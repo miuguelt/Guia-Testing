@@ -29,6 +29,7 @@ const SIMULATORS = {
         `;
         const draggables = container.querySelectorAll(".draggable");
         const slots = container.querySelectorAll("[data-level]");
+        const solvedSlots = new Set();
         draggables.forEach(d => {
             d.addEventListener("dragstart", e => e.dataTransfer.setData("type", d.dataset.type));
         });
@@ -38,11 +39,22 @@ const SIMULATORS = {
                 e.preventDefault();
                 const type = e.dataTransfer.getData("type");
                 const dragged = container.querySelector(`[data-type="${type}"]`);
+                if (!dragged) return;
                 const correct = dragged.dataset.correct === slot.dataset.level;
                 if (correct) {
                     slot.style.background = "rgba(16,185,129,0.4)";
                     slot.textContent = `${dragged.textContent} Correcto!`;
+                    solvedSlots.add(slot.dataset.level);
                     if (window.GAMIFICATION) GAMIFICATION.addXP(50, "Pyramid Builder correcto");
+                    if (solvedSlots.size === 3) {
+                        const resultEl = container.querySelector("#pyramid-result");
+                        if (resultEl) {
+                            resultEl.innerHTML = '<div style="color:#10b981;font-weight:600;padding:0.5rem;background:rgba(16,185,129,0.15);border-radius:6px;">🎉 ¡Pirámide balanceada! 70% Unit, 20% Integration, 10% E2E.</div>';
+                        }
+                        if (window.TestingSession) {
+                            window.TestingSession.recordSimulator('sim-pyramid', 50, 50, 'Pirámide de Cohn balanceada: Unit (70%), Integration (20%), E2E (10%)');
+                        }
+                    }
                 } else {
                     slot.style.background = "rgba(244,63,94,0.4)";
                     slot.textContent = "Incorrecto - intenta de nuevo";
@@ -84,6 +96,9 @@ const SIMULATORS = {
             if (current >= tests.length) {
                 feedbackEl.innerHTML = `<div style="color:#10b981;">Completado! ${score}/${tests.length} aciertos.</div>`;
                 if (window.GAMIFICATION) GAMIFICATION.addXP(75, "Assertion Validator completado");
+                if (window.TestingSession) {
+                    window.TestingSession.recordSimulator('sim-assertion', score, tests.length, `${score} de ${tests.length} aserciones acertadas.`);
+                }
                 return;
             }
             codeEl.textContent = tests[current].code;
@@ -126,6 +141,9 @@ const SIMULATORS = {
             if (idx >= questions.length) {
                 content.innerHTML = `<div style="color:#10b981;">Quiz completado! ${score}/${questions.length} correctas.</div>`;
                 if (window.GAMIFICATION) GAMIFICATION.addXP(75, "Quiz completado");
+                if (window.TestingSession) {
+                    window.TestingSession.recordSimulator('sim-quiz', score, questions.length, `${score} de ${questions.length} preguntas correctas.`);
+                }
                 if (typeof confetti !== "undefined") confetti({ particleCount: 100, spread: 70 });
                 return;
             }
@@ -376,10 +394,16 @@ const SIMULATORS = {
                         if (window.GAMIFICATION) {
                             window.GAMIFICATION.addXP(100, "Secuenciador de Fases completado (7/7)");
                         }
+                        if (window.TestingSession) {
+                            window.TestingSession.recordSimulator('sim-sequencer', 7, 7, 'Pipeline Maestro ordenado al 100% (7/7 fases).');
+                        }
                         if (typeof confetti !== "undefined") {
                             confetti({ particleCount: 120, spread: 80 });
                         }
                     } else {
+                        if (window.TestingSession) {
+                            window.TestingSession.recordSimulator('sim-sequencer', correctCount, 7, `${correctCount} de 7 fases en posición correcta.`);
+                        }
                         feedbackEl.innerHTML = `
                             <div style="background:rgba(239,68,68,0.12);border:1px solid #ef4444;padding:1.25rem;border-radius:8px;margin-bottom:1rem;">
                                 <div style="font-size:1.1rem;font-weight:700;color:#f87171;margin-bottom:0.5rem;">

@@ -94,6 +94,7 @@ const APP = {
                 'm-reto': 'Reto Final',
                 'm-ia-testing': 'IA en Testing',
                 'm-simuladores': 'Simuladores',
+                'm-evidencias-sena': 'Evidencias SENA',
                 'descargar': 'Descargar Proyecto'
             };
             breadcrumb.textContent = names[pageId] || pageId;

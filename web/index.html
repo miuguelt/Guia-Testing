@@ -78,6 +78,10 @@
                 <a href="#m-simuladores" class="nav-item" data-module="m-simuladores"><span class="nav-icon">&#127918;</span><span class="nav-text">Simuladores</span></a>
             </div>
             <div class="nav-section">
+                <span class="nav-section-title">Certificación</span>
+                <a href="#m-evidencias-sena" class="nav-item" data-module="m-evidencias-sena"><span class="nav-icon">&#128196;</span><span class="nav-text">Evidencias SENA</span><span class="nav-badge">Final</span></a>
+            </div>
+            <div class="nav-section">
                 <span class="nav-section-title">Recursos</span>
                 <a href="#descargar" class="nav-item" data-module="descargar"><span class="nav-icon">&#128229;</span><span class="nav-text">Descargar Proyecto</span></a>
             </div>
@@ -89,6 +93,7 @@
             <div class="breadcrumb">Guia Testing & QA > <span id="breadcrumb-current">Inicio</span></div>
             <div class="header-actions">
                 <button class="btn btn-sm btn-primary" onclick="APP.navigateTo('m-simuladores')">Simuladores</button>
+                <button class="btn btn-sm btn-secondary" onclick="APP.navigateTo('m-evidencias-sena')">&#128196; Evidencias SENA</button>
             </div>
         </header>
 
@@ -145,6 +150,30 @@
                     <div class="sim-quiz-container"></div>
                     <h3 class="mt-4">&#9881;&#65039; Secuenciador de Fases: Pipeline de Pruebas Automatizadas</h3>
                     <div class="sim-sequencer-container"></div>
+                </div>
+            </section>
+
+            <!-- ====================================================================
+                 MÓDULO FINAL: CERTIFICACIÓN OFICIAL & EVIDENCIAS SENA (ADSO)
+                 ==================================================================== -->
+            <section id="m-evidencias-sena" class="page-section module-page">
+                <div class="section-card glass-panel">
+                    <div class="module-hero">
+                        <span class="module-badge">&#128196; Certificación Oficial SENA (GFPI-F-023)</span>
+                        <h1>Registro Integral de Evidencias & Calidad QA</h1>
+                        <p>Generación del formato estándar institucional con todos los checks de pruebas ejecutadas, métricas de calidad y resultados de simuladores.</p>
+                    </div>
+
+                    <!-- Puntos de anclaje para DevBrainEvidence SSoT -->
+                    <div style="display:none;">
+                        <div data-db-evidence="ART-TEST-01"></div>
+                        <div data-db-evidence="ART-TEST-02"></div>
+                        <div data-db-evidence="ART-TEST-03"></div>
+                        <div data-db-evidence-dossier></div>
+                    </div>
+
+                    <!-- Raíz del Módulo de Evidencias SENA -->
+                    <div id="sena-dossier-root"></div>
                 </div>
             </section>
 
@@ -278,11 +307,13 @@ curl http://localhost:8009/api/fincas</code></pre>
 
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.min.js"></script>
     <script src="js/vendor/devbrain-code.js"></script>
+    <script src="js/testing-session.js"></script>
     <script src="js/gamification.js"></script>
     <script src="js/simulators.js"></script>
     <script src="js/modules-content.js"></script>
     <script src="js/modules-content-2.js"></script>
     <script src="js/code-renderer.js"></script>
+    <script src="js/sena-dossier.js"></script>
     <script src="js/vendor/devbrain-evidence.js"></script>
     <script src="js/main.js"></script>
     <script>

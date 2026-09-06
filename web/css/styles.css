@@ -1887,3 +1887,726 @@ footer { text-align: center; padding: 2rem 0; color: var(--text-muted); border-t
     padding: 1.5rem;
     margin-top: 1rem;
 }
+
+/* ==========================================================================
+   FORMATO INSTITUCIONAL DE EVIDENCIAS SENA (GFPI-F-023 VERSIÓN 03)
+   ========================================================================== */
+
+.evidence-wrapper,
+.sena-dossier-wrapper {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding-bottom: 3rem;
+}
+
+/* Panel de Control y Configuración del Aprendiz (Solo Pantalla) */
+.evidence-form-card {
+    background: rgba(15, 23, 42, 0.75);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem 1.75rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(12px);
+}
+
+.evidence-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--accent-primary);
+}
+
+.evidence-form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.sim-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.sim-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.sim-input {
+    background: rgba(15, 23, 42, 0.85);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    padding: 0.6rem 0.85rem;
+    font-size: 0.88rem;
+    font-family: inherit;
+    transition: all 0.2s ease;
+}
+
+.sim-input:focus {
+    border-color: var(--accent-primary);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
+}
+
+/* Panel Interactivo de Firma Digital */
+.signature-control-panel {
+    background: rgba(2, 6, 23, 0.6);
+    border: 1px solid rgba(56, 189, 248, 0.2);
+    border-radius: var(--radius-md);
+    padding: 1.25rem;
+    margin-top: 1.25rem;
+}
+
+.signature-panel-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin: 0 0 0.35rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.signature-panel-subtitle {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+    line-height: 1.45;
+}
+
+.signature-canvas-wrapper {
+    background: #ffffff;
+    border: 2px dashed #94a3b8;
+    border-radius: 6px;
+    display: inline-block;
+    position: relative;
+    touch-action: none;
+}
+
+#signature-canvas {
+    display: block;
+    background: #ffffff;
+    cursor: crosshair;
+    touch-action: none;
+    border-radius: 4px;
+}
+
+.signature-canvas-hint {
+    font-size: 0.72rem;
+    color: #94a3b8;
+    margin-top: 0.35rem;
+    text-align: center;
+}
+
+.signature-panel-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.85rem;
+    align-items: center;
+}
+
+.signature-status-pill {
+    font-size: 0.78rem;
+    padding: 0.25rem 0.65rem;
+    border-radius: 20px;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.signature-status-pill.is-active {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+    border: 1px solid #10b981;
+}
+
+.signature-status-pill.is-empty {
+    background: rgba(148, 163, 184, 0.15);
+    color: var(--text-muted);
+    border: 1px solid var(--border-subtle);
+}
+
+.evidence-actions-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+/* ==========================================================================
+   HOJA BLANCA INSTITUCIONAL SENA SIGA (GFPI-F-023)
+   ========================================================================== */
+.sena-evidence-sheet,
+.sena-printable-sheet {
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+    max-width: 960px;
+    margin: 2rem auto;
+    padding: 2.75rem 3.25rem;
+    border-radius: 8px;
+    border: 1px solid #cbd5e1;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    position: relative;
+    box-sizing: border-box;
+}
+
+/* Encabezado Oficial SENA SIGA (Tabla de Control Institucional) */
+.evidence-header-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 2px solid #39a900;
+    margin-bottom: 1.5rem;
+    background-color: #ffffff;
+}
+
+.evidence-header-table td {
+    border: 1px solid #cbd5e1;
+    padding: 0.65rem 0.85rem;
+    vertical-align: middle;
+}
+
+.evidence-header-logo-cell {
+    width: 16%;
+    text-align: center;
+    background-color: #ffffff;
+    padding: 0.5rem !important;
+}
+
+.evidence-header-logo-cell svg {
+    display: block;
+    margin: 0 auto;
+    max-height: 70px;
+    width: auto;
+}
+
+.evidence-header-title-cell {
+    width: 58%;
+    text-align: center;
+}
+
+.evidence-header-title-cell h2 {
+    font-size: 0.98rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0 0 0.25rem 0;
+    letter-spacing: 0.5px;
+}
+
+.evidence-header-title-cell p {
+    font-size: 0.78rem;
+    color: #475569;
+    margin: 0.15rem 0;
+    line-height: 1.25;
+}
+
+.evidence-header-title-cell strong {
+    color: #0f172a;
+}
+
+.evidence-header-meta-cell {
+    width: 26%;
+    font-size: 0.76rem;
+    background-color: #f8fafc;
+    padding: 0.5rem 0.75rem !important;
+    line-height: 1.35;
+    color: #334155;
+}
+
+.evidence-header-meta-cell p {
+    margin: 0.15rem 0;
+}
+
+.evidence-header-meta-cell strong {
+    color: #0f172a;
+}
+
+/* Subtítulos de sección oficial */
+.evidence-section {
+    margin-bottom: 1.5rem;
+}
+
+.evidence-subtitle {
+    font-size: 0.88rem;
+    font-weight: 800;
+    color: #0f172a;
+    background-color: #f1f5f9;
+    border-left: 4px solid #39a900;
+    padding: 0.4rem 0.65rem;
+    margin: 1.25rem 0 0.65rem 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Tablas Institucionales */
+.evidence-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1rem;
+    font-size: 0.84rem;
+}
+
+.evidence-table th, 
+.evidence-table td {
+    border: 1px solid #cbd5e1;
+    padding: 0.55rem 0.75rem;
+    text-align: left;
+    color: #1e293b;
+}
+
+.evidence-table th {
+    background-color: #f8fafc;
+    color: #0f172a;
+    font-weight: 700;
+    font-size: 0.82rem;
+}
+
+.evidence-table tr:nth-child(even) td {
+    background-color: #fafbfd;
+}
+
+.evidence-table-label {
+    font-weight: 700;
+    color: #334155;
+    background-color: #f8fafc;
+    width: 22%;
+}
+
+.evidence-table-val {
+    color: #0f172a;
+}
+
+/* Caja de Juicio de Evaluación Final */
+.evidence-verdict-box {
+    background-color: #f8fafc;
+    border: 2px solid #cbd5e1;
+    border-radius: 6px;
+    padding: 0.85rem 1.15rem;
+    margin: 1.25rem 0;
+}
+
+.evidence-verdict-box.is-approved {
+    border-color: #39a900;
+    background-color: #f0fdf4;
+}
+
+.verdict-header {
+    font-size: 0.88rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 0.4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.verdict-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin: 0.4rem 0 0.6rem 0;
+    font-size: 0.86rem;
+    color: #0f172a;
+}
+
+.evidence-observations-box {
+    margin-top: 0.65rem;
+    font-size: 0.8rem;
+    color: #334155;
+    background: #ffffff;
+    padding: 0.55rem 0.75rem;
+    border: 1px dashed #cbd5e1;
+    border-radius: 4px;
+    line-height: 1.35;
+}
+
+/* Declaración de autenticidad y firmas */
+.evidence-declaration {
+    font-size: 0.76rem;
+    color: #475569;
+    font-style: italic;
+    margin: 1.25rem 0 1.75rem 0;
+    line-height: 1.35;
+    border-top: 1px solid #e2e8f0;
+    padding-top: 0.65rem;
+    text-align: justify;
+}
+
+.evidence-signatures-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5rem;
+    margin-top: 1.5rem;
+}
+
+.signature-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.signature-stamp-area {
+    height: 85px;
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 4px;
+}
+
+.signature-stamp-img {
+    max-height: 75px;
+    max-width: 220px;
+    object-fit: contain;
+    display: block;
+}
+
+.signature-blank-placeholder {
+    height: 65px;
+}
+
+.signature-line-bar {
+    width: 90%;
+    border-top: 1.5px solid #0f172a;
+    margin-top: 2px;
+    margin-bottom: 6px;
+}
+
+.signature-details {
+    font-size: 0.8rem;
+    line-height: 1.35;
+    color: #1e293b;
+}
+
+.signature-details strong {
+    display: block;
+    font-size: 0.85rem;
+    color: #0f172a;
+}
+
+.signature-digital-tag {
+    display: inline-block;
+    font-size: 0.68rem;
+    color: #166534;
+    background-color: #dcfce7;
+    padding: 1px 6px;
+    border-radius: 4px;
+    border: 1px solid #86efac;
+    margin-top: 3px;
+    font-weight: 600;
+}
+
+/* ==========================================================================
+   REGLAS DE IMPRESIÓN OFICIALES (@media print)
+   Garantiza exportación limpia en papel carta / PDF idéntica a GFPI-F-023
+   ========================================================================== */
+@media print {
+    @page {
+        margin: 1.2cm 1.4cm;
+        size: letter portrait;
+    }
+
+    body,
+    html {
+        background: #ffffff !important;
+        color: #0f172a !important;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif !important;
+        font-size: 9.5pt !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    /* Ocultar elementos de UI no institucionales */
+    .no-print,
+    .sidebar,
+    .sidebar-toggle,
+    .top-header,
+    .background-orbs,
+    .particles-container,
+    .modal-overlay,
+    footer,
+    .evidence-form-card,
+    .evidence-actions-bar,
+    .signature-control-panel,
+    .reading-progress-bar,
+    .hero-actions,
+    .module-hero,
+    .module-badge,
+    .btn,
+    .breadcrumb,
+    .section-header,
+    #reading-progress-fill,
+    nav {
+        display: none !important;
+    }
+
+    .main-wrapper,
+    .content,
+    .page-section,
+    .section-card {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        display: block !important;
+    }
+
+    #m-evidencias-sena {
+        display: block !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+    }
+
+    .evidence-wrapper {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+    }
+
+    /* Hoja Oficial SENA Desplegada en Papel / PDF */
+    .sena-evidence-sheet,
+    .sena-printable-sheet {
+        max-width: 100% !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+        box-shadow: none !important;
+        background: #ffffff !important;
+        color: #0f172a !important;
+    }
+
+    /* Encabezado Institucional */
+    .evidence-header-table {
+        border: 1.5pt solid #39a900 !important;
+        margin-bottom: 1rem !important;
+        page-break-inside: avoid;
+        break-inside: avoid;
+        width: 100% !important;
+    }
+
+    .evidence-header-table td {
+        border: 0.5pt solid #94a3b8 !important;
+        padding: 0.35rem 0.55rem !important;
+    }
+
+    .evidence-header-logo-cell {
+        padding: 0.25rem !important;
+    }
+
+    .evidence-header-logo-cell svg {
+        max-height: 58px !important;
+    }
+
+    .evidence-header-title-cell h2 {
+        font-size: 8.5pt !important;
+        margin-bottom: 0.15rem !important;
+        color: #0f172a !important;
+    }
+
+    .evidence-header-title-cell p {
+        font-size: 6.8pt !important;
+        margin: 0.1rem 0 !important;
+        color: #475569 !important;
+    }
+
+    .evidence-header-meta-cell {
+        font-size: 6.8pt !important;
+        padding: 0.35rem 0.5rem !important;
+        background-color: #f8fafc !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color: #334155 !important;
+    }
+
+    /* Subtítulos de Secciones */
+    .evidence-section {
+        page-break-inside: auto;
+        break-inside: auto;
+        margin-bottom: 1rem !important;
+    }
+
+    .evidence-subtitle {
+        background-color: #f1f5f9 !important;
+        border-left: 3pt solid #39a900 !important;
+        color: #0f172a !important;
+        padding: 0.3rem 0.5rem !important;
+        font-size: 8pt !important;
+        margin: 0.8rem 0 0.4rem 0 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        page-break-after: avoid;
+        break-after: avoid;
+    }
+
+    /* Tablas de Evidencias y Rúbricas */
+    .evidence-table {
+        page-break-inside: auto;
+        font-size: 7.2pt !important;
+        border-collapse: collapse !important;
+        margin-bottom: 0.6rem !important;
+        width: 100% !important;
+    }
+
+    .evidence-table tr {
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+
+    .evidence-table th, 
+    .evidence-table td {
+        border: 0.5pt solid #94a3b8 !important;
+        padding: 0.3rem 0.45rem !important;
+        line-height: 1.25 !important;
+        color: #1e293b !important;
+    }
+
+    .evidence-table th {
+        background-color: #f1f5f9 !important;
+        color: #0f172a !important;
+        font-size: 7.2pt !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    .evidence-table-label {
+        background-color: #f8fafc !important;
+        color: #334155 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    /* Badges de Estado en Impresión */
+    .badge {
+        display: inline-block !important;
+        border: 0.5pt solid #94a3b8 !important;
+        padding: 1px 4px !important;
+        font-size: 6.5pt !important;
+        font-weight: 700 !important;
+        border-radius: 3px !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    .badge--success {
+        color: #14532d !important;
+        background-color: #f0fdf4 !important;
+        border-color: #86efac !important;
+    }
+
+    .badge--warning {
+        color: #78350f !important;
+        background-color: #fffbeb !important;
+        border-color: #fde68a !important;
+    }
+
+    .badge--danger {
+        color: #7f1d1d !important;
+        background-color: #fef2f2 !important;
+        border-color: #fca5a5 !important;
+    }
+
+    /* Caja de Juicio de Evaluación Final */
+    .evidence-verdict-box {
+        border: 1.2pt solid #39a900 !important;
+        background-color: #f0fdf4 !important;
+        page-break-inside: avoid;
+        break-inside: avoid;
+        padding: 0.5rem 0.75rem !important;
+        margin: 0.8rem 0 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    .verdict-header {
+        font-size: 8pt !important;
+        margin-bottom: 0.25rem !important;
+    }
+
+    .verdict-options {
+        font-size: 7.5pt !important;
+        margin: 0.25rem 0 !important;
+        gap: 1.5rem !important;
+    }
+
+    .evidence-observations-box {
+        font-size: 7pt !important;
+        padding: 0.35rem 0.5rem !important;
+        border: 0.5pt dashed #94a3b8 !important;
+        background: #ffffff !important;
+        margin-top: 0.4rem !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    /* Declaración Legal y Firmas */
+    .evidence-declaration {
+        font-size: 6.5pt !important;
+        margin: 0.8rem 0 1rem 0 !important;
+        padding-top: 0.4rem !important;
+        line-height: 1.25 !important;
+    }
+
+    .evidence-signatures-grid {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        margin-top: 0.8rem !important;
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 2rem !important;
+    }
+
+    .signature-column {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+    }
+
+    .signature-stamp-area {
+        height: 55px !important;
+        padding-bottom: 2px !important;
+    }
+
+    .signature-stamp-img {
+        max-height: 50px !important;
+    }
+
+    .signature-blank-placeholder {
+        height: 40px !important;
+    }
+
+    .signature-line-bar {
+        border-top: 1pt solid #0f172a !important;
+        margin-bottom: 4px !important;
+    }
+
+    .signature-details {
+        font-size: 7pt !important;
+        line-height: 1.25 !important;
+    }
+
+    .signature-details strong {
+        font-size: 7.5pt !important;
+    }
+
+    .signature-digital-tag {
+        font-size: 6pt !important;
+        padding: 1px 4px !important;
+        border: 0.5pt solid #86efac !important;
+        background-color: #dcfce7 !important;
+        color: #166534 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+}
+
+

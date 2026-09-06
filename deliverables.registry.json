@@ -8,14 +8,14 @@
   "submission": {
     "packageName": "EV-TESTING-QA-2026",
     "namingRule": "EV-TESTING-QA-<ficha>-<apellido><nombre>.zip",
-    "format": "Repositorio Git con suite de pruebas PyTest/Jest/Playwright, reporte de cobertura, bitácora docs/ai-log.md y formato oficial de evidencias en Markdown/JSON.",
+    "format": "Repositorio Git con suite de pruebas PyTest/Jest/Playwright, reporte de cobertura, bitácora docs/ai-log.md y formato oficial de evidencias GFPI-F-023 Versión 03 en PDF/Markdown/JSON con firma digital.",
     "where": "Actividad de Aseguramiento de Calidad y Pruebas en la plataforma LMS institucional del SENA.",
-    "whatIsGraded": "Se califica el plan formal de pruebas IEEE 829, la cobertura de pruebas unitarias/integración (>=80%), la automatización E2E y la bitácora V.E.R.A.",
+    "whatIsGraded": "Se califica el plan formal de pruebas IEEE 829, la cobertura de pruebas unitarias/integración (>=80%), la automatización E2E, la bitácora V.E.R.A. y el registro institucional de evidencias GFPI-F-023 con cálculo real.",
     "approval": [
       "Las tres evidencias técnicas están completadas en estado 'lista', ninguna en blanco.",
       "La suite de pruebas ejecuta con 100% de tests aprobados.",
       "La cobertura de código supera el umbral mínimo del 80%.",
-      "El formato final de evidencias está exportado y respaldado en formato JSON."
+      "El formato oficial de evidencias GFPI-F-023 Versión 03 está generado con cálculo verídico y exportado en PDF o respaldado en formato JSON."
     ],
     "competencyMap": [
       {

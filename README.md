@@ -14,21 +14,128 @@ Esta guía formativa cubre el aseguramiento de la calidad de software (QA), la p
 
 ---
 
-## 🐙 Git & Testing: ¿Por qué y cómo versionar las pruebas?
+---
 
-### ¿Por qué SÍ se deben subir las pruebas a Git?
-1. **Código de primera clase (*First-Class Citizen*):** Las pruebas son tan vitales como el código de producción. Sin ellas, ningún refactor es seguro.
-2. **Atomicidad de los Commits:** Cada funcionalidad o corrección de bug viaja junto con su prueba asociada en el mismo commit. Esto permite que herramientas como `git bisect` encuentren el origen exacto de cualquier regresión histórica.
-3. **Documentación Viva (*Living Documentation*):** Un desarrollador nuevo comprende el comportamiento real y los contratos de las APIs ejecutando `pytest` o `npm test`.
-4. **Habilitador Único de CI/CD:** Los runners remotos (GitHub Actions, GitLab CI) clonan el repositorio Git. Si las pruebas no están en el repositorio, la nube no tiene nada que ejecutar y el Quality Gate no puede operar.
+## 🐙 Git & Testing: Relación con GitHub, Seguridad y Versionamiento
 
-### ¿Qué NUNCA se debe subir a Git?
-El error común no es subir los tests, sino subir los **artefactos temporales y resultados efímeros**. Se deben ignorar estrictamente en `.gitignore`:
-* Cachés: `.pytest_cache/`, `.nyc_output/`, `node_modules/`, `__pycache__/`
-* Reportes de cobertura: `htmlcov/`, `.coverage`, `coverage/`, `playwright-report/`, `test-results/`
-* Evidencias pesadas locales: Grabaciones `.webm`, screenshots `.png` de corridas manuales
-* Bases de datos locales: `test.db`, `*.sqlite3`
-* Credenciales y secretos: `.env`, `.env.test.local`, llaves privadas `.pem`
+### 1. La Relación entre Testing y GitHub (El Quality Gate en la Nube)
+GitHub no es un mero almacenamiento de archivos; es el **orquestador central y árbitro de calidad** del software moderno.
+* **De la laptop a la nube:** El mayor riesgo de un equipo es el síndrome *"en mi máquina sí funciona"*. GitHub Actions erradica esto ejecutando las suites en runners limpios, efímeros e independientes (`ubuntu-latest`, `windows-latest`).
+* **Branch Protection Rules & Required Status Checks:** Permiten configurar reglas estrictas para que ninguna rama pueda fusionarse hacia `main` o `develop` a menos que todos los tests unitarios, de integración y E2E pasen con éxito (Quality Gate 100% verde).
+* **Feedback Inmediato en Pull Requests:** Al abrir un PR, GitHub ejecuta automáticamente el pipeline e informa mediante anotaciones inline en el código qué línea falló, reporta el porcentaje de cobertura con Codecov y guarda artefactos de depuración (videos y trazas de Playwright).
+
+---
+
+### 2. ¿Es recomendable subir los tests a Git?
+**SÍ, ROTUNDAMENTE.** El código de pruebas es un **ciudadano de primera clase (*First-Class Citizen*)**.
+1. **Single Source of Truth (SSoT):** El código de producción y sus pruebas deben evolucionar sincronizados en el mismo commit. Si se modifica una regla de negocio o la firma de una función, la prueba que la valida viaja en el mismo cambio.
+2. **Habilitador Único de CI/CD:** Los runners remotos de GitHub Actions clonan el repositorio. Si las pruebas no están versionadas, el runner no tiene nada que ejecutar y el Quality Gate queda inoperativo.
+3. **Trazabilidad y Regresiones con `git bisect`:** Si surge un error en producción, el comando `git bisect run pytest` recorre el historial de Git ejecutando automáticamente los tests hasta aislar el commit exacto que introdujo el bug.
+4. **Documentación Viva (*Living Documentation*):** Los requisitos en Word o Wiki se desactualizan; las pruebas no pueden mentir porque si fallan, rompen el build. Un desarrollador nuevo comprende el sistema leyendo y ejecutando los tests.
+5. **Onboarding y Reproducibilidad:** Cualquier compañero que clone el repositorio puede verificar de inmediato la salud del proyecto ejecutando `pytest`, `npm test` o `mvn test`.
+
+#### Matriz Canónica: ¿Qué SÍ y qué NUNCA se sube a Git?
+
+| Elemento de QA | ¿Se sube a Git? | Archivos / Patrones | Razón Técnica y de Calidad |
+| :--- | :---: | :--- | :--- |
+| **Código de Pruebas** | ✅ **SÍ** (Obligatorio) | `tests/test_*.py`, `*.spec.js`, `*Test.java` | Las pruebas son código de producción; garantizan la estabilidad del software. |
+| **Fixtures y Datos Sintéticos** | ✅ **SÍ** (Obligatorio) | `conftest.py`, fábricas `Faker`, seeders | Permiten reproducibilidad determinista en cualquier máquina sin dependencias externas. |
+| **Configuración de Tests** | ✅ **SÍ** (Obligatorio) | `pytest.ini`, `vitest.config.js`, `playwright.config.js` | Definen timeouts, flags, descubrimiento de tests y umbrales de cobertura obligatorios. |
+| **Pipelines CI & Git Hooks** | ✅ **SÍ** (Obligatorio) | `.github/workflows/*.yml`, `.pre-commit-config.yaml` | Formalizan el contrato de calidad que todos los colaboradores y runners deben cumplir. |
+| **Secretos y Credenciales** | ❌ **NUNCA** (`.gitignore`) | `.env`, `.env.local`, `id_rsa`, `*.pem`, API keys | Vulnerabilidad crítica. Un secreto comiteado queda expuesto en el historial para siempre. |
+| **Reportes y Cobertura** | ❌ **NUNCA** (`.gitignore`) | `htmlcov/`, `.coverage`, `coverage/`, `playwright-report/` | Artefactos efímeros derivados. Generan ruido masivo y conflictos de merge constantes. |
+| **Cachés de Compilación** | ❌ **NUNCA** (`.gitignore`) | `.pytest_cache/`, `__pycache__/`, `node_modules/`, `.nyc_output/` | Específicos del sistema operativo local; deben regenerarse limpios en cada runner. |
+| **Bases de Datos Locales** | ❌ **NUNCA** (`.gitignore`) | `test.db`, `*.sqlite3`, dumps `*.sql` locales | Riesgo de fuga de datos reales y corrupción binaria en el historial de Git. |
+
+---
+
+### 3. Seguridad en Pruebas: ¿Subir los tests revela información a atacantes?
+
+#### El Mito de la "Seguridad por Oscuridad" (*Security through Obscurity*)
+Existe el temor infundado de que al subir las pruebas, los atacantes sabrán qué casos extremos se validan y dónde atacar. **Esto es una falacia de seguridad que contradice el Principio de Kerckhoffs.**
+* Un sistema de software debe ser seguro por su **diseño arquitectónico, validación de entradas, sanitización y control estricto de accesos**, no porque su código o sus pruebas se mantengan en secreto.
+* Los atacantes no esperan a leer tus pruebas: utilizan herramientas automatizadas de escaneo dinámico (Burp Suite, OWASP ZAP, SQLmap, nmap) que bombardean los endpoints públicos buscando vulnerabilidades.
+* Si una prueba verifica que un endpoint no permite inyecciones SQL o accesos sin token JWT, la prueba certifica que la defensa existe. Y si la prueba demuestra una falla, la vulnerabilidad ya reside en el código de producción expuesto a internet.
+
+#### Los 3 Riesgos REALES que SÍ pueden ayudar a un atacante:
+1. **Secretos Quemados (*Hardcoded Secrets*):** Dejar contraseñas reales de base de datos, credenciales de staging o tokens de APIs de pago (Stripe, AWS, SendGrid) dentro de los archivos de test creyendo que *"como es un test, no importa"*. Si el repositorio se filtra o es público, el atacante tiene acceso inmediato a la infraestructura.
+2. **Fuga de PII en Fixtures:** Exportar registros reales de usuarios (nombres, correos, documentos, contraseñas hash) de una base de datos de producción para usarlos como "datos de prueba" en un fixture. Esto constituye una violación legal grave (GDPR, Habeas Data Ley 1581).
+3. **Endpoints de Depuración Olvidados:** Rutas auxiliares creadas para facilitar las pruebas (ej. `/api/test/reset-db`, `/debug/impersonate-admin`) que quedan habilitadas y desprotegidas en los despliegues de producción.
+
+#### Prácticas Obligatorias de Seguridad:
+* **Generación Sintética:** Usar bibliotecas generadoras de datos ficticios como `Faker` o `factory_boy`.
+* **Secretos en la Nube:** Almacenar tokens y credenciales exclusivamente en **GitHub Secrets** (`${{ secrets.API_KEY }}`) e inyectarlos como variables de entorno efímeras en el runner.
+* **Aislamiento en Memoria:** Utilizar bases de datos efímeras en memoria (`sqlite:///:memory:`) o contenedores efímeros (*Testcontainers*) que se destruyen al finalizar la prueba.
+* **Escaneo Continuo:** Integrar herramientas como `gitleaks` o `trufflehog` para impedir que se comiteen secretos por error.
+
+---
+
+### 4. ¿Qué tan recomendable es tener repositorios públicos en Git?
+
+| Criterio | Repositorio Público | Repositorio Privado | Recomendación Profesional / SENA ADSO |
+| :--- | :--- | :--- | :--- |
+| **Portafolio y Empleabilidad** | ⭐⭐⭐⭐⭐ **Máxima visibilidad.** Evidencia irrefutable de dominio técnico: pirámide de pruebas, cobertura $\ge 80\%$ y CI/CD verde ante reclutadores. | ❌ **Invisible.** No permite demostrar habilidades a menos que se comparta acceso explícito bajo invitación. | **Proyectos formativos y de práctica deben ser públicos** para construir reputación profesional. |
+| **Propiedad Intelectual (IP)** | ⚠️ **Código abierto al mundo.** Cualquiera puede clonar, bifurcar o aprender de la implementación. | 🔒 **Protección total.** Salvaguarda ventajas competitivas, algoritmos propietarios y modelos de negocio. | **Usa repositorios privados para empresas, clientes comerciales o proyectos con NDA.** |
+| **Costos y Recursos CI/CD** | 🆓 **Minutos ilimitados y gratuitos** en GitHub Actions para proyectos públicos. | ⏱️ **Cuota limitada** (2.000 minutos/mes en plan gratuito compartidos entre todos tus repositorios privados). | Los repositorios públicos permiten correr suites pesadas (Playwright E2E) sin agotar cuota. |
+| **Auditoría Comunitaria** | 👁️ **Ley de Linus:** *"Dado un número suficiente de ojos, todos los errores son superficiales"*. Reportes y parches de la comunidad. | 🛡️ **Auditoría cerrada.** La detección de bugs recae exclusivamente en el equipo interno. | **REGLA DE ORO: Desarrolla y prueba TODO repositorio privado como si fuera público mañana (cero secretos).** |
+
+---
+
+### 5. Tests para Git: Validando el Flujo de Trabajo (Hooks & Secret Scanning)
+
+Así como probamos el código de la aplicación con PyTest o Jest, también debemos **testear el propio flujo de Git** antes de que el código salga de la máquina del desarrollador:
+
+1. **Pre-commit Hooks (`pre-commit`):**
+   * Se ejecutan en el área de preparación (*staging area*) al invocar `git commit`.
+   * Si detectan espacios en blanco sobrantes, YAML mal formateado o si falla una prueba unitaria rápida, **Git aborta físicamente el commit**.
+2. **Secret Scanning en Git (`gitleaks`):**
+   * Hook estático de seguridad que inspecciona los diffs en stage buscando patrones de regex de tokens de GitHub, llaves privadas RSA, secretos de AWS y contraseñas.
+   * Si un aprendiz intenta cometer un archivo `.env` o una constante `API_KEY = "sk_live_..."`, el commit es rechazado de inmediato.
+3. **Commitlint (Conventional Commits):**
+   * Prueba automática sobre el mensaje del commit para forzar el estándar (`feat:`, `fix:`, `test:`, `docs:`), permitiendo generar *Changelogs* y versionamiento semántico (*SemVer*) automático.
+4. **Pruebas Locales de Workflows con `act`:**
+   * La herramienta CLI `act` (de Nektos) permite ejecutar los flujos de GitHub Actions (`.github/workflows/ci.yml`) localmente dentro de contenedores Docker, verificando que el pipeline funcione antes de hacer `git push`.
+
+#### Configuración Canónica: `.pre-commit-config.yaml`
+Disponible en `recursos/codigo-ejemplo/.pre-commit-config.yaml`:
+```yaml
+repos:
+  # Higiene de repositorio
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-json
+      - id: check-added-large-files
+        args: ['--maxkb=500']
+
+  # Detección estricta de secretos en Git
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.18.4
+    hooks:
+      - id: gitleaks
+
+  # Linter rápido Python
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.4.4
+    hooks:
+      - id: ruff
+        args: [--fix]
+
+  # Smoke test obligatorio antes del commit (< 2s)
+  - repo: local
+    hooks:
+      - id: pytest-unit-fast
+        name: pytest unit fast
+        entry: pytest tests/unit -q --tb=line
+        language: system
+        types: [python]
+        pass_filenames: false
+```
+
+---
 
 ---
 
@@ -429,3 +536,35 @@ Para levantar la aplicación Flask junto al visor Dozzle y el agente de IA, impo
 LLM_API_KEY=tu_api_key_de_gemini_o_openai
 DISCORD_WEBHOOK_URL=https://discord.com/api/webhooks/...
 ```
+
+---
+
+## 📄 Módulo de Consolidación Institucional & Evidencias SENA (ADSO) — GFPI-F-023 Versión 03
+
+Al cierre de la ruta de aprendizaje, la guía integra el **Registro Técnico Integral y Generador de Evidencias SENA**, accesible desde la barra de navegación lateral (`#m-evidencias-sena`). Este módulo implementa de forma prioritaria el **Formato Oficial GFPI-F-023 Versión 03** (SIGA - Dirección de Formación Profesional):
+
+### 1. Componentes Evaluados y Ponderación Real de la Sesión
+El sistema calcula el avance del aprendiz de forma verídica y ponderada en tiempo real:
+* **Módulos Teórico-Prácticos (20%):** Seguimiento del estudio de los 13 módulos formativos.
+* **Simuladores Interactivos QA (30%):**
+  1. *Test Pyramid Builder:* Balance de la pirámide (70% Unit, 20% Integration, 10% E2E).
+  2. *Assertion Validator:* Verificación de 8 aserciones críticas en Python y JavaScript.
+  3. *Quiz de Certificación:* 8 preguntas conceptuales y de estándares QA.
+  4. *Secuenciador de Fases:* Ordenamiento secuencial de las 7 fases maestras de testing.
+* **Matriz de Checks de Pruebas Automatizadas (30%):**
+  Verificación interactiva de ejecución de las 9 suites de prueba del proyecto (`PyTest` unit e integración, `TDD` con Pydantic, `BDD` con Behave, `Jest` en React, `JUnit 5` en Java, `Playwright` E2E, auditoría de cobertura $\ge 80\%$ y `CI/CD` con GitHub Actions).
+* **Entregables Institucionales SSoT (20%):**
+  Consolidación de los tres artefactos oficiales declarados en `deliverables.registry.json` (`ART-TEST-01`, `ART-TEST-02`, `ART-TEST-03`).
+
+### 2. Dictamen Institucional y Exportación Multiformato
+El sistema emite el juicio oficial:
+* **APROBADO (A):** Avance ponderado $\ge 70\%$, al menos 5 checks de prueba verificados y al menos 2 simuladores aprobados.
+* **PENDIENTE / EN FORMACIÓN (NA):** Desglose claro de las tareas pendientes.
+
+### 3. Características Clave del Diseño Canónico (GFPI-F-023 Versión 03)
+* 🏛️ **Membrete Oficial SIGA:** Encabezado formal con el isotipo oficial del SENA en SVG vectorial (`fill="#39A900"`), títulos de la Dirección de Formación Profesional y tabla de control documental institucional (Código `GFPI-F-023`, Versión `03`, Ficha y Fecha).
+* ✍️ **Lienzo de Firma Digital del Aprendiz (Canvas HTML5):** Permite trazar la firma directamente con ratón, touchpad o pantalla táctil, o cargar una imagen (PNG/JPG). Se persiste automáticamente en `localStorage` y se estampa en el documento oficial con badge de validación.
+* 📋 **Registro Taxativo de Evidencias Técnicas:** Desglose pormenorizado de las evidencias `EV-01` (Plan de Pruebas IEEE 829), `EV-02` (Pruebas Unitarias e Integración con cobertura $\ge 80\%$) y `EV-03` (Playwright E2E y Bug Tracker), con botones de navegación directa hacia cada sección.
+* 🖨️ **Impresión / Exportación en PDF Impecable (`@media print`):** Formato carta (`letter portrait`) que oculta completamente los elementos de navegación web y paneles de control (`.no-print`), preservando la hoja `.sena-evidence-sheet` con colores institucionales exactos (`print-color-adjust: exact`) y evitando cortes dentro de celdas o tablas.
+* 📥 **Descarga en Markdown (`.md`):** Reporte estructurado para adjuntar al repositorio Git o bitácora de evidencias.
+* 💾 **Descarga en JSON (`.json`):** Paquete institucional estructurado para plataformas de gestión académica (LMS).

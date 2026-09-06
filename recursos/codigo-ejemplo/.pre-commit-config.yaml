@@ -1,0 +1,55 @@
+# ==============================================================================
+# .pre-commit-config.yaml — Quality Gate Local en Git
+# Guía de Testing & QA Universal (SENA ADSO)
+# ==============================================================================
+# Propósito: Ejecutar pruebas estáticas, formateo, escaneo de secretos y tests
+# unitarios rápidos en la máquina del desarrollador ANTES de permitir el commit.
+#
+# Instalación:
+#   pip install pre-commit gitleaks
+#   pre-commit install
+# ==============================================================================
+
+repos:
+  # 1. Higiene básica del repositorio Git
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace
+        name: 🧹 Limpiar espacios en blanco al final de línea
+      - id: end-of-file-fixer
+        name: 📄 Asegurar salto de línea al final del archivo
+      - id: check-yaml
+        name: ⚙️ Validar sintaxis de archivos YAML (.github/workflows)
+      - id: check-json
+        name: 🔍 Validar sintaxis de archivos JSON
+      - id: check-added-large-files
+        name: 📦 Prevenir subida de binarios grandes (>500KB)
+        args: ['--maxkb=500']
+      - id: check-merge-conflict
+        name: 🛑 Bloquear marcadores de conflicto de merge olvidados
+
+  # 2. Seguridad en Git: Detección estricta de secretos y credenciales
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.18.4
+    hooks:
+      - id: gitleaks
+        name: 🔒 Gitleaks: Prevenir subida de contraseñas, tokens y llaves privadas
+
+  # 3. Linter y verificación estática rápida (Python)
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.4.4
+    hooks:
+      - id: ruff
+        name: ⚡ Ruff: Linter ultrarrápido de código Python
+        args: [--fix]
+
+  # 4. Pruebas Unitarias Rápidas Locales (Smoke Gate antes del Commit)
+  - repo: local
+    hooks:
+      - id: pytest-unit-fast
+        name: 🧪 PyTest: Ejecución de pruebas unitarias críticas (< 2s)
+        entry: pytest tests/unit -q --tb=line
+        language: system
+        types: [python]
+        pass_filenames: false

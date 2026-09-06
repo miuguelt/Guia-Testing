@@ -230,8 +230,13 @@ def modulos(doc):
     doc.add_paragraph("Umbral obligatorio ADSO: Cobertura >= 80% en logica de negocio.")
     doc.add_paragraph("Comandos: pytest --cov=app --cov-fail-under=80 | npm run test:coverage | mvn test jacoco:report")
 
-    # 3.11 CI/CD con GitHub Actions
-    doc.add_heading("3.11 CI/CD con GitHub Actions y Quality Gates", level=2)
+    # 3.11 CI/CD con GitHub Actions y Versionamiento en Git
+    doc.add_heading("3.11 CI/CD, Testing con GitHub Actions y Versionamiento en Git", level=2)
+    doc.add_paragraph("Relacion entre Testing y GitHub: GitHub es el orquestador y arbitro imparcial de la calidad. A traves de GitHub Actions, los tests se ejecutan en runners limpios e independientes por cada push y pull request. Las Branch Protection Rules impiden fusionar cambios a main si los tests fallan.")
+    doc.add_paragraph("¿Se deben subir los tests a Git? SI, rotundamente. Las pruebas son ciudadanos de primera clase (First-Class Citizens). Sin ellas en el repositorio, los runners de CI/CD no tienen nada que ejecutar y no hay reproducibilidad ni trazabilidad con git bisect. NUNCA se suben: reportes efimeros (htmlcov/), caches (.pytest_cache/) ni secretos (.env).")
+    doc.add_paragraph("Seguridad y Atacantes: El mito de la 'seguridad por oscuridad' es falso. Ocultar los tests no protege la aplicacion; los atacantes usan herramientas automaticas (Burp Suite, OWASP ZAP) para encontrar fallas. El riesgo real es subir credenciales quemadas (hardcoded secrets) o datos reales en fixtures. Usa siempre datos sinteticos con Faker y GitHub Secrets.")
+    doc.add_paragraph("Repositorios Publicos vs Privados: Para aprendices, los repositorios publicos son su mejor portafolio demostrando calidad y cobertura >= 80%. Para empresas y software propietario con NDA, se usan repositorios privados. Regla de oro: Escribe y prueba todo proyecto como si fuera a ser publico manana.")
+
     agregar_pasos(doc, "Paso a paso para el Pipeline CI/CD:", [
         {"num": 1, "titulo": "Workflow YAML", "desc": "Definir .github/workflows/ci.yml con eventos push y pull_request hacia main.", "cmd": "git push origin main", "tip": "Configura cache de dependencias para acelerar el pipeline."},
         {"num": 2, "titulo": "Compuerta de Calidad", "desc": "Encadenar linter, pruebas unitarias, integracion y validacion de umbral del 80%.", "cmd": "pytest --cov=app --cov-fail-under=80", "tip": "Si un test falla, el despliegue al servidor VPS se cancela de inmediato."},
@@ -239,6 +244,11 @@ def modulos(doc):
     ])
     if os.path.exists(os.path.join(EJ_DIR, ".github", "workflows", "ci.yml")):
         agregar_codigo(doc, leer(os.path.join(".github", "workflows", "ci.yml")))
+
+    doc.add_heading("3.11.1 Tests para Git: Pre-commit Hooks y Deteccion de Secretos", level=3)
+    doc.add_paragraph("Pre-commit hooks ejecutan validaciones en la maquina local antes de permitir 'git commit'. Con Gitleaks bloquean la subida accidental de llaves API y con PyTest ejecutan smoke tests unitarios (< 2s).")
+    if os.path.exists(os.path.join(EJ_DIR, ".pre-commit-config.yaml")):
+        agregar_codigo(doc, leer(".pre-commit-config.yaml"))
 
     # 3.12 Auditoría Multidimensional
     doc.add_heading("3.12 Auditoria Multidimensional y Codigo IA (qa_auditor)", level=2)

@@ -72,6 +72,36 @@ Esta guia CONSUME el codigo de las 4 guias anteriores:
 
 ---
 
+## 5. Estándar Oficial del Registro Integral de Evidencias SENA (GFPI-F-023 Versión 03)
+> **Directriz SSoT Permanente ("Deseo Canónico de Diseño e Impresión"):**  
+> Cuando se genere o regenere el módulo de evidencias SENA en esta guía (o guías hermanas), se debe **priorizar estrictamente el diseño institucional GFPI-F-023 Versión 03** (origen SIGA - Formato Registro Integral de Evidencias y Juicio de Evaluación), garantizando:
+
+1. **Membrete Oficial SIGA:**
+   - Tabla con borde institucional verde `#39a900` de 2px, logotipo SVG del SENA centrado, subtítulos del Sistema Integrado de Gestión y Autocontrol (SIGA).
+   - Celda lateral derecha de control documental con: Código Formato (`GFPI-F-023`), Versión (`03`), Ficha, Fecha de emisión y Badge de estado dinámico.
+
+2. **Panel de Control y Firma Digital (Solo Pantalla):**
+   - Formulario reactivo para diligenciamiento de datos del aprendiz (nombre, documento, ficha, centro, regional, instructor, observaciones).
+   - Lienzo interactivo (Canvas HTML5 de 360x120) de **firma digital** con soporte táctil (Pointer Events), mouse, limpieza de trazo, carga de archivo de imagen (PNG/JPG) y persistencia en `localStorage` (`sena_apprentice_signature`).
+   - Barra de acciones: `🖨️ Imprimir / Guardar en PDF`, `💾 Descargar Evidencia en JSON`, `📥 Descargar en Markdown (.md)`, `🔄 Recargar Estado Real`, `⚡ Ejecutar Todas las Pruebas (CI)`.
+
+3. **Estructura Taxativa de la Hoja Imprimible (`.sena-evidence-sheet`):**
+   - **Sección 1:** Datos Generales del Aprendiz y Proceso Formativo (Competencia 220501100, RAPs 1..4).
+   - **Sección 2:** Registro Taxativo de Evidencias Técnicas Realizadas (EV-01, EV-02, EV-03) con badges de estado y botones directos de navegación `Ir a ... ➔`.
+   - **Sección 3:** Desempeño en Simuladores Interactivos (Pirámide de Cohn, Assertion Validator, Quiz QA, Secuenciador de Fases) y Matriz de 9 Suites de Prueba Automatizadas.
+   - **Sección 4:** Rúbrica de Criterios SENA con caja destacada de **Juicio de Evaluación Final del Instructor** (`APROBADO (A)` vs `NO APROBADO / EN FORMACIÓN (NA)`), observaciones editables y Declaración de Autenticidad y Veracidad.
+   - **Sección 5:** Espacio Institucional de Firmas en dos columnas (Aprendiz con estampa digital / Instructor con sello).
+
+4. **Reglas de Impresión y Exportación a PDF (`@media print`):**
+   - Supresión completa de elementos ajenos (`.no-print`, header, footer, barras de progreso, botones de acción).
+   - Hoja blanca centrada a tamaño carta (`size: letter portrait; margin: 1.2cm 1.4cm`).
+   - Mantenimiento exacto de bordes, fondos de cabecera `#f1f5f9` y badges institucionales (`-webkit-print-color-adjust: exact !important`).
+   - Prevención de saltos de página dentro de filas de tablas (`page-break-inside: avoid;`).
+
+5. **Cálculo Verídico y Ponderación Real de la Sesión:**
+   - Fórmula: $\text{Score} = \text{Módulos}(20\%) + \text{Simuladores}(30\%) + \text{Test Checks}(30\%) + \text{Entregables SSoT}(20\%)$.
+   - Condición de Aprobación: $\text{Score} \ge 70\%$, mínimo 5 suites de prueba aprobadas y mínimo 2 simuladores aprobados.
+
 ---
 
 ## Ruta ADSO

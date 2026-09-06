@@ -24,5 +24,5 @@ Write-Host "
 Write-Host "  http://localhost:$Port
 " -ForegroundColor Green
 
-# live-server con livereload automático (hot-reload)
-& "npx" -y live-server $WebDir --port=$Port --livereload-port=35735 --no-browser
+# live-server con recarga automática nativa (WebSocket en puerto $Port)
+& "npx" -y live-server $WebDir --port=$Port --no-browser
