@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="es-CO">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SENA ADSO - Guia Testing & QA</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Space+Grotesk:wght@400;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Bloques de codigo: modulo compartido DevBrain, local y sin CDN. -->
+    <link rel="stylesheet" href="css/vendor/devbrain-code.css">
+  <link rel="stylesheet" href="css/vendor/devbrain-evidence.css">
+</head>
+<body>
+    <div class="background-orbs">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+    <div id="particles" class="particles-container"></div>
+
+    <button id="sidebar-toggle" class="sidebar-toggle" aria-label="Toggle sidebar">&#9776;</button>
+
+    <aside id="sidebar" class="sidebar glass-panel">
+        <div class="sidebar-header">
+            <div class="logo">
+                <span class="logo-icon">&#128269;</span>
+                <span class="logo-text">Guia <span class="highlight">Testing</span></span>
+            </div>
+            <span class="sidebar-version">v1.0</span>
+        </div>
+        <div class="sidebar-user">
+            <div class="user-level">
+                <span id="user-level-name">Novato QA</span>
+                <span id="user-level" class="user-level-badge">Nivel 1</span>
+            </div>
+            <div class="user-xp"><span id="user-xp">0 XP</span></div>
+            <div class="progress-bar xp-bar"><div id="xp-progress-fill" class="progress-fill"></div></div>
+        </div>
+        <div class="sidebar-progress">
+            <div class="progress-label"><span>Progreso del curso</span><span id="progress-pct">0%</span></div>
+            <div class="progress-bar course-bar"><div id="course-progress" class="progress-fill"></div></div>
+        </div>
+        <div class="sidebar-search">
+            <input type="text" id="sidebar-search" placeholder="Buscar modulo... (Ctrl+K)">
+        </div>
+        <nav class="sidebar-nav">
+            <div class="nav-section">
+                <span class="nav-section-title">Fundamentos</span>
+                <a href="#welcome" class="nav-item active" data-module="welcome"><span class="nav-icon">&#127968;</span><span class="nav-text">Inicio</span></a>
+                <a href="#m-reflexion" class="nav-item" data-module="m-reflexion"><span class="nav-icon">&#128162;</span><span class="nav-text">Reflexion</span><span class="nav-badge">1</span></a>
+                <a href="#m-piramide" class="nav-item" data-module="m-piramide"><span class="nav-icon">&#128201;</span><span class="nav-text">Piramide Testing</span><span class="nav-badge">2</span></a>
+            </div>
+            <div class="nav-section">
+                <span class="nav-section-title">Practica</span>
+                <a href="#m-pytest-fastapi" class="nav-item" data-module="m-pytest-fastapi"><span class="nav-icon">&#9889;</span><span class="nav-text">PyTest FastAPI</span><span class="nav-badge">3</span></a>
+                <a href="#m-pytest-flask" class="nav-item" data-module="m-pytest-flask"><span class="nav-icon">&#127798;</span><span class="nav-text">PyTest Flask</span><span class="nav-badge">4</span></a>
+                <a href="#m-jest-react" class="nav-item" data-module="m-jest-react"><span class="nav-icon">&#9883;</span><span class="nav-text">Jest React</span><span class="nav-badge">5</span></a>
+                <a href="#m-junit-jsp" class="nav-item" data-module="m-junit-jsp"><span class="nav-icon">&#9749;</span><span class="nav-text">JUnit JSP</span><span class="nav-badge">6</span></a>
+            </div>
+            <div class="nav-section">
+                <span class="nav-section-title">Avanzado</span>
+                <a href="#m-tdd" class="nav-item" data-module="m-tdd"><span class="nav-icon">&#128260;</span><span class="nav-text">TDD</span><span class="nav-badge">7</span></a>
+                <a href="#m-bdd" class="nav-item" data-module="m-bdd"><span class="nav-icon">&#127797;</span><span class="nav-text">BDD</span><span class="nav-badge">8</span></a>
+                <a href="#m-playwright" class="nav-item" data-module="m-playwright"><span class="nav-icon">&#127916;</span><span class="nav-text">Playwright E2E</span><span class="nav-badge">9</span></a>
+                <a href="#m-cobertura" class="nav-item" data-module="m-cobertura"><span class="nav-icon">&#128202;</span><span class="nav-text">Cobertura</span><span class="nav-badge">10</span></a>
+                <a href="#m-cicd" class="nav-item" data-module="m-cicd"><span class="nav-icon">&#128640;</span><span class="nav-text">CI/CD</span><span class="nav-badge">11</span></a>
+            </div>
+            <div class="nav-section">
+                <span class="nav-section-title">IA y Testing</span>
+                <a href="#m-ia-testing" class="nav-item" data-module="m-ia-testing"><span class="nav-icon">&#129302;</span><span class="nav-text">IA en Testing</span><span class="nav-badge">+</span></a>
+            </div>
+            <div class="nav-section">
+                <span class="nav-section-title">Desafio</span>
+                <a href="#m-reto" class="nav-item" data-module="m-reto"><span class="nav-icon">&#127942;</span><span class="nav-text">Reto Final</span><span class="nav-badge">12</span></a>
+                <a href="#m-simuladores" class="nav-item" data-module="m-simuladores"><span class="nav-icon">&#127918;</span><span class="nav-text">Simuladores</span></a>
+            </div>
+            <div class="nav-section">
+                <span class="nav-section-title">Recursos</span>
+                <a href="#descargar" class="nav-item" data-module="descargar"><span class="nav-icon">&#128229;</span><span class="nav-text">Descargar Proyecto</span></a>
+            </div>
+        </nav>
+    </aside>
+
+    <div class="main-wrapper">
+        <header class="top-header glass-panel">
+            <div class="breadcrumb">Guia Testing & QA > <span id="breadcrumb-current">Inicio</span></div>
+            <div class="header-actions">
+                <button class="btn btn-sm btn-primary" onclick="APP.navigateTo('m-simuladores')">Simuladores</button>
+            </div>
+        </header>
+
+        <main class="content">
+            <section id="welcome" class="page-section active">
+                <div class="hero-section section-card glass-panel">
+                    <div class="badge">Fase 5 - Evaluacion - Guia de Aprendizaje Oficial SENA ADSO</div>
+                    <h1 class="title">Calidad de Software con <span class="gradient-text">Testing & QA</span></h1>
+                    <p class="subtitle">Cierra el ciclo Construir -&gt; Verificar. Testea el codigo REAL de las 4 guias anteriores (Flask, FastAPI, JSP, React) con PyTest, Jest, JUnit, Playwright y CI/CD.</p>
+                    <div class="hero-stats">
+                        <div class="stat"><span class="stat-number">12</span><span class="stat-label">Modulos</span></div>
+                        <div class="stat"><span class="stat-number">4</span><span class="stat-label">Simuladores</span></div>
+                        <div class="stat"><span class="stat-number">40h</span><span class="stat-label">Duracion</span></div>
+                        <div class="stat"><span class="stat-number">4</span><span class="stat-label">Frameworks</span></div>
+                    </div>
+                    <div class="alert-box note">
+                        <h3>&#129300; Pregunta Esencial (PBL)</h3>
+                        <p>Como garantizas que el software que construyas no falle en produccion y cueste millones? El bug de Knight Capital (2012) perdio $440 millones en 45 minutos por un codigo de prueba no eliminado.</p>
+                    </div>
+                    <div class="hero-actions">
+                        <button class="btn btn-primary" onclick="APP.navigateTo('m-reflexion')">Comenzar Mision 1</button>
+                        <button class="btn btn-secondary" onclick="APP.navigateTo('m-simuladores')">Ver Simuladores</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="m-reflexion" class="page-section module-page"><div class="section-card glass-panel"></div></section>
+            <section id="m-piramide" class="page-section module-page"><div class="section-card glass-panel"></div></section>
+            <section id="m-pytest-fastapi" class="page-section module-page"><div class="section-card glass-panel"></div></section>
+            <section id="m-pytest-flask" class="page-section module-page"><div class="section-card glass-panel"></div></section>
+            <section id="m-jest-react" class="page-section module-page"><div class="section-card glass-panel"></div></section>
+            <section id="m-junit-jsp" class="page-section module-page"><div class="section-card glass-panel"></div></section>
+            <section id="m-tdd" class="page-section module-page"><div class="section-card glass-panel"></div></section>
+            <section id="m-bdd" class="page-section module-page"><div class="section-card glass-panel"></div></section>
+            <section id="m-playwright" class="page-section module-page"><div class="section-card glass-panel"></div></section>
+            <section id="m-cobertura" class="page-section module-page"><div class="section-card glass-panel"></div></section>
+            <section id="m-cicd" class="page-section module-page"><div class="section-card glass-panel"></div></section>
+            <section id="m-reto" class="page-section module-page"><div class="section-card glass-panel"></div></section>
+
+            <section id="m-ia-testing" class="page-section module-page"><div class="section-card glass-panel"></div></section>
+            <section id="m-simuladores" class="page-section module-page">
+                <div class="section-card glass-panel">
+                    <div class="module-hero">
+                        <span class="module-badge">Simuladores</span>
+                        <h1>Simuladores Interactivos QA</h1>
+                        <p>Practica con 9 herramientas interactivas y gana XP.</p>
+                    </div>
+                    <h3>Test Pyramid Builder</h3>
+                    <div class="sim-pyramid-container"></div>
+                    <h3 class="mt-4">Assertion Validator</h3>
+                    <div class="sim-assertion-container"></div>
+                    <h3 class="mt-4">Quiz de Testing</h3>
+                    <div class="sim-quiz-container"></div>
+                    <h3 class="mt-4">&#9881;&#65039; Secuenciador de Fases: Pipeline de Pruebas Automatizadas</h3>
+                    <div class="sim-sequencer-container"></div>
+                </div>
+            </section>
+
+<!-- DESCARGA -->
+            <section id="descargar" class="page-section module-page">
+                <div class="section-card glass-panel">
+                    <div class="module-hero">
+                        <span class="module-badge">&#128229; Descargar Proyecto</span>
+                        <h1>Descarga y ejecuta las pruebas</h1>
+                        <p>El codigo completo de testing esta en <code>recursos/codigo-ejemplo/</code>. Cubre PyTest, Jest, JUnit y Playwright.</p>
+                    </div>
+
+                    <h3>&#128221; Requisitos</h3>
+                    <ul>
+                        <li>Python 3.11+ (para tests PyTest de FastAPI y Flask)</li>
+                        <li>Node.js 18+ (para tests Jest de React)</li>
+                        <li>JDK 21 + Maven (para tests JUnit de JSP)</li>
+                        <li>Navegador Chromium (para Playwright E2E)</li>
+                    </ul>
+
+                    <h3 class="mt-4">&#128736; Instrucciones paso a paso</h3>
+                    <div class="code-block-wrapper">
+                        <div class="code-file-header"><span class="file-icon">&#128194;</span><span class="file-path">Terminal — Tests Python (FastAPI + Flask)</span></div>
+                        <pre class="code-block"><code>cd recursos/codigo-ejemplo
+
+# Entorno virtual
+python -m venv venv
+.\venv\Scripts\activate
+pip install -r requirements.txt
+
+# Ejecutar tests por fases del flujo maestro
+pytest tests/unit/ -v              # Fase 1: Pruebas unitarias de logica pura
+pytest tests/integration/ -v       # Fase 3: Integracion HTTP y SQLite con TestClient
+pytest tests/ -v                   # Todas las fases (26 tests automatizados)
+pytest tests/ --cov=services --cov=routers --cov=schemas --cov-report=term-missing # Fase 6: Cobertura total</code></pre>
+                    </div>
+
+                    <div class="code-block-wrapper mt-4">
+                        <div class="code-file-header"><span class="file-icon">&#128194;</span><span class="file-path">Terminal — Tests JavaScript (Vitest, API compatible con Jest)</span></div>
+                        <pre class="code-block"><code>cd recursos/codigo-ejemplo
+npm install
+npm test
+npm run test:coverage</code></pre>
+                    </div>
+
+                    <div class="code-block-wrapper mt-4">
+                        <div class="code-file-header"><span class="file-icon">&#128194;</span><span class="file-path">Terminal — Tests JUnit 5 (Maven / Spring Boot)</span></div>
+                        <pre class="code-block"><code>cd recursos/codigo-ejemplo
+mvn test
+# Cobertura con JaCoCo (agrega el plugin jacoco-maven-plugin)
+mvn jacoco:report</code></pre>
+                    </div>
+
+                    <div class="code-block-wrapper mt-4">
+                        <div class="code-file-header"><span class="file-icon">&#128194;</span><span class="file-path">Terminal — Playwright E2E</span></div>
+                        <pre class="code-block"><code>cd recursos/codigo-ejemplo
+npx playwright install
+npx playwright test
+npx playwright show-report</code></pre>
+                    </div>
+
+                    <div class="alert-box success mt-4">
+                        <h4>&#128200; Ver cobertura</h4>
+                        <p>Cada framework produce su propio reporte. Apreta los reportes en la raiz del proyecto:</p>
+                        <ul>
+                            <li><strong>Python:</strong> <code>pytest --cov=app --cov-report=html</code> abre <code>htmlcov/index.html</code>.</li>
+                            <li><strong>JavaScript:</strong> <code>npm run test:coverage</code> genera <code>coverage/index.html</code>.</li>
+                            <li><strong>Java:</strong> <code>mvn jacoco:report</code> abre <code>target/site/jacoco/index.html</code>.</li>
+                        </ul>
+                    </div>
+
+                    <div class="alert-box note mt-4">
+                        <h4>&#128736; Script de setup automático</h4>
+                        <pre><code class="language-powershell"># setup.ps1
+Write-Host "=== Configurando entorno de Testing ===" -ForegroundColor Cyan
+
+# Python tests
+python -m venv venv
+.\venv\Scripts\activate
+pip install -r requirements.txt
+
+# Frontend tests
+npm install
+
+# Playwright
+npx playwright install
+
+Write-Host "Listo! Ejecuta 'pytest tests/ -v' para probar." -ForegroundColor Green
+
+#### Prueba rapida de cURL ####
+# Probar que la API FastAPI funciona (debe estar corriendo)
+curl http://localhost:8009/api/fincas</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <footer>
+                <p>SENA ADSO - Guia Testing & QA v1.0 - Puerto 8035</p>
+            </footer>
+        </main>
+    </div>
+
+    <div id="victory-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content glass-panel">
+            <div class="modal-header">
+                <span class="modal-icon">&#127942;</span>
+                <h2>&#161;Certificacion QA Superada!</h2>
+            </div>
+            <div class="modal-body">
+                <p class="modal-stats">Has completado todos los modulos de la guia.</p>
+                <div class="modal-stats-grid">
+                    <div class="modal-stat">
+                        <span class="modal-stat-number" id="modal-modules">0</span>
+                        <span class="modal-stat-label">Modulos</span>
+                    </div>
+                    <div class="modal-stat">
+                        <span class="modal-stat-number" id="modal-xp">0</span>
+                        <span class="modal-stat-label">XP Totales</span>
+                    </div>
+                    <div class="modal-stat">
+                        <span class="modal-stat-number" id="modal-level">0</span>
+                        <span class="modal-stat-label">Nivel</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="APP.closeVictoryModal()">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.min.js"></script>
+    <script src="js/vendor/devbrain-code.js"></script>
+    <script src="js/gamification.js"></script>
+    <script src="js/simulators.js"></script>
+    <script src="js/modules-content.js"></script>
+    <script src="js/modules-content-2.js"></script>
+    <script src="js/code-renderer.js"></script>
+    <script src="js/vendor/devbrain-evidence.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+      // Convierte en tarjetas DevBrain cada <pre> de la guia, ahora y cada
+      // vez que el enrutador pinte contenido nuevo.
+      DevBrainCode.activarAdopcionAutomatica();
+    </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (window.DevBrainEvidence) {
+        window.DevBrainEvidence.montar({
+          registro: 'deliverables.registry.json',
+          prefijo: 'guia_testing'
+        });
+      }
+    });
+  </script>
+</body>
+</html>

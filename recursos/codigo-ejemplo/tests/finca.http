@@ -1,0 +1,62 @@
+### Listar fincas
+GET http://localhost:8080/api/fincas
+
+### Listar fincas (espera vacio)
+GET http://localhost:8080/api/fincas
+
+### Obtener finca por ID
+GET http://localhost:8080/api/fincas/1
+
+### Error 404 - finca no existente
+GET http://localhost:8080/api/fincas/999
+
+### Crear finca
+POST http://localhost:8080/api/fincas
+Content-Type: application/json
+
+{
+  "nombre": "La Esperanza",
+  "propietario": "Carlos",
+  "vereda": "El Gualilo",
+  "municipio": "Vélez",
+  "hectareas": 12.5
+}
+
+### Crear finca solo campos obligatorios
+POST http://localhost:8080/api/fincas
+Content-Type: application/json
+
+{
+  "nombre": "El Porvenir",
+  "propietario": "Ana",
+  "municipio": "Puente Nacional",
+  "hectareas": 8.0
+}
+
+### Error 400 - datos invalidos (nombre vacio, hectareas negativas)
+POST http://localhost:8080/api/fincas
+Content-Type: application/json
+
+{
+  "nombre": "",
+  "propietario": "",
+  "municipio": "",
+  "hectareas": -5.0
+}
+
+### Error 400 - hectareas en cero
+POST http://localhost:8080/api/fincas
+Content-Type: application/json
+
+{
+  "nombre": "Finca Test",
+  "propietario": "Luis",
+  "municipio": "Bolívar",
+  "hectareas": 0
+}
+
+### Eliminar finca
+DELETE http://localhost:8080/api/fincas/1
+
+### Error 404 - eliminar finca no existente
+DELETE http://localhost:8080/api/fincas/999

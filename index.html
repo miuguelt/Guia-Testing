@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es-CO">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía Interactiva: Testing de Software & QA Universal | SENA ADSO</title>
+    <meta name="description" content="Guía interactiva completa de Testing de Software, QA, TDD, PyTest, Jest, JUnit 5 y Playwright bajo el estándar ISO/IEC 25010.">
+    <link rel="stylesheet" href="web/css/styles.css">
+  <link rel="stylesheet" href="web/css/vendor/devbrain-evidence.css">
+</head>
+<body class="no-sidebar">
+    <div class="main-wrapper">
+        <header class="top-header">
+            <h1>🧪 Guía de Testing de Software, QA & Pruebas Automatizadas</h1>
+        </header>
+
+        <main class="content" id="main-content">
+            <!-- 1. PLAN DE PRUEBAS -->
+            <section id="m-plan-pruebas" class="page-section active">
+                <div class="section-card">
+                    <h2>📋 Plan de Pruebas de Software (IEEE 829)</h2>
+                    <p>Diseño y especificación de estrategias de prueba, matrices de cobertura y criterios de aceptación.</p>
+                    <div data-db-evidence="ART-TEST-01"></div>
+                </div>
+            </section>
+
+            <!-- 2. PRUEBAS UNITARIAS -->
+            <section id="m-unitarias" class="page-section">
+                <div class="section-card">
+                    <h2>⚙️ Suite de Pruebas Unitarias & Mocks</h2>
+                    <p>Desarrollo guiado por pruebas (TDD), aserciones estrictas y métricas de cobertura de código (>=80%).</p>
+                    <div data-db-evidence="ART-TEST-02"></div>
+                </div>
+            </section>
+
+            <!-- 3. E2E & BUG TRACKER -->
+            <section id="m-e2e" class="page-section">
+                <div class="section-card">
+                    <h2>🚀 Pruebas End-to-End con Playwright & Bug Tracking</h2>
+                    <p>Automatización de flujos de usuario reales y gestión de defectos según severidad.</p>
+                    <div data-db-evidence="ART-TEST-03"></div>
+                </div>
+            </section>
+
+            <!-- Formato de Evidencias -->
+            <section id="m-dossier" class="page-section">
+                <div class="section-card">
+                    <h2>📄 consolidación del Formato de Evidencias de Calidad</h2>
+                    <div data-db-evidence-dossier></div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="web/js/vendor/devbrain-evidence.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const evidenceAPI = window.DevBrainEvidence || (window.DevBrainSDK && window.DevBrainSDK.evidence);
+      if (evidenceAPI) {
+        evidenceAPI.montar({
+          registro: 'deliverables.registry.json',
+          prefijo: 'guia_testing'
+        });
+      }
+    });
+  </script>
+</body>
+</html>

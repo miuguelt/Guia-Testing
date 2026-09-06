@@ -1,0 +1,162 @@
+{
+  "standard": {
+    "id": "devbrain.educational-guide",
+    "version": "2.4.0"
+  },
+  "guide": {
+    "id": "adso-testing-qa-calidad-2026",
+    "title": "Testing de Software, Aseguramiento de Calidad (QA) y Pruebas Automatizadas",
+    "format": "web",
+    "entrypoint": "./index.html",
+    "language": "es-CO",
+    "version": "3.0.0",
+    "servicePort": 8035,
+    "summary": "Formación integral en aseguramiento de calidad del software (QA), diseño de planes de pruebas, pruebas unitarias, de integración y end-to-end con PyTest, Jest, JUnit 5 y Playwright bajo el estándar ISO/IEC 25010."
+  },
+  "curricularAlignment": {
+    "program": {
+      "code": "228118",
+      "name": "Tecnólogo en Análisis y Desarrollo de Software (ADSO)"
+    },
+    "competency": {
+      "code": "220501098",
+      "name": "Verificar los entregables del desarrollo de software de acuerdo con las especificaciones del diseño"
+    },
+    "learningResults": [
+      {
+        "code": "RAP-01",
+        "name": "Diseñar y ejecutar el plan de pruebas de software verificando el cumplimiento de requisitos funcionales y no funcionales."
+      }
+    ]
+  },
+  "duration": {
+    "recommendedTotalHours": "40 horas",
+    "hours": 40
+  },
+  "platform": {
+    "sdk": "devbrain-learner-sdk",
+    "bootstrap": "window.DevBrainSDK.createApp()",
+    "storagePrefix": "guia_testing",
+    "vendored": [
+      "js/vendor/devbrain-learner-sdk.js",
+      "css/vendor/devbrain-learner-sdk.css"
+    ],
+    "dashboardLink": "http://127.0.0.1:8051",
+    "modules": 8,
+    "xpTotal": 1800,
+    "levels": [
+      {
+        "name": "Tester Novato",
+        "min": 0,
+        "icon": "🌱"
+      },
+      {
+        "name": "QA Specialist",
+        "min": 450,
+        "icon": "🧪"
+      },
+      {
+        "name": "Automation Lead",
+        "min": 950,
+        "icon": "⚡"
+      },
+      {
+        "name": "Maestro QA",
+        "min": 1400,
+        "icon": "👑"
+      }
+    ]
+  },
+  "project": {
+    "caseStudy": "Suite QA & Testing Universal",
+    "challenge": "Diseñar y automatizar el plan de pruebas integral para el ecosistema de software con pirámide de tests y reporte de defectos.",
+    "finalProduct": "Informe Integral de Evidencias en Markdown con Plan de Pruebas IEEE 829, suite automatizada con cobertura >= 80% y bitácora V.E.R.A.",
+    "deliverablesRegistry": "deliverables.registry.json",
+    "checkpoints": [
+      {
+        "id": "CP-01",
+        "name": "Plan de Pruebas IEEE 829",
+        "evidence": "ART-TEST-01",
+        "criterion": "Define alcance, estrategia y matriz de casos."
+      },
+      {
+        "id": "CP-02",
+        "name": "Suite de Pruebas Unitarias",
+        "evidence": "ART-TEST-02",
+        "criterion": "Automatiza pruebas con cobertura >= 80%."
+      },
+      {
+        "id": "CP-03",
+        "name": "Automatización E2E y Bug Tracking",
+        "evidence": "ART-TEST-03",
+        "criterion": "Ejecuta flujos Playwright y clasifica defectos."
+      }
+    ]
+  },
+  "learningSequence": [
+    {
+      "phase": "reflection",
+      "name": "Reflexión Inicial",
+      "hours": 4
+    },
+    {
+      "phase": "contextualization",
+      "name": "Contextualización: Pirámide de Pruebas",
+      "hours": 6
+    },
+    {
+      "phase": "appropriation",
+      "name": "Apropiación: PyTest, TDD y Mocks",
+      "hours": 20
+    },
+    {
+      "phase": "transfer",
+      "name": "Transferencia: Pipeline QA Automatizado",
+      "hours": 10
+    }
+  ],
+  "evidence": {
+    "knowledge": [
+      "ART-TEST-01"
+    ],
+    "performance": [
+      "ART-TEST-02"
+    ],
+    "product": [
+      "ART-TEST-03"
+    ]
+  },
+  "assessment": {
+    "instruments": [
+      "Lista de chequeo de plan de pruebas",
+      "Rúbrica de pruebas automatizadas",
+      "Rúbrica analítica de producto de software"
+    ]
+  },
+  "glossary": [
+    {
+      "term": "Test-Driven Development (TDD)",
+      "meaning": "Metodología de desarrollo donde se escribe primero la prueba que falla antes de implementar el código de producción."
+    },
+    {
+      "term": "Pirámide de Pruebas",
+      "meaning": "Modelo arquitectónico que prioriza una amplia base de pruebas unitarias rápidas sobre pruebas de integración y E2E."
+    },
+    {
+      "term": "Protocolo V.E.R.A.",
+      "meaning": "Verificar en docs, Ejecutar TDD, Revisar calidad/seguridad, Atribuir en bitácora."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Estándar IEEE 829 para Documentación de Pruebas de Software",
+      "locator": "IEEE Standard for Software and System Test Documentation",
+      "use": "Estructura del plan de pruebas y casos de prueba formales."
+    },
+    {
+      "title": "Estándar Canónico DevBrain v2.4.0",
+      "locator": "_core/knowledge_base/EDUCATIONAL_GUIDE_STANDARD.md",
+      "use": "Estructura de estaciones distribuidas, evidencias, criterios y gates de calidad."
+    }
+  ]
+}

@@ -1,0 +1,381 @@
+/* DevBrain · bloques de código para guías. Generado por bundle.cjs. */
+/* ==================================================================== *
+ *  Bloques de código de las guías DevBrain                             *
+ * ==================================================================== *
+ *
+ * Tres decisiones mandan sobre todas las demás:
+ *
+ *  1. El código NO se ajusta al ancho. Envolver una línea desplaza el resto
+ *     de la línea al margen izquierdo y destruye la sangría, que es lo único
+ *     que le dice al aprendiz qué está dentro de qué. Se desplaza en
+ *     horizontal, y el ajuste queda como interruptor explícito para pantallas
+ *     estrechas.
+ *  2. El color nunca es el único canal. El ámbito se marca además con rieles,
+ *     las líneas destacadas con una marca en el margen y el tipo de token con
+ *     peso e itálica. Quien no distingue verde de rojo debe seguir leyendo.
+ *  3. La paleta se elige por contraste medido sobre el fondo del bloque, no
+ *     por gusto. Todos los tokens superan 4.5:1 en su tema.
+ */
+
+.dbc {
+  --dbc-bg: #0d1420;
+  --dbc-bg-cabeza: #131c2b;
+  --dbc-borde: rgba(148, 163, 184, 0.22);
+  --dbc-guia: rgba(148, 163, 184, 0.18);
+  --dbc-num: #7d8da4;
+  --dbc-foco: rgba(56, 189, 248, 0.14);
+  --dbc-foco-marca: #38bdf8;
+
+  --dbc-riel-funcion: #7dd3fc;
+  --dbc-riel-metodo: #c4b5fd;
+  --dbc-riel-clase: #fcd34d;
+
+  --tk-plain: #e2e8f0;
+  --tk-comment: #94a3b8;
+  --tk-string: #86efac;
+  --tk-number: #fbbf24;
+  --tk-literal: #fbbf24;
+  --tk-keyword: #d8b4fe;
+  --tk-control: #fda4af;
+  --tk-type: #67e8f9;
+  --tk-builtin: #67e8f9;
+  --tk-function: #93c5fd;
+  --tk-property: #f9a8d4;
+  --tk-variable: #fdba74;
+  --tk-decorator: #fdba74;
+  --tk-tag: #fda4af;
+  --tk-meta: #94a3b8;
+  --tk-operator: #cbd5e1;
+  --tk-punct: #94a3b8;
+
+  --dbc-num-w: 3ch;
+  --dbc-canal-w: 0ch;
+
+  margin: 0 0 1.25rem;
+  border: 1px solid var(--dbc-borde);
+  border-radius: 12px;
+  background: var(--dbc-bg);
+  overflow: hidden;
+  color-scheme: dark;
+}
+
+/* Paleta clara. La activa el SDK midiendo el fondo real del bloque, así que
+   funciona con `data-theme="light"`, con `claro`, con una clase propia de la
+   guía o sin ningún interruptor de tema. */
+.dbc.dbc--claro {
+  --dbc-bg: #f8fafc;
+  --dbc-bg-cabeza: #eef2f7;
+  --dbc-borde: #cbd5e1;
+  --dbc-guia: rgba(71, 85, 105, 0.2);
+  --dbc-num: #64748b;
+  --dbc-foco: rgba(2, 132, 199, 0.1);
+  --dbc-foco-marca: #0284c7;
+
+  --dbc-riel-funcion: #0369a1;
+  --dbc-riel-metodo: #6d28d9;
+  --dbc-riel-clase: #a16207;
+
+  --tk-plain: #1f2937;
+  --tk-comment: #5b6b7f;
+  --tk-string: #15803d;
+  --tk-number: #b45309;
+  --tk-literal: #b45309;
+  --tk-keyword: #7c2d92;
+  --tk-control: #be123c;
+  --tk-type: #0e7490;
+  --tk-builtin: #0e7490;
+  --tk-function: #1d4ed8;
+  --tk-property: #9d174d;
+  --tk-variable: #c2410c;
+  --tk-decorator: #c2410c;
+  --tk-tag: #be123c;
+  --tk-meta: #5b6b7f;
+  --tk-operator: #475569;
+  --tk-punct: #64748b;
+
+  color-scheme: light;
+}
+
+/* ---------------------------- Cabecera ---------------------------- */
+
+.dbc__cabeza {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.6rem;
+  background: var(--dbc-bg-cabeza);
+  border-bottom: 1px solid var(--dbc-borde);
+}
+
+.dbc__lenguaje {
+  flex: 0 0 auto;
+  padding: 0.1rem 0.45rem;
+  font-family: var(--sdk-font-code, ui-monospace, monospace);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--dbc-bg);
+  background: var(--tk-function);
+  border-radius: 5px;
+}
+
+.dbc__ruta {
+  flex: 1 1 12rem;
+  min-width: 0;
+  font-family: var(--sdk-font-code, ui-monospace, monospace);
+  font-size: 0.76rem;
+  line-height: 1.35;
+  color: var(--tk-plain);
+  background: none;
+  padding: 0;
+  /* La ruta completa es información: nunca se recorta con puntos suspensivos. */
+  overflow-wrap: anywhere;
+}
+
+.dbc__tam {
+  flex: 0 0 auto;
+  font-size: 0.7rem;
+  color: var(--dbc-num);
+}
+
+.dbc__acciones { display: inline-flex; gap: 0.35rem; flex: 0 0 auto; }
+
+.dbc__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  min-height: 2rem;
+  padding: 0.2rem 0.55rem;
+  font: inherit;
+  font-size: 0.72rem;
+  color: var(--tk-plain);
+  background: var(--dbc-bg);
+  border: 1px solid var(--dbc-borde);
+  border-radius: 6px;
+  cursor: pointer;
+}
+.dbc__btn:hover { border-color: var(--tk-function); }
+.dbc__btn:focus-visible { outline: 2px solid var(--dbc-foco-marca); outline-offset: 2px; }
+.dbc__btn.is-ok { color: var(--tk-string); border-color: var(--tk-string); }
+.dbc__btn.is-fail { color: var(--tk-control); border-color: var(--tk-control); }
+.dbc__btn-icono { font-size: 0.85rem; line-height: 1; }
+.dbc--ajustado .dbc__btn--ajustar { color: var(--tk-function); border-color: var(--tk-function); }
+
+/* ------------------------------ Código ---------------------------- */
+
+.dbc__scroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+  background: var(--dbc-bg);
+}
+.dbc__scroll:focus-visible { outline: 2px solid var(--dbc-foco-marca); outline-offset: -2px; }
+
+.dbc ol.dbc__codigo {
+  display: block;
+  margin: 0;
+  padding: 0.6rem 0;
+  padding-inline-start: 0;
+  list-style: none;
+  min-width: max-content;
+  font-family: var(--sdk-font-code, ui-monospace, 'JetBrains Mono', monospace);
+  font-size: 0.82rem;
+  line-height: 1.65;
+  tab-size: 4;
+  color: var(--tk-plain);
+}
+
+/* `list-style: none` en el `<ol>` no basta: varias guías dan estilo a `li` en
+   su propia hoja y le devuelven el marcador, con lo que el número aparecía dos
+   veces («1 1», «2 2»). Se apaga también en la línea y en su `::marker`. */
+.dbc__linea {
+  display: flex;
+  align-items: flex-start;
+  min-height: 1.65em;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-increment: none;
+}
+.dbc__linea::marker { content: none; }
+
+/* El número se queda pegado al borde izquierdo mientras el código se desplaza:
+   sin eso, en un listado ancho el aprendiz pierde la referencia justo cuando
+   más la necesita.
+
+   Es contenido generado, no un `<span>`: así no entra en el `textContent` del
+   bloque ni en lo que el navegador copia al seleccionar, y el aprendiz pega
+   código, no una columna de cifras. */
+.dbc__linea::before {
+  content: attr(data-n);
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  flex: 0 0 auto;
+  width: var(--dbc-num-w);
+  padding: 0 0.75ch;
+  box-sizing: content-box;
+  text-align: right;
+  color: var(--dbc-num);
+  background: var(--dbc-bg);
+  user-select: none;
+}
+
+.dbc__canal {
+  position: sticky;
+  left: calc(var(--dbc-num-w) + 1.5ch);
+  z-index: 2;
+  flex: 0 0 auto;
+  display: flex;
+  align-self: stretch;
+  width: var(--dbc-canal-w);
+  background: var(--dbc-bg);
+}
+
+/* Un riel por ámbito abierto. La esquina superior marca la apertura y la
+   inferior el cierre, de modo que el bloque se ve completo sin contar sangrías. */
+.dbc__riel {
+  position: relative;
+  flex: 0 0 auto;
+  width: 1ch;
+}
+.dbc__riel::before {
+  content: '';
+  position: absolute;
+  left: 0.35ch;
+  width: 2px;
+  background: currentColor;
+  opacity: 0.55;
+  top: 0;
+  bottom: 0;
+}
+.dbc__riel[data-pos='ini']::before { top: 55%; border-radius: 2px 2px 0 0; }
+.dbc__riel[data-pos='fin']::before { bottom: 45%; border-radius: 0 0 2px 2px; }
+.dbc__riel[data-pos='ini']::after,
+.dbc__riel[data-pos='fin']::after {
+  content: '';
+  position: absolute;
+  left: 0.35ch;
+  width: 0.5ch;
+  height: 2px;
+  background: currentColor;
+  opacity: 0.55;
+}
+.dbc__riel[data-pos='ini']::after { top: 55%; }
+.dbc__riel[data-pos='fin']::after { bottom: 45%; }
+
+.dbc__riel[data-tipo='funcion'] { color: var(--dbc-riel-funcion); }
+.dbc__riel[data-tipo='metodo'] { color: var(--dbc-riel-metodo); }
+.dbc__riel[data-tipo='clase'] { color: var(--dbc-riel-clase); }
+
+.dbc__txt {
+  flex: 1 1 auto;
+  padding-right: 1.5ch;
+  white-space: pre;
+}
+
+/* Guías de sangría: una línea vertical por nivel, dibujada solo sobre el
+   espacio en blanco inicial para que coincida exactamente con la columna. */
+.dbc__ind {
+  display: inline-block;
+  background-image: repeating-linear-gradient(
+    to right,
+    var(--dbc-guia) 0,
+    var(--dbc-guia) 1px,
+    transparent 1px,
+    transparent calc(1ch * var(--dbc-unidad, 2))
+  );
+}
+
+.dbc__linea--abre {
+  background: linear-gradient(to right, color-mix(in srgb, var(--dbc-foco-marca) 8%, transparent), transparent 60%);
+}
+.dbc__linea--abre .dbc__txt { font-weight: 600; }
+.dbc__linea--cierra { box-shadow: inset 0 -1px 0 var(--dbc-guia); }
+
+/* La línea destacada se marca con fondo y con una barra en el margen: quien no
+   distingue el matiz de fondo sigue viendo cuál es. */
+.dbc__linea--foco { background: var(--dbc-foco); }
+.dbc__linea--foco::before {
+  box-shadow: inset 3px 0 0 var(--dbc-foco-marca);
+  background: var(--dbc-foco);
+  font-weight: 700;
+  color: var(--dbc-foco-marca);
+}
+.dbc__linea--senalada { background: var(--dbc-foco); transition: background 0.4s ease; }
+
+/* --------------------------- Tokens ------------------------------- */
+
+.tk--comment { color: var(--tk-comment); font-style: italic; }
+.tk--string { color: var(--tk-string); }
+.tk--number, .tk--literal { color: var(--tk-number); }
+.tk--keyword { color: var(--tk-keyword); font-weight: 600; }
+.tk--control { color: var(--tk-control); font-weight: 600; }
+.tk--type, .tk--builtin { color: var(--tk-type); }
+.tk--function { color: var(--tk-function); }
+.tk--property { color: var(--tk-property); }
+.tk--variable { color: var(--tk-variable); }
+.tk--decorator { color: var(--tk-decorator); font-style: italic; }
+.tk--tag { color: var(--tk-tag); }
+.tk--meta { color: var(--tk-meta); }
+.tk--operator { color: var(--tk-operator); }
+.tk--punct { color: var(--tk-punct); }
+
+/* ------------------------ Índice de ámbitos ----------------------- */
+
+.dbc__indice {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.45rem 0.6rem;
+  background: var(--dbc-bg-cabeza);
+  border-top: 1px solid var(--dbc-borde);
+}
+.dbc__indice-rotulo { font-size: 0.72rem; color: var(--dbc-num); }
+
+.dbc__chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  min-height: 1.9rem;
+  padding: 0.15rem 0.5rem;
+  font-family: var(--sdk-font-code, ui-monospace, monospace);
+  font-size: 0.72rem;
+  color: var(--tk-plain);
+  background: var(--dbc-bg);
+  border: 1px solid var(--dbc-borde);
+  border-left-width: 3px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.dbc__chip[data-tipo='funcion'] { border-left-color: var(--dbc-riel-funcion); }
+.dbc__chip[data-tipo='metodo'] { border-left-color: var(--dbc-riel-metodo); }
+.dbc__chip[data-tipo='clase'] { border-left-color: var(--dbc-riel-clase); }
+.dbc__chip:hover { border-color: var(--tk-function); }
+.dbc__chip:focus-visible { outline: 2px solid var(--dbc-foco-marca); outline-offset: 2px; }
+.dbc__chip-rango { color: var(--dbc-num); font-size: 0.66rem; }
+
+/* --------------------------- Variantes ---------------------------- */
+
+.dbc--ajustado .dbc__txt { white-space: pre-wrap; overflow-wrap: anywhere; }
+.dbc--ajustado .dbc__codigo { min-width: 0; }
+
+@media (max-width: 640px) {
+  .dbc__codigo { font-size: 0.76rem; }
+  .dbc__tam { display: none; }
+  .dbc__btn-txt { display: none; }
+  .dbc__btn { padding: 0.2rem 0.45rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dbc__linea--senalada { transition: none; }
+}
+
+@media print {
+  .dbc__acciones, .dbc__indice { display: none; }
+  .dbc { break-inside: avoid; border-color: #64748b; }
+  .dbc__scroll { overflow: visible; }
+  .dbc__txt { white-space: pre-wrap; }
+}

@@ -1,0 +1,13 @@
+services:
+  test:
+    build: .
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '3'
+    volumes:
+      - ./tests:/app/tests
+      - ./reports:/app/reports
+    command: pytest --cov=app --cov-report=html:reports/coverage --cov-report=term-missing -v

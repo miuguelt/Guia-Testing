@@ -1,0 +1,60 @@
+# ==============================================================================
+# Stack de Observabilidad y Monitoreo Inteligente para Coolify
+# Despliegue directo en Coolify como Docker Compose Service
+# ==============================================================================
+version: '3.8'
+
+services:
+  # 1. Aplicacion Web Flask instrumentada con Observabilidad
+  flask-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - FLASK_ENV=production
+      - SERVICE_NAME=catalogo-api
+      - LOG_LEVEL=INFO
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8000/healthz || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "15m"
+        max-file: "5"
+
+  # 2. Dozzle: Visor Web Ultraligero de Logs en Tiempo Real para Docker/Coolify
+  dozzle:
+    image: amir20/dozzle:latest
+    restart: unless-stopped
+    ports:
+      - "8888:8080"
+    volumes:
+      # Montaje del socket de Docker en solo lectura para inspeccionar contenedores
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - DOZZLE_LEVEL=info
+      - DOZZLE_TAILSIZE=300
+      - DOZZLE_FILTER=status=running
+
+  # 3. AI Log Watcher & Coolify Webhook Triage Agent
+  ai-watcher:
+    image: python:3.11-slim
+    restart: unless-stopped
+    ports:
+      - "9050:9050"
+    volumes:
+      - ./ai_log_watcher.py:/app/ai_log_watcher.py:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    working_dir: /app
+    environment:
+      - LLM_API_KEY=${LLM_API_KEY}
+      - DISCORD_WEBHOOK_URL=${DISCORD_WEBHOOK_URL}
+      - WEBHOOK_PORT=9050
+    command: python /app/ai_log_watcher.py
