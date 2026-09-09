@@ -1432,11 +1432,11 @@
 
   /* --- evidence/dossier-sheet.js --- */
   /**
-   * Componente formal imprimible: Hoja Oficial del Dossier SENA.
+   * Componente imprimible de trabajo para el registro local de evidencias.
    *
-   * Renderiza la ficha técnica institucional del SENA con el encabezado oficial,
+   * Renderiza una ficha de trabajo con los datos declarados por el aprendiz,
    * datos generales del aprendiz, registro de evidencias con instrumentos y resultados,
-   * y la rúbrica de evaluación con juicio final y firmas.
+   * y una auto-revisión que queda pendiente de la valoración aplicable.
    */
   
   
@@ -1476,7 +1476,7 @@
   }
   
   /**
-   * Construye la hoja imprimible institucional del SENA.
+   * Construye una hoja imprimible de trabajo para la guía.
    * @param {Object} params
    * @param {Object} params.registro
    * @param {Array<Object>} params.filas
@@ -1500,9 +1500,9 @@
             dbeEl('div', { clase: 'sena-shield', texto: 'SENA' }),
             dbeEl('div', {
               hijos: [
-                dbeEl('h2', { texto: 'SERVICIO NACIONAL DE APRENDIZAJE — SENA' }),
-                dbeEl('p', { texto: 'Dirección de Formación Profesional · Tecnólogo en Análisis y Desarrollo de Software (ADSO)' }),
-                dbeEl('p', { hijos: [dbeEl('strong', { texto: `INFORME INTEGRAL DE EVIDENCIAS: ${tituloDossier.toUpperCase()}` })] })
+                dbeEl('h2', { texto: 'ADAPTACIÓN DIDÁCTICA · FORMACIÓN ADSO' }),
+                dbeEl('p', { texto: 'Contexto de referencia SENA · Tecnólogo en Análisis y Desarrollo de Software (ADSO)' }),
+                dbeEl('p', { hijos: [dbeEl('strong', { texto: `REGISTRO INTEGRAL DE EVIDENCIAS: ${tituloDossier.toUpperCase()}` })] })
               ]
             })
           ]
@@ -1598,12 +1598,12 @@
       ]
     });
   
-    // Sección 3: Rúbrica y Juicio de Evaluación
+    // Sección 3: Criterios de trabajo y auto-revisión
     const criterios = dbeObtenerCriteriosRubrica(registro, filas);
     const seccion3 = dbeEl('section', {
       clase: 'dossier-section',
       hijos: [
-        dbeEl('h4', { clase: 'dossier-subtitle', texto: '3. Rúbrica y Juicio de Evaluación del Instructor' }),
+        dbeEl('h4', { clase: 'dossier-subtitle', texto: '3. Criterios de trabajo y auto-revisión' }),
         dbeEl('table', {
           clase: 'dossier-table',
           hijos: [
@@ -1611,9 +1611,9 @@
               hijos: [
                 dbeEl('tr', {
                   hijos: [
-                    dbeEl('th', { texto: 'Criterio de Evaluación SENA' }),
-                    dbeEl('th', { texto: 'Cumple' }),
-                    dbeEl('th', { texto: 'Observaciones del Instructor' })
+                    dbeEl('th', { texto: 'Criterio de trabajo' }),
+                    dbeEl('th', { texto: 'Auto-revisión' }),
+                    dbeEl('th', { texto: 'Observaciones' })
                   ]
                 })
               ]
@@ -1632,12 +1632,12 @@
         dbeEl('div', {
           clase: 'dossier-verdict-box',
           hijos: [
-            dbeEl('p', { hijos: [dbeEl('strong', { texto: 'JUICIO DE EVALUACIÓN FINAL:' })] }),
+            dbeEl('p', { hijos: [dbeEl('strong', { texto: 'RESULTADO DE AUTO-REVISIÓN:' })] }),
             dbeEl('div', {
               clase: 'verdict-options',
               hijos: [
-                dbeEl('label', { hijos: [dbeEl('input', { attrs: { type: 'radio', name: 'juicio_sena', checked: true } }), dbeEl('strong', { texto: ' APROBADO (A)' })] }),
-                dbeEl('label', { hijos: [dbeEl('input', { attrs: { type: 'radio', name: 'juicio_sena' } }), dbeEl('strong', { texto: ' NO APROBADO (NA)' })] })
+                dbeEl('label', { hijos: [dbeEl('input', { attrs: { type: 'radio', name: 'resultado_aprendizaje', checked: true } }), dbeEl('strong', { texto: ' LISTO PARA REVISIÓN' })] }),
+                dbeEl('label', { hijos: [dbeEl('input', { attrs: { type: 'radio', name: 'resultado_aprendizaje' } }), dbeEl('strong', { texto: ' REQUIERE AJUSTES' })] })
               ]
             })
           ]
@@ -1657,7 +1657,7 @@
               clase: 'sig-line',
               hijos: [
                 dbeEl('p', { texto: '_________________________________________' }),
-                dbeEl('p', { hijos: [dbeEl('strong', { texto: 'Firma del Instructor SENA' })] }),
+                dbeEl('p', { hijos: [dbeEl('strong', { texto: 'Firma del instructor o acompañante, si aplica' })] }),
                 dbeEl('p', { attrs: { id: 'sig-instructor' }, texto: apprenticeData.instructor })
               ]
             })
@@ -1688,10 +1688,10 @@
 
   /* --- evidence/dossier.js --- */
   /**
-   * Consolidación final: Dossier Integral de Evidencias SENA (ADSO).
+   * Consolidación final del registro integral de evidencias (ADSO).
    *
-   * Orquesta la herramienta de medición de desempeño al cierre de cada guía.
-   * Coordina los datos de identificación, acciones institucionales y la hoja formal.
+   * Orquesta el registro local de evidencias al cierre de cada guía.
+   * Coordina los datos de identificación, acciones de auto-revisión y la hoja de trabajo.
    */
   
   
@@ -1700,25 +1700,44 @@
   
   
   /**
-   * Lee el perfil del aprendiz de localStorage con valores institucionales por omisión.
+   * Lee el perfil del aprendiz de localStorage sin inventar datos personales.
    * @param {string} prefijo
    * @returns {Object}
    */
   function dbeLeerPerfilAprendiz(prefijo) {
     const clave = `${prefijo || 'dbe'}_apprentice_profile`;
-    try {
-      const guardado = localStorage.getItem(clave);
-      if (guardado) return JSON.parse(guardado);
-    } catch (e) {}
-    return {
-      name: 'APRENDIZ SENA ADSO',
-      docNumber: '1.020.345.678',
-      ficha: '228118',
-      centro: 'Centro de Biotecnología Agropecuaria / Centro de Servicios Financieros',
-      regional: 'Regional Distrito Capital',
-      instructor: 'INSTRUCTOR TÉCNICO SENA',
+    const perfilInicial = {
+      name: 'APRENDIZ ADSO',
+      docNumber: '',
+      ficha: '<NÚMERO_DE_FICHA>',
+      centro: 'Por diligenciar',
+      regional: 'Por diligenciar',
+      instructor: 'Por diligenciar',
       date: new Date().toLocaleDateString('es-CO')
     };
+    try {
+      const guardado = localStorage.getItem(clave);
+      if (guardado) {
+        const perfil = JSON.parse(guardado);
+        const camposDeEjemplo = {
+          name: 'APRENDIZ SENA ADSO',
+          docNumber: '1.020.345.678',
+          ficha: '228118-ADSO',
+          centro: 'Centro de Biotecnología Agropecuaria / CSF',
+          regional: 'Regional Distrito Capital',
+          instructor: 'INSTRUCTOR TÉCNICO SENA',
+        };
+        const camposCoincidentes = Object.keys(camposDeEjemplo)
+          .filter((campo) => perfil && String(perfil[campo] || '').trim() === camposDeEjemplo[campo]);
+        if (!camposCoincidentes.length) return perfil;
+        const perfilLimpio = { ...perfil };
+        camposCoincidentes.forEach((campo) => {
+          perfilLimpio[campo] = perfilInicial[campo];
+        });
+        return perfilLimpio;
+      }
+    } catch (e) {}
+    return perfilInicial;
   }
   
   /**
@@ -1837,7 +1856,7 @@
   }
   
   /**
-   * Monta la sección de consolidación institucional del SENA.
+   * Monta la sección de consolidación local de evidencias.
    *
    * @param {HTMLElement} contenedor - Nodo con `data-db-evidence-dossier`
    * @param {Object} registro - Registro normalizado de entregables
@@ -1861,8 +1880,8 @@
       const formCard = dbeEl('div', {
         clase: 'evidence-form-card no-print',
         hijos: [
-          dbeEl('h3', { clase: 'evidence-title', texto: '📋 Datos de Identificación del Aprendiz para el Formato de Evidencias' }),
-          dbeEl('p', { clase: 'text-muted', texto: 'Complete sus datos institucionales para generar el formato oficial de entrega al instructor:' }),
+          dbeEl('h3', { clase: 'evidence-title', texto: '📋 Datos de identificación para el registro de evidencias' }),
+          dbeEl('p', { clase: 'text-muted', texto: 'Diligencia estos datos solo si corresponde y revisa con el instructor el formato de entrega aplicable:' }),
           dbeEl('div', {
             clase: 'evidence-form-grid',
             hijos: [
@@ -1895,7 +1914,7 @@
           apprentice: apprenticeData,
           guideId: registro.guideId,
           program: 'Tecnólogo en Análisis y Desarrollo de Software (ADSO) - Ficha ' + apprenticeData.ficha,
-          competency: (registro.submission && registro.submission.packageName) || 'Desarrollo de Software SENA ADSO',
+          competency: (registro.submission && registro.submission.packageName) || 'Desarrollo de Software ADSO',
           dossierStatus: listas === filas.length ? 'COMPLETED' : 'IN_PROGRESS',
           evaluationTimestamp: new Date().toISOString(),
           summary: { total: filas.length, completed: listas, pending: filas.length - listas },
@@ -1903,13 +1922,13 @@
             id: f.artefacto.id,
             code: f.artefacto.code,
             name: f.artefacto.name,
-            instrument: f.artefacto.instrument || 'Instrumento de Evaluación SENA',
+            instrument: f.artefacto.instrument || 'Instrumento de evaluación aplicable',
             status: f.estado,
-            criterion: f.artefacto.criterion || 'Criterio curricular SENA'
+            criterion: f.artefacto.criterion || 'Criterio de trabajo declarado'
           })),
           aiLog: bitacora
         };
-        dbeDescargar(JSON.stringify(payload, null, 2), `SENA_Evidencias_${apprenticeData.ficha}_${apprenticeData.docNumber}.json`, 'application/json');
+        dbeDescargar(JSON.stringify(payload, null, 2), `registro_evidencias_${apprenticeData.ficha}_${apprenticeData.docNumber}.json`, 'application/json');
       });
   
       const botonDescargarMd = dbeEl('button', {
@@ -1937,7 +1956,7 @@
         hijos: [botonImprimir, botonDescargarJson, botonDescargarMd, botonCopiarMd]
       }));
   
-      // 3. Hoja Formal Imprimible del SENA
+      // 3. Hoja imprimible de trabajo
       const dossierSheet = dbeConstruirHojaSena({
         registro,
         filas,
@@ -1970,7 +1989,7 @@
         })
         : dbeEl('p', {
           clase: 'dbe-bloque__texto dbe-bloque--exito no-print',
-          texto: 'Todas las evidencias declaradas están diligenciadas y contrastadas con su criterio. Imprime el formato de evidencias en PDF o descarga el paquete JSON para subir a la plataforma SENA.',
+            texto: 'Todas las evidencias declaradas están diligenciadas y contrastadas con su criterio. Imprime el registro o descarga el paquete JSON para revisarlo con el instructor.',
         });
   
       const tarjeta = dbeEl('div', {
@@ -1981,7 +2000,7 @@
           dossierSheet,
           dbeEl('p', {
             clase: 'dbe-dossier__limite no-print',
-            texto: 'Este documento formal se calcula en tu navegador a partir del avance registrado. La valoración final de la competencia la realiza el instructor SENA mediante los instrumentos institucionales de evaluación.',
+              texto: 'Este registro se calcula en tu navegador a partir del avance guardado localmente. La valoración final la realiza el instructor mediante los instrumentos institucionales aplicables.',
           })
         ]
       });

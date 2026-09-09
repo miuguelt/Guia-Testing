@@ -24,6 +24,12 @@ def bibliografia(doc):
         "Cohn, M. (2009). Succeeding with Agile. Addison-Wesley.",
         "North, D. (2006). Introducing BDD. Better Software Magazine.",
         "Playwright. (2024). Documentación oficial. https://playwright.dev/docs",
+        "Playwright. (s. f.). Documentación de localizadores, fixtures y "
+        "servidor web. https://playwright.dev/docs/locators",
+        "Pallets Projects. (s. f.). Flask: Testing Flask Applications. "
+        "https://flask.palletsprojects.com/en/stable/testing/",
+        "Pallets Projects. (s. f.). Flask: Templates. "
+        "https://flask.palletsprojects.com/en/stable/templates/",
         "PyTest. (2024). Documentación oficial. https://docs.pytest.org/",
         "Jest. (2024). Documentación oficial. https://jestjs.io/docs",
         "JUnit 5. (2024). Documentación oficial. https://junit.org/junit5/docs/",

@@ -20,9 +20,17 @@ if ($Stop) {
 }
 
 Write-Host "
-  SENA ADSO - Guia Testing v1.0" -ForegroundColor Cyan
+  Guia Testing QA v3.0" -ForegroundColor Cyan
 Write-Host "  http://localhost:$Port
 " -ForegroundColor Green
 
-# live-server con recarga automática nativa (WebSocket en puerto $Port)
+# Primero intenta servir la guía con el servidor estático incluido en Python,
+# sin descargar paquetes. Usa live-server como alternativa si Python no está disponible.
+$Python = Get-Command python -ErrorAction SilentlyContinue
+if ($Python) {
+    & $Python.Source -m http.server $Port --directory $WebDir
+    exit $LASTEXITCODE
+}
+
+Write-Warning "Python no está disponible; se usará live-server mediante npx y puede requerir internet."
 & "npx" -y live-server $WebDir --port=$Port --no-browser

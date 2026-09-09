@@ -1,5 +1,5 @@
 # language: es
-Caracteristica: Gestion de Inventario y Calculos de Stock
+Característica: Gestion de Inventario y Calculos de Stock
   Como encargado del almacen
   Quiero clasificar el nivel de stock y calcular totales
   Para garantizar inventario suficiente y facturacion precisa

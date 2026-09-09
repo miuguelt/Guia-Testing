@@ -7,9 +7,9 @@
     "id": "adso-testing-qa-calidad-2026",
     "title": "Testing de Software, Aseguramiento de Calidad (QA) y Pruebas Automatizadas",
     "format": "web",
-    "entrypoint": "./index.html",
+    "entrypoint": "./web/index.html",
     "language": "es-CO",
-    "version": "3.0.0",
+    "version": "3.1.0",
     "servicePort": 8035,
     "summary": "Formación integral en aseguramiento de calidad del software (QA), diseño de planes de pruebas, pruebas unitarias, de integración y end-to-end con PyTest, Jest, JUnit 5 y Playwright bajo el estándar ISO/IEC 25010."
   },
@@ -34,16 +34,18 @@
     "hours": 40
   },
   "platform": {
-    "sdk": "devbrain-learner-sdk",
-    "bootstrap": "window.DevBrainSDK.createApp()",
+    "sdk": "devbrain-code + devbrain-evidence",
+    "bootstrap": "window.DevBrainEvidence.montar({ registro: window.GUIDE_DELIVERABLES })",
     "storagePrefix": "guia_testing",
     "vendored": [
-      "js/vendor/devbrain-learner-sdk.js",
-      "css/vendor/devbrain-learner-sdk.css"
+      "js/vendor/devbrain-code.js",
+      "js/vendor/devbrain-evidence.js",
+      "css/vendor/devbrain-code.css",
+      "css/vendor/devbrain-evidence.css"
     ],
     "dashboardLink": "http://127.0.0.1:8051",
-    "modules": 8,
-    "xpTotal": 1800,
+    "modules": 16,
+    "xpTotal": 4000,
     "levels": [
       {
         "name": "Tester Novato",
@@ -70,7 +72,7 @@
   "project": {
     "caseStudy": "Suite QA & Testing Universal",
     "challenge": "Diseñar y automatizar el plan de pruebas integral para el ecosistema de software con pirámide de tests y reporte de defectos.",
-    "finalProduct": "Informe Integral de Evidencias en Markdown con Plan de Pruebas IEEE 829, suite automatizada con cobertura >= 80% y bitácora V.E.R.A.",
+    "finalProduct": "Registro Integral de Evidencias en Markdown con plan de pruebas, suite automatizada, reporte de cobertura, Gema QA reutilizable y bitácora V.E.R.A.",
     "deliverablesRegistry": "deliverables.registry.json",
     "checkpoints": [
       {
@@ -151,12 +153,17 @@
     {
       "title": "Estándar IEEE 829 para Documentación de Pruebas de Software",
       "locator": "IEEE Standard for Software and System Test Documentation",
-      "use": "Estructura del plan de pruebas y casos de prueba formales."
+      "use": "Adaptación didáctica de la estructura del plan de pruebas y casos de prueba; validar la versión aplicable con el instructor."
     },
     {
       "title": "Estándar Canónico DevBrain v2.4.0",
       "locator": "_core/knowledge_base/EDUCATIONAL_GUIDE_STANDARD.md",
       "use": "Estructura de estaciones distribuidas, evidencias, criterios y gates de calidad."
+    },
+    {
+      "title": "Documentación oficial de asistentes y herramientas IA para pruebas",
+      "locator": "GitHub Copilot, Cursor, Gemini Code Assist, Amazon Q Developer, Qodo, Diffblue Cover, Claude Code y mabl",
+      "use": "Contrastar capacidades, requisitos, privacidad y disponibilidad; la guía enseña a verificar sus propuestas y no las presenta como autoridad final."
     }
   ]
 }

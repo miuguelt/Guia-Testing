@@ -12,6 +12,23 @@
 
 Esta guía formativa cubre el aseguramiento de la calidad de software (QA), la pirámide de pruebas de Mike Cohn, el diseño bajo TDD/BDD y la automatización multi-stack (PyTest, Jest/Vitest, JUnit 5, Mockito, Playwright) bajo el estándar **ISO/IEC 25010** y el marco curricular SENA ADSO (Fase 5 - Evaluación).
 
+## Proyecto descargable para practicar
+
+La guía publica un paquete fuente listo para trabajar en
+[`recursos/codigo-ejemplo/`](recursos/codigo-ejemplo/). También se puede descargar
+el mismo paquete desde la opción **Descargar Proyecto** de la interfaz o desde
+[`web/downloads/guia-testing-qa.zip`](web/downloads/guia-testing-qa.zip).
+
+La guía paso a paso del paquete está en
+[`recursos/codigo-ejemplo/README.md`](recursos/codigo-ejemplo/README.md). Allí se
+explica la preparación en Windows y la ejecución separada de unitarias,
+integración, BDD, Vitest, JUnit/JaCoCo y Playwright.
+
+Si se actualiza el código del ejemplo, regenera el archivo público con
+`& .\exportar-proyecto.ps1`; el comando reemplaza
+`web/downloads/guia-testing-qa.zip` usando únicamente archivos fuente y de
+configuración.
+
 ---
 
 ---
@@ -55,7 +72,7 @@ GitHub no es un mero almacenamiento de archivos; es el **orquestador central y �
 Existe el temor infundado de que al subir las pruebas, los atacantes sabrán qué casos extremos se validan y dónde atacar. **Esto es una falacia de seguridad que contradice el Principio de Kerckhoffs.**
 * Un sistema de software debe ser seguro por su **diseño arquitectónico, validación de entradas, sanitización y control estricto de accesos**, no porque su código o sus pruebas se mantengan en secreto.
 * Los atacantes no esperan a leer tus pruebas: utilizan herramientas automatizadas de escaneo dinámico (Burp Suite, OWASP ZAP, SQLmap, nmap) que bombardean los endpoints públicos buscando vulnerabilidades.
-* Si una prueba verifica que un endpoint no permite inyecciones SQL o accesos sin token JWT, la prueba certifica que la defensa existe. Y si la prueba demuestra una falla, la vulnerabilidad ya reside en el código de producción expuesto a internet.
+* Si una prueba verifica que un endpoint no permite inyecciones SQL o accesos sin token JWT, aporta evidencia de que esa defensa funciona en el escenario probado. Y si la prueba demuestra una falla, la vulnerabilidad está en el código de producción expuesto a internet.
 
 #### Los 3 Riesgos REALES que SÍ pueden ayudar a un atacante:
 1. **Secretos Quemados (*Hardcoded Secrets*):** Dejar contraseñas reales de base de datos, credenciales de staging o tokens de APIs de pago (Stripe, AWS, SendGrid) dentro de los archivos de test creyendo que *"como es un test, no importa"*. Si el repositorio se filtra o es público, el atacante tiene acceso inmediato a la infraestructura.
@@ -177,7 +194,7 @@ El despliegue hacia nuestro servidor VPS no se realiza a ciegas. Sigue un flujo 
 * **Componentes / UI:** Renderizado de componentes en DOM virtual con eventos accesibles (`getByRole`).
 * **End-to-End (E2E):** Automatización de flujos completos en navegadores reales headless con Playwright.
 * **Regresión:** Ejecución sistemática tras cada cambio para evitar que funcionalidades previas se rompan.
-* **Humo (Smoke Tests):** Verificación rápida y superficial post-despliegue en el VPS para certificar que el servicio arrancó.
+* **Humo (Smoke Tests):** Verificación rápida y superficial post-despliegue en el VPS para comprobar que el servicio arrancó.
 
 ### 2. Pruebas No Funcionales: Rendimiento y Estrés del Servidor
 * **Carga (Load Testing):** Comportamiento bajo volumen normal esperado (ej. 100-500 usuarios concurrentes, latencia p95 < 200 ms).
@@ -259,7 +276,7 @@ El aprendiz prueba la aplicación web Flask real que construyó en la fase anter
 * **Paso 7 — Levantar la app para verificar (opcional):** `python run.py` → abrir `http://127.0.0.1:5000` → detener con `Ctrl+C`.
 * **Paso 8 — Ejecutar la suite completa:** `pytest` (lee `pytest.ini` → `testpaths = tests`). La última línea resume: `N passed` o `M failed`.
 * **Paso 9 — Ejecutar el archivo de rutas:** `pytest tests/test_routes.py -v` (una sola prueba: `pytest tests/test_routes.py::test_health_check -v`).
-* **Paso 10 — Medir cobertura:** `pytest --cov=app --cov-report=term-missing --cov-fail-under=80` (umbral mínimo 80 %).
+* **Paso 10 — Medir cobertura:** `pytest --cov=services --cov=routers --cov=schemas --cov-report=term-missing --cov-fail-under=80` (umbral mínimo 80 % en la lógica del ejemplo).
 * **Solución de errores:** `ModuleNotFoundError` → verificar carpeta raíz, entorno activo y dependencias instaladas en ese orden.
 * **Conceptos al redactar pruebas:** la fixture aísla con `TESTING=True` + `sqlite:///:memory:`; el HTML se valida decodificado (`response.get_data(as_text=True)` y `follow_redirects=True`); las sesiones se simulan con `with client.session_transaction() as sess:`.
 
@@ -308,22 +325,113 @@ El aprendiz prueba la aplicación web Flask real que construyó en la fase anter
 * **Paso 4: Ejecución:** `behave features/`
 
 #### 7. Playwright (Pruebas End-to-End E2E)
-* **Paso 1: Setup:** `npm install -D @playwright/test && npx playwright install chromium`
-* **Paso 2: Configuración:** Configurar `baseURL: 'http://localhost:5173'` y `trace: 'on-first-retry'` en `playwright.config.js`.
-* **Paso 3: Spec E2E con auto-waiting:**
-  ```javascript
-  test("flujo compra", async ({ page }) => {
-      await page.goto("/productos");
-      await page.fill("[data-testid=buscar]", "Laptop");
-      await page.click("[data-testid=agregar-carrito]");
-      await expect(page.locator("[data-testid=badge-carrito]")).toHaveText("1");
-  });
-  ```
-* **Paso 4: Ejecución:** `npx playwright test` (headless) o `npx playwright test --ui` (interactivo).
-* **Paso 5: Diagnóstico:** En caso de fallo, ejecutar `npx playwright show-report` para ver videos y trazas del DOM.
+Los aprendices ya conocen Flask y Jinja; por eso el punto de partida no es
+aprender otro *frontend*, sino seguir la petición completa:
+
+`ruta Flask -> render_template() -> HTML en el navegador -> acción del usuario -> nueva petición -> respuesta Jinja`.
+
+Playwright observa y actúa sobre el navegador real. No reemplaza a PyTest ni al
+`test_client`: PyTest comprueba la vista y el contrato del servidor sin abrir un
+navegador; Playwright comprueba que una persona pueda completar el flujo desde
+la interfaz.
+
+**Mapa rápido de herramientas:**
+
+| En la aplicación Flask/Jinja | En Playwright | Qué se verifica |
+|---|---|---|
+| `@app.get('/productos')` | `page.goto('/productos')` | La ruta carga y entrega una página navegable. |
+| `render_template('productos.html', products=...)` | `page.getByRole(...)` / `page.getByTestId(...)` | El HTML renderizado contiene controles y datos visibles. |
+| `<label for="nombre">` + `<input id="nombre">` | `page.getByLabel('Nombre')` | El campo puede ser localizado como lo percibe el usuario. |
+| `<form method="post">` + `request.form` | `locator.fill()` + `locator.click()` | El usuario puede diligenciar y enviar el formulario. |
+| `redirect(url_for(...))` | `expect(page).toHaveURL(...)` | El flujo termina en la URL esperada. |
+| `flash()` y mensajes Jinja | `expect(page.getByRole('status'/'alert'))` | El éxito y el error son comunicados en pantalla. |
+
+**Paso 1: Preparar el ejemplo Flask/Jinja.** Usa el ejemplo autocontenido de
+[`recursos/codigo-ejemplo/flask_jinja_demo/`](recursos/codigo-ejemplo/flask_jinja_demo/).
+La plantilla expone etiquetas accesibles y algunos `data-testid` como contrato
+de prueba. Los identificadores de prueba describen una intención estable; no
+dependas de `div:nth-child(2)` ni de la estructura visual.
+
+**Paso 2: Instalar Playwright y el navegador.** Desde
+`recursos/codigo-ejemplo/` ejecuta:
+
+```powershell
+npm install -D @playwright/test
+npx playwright install chromium
+$env:FLASK_SECRET_KEY = "<CLAVE_LOCAL_DE_PRUEBA>"
+```
+
+La variable es necesaria porque el ejemplo usa `flash()` y, por tanto, la
+sesión firmada de Flask. Usa una clave local o efímera; nunca una credencial de
+producción ni la guardes en Git.
+
+**Paso 3: Configurar el servidor de Flask.** El archivo
+[`playwright.flask.config.js`](recursos/codigo-ejemplo/playwright.flask.config.js)
+define `baseURL`, captura de pantalla, vídeo, traza y `webServer`. Esta última
+opción inicia Flask antes de los tests y lo detiene al terminar; por eso cada
+spec puede escribir `page.goto('/productos')` sin repetir la URL completa.
+
+**Paso 4: Leer el DOM con localizadores.** Prefiere, en este orden, lo que el
+usuario percibe (`getByRole`, `getByLabel`, `getByText`) y luego un contrato
+explícito (`getByTestId`). `page` representa una pestaña, `locator` representa
+un elemento que Playwright vuelve a buscar cuando lo usa y `expect` espera hasta
+que la condición web sea verdadera. Esta combinación reduce pruebas inestables.
+
+**Paso 5: Probar un flujo completo.** En
+[`tests/e2e/flask_jinja.spec.js`](recursos/codigo-ejemplo/tests/e2e/flask_jinja.spec.js)
+se prueban tres caminos: render inicial, creación válida con `POST` y
+`redirect`, y rechazo de un precio inválido. Observa que cada prueba afirma un
+resultado visible, no solamente que el clic se ejecutó.
+
+```javascript
+test("crea un producto y sigue el redirect de Flask", async ({ page }) => {
+    await page.goto("/productos");
+    await page.getByLabel("Nombre").fill("Teclado");
+    await page.getByLabel("Precio").fill("45");
+    await page.getByRole("button", { name: "Guardar producto" }).click();
+
+    await expect(page).toHaveURL(/\/productos$/);
+    await expect(page.getByRole("status")).toContainText("Producto creado");
+    await expect(page.getByTestId("producto-row")).toContainText("Teclado");
+});
+```
+
+**Paso 6: Usar las demás herramientas cuando el caso lo requiera.** `browser`
+es el motor; `context` aísla cookies, almacenamiento y permisos de cada
+usuario; `page` es la pestaña; `locator` localiza; `expect` aserta con espera
+automática; `request` prepara o consulta datos por HTTP sin pasar por la UI;
+`page.route()` controla una petición de red cuando se necesita simular una
+dependencia externa; `test` y sus *fixtures* organizan el ciclo de vida; y
+`webServer` conecta el ejecutor con Flask. En una app con login, una fixture
+puede crear la sesión de prueba una vez y cada `context` conserva el aislamiento
+entre casos. No uses `request` para reemplazar el flujo que quieres demostrar:
+úsalo para preparar datos o separar un caso de autenticación.
+
+**Paso 7: Ejecutar, observar y diagnosticar.**
+
+```powershell
+npx playwright test --config=playwright.flask.config.js
+npx playwright test --config=playwright.flask.config.js --headed
+npx playwright test --config=playwright.flask.config.js --ui
+npx playwright codegen http://127.0.0.1:5017/productos
+npx playwright show-report
+```
+
+`codegen` ayuda a descubrir acciones y localizadores, pero el código generado
+se revisa y se simplifica. `--headed` muestra el navegador; `--ui` permite
+avanzar paso a paso; el informe y la traza permiten revisar DOM, consola,
+peticiones y capturas. Evita `setTimeout`: espera el estado que importa con
+`expect`. Si el fallo está en la regla, corrígelo en Flask; si está en la
+plantilla o en el contrato de localización, corrígelo en Jinja/HTML; si el
+flujo funciona pero la aserción es frágil, mejora el spec.
+
+**Regla de separación:** prueba con `client.post()` las reglas del servidor,
+validaciones y códigos HTTP; prueba con Playwright los caminos críticos que una
+persona ejecuta en el navegador. Un mismo requisito puede tener ambas pruebas,
+pero con responsabilidades diferentes.
 
 #### 8. Medición de Cobertura (Coverage Gates)
-* **Python:** `pytest --cov=app --cov-report=html --cov-fail-under=80`
+* **Python:** `pytest --cov=services --cov=routers --cov=schemas --cov-report=html --cov-fail-under=80`
 * **JavaScript:** `npm run test:coverage` (abrir `coverage/index.html`)
 * **Java:** `mvn test jacoco:report` (abrir `target/site/jacoco/index.html`)
 * **Regla de oro:** 80% en lógica de negocio es obligatorio. Auditar que cada línea cubierta contenga aserciones reales.
@@ -347,11 +455,15 @@ El aprendiz prueba la aplicación web Flask real que construyó en la fase anter
   .\start-windows.ps1
   # Disponible en http://localhost:8035
   ```
+  El script usa el servidor estático de Python y no descarga paquetes. Como alternativa
+  rápida, abre `web/index.html` directamente en el navegador; la ruta de aprendizaje
+  y sus simuladores funcionan sin red porque los recursos de la guía están versionados
+  localmente.
 * **Ejecutar Suite de Pruebas de la Guía:**
   ```powershell
   pytest tests/test_guide.py -v
   ```
-* **Generar Documento DOCX Oficial:**
+* **Generar el documento DOCX de la guía:**
   ```powershell
   python generar_guia.py
   ```
@@ -445,7 +557,7 @@ El ciclo de calidad no termina con el despliegue exitoso (`git push ➔ CI/CD`).
 
 Para que un contenedor pueda ser analizado de forma automatizada por la IA, el log no debe ser texto plano arbitrario, sino **JSON estructurado** con identificador de correlación (*Correlation ID*).
 
-El módulo [`recursos/observabilidad/flask_observability.py`](file:///c:/Users/Miguel/Documents/Aplicaciones/_projects/Guia%20Testing/recursos/observabilidad/flask_observability.py) suministra esta capa:
+El módulo [`recursos/observabilidad/flask_observability.py`](recursos/observabilidad/flask_observability.py) suministra esta capa:
 
 ```python
 from flask import Flask
@@ -507,7 +619,7 @@ logging:
 
 ### 3. Automatización del Proceso Usando Inteligencia Artificial (AI SRE / Auto-Triage)
 
-El analizador automatizado [`recursos/observabilidad/ai_log_watcher.py`](file:///c:/Users/Miguel/Documents/Aplicaciones/_projects/Guia%20Testing/recursos/observabilidad/ai_log_watcher.py) procesa los incidentes de Coolify en tiempo real siguiendo este flujo:
+El analizador automatizado [`recursos/observabilidad/ai_log_watcher.py`](recursos/observabilidad/ai_log_watcher.py) procesa los incidentes de Coolify en tiempo real siguiendo este flujo:
 
 #### Paso 1: Ingesta del Evento
 * **Vía Webhook de Coolify:** Coolify envía una petición HTTP `POST` a `/webhook/coolify` en el puerto `9050` ante fallos de despliegue o reinicios.
@@ -542,42 +654,27 @@ El agente despacha una tarjeta con código de color (Rojo para CRITICAL, Naranja
 
 ### 4. Despliegue Rápido del Stack en Coolify
 
-Para levantar la aplicación Flask junto al visor Dozzle y el agente de IA, importar [`recursos/observabilidad/docker-compose.observability.yml`](file:///c:/Users/Miguel/Documents/Aplicaciones/_projects/Guia%20Testing/recursos/observabilidad/docker-compose.observability.yml) como un nuevo servicio en Coolify:
+Para desplegar la aplicación Flask junto al visor Dozzle y el agente de IA en un servidor remoto, importar [`recursos/observabilidad/docker-compose.observability.yml`](recursos/observabilidad/docker-compose.observability.yml) como un nuevo servicio en Coolify. Este escenario es opcional y no hace parte de la ejecución local de la guía:
 
 ```bash
 # Variables de entorno requeridas en Coolify:
-LLM_API_KEY=tu_api_key_de_gemini_o_openai
-DISCORD_WEBHOOK_URL=https://discord.com/api/webhooks/...
+LLM_API_KEY=<CLAVE_IA_AQUI>
+DISCORD_WEBHOOK_URL=<WEBHOOK_DISCORD_AQUI>
 ```
 
 ---
 
-## 📄 Módulo de Consolidación Institucional & Evidencias SENA (ADSO) — GFPI-F-023 Versión 03
+## 📄 Consolidación del Portafolio de Evidencias
 
-Al cierre de la ruta de aprendizaje, la guía integra el **Registro Técnico Integral y Generador de Evidencias SENA**, accesible desde la barra de navegación lateral (`#m-evidencias-sena`). Este módulo implementa de forma prioritaria el **Formato Oficial GFPI-F-023 Versión 03** (SIGA - Dirección de Formación Profesional):
+Al cierre de la ruta, la guía integra un registro local accesible desde
+`#m-evidencias-sena`. Su fuente única es [`deliverables.registry.json`](deliverables.registry.json),
+que también se publica como un recurso JavaScript local para que la web funcione
+al abrirse sin servidor. Cada evidencia aparece en la estación donde se produce
+y el cierre solo consolida lo ya diligenciado.
 
-### 1. Componentes Evaluados y Ponderación Real de la Sesión
-El sistema calcula el avance del aprendiz de forma verídica y ponderada en tiempo real:
-* **Módulos Teórico-Prácticos (20%):** Seguimiento del estudio de los 13 módulos formativos.
-* **Simuladores Interactivos QA (30%):**
-  1. *Test Pyramid Builder:* Balance de la pirámide (70% Unit, 20% Integration, 10% E2E).
-  2. *Assertion Validator:* Verificación de 8 aserciones críticas en Python y JavaScript.
-  3. *Quiz de Certificación:* 8 preguntas conceptuales y de estándares QA.
-  4. *Secuenciador de Fases:* Ordenamiento secuencial de las 7 fases maestras de testing.
-* **Matriz de Checks de Pruebas Automatizadas (30%):**
-  Verificación interactiva de ejecución de las 9 suites de prueba del proyecto (`PyTest` unit e integración, `TDD` con Pydantic, `BDD` con Behave, `Jest` en React, `JUnit 5` en Java, `Playwright` E2E, auditoría de cobertura $\ge 80\%$ y `CI/CD` con GitHub Actions).
-* **Entregables Institucionales SSoT (20%):**
-  Consolidación de los tres artefactos oficiales declarados en `deliverables.registry.json` (`ART-TEST-01`, `ART-TEST-02`, `ART-TEST-03`).
-
-### 2. Dictamen Institucional y Exportación Multiformato
-El sistema emite el juicio oficial:
-* **APROBADO (A):** Avance ponderado $\ge 70\%$, al menos 5 checks de prueba verificados y al menos 2 simuladores aprobados.
-* **PENDIENTE / EN FORMACIÓN (NA):** Desglose claro de las tareas pendientes.
-
-### 3. Características Clave del Diseño Canónico (GFPI-F-023 Versión 03)
-* 🏛️ **Membrete Oficial SIGA:** Encabezado formal con el isotipo oficial del SENA en SVG vectorial (`fill="#39A900"`), títulos de la Dirección de Formación Profesional y tabla de control documental institucional (Código `GFPI-F-023`, Versión `03`, Ficha y Fecha).
-* ✍️ **Lienzo de Firma Digital del Aprendiz (Canvas HTML5):** Permite trazar la firma directamente con ratón, touchpad o pantalla táctil, o cargar una imagen (PNG/JPG). Se persiste automáticamente en `localStorage` y se estampa en el documento oficial con badge de validación.
-* 📋 **Registro Taxativo de Evidencias Técnicas:** Desglose pormenorizado de las evidencias `EV-01` (Plan de Pruebas IEEE 829), `EV-02` (Pruebas Unitarias e Integración con cobertura $\ge 80\%$) y `EV-03` (Playwright E2E y Bug Tracker), con botones de navegación directa hacia cada sección.
-* 🖨️ **Impresión / Exportación en PDF Impecable (`@media print`):** Formato carta (`letter portrait`) que oculta completamente los elementos de navegación web y paneles de control (`.no-print`), preservando la hoja `.sena-evidence-sheet` con colores institucionales exactos (`print-color-adjust: exact`) y evitando cortes dentro de celdas o tablas.
-* 📥 **Descarga en Markdown (`.md`):** Reporte estructurado para adjuntar al repositorio Git o bitácora de evidencias.
-* 💾 **Descarga en JSON (`.json`):** Paquete institucional estructurado para plataformas de gestión académica (LMS).
+El registro es una adaptación didáctica: no es una certificación, no emite un
+juicio institucional y no reemplaza el instrumento, el formato o la valoración
+que defina el instructor. Para preparar la entrega, usa
+[`docs/evidencias-template.md`](docs/evidencias-template.md), conserva los
+resultados reproducibles y revisa los umbrales acordados antes de cargar el
+paquete en el LMS.

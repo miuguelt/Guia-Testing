@@ -1,4 +1,4 @@
-"""Datos institucionales de la guía de aprendizaje (editar según la regional)."""
+"""Datos de contexto de la adaptación didáctica (validar antes de entregar)."""
 import os
 from datetime import date
 
@@ -8,13 +8,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 EJ_DIR = os.path.join(BASE_DIR, "recursos", "codigo-ejemplo")
 
 REGIONAL = "Regional por diligenciar"
-CENTRO = "Centro de Gestión Agroempresarial del Oriente"
+CENTRO = "Centro de formación por diligenciar"
 PROGRAMA = "Análisis y Desarrollo de Software"
 CODIGO_PROGRAMA = "228118"
 PROYECTO_FORMATIVO = (
-    "Construcción de software a la medida para el control de acceso de "
-    "personal, elementos de almacén y flujo de equipos externos para el "
-    "Centro de Gestión Agroempresarial del Oriente."
+    "Construcción de software a la medida para gestionar inventario y calidad "
+    "del sistema de información del proyecto formativo."
 )
 FASE_PROYECTO = "Evaluación"
 ACTIVIDAD_PROYECTO = (
@@ -34,7 +33,7 @@ RESULTADOS_APRENDIZAJE = [
 ]
 DURACION_TOTAL = "40 horas (10 de teoría y 30 de práctica)"
 MODALIDAD = "Presencial apoyada en plataforma virtual"
-VERSION = "2.0.0"
+VERSION = "3.0.0"
 ELABORO = "Instructor — SENA ADSO"
 
 FUENTE_NORMAL = "Calibri"

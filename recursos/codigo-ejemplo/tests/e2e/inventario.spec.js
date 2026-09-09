@@ -1,13 +1,16 @@
 import { test, expect } from "@playwright/test";
 
 test.describe("Flujo de Inventario", () => {
+  const testEmail = process.env.E2E_TEST_EMAIL || "<CORREO_DE_PRUEBA>";
+  const testPassword = process.env.E2E_TEST_PASSWORD || "<CONTRASEÑA_DE_PRUEBA>";
+
   test.beforeEach(async ({ page }) => {
     await page.goto("http://localhost:5173");
   });
 
   test("login y crear producto", async ({ page }) => {
-    await page.fill("[data-testid=email]", "admin@sena.edu.co");
-    await page.fill("[data-testid=password]", "admin123");
+    await page.fill("[data-testid=email]", testEmail);
+    await page.fill("[data-testid=password]", testPassword);
     await page.click("[data-testid=login-btn]");
     await expect(page).toHaveURL(/dashboard/);
     await page.click("text=Productos");

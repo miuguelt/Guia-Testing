@@ -22,7 +22,7 @@ def identificacion(doc):
         part.paragraph_format.left_indent = Cm(0.75)
     campo(doc, "Duración de la Guía de Aprendizaje", DURACION_TOTAL)
     campo(doc, "Modalidad", MODALIDAD)
-    campo(doc, "Versión institucional", f"GFPI-F-135 — {VERSION}")
+    campo(doc, "Versión de la adaptación", VERSION)
     doc.add_page_break()
 
 

@@ -3,14 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SENA ADSO - Guia Testing & QA</title>
+    <title>Guía de Testing y QA — aprendizaje autónomo</title>
     <link rel="stylesheet" href="css/styles.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Space+Grotesk:wght@400;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-    <!-- Bloques de codigo: modulo compartido DevBrain, local y sin CDN. -->
+    <!-- Todos los recursos se sirven localmente para permitir el uso sin red. -->
     <link rel="stylesheet" href="css/vendor/devbrain-code.css">
   <link rel="stylesheet" href="css/vendor/devbrain-evidence.css">
+    <link rel="stylesheet" href="css/ai-testing-coach.css">
 </head>
 <body>
     <div class="background-orbs">
@@ -20,7 +18,7 @@
     </div>
     <div id="particles" class="particles-container"></div>
 
-    <button id="sidebar-toggle" class="sidebar-toggle" aria-label="Toggle sidebar">&#9776;</button>
+    <button id="sidebar-toggle" class="sidebar-toggle" aria-label="Mostrar u ocultar navegación">&#9776;</button>
 
     <aside id="sidebar" class="sidebar glass-panel">
         <div class="sidebar-header">
@@ -28,7 +26,7 @@
                 <span class="logo-icon">&#128269;</span>
                 <span class="logo-text">Guia <span class="highlight">Testing</span></span>
             </div>
-            <span class="sidebar-version">v1.0</span>
+            <span class="sidebar-version">v3.1</span>
         </div>
         <div class="sidebar-user">
             <div class="user-level">
@@ -70,16 +68,18 @@
             </div>
             <div class="nav-section">
                 <span class="nav-section-title">IA y Testing</span>
-                <a href="#m-ia-testing" class="nav-item" data-module="m-ia-testing"><span class="nav-icon">&#129302;</span><span class="nav-text">IA en Testing</span><span class="nav-badge">+</span></a>
+                <a href="#m-ia-testing" class="nav-item" data-module="m-ia-testing"><span class="nav-icon">&#129302;</span><span class="nav-text">IA en Testing</span><span class="nav-badge">13</span></a>
+                <a href="#m-gema-testing" class="nav-item" data-module="m-gema-testing"><span class="nav-icon">&#128142;</span><span class="nav-text">Constructor de Gema QA</span><span class="nav-badge">14</span></a>
+                <a href="#m-herramientas-ia" class="nav-item" data-module="m-herramientas-ia"><span class="nav-icon">&#128640;</span><span class="nav-text">Laboratorio de herramientas IA</span><span class="nav-badge">15</span></a>
             </div>
             <div class="nav-section">
-                <span class="nav-section-title">Desafio</span>
-                <a href="#m-reto" class="nav-item" data-module="m-reto"><span class="nav-icon">&#127942;</span><span class="nav-text">Reto Final</span><span class="nav-badge">13</span></a>
+                <span class="nav-section-title">Desafío</span>
+                <a href="#m-reto" class="nav-item" data-module="m-reto"><span class="nav-icon">&#127942;</span><span class="nav-text">Reto Final</span><span class="nav-badge">16</span></a>
                 <a href="#m-simuladores" class="nav-item" data-module="m-simuladores"><span class="nav-icon">&#127918;</span><span class="nav-text">Simuladores</span></a>
             </div>
             <div class="nav-section">
-                <span class="nav-section-title">Certificación</span>
-                <a href="#m-evidencias-sena" class="nav-item" data-module="m-evidencias-sena"><span class="nav-icon">&#128196;</span><span class="nav-text">Evidencias SENA</span><span class="nav-badge">Final</span></a>
+                <span class="nav-section-title">Cierre y evidencias</span>
+                <a href="#m-evidencias-sena" class="nav-item" data-module="m-evidencias-sena"><span class="nav-icon">&#128196;</span><span class="nav-text">Registro de evidencias</span><span class="nav-badge">Final</span></a>
             </div>
             <div class="nav-section">
                 <span class="nav-section-title">Recursos</span>
@@ -93,18 +93,18 @@
             <div class="breadcrumb">Guia Testing & QA > <span id="breadcrumb-current">Inicio</span></div>
             <div class="header-actions">
                 <button class="btn btn-sm btn-primary" onclick="APP.navigateTo('m-simuladores')">Simuladores</button>
-                <button class="btn btn-sm btn-secondary" onclick="APP.navigateTo('m-evidencias-sena')">&#128196; Evidencias SENA</button>
+                <button class="btn btn-sm btn-secondary" onclick="APP.navigateTo('m-evidencias-sena')">&#128196; Registro de evidencias</button>
             </div>
         </header>
 
         <main class="content">
             <section id="welcome" class="page-section active">
                 <div class="hero-section section-card glass-panel">
-                    <div class="badge">Fase 5 - Evaluacion - Guia de Aprendizaje Oficial SENA ADSO</div>
+                    <div class="badge">Fase 5 — Evaluación — adaptación didáctica para SENA ADSO</div>
                     <h1 class="title">Calidad de Software con <span class="gradient-text">Testing & QA</span></h1>
-                    <p class="subtitle">Cierra el ciclo Construir -&gt; Verificar. Testea el codigo REAL de las 4 guias anteriores (Flask, FastAPI, JSP, React) con PyTest, Jest, JUnit, Playwright, CI/CD y Observabilidad en Coolify.</p>
+                    <p class="subtitle">Cierra el ciclo Construir -&gt; Verificar. Practica con ejemplos de Flask, FastAPI, JSP y React usando PyTest, Jest, JUnit, Playwright, CI/CD y observabilidad en escenarios locales o remotos.</p>
                     <div class="hero-stats">
-                        <div class="stat"><span class="stat-number">13</span><span class="stat-label">Modulos</span></div>
+                        <div class="stat"><span class="stat-number">16</span><span class="stat-label">Módulos</span></div>
                         <div class="stat"><span class="stat-number">4</span><span class="stat-label">Simuladores</span></div>
                         <div class="stat"><span class="stat-number">40h</span><span class="stat-label">Duracion</span></div>
                         <div class="stat"><span class="stat-number">4</span><span class="stat-label">Frameworks</span></div>
@@ -121,20 +121,22 @@
             </section>
 
             <section id="m-reflexion" class="page-section module-page"><div class="section-card glass-panel"></div></section>
-            <section id="m-piramide" class="page-section module-page"><div class="section-card glass-panel"></div></section>
-            <section id="m-pytest-fastapi" class="page-section module-page"><div class="section-card glass-panel"></div></section>
+            <section id="m-piramide" class="page-section module-page"><div class="section-card glass-panel"></div><div class="evidence-station-anchor" data-db-evidence="ART-TEST-01"></div></section>
+            <section id="m-pytest-fastapi" class="page-section module-page"><div class="section-card glass-panel"></div><div class="evidence-station-anchor" data-db-evidence="ART-TEST-02"></div></section>
             <section id="m-pytest-flask" class="page-section module-page"><div class="section-card glass-panel"></div></section>
             <section id="m-jest-react" class="page-section module-page"><div class="section-card glass-panel"></div></section>
             <section id="m-junit-jsp" class="page-section module-page"><div class="section-card glass-panel"></div></section>
             <section id="m-tdd" class="page-section module-page"><div class="section-card glass-panel"></div></section>
             <section id="m-bdd" class="page-section module-page"><div class="section-card glass-panel"></div></section>
-            <section id="m-playwright" class="page-section module-page"><div class="section-card glass-panel"></div></section>
+            <section id="m-playwright" class="page-section module-page"><div class="section-card glass-panel"></div><div class="evidence-station-anchor" data-db-evidence="ART-TEST-03"></div></section>
             <section id="m-cobertura" class="page-section module-page"><div class="section-card glass-panel"></div></section>
             <section id="m-cicd" class="page-section module-page"><div class="section-card glass-panel"></div></section>
             <section id="m-observabilidad" class="page-section module-page"><div class="section-card glass-panel"></div></section>
             <section id="m-reto" class="page-section module-page"><div class="section-card glass-panel"></div></section>
 
             <section id="m-ia-testing" class="page-section module-page"><div class="section-card glass-panel"></div></section>
+            <section id="m-gema-testing" class="page-section module-page"><div class="section-card glass-panel"></div></section>
+            <section id="m-herramientas-ia" class="page-section module-page"><div class="section-card glass-panel"></div></section>
             <section id="m-simuladores" class="page-section module-page">
                 <div class="section-card glass-panel">
                     <div class="module-hero">
@@ -154,26 +156,16 @@
             </section>
 
             <!-- ====================================================================
-                 MÓDULO FINAL: CERTIFICACIÓN OFICIAL & EVIDENCIAS SENA (ADSO)
+                 MÓDULO FINAL: CONSOLIDACIÓN DE EVIDENCIAS (ADSO)
                  ==================================================================== -->
             <section id="m-evidencias-sena" class="page-section module-page">
                 <div class="section-card glass-panel">
                     <div class="module-hero">
-                        <span class="module-badge">&#128196; Certificación Oficial SENA (GFPI-F-023)</span>
+                        <span class="module-badge">&#128196; Registro local de evidencias</span>
                         <h1>Registro Integral de Evidencias & Calidad QA</h1>
-                        <p>Generación del formato estándar institucional con todos los checks de pruebas ejecutadas, métricas de calidad y resultados de simuladores.</p>
+                        <p>Consolida los artefactos producidos durante la ruta, sus criterios y la evidencia de ejecución. Este registro local no es una certificación ni reemplaza la valoración del instructor.</p>
                     </div>
-
-                    <!-- Puntos de anclaje para DevBrainEvidence SSoT -->
-                    <div style="display:none;">
-                        <div data-db-evidence="ART-TEST-01"></div>
-                        <div data-db-evidence="ART-TEST-02"></div>
-                        <div data-db-evidence="ART-TEST-03"></div>
-                        <div data-db-evidence-dossier></div>
-                    </div>
-
-                    <!-- Raíz del Módulo de Evidencias SENA -->
-                    <div id="sena-dossier-root"></div>
+                    <div data-db-evidence-dossier></div>
                 </div>
             </section>
 
@@ -183,13 +175,17 @@
                     <div class="module-hero">
                         <span class="module-badge">&#128229; Descargar Proyecto</span>
                         <h1>Descarga y ejecuta las pruebas</h1>
-                        <p>El codigo completo de testing esta en <code>recursos/codigo-ejemplo/</code>. Cubre PyTest, Jest, JUnit y Playwright.</p>
+                        <p>Descarga el proyecto de práctica autocontenido para trabajar con PyTest, Vitest, JUnit 5 y Playwright.</p>
+                        <div class="hero-actions">
+                            <a class="btn btn-primary" href="downloads/guia-testing-qa.zip" download>&#128229; Descargar proyecto de práctica (.zip)</a>
+                        </div>
+                        <p class="text-muted">El paquete incluye código fuente, pruebas, configuración y una guía propia de ejecución. No contiene credenciales ni archivos generados de tu computador.</p>
                     </div>
 
                     <h3>&#128221; Requisitos</h3>
                     <ul>
                         <li>Python 3.11+ (para tests PyTest de FastAPI y Flask)</li>
-                        <li>Node.js 18+ (para tests Jest de React)</li>
+                        <li>Node.js 20+ (para Vitest, React y Playwright)</li>
                         <li>JDK 21 + Maven (para tests JUnit de JSP)</li>
                         <li>Navegador Chromium (para Playwright E2E)</li>
                     </ul>
@@ -197,81 +193,73 @@
                     <h3 class="mt-4">&#128736; Instrucciones paso a paso</h3>
                     <div class="code-block-wrapper">
                         <div class="code-file-header"><span class="file-icon">&#128194;</span><span class="file-path">Terminal — Tests Python (FastAPI + Flask)</span></div>
-                        <pre class="code-block"><code>cd recursos/codigo-ejemplo
+                        <pre class="code-block"><code># Después de descargar y extraer guia-testing-qa.zip
+cd guia-testing-qa
 
 # Entorno virtual
-python -m venv venv
-.\venv\Scripts\activate
-pip install -r requirements.txt
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
 
 # Ejecutar tests por fases del flujo maestro
-pytest tests/unit/ -v              # Fase 1: Pruebas unitarias de logica pura
-pytest tests/integration/ -v       # Fase 3: Integracion HTTP y SQLite con TestClient
-pytest tests/ -v                   # Todas las fases (26 tests automatizados)
-pytest tests/ --cov=services --cov=routers --cov=schemas --cov-report=term-missing # Fase 6: Cobertura total</code></pre>
+pytest tests/unit/ -v              # Fase 1: lógica pura
+pytest tests/integration/ -v       # Fase 3: API y SQLite en memoria
+pytest tests/ -v                   # Suite Python completa
+pytest --cov=services --cov=routers --cov=schemas --cov-report=term-missing</code></pre>
                     </div>
 
                     <div class="code-block-wrapper mt-4">
                         <div class="code-file-header"><span class="file-icon">&#128194;</span><span class="file-path">Terminal — Tests JavaScript (Vitest, API compatible con Jest)</span></div>
-                        <pre class="code-block"><code>cd recursos/codigo-ejemplo
-npm install
+<pre class="code-block"><code>cd guia-testing-qa
+npm ci
 npm test
 npm run test:coverage</code></pre>
                     </div>
 
                     <div class="code-block-wrapper mt-4">
                         <div class="code-file-header"><span class="file-icon">&#128194;</span><span class="file-path">Terminal — Tests JUnit 5 (Maven / Spring Boot)</span></div>
-                        <pre class="code-block"><code>cd recursos/codigo-ejemplo
+                        <pre class="code-block"><code>cd guia-testing-qa
 mvn test
-# Cobertura con JaCoCo (agrega el plugin jacoco-maven-plugin)
-mvn jacoco:report</code></pre>
+mvn test jacoco:report</code></pre>
                     </div>
 
                     <div class="code-block-wrapper mt-4">
                         <div class="code-file-header"><span class="file-icon">&#128194;</span><span class="file-path">Terminal — Playwright E2E</span></div>
-                        <pre class="code-block"><code>cd recursos/codigo-ejemplo
-npx playwright install
-npx playwright test
+                        <pre class="code-block"><code>cd guia-testing-qa
+$env:FLASK_SECRET_KEY = "&lt;CLAVE_LOCAL_DE_PRUEBA&gt;"
+npx playwright install chromium
+npm run e2e
 npx playwright show-report</code></pre>
                     </div>
 
                     <div class="alert-box success mt-4">
                         <h4>&#128200; Ver cobertura</h4>
-                        <p>Cada framework produce su propio reporte. Apreta los reportes en la raiz del proyecto:</p>
+                        <p>Cada herramienta produce su propio reporte. Abre los reportes en la raíz del proyecto:</p>
                         <ul>
-                            <li><strong>Python:</strong> <code>pytest --cov=app --cov-report=html</code> abre <code>htmlcov/index.html</code>.</li>
+                            <li><strong>Python:</strong> <code>pytest --cov=services --cov=routers --cov=schemas --cov-report=html</code> abre <code>htmlcov/index.html</code>.</li>
                             <li><strong>JavaScript:</strong> <code>npm run test:coverage</code> genera <code>coverage/index.html</code>.</li>
                             <li><strong>Java:</strong> <code>mvn jacoco:report</code> abre <code>target/site/jacoco/index.html</code>.</li>
                         </ul>
                     </div>
 
                     <div class="alert-box note mt-4">
-                        <h4>&#128736; Script de setup automático</h4>
-                        <pre><code class="language-powershell"># setup.ps1
-Write-Host "=== Configurando entorno de Testing ===" -ForegroundColor Cyan
+                        <h4>&#128736; Script de preparación automática</h4>
+                        <pre><code class="language-powershell"># Desde la carpeta extraída del proyecto
+.\setup-windows.ps1
+.\.venv\Scripts\Activate.ps1
+$env:FLASK_SECRET_KEY = "&lt;CLAVE_LOCAL_DE_PRUEBA&gt;"
 
-# Python tests
-python -m venv venv
-.\venv\Scripts\activate
-pip install -r requirements.txt
+Write-Host "Listo. Ejecuta 'pytest tests/ -v' para comenzar." -ForegroundColor Green
 
-# Frontend tests
-npm install
-
-# Playwright
-npx playwright install
-
-Write-Host "Listo! Ejecuta 'pytest tests/ -v' para probar." -ForegroundColor Green
-
-#### Prueba rapida de cURL ####
-# Probar que la API FastAPI funciona (debe estar corriendo)
-curl http://localhost:8009/api/fincas</code></pre>
+#### Prueba rápida de la API ####
+# En otra ventana: uvicorn main:app --reload --port 8009
+Invoke-RestMethod http://127.0.0.1:8009/productos/</code></pre>
                     </div>
                 </div>
             </section>
 
             <footer>
-                <p>SENA ADSO - Guia Testing & QA v1.0 - Puerto 8035</p>
+                <p>Guía de Testing y QA — adaptación didáctica local — puerto 8035</p>
             </footer>
         </main>
     </div>
@@ -280,7 +268,7 @@ curl http://localhost:8009/api/fincas</code></pre>
         <div class="modal-content glass-panel">
             <div class="modal-header">
                 <span class="modal-icon">&#127942;</span>
-                <h2>&#161;Certificacion QA Superada!</h2>
+                <h2>&#161;Recorrido de aprendizaje completado!</h2>
             </div>
             <div class="modal-body">
                 <p class="modal-stats">Has completado todos los modulos de la guia.</p>
@@ -305,15 +293,16 @@ curl http://localhost:8009/api/fincas</code></pre>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.min.js"></script>
     <script src="js/vendor/devbrain-code.js"></script>
     <script src="js/testing-session.js"></script>
     <script src="js/gamification.js"></script>
     <script src="js/simulators.js"></script>
     <script src="js/modules-content.js"></script>
     <script src="js/modules-content-2.js"></script>
+    <script src="js/ai-testing-coach.js"></script>
+    <script src="js/ai-tools-lab.js"></script>
     <script src="js/code-renderer.js"></script>
-    <script src="js/sena-dossier.js"></script>
+    <script src="js/deliverables-registry.js"></script>
     <script src="js/vendor/devbrain-evidence.js"></script>
     <script src="js/main.js"></script>
     <script>
@@ -326,8 +315,9 @@ curl http://localhost:8009/api/fincas</code></pre>
     document.addEventListener('DOMContentLoaded', function() {
       if (window.DevBrainEvidence) {
         window.DevBrainEvidence.montar({
-          registro: 'deliverables.registry.json',
-          prefijo: 'guia_testing'
+          registro: window.GUIDE_DELIVERABLES,
+          prefijo: 'guia_testing',
+          dossierHref: '#m-evidencias-sena'
         });
       }
     });

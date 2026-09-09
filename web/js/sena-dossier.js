@@ -1,22 +1,24 @@
 /**
- * REGISTRO INTEGRAL DE EVIDENCIAS Y JUICIO DE EVALUACIÓN — SENA ADSO (GFPI-F-023 Versión 03)
- * Formato Oficial Registro Integral de Evidencias y Juicio de Evaluación
+ * REGISTRO INTEGRAL DE EVIDENCIAS DE APRENDIZAJE — adaptación SENA ADSO
+ * Plantilla local para organizar evidencias; no reemplaza un formato institucional.
+ * Compatibilidad histórica: GFPI-F-023 puede ser solicitado por la institución;
+ * confirma siempre la versión y el canal de entrega con el instructor.
  * SIGA (Sistema Integrado de Gestión y Autocontrol)
  *
- * Implementa el diseño canónico institucional con:
- * - Membrete oficial SENA SIGA con logo SVG y tabla de control de documento.
+ * Implementa una plantilla local con:
+ * - Encabezado contextual SENA ADSO y tabla de control de documento.
  * - Formulario editable de identificación con persistencia en LocalStorage.
  * - Lienzo interactivo (Canvas) de firma digital del aprendiz con soporte táctil, ratón y carga de imagen.
  * - Registro taxativo de evidencias técnicas con estado real y enlaces de navegación.
  * - Matriz de checks de pruebas ejecutadas y resultados reales de simuladores QA.
- * - Rúbrica oficial con evaluación de criterios curriculares y cálculo verídico de puntajes.
- * - Exportador multiformato (Impresión/PDF en limpio, JSON institucional y Markdown oficial).
+ * - Rúbrica orientativa para auto-revisión y cálculo local del avance.
+ * - Exportador multiformato (impresión/PDF, JSON y Markdown local).
  */
 (function (global) {
     'use strict';
 
     const SENA_LOGO_SVG = `
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="68" height="68" aria-label="Logo Institucional SENA">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="68" height="68" aria-label="Referencia visual SENA">
         <circle cx="80" cy="22" r="14" fill="#39A900"/>
         <path d="M80 44 C74 44 54 58 34 74 C30 77 32 81 36 81 C50 81 66 69 75 62 L75 96 L85 96 L85 62 C94 69 110 81 124 81 C128 81 130 77 126 74 C106 58 86 44 80 44 Z" fill="#39A900"/>
         <rect x="56" y="102" width="48" height="6" rx="3" fill="#39A900"/>
@@ -65,14 +67,14 @@
 
             let globalBadge = `<span class="badge badge--danger">EN FORMACIÓN (0/3 EVIDENCIAS)</span>`;
             if (completedEvCount === 3 && progress.isApproved) {
-                globalBadge = `<span class="badge badge--success">APROBADO (3/3 EVIDENCIAS · 100%)</span>`;
+                globalBadge = `<span class="badge badge--success">LOGRO ORIENTATIVO (3/3 EVIDENCIAS · 100%)</span>`;
             } else if (completedEvCount > 0) {
                 globalBadge = `<span class="badge badge--warning">EN FORMACIÓN (${completedEvCount}/3 EVIDENCIAS)</span>`;
             }
 
             const defaultObservation = progress.isApproved
                 ? "El aprendiz demuestra apropiación integral de las competencias de testing, aseguramiento de calidad y automatización de pruebas bajo estándares ISO/IEC 25010 e IEEE 829. Cumple satisfactoriamente con los criterios curriculares del programa ADSO."
-                : "El aprendiz se encuentra en proceso formativo activo. Ha desarrollado suites de prueba y simuladores clave; debe culminar las actividades pendientes para consolidar el juicio de APROBADO.";
+                : "El aprendiz se encuentra en proceso formativo activo. Ha desarrollado suites de prueba y simuladores clave; debe culminar las actividades pendientes para consolidar el registro local.";
 
             const currentObs = profile.observations || defaultObservation;
             const currentSignature = localStorage.getItem("sena_apprentice_signature") || profile.signature || "";
@@ -84,7 +86,7 @@
                      ================================================================== -->
                 <div class="evidence-form-card no-print">
                   <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem;">
-                    <h3 class="evidence-title" style="margin: 0;">📋 Generador Institucional de Evidencias SENA (ADSO)</h3>
+                    <h3 class="evidence-title" style="margin: 0;">📋 Registro local de evidencias de aprendizaje (ADSO)</h3>
                     <div style="display: flex; align-items: center; gap: 0.5rem;">
                       <span style="font-size: 0.85rem; color: var(--text-muted);">Progreso Formativo:</span>
                       <span id="top-global-badge">${globalBadge}</span>
@@ -167,11 +169,11 @@
                 </div>
 
                 <!-- ==================================================================
-                     VISTA IMPRIMIBLE / FORMATO OFICIAL SENA SIGA (GFPI-F-023)
+                     VISTA IMPRIMIBLE / REGISTRO LOCAL DE EVIDENCIAS
                      ================================================================== -->
                 <div class="sena-evidence-sheet" id="sena-evidence-sheet">
                   
-                  <!-- Encabezado Institucional SENA SIGA -->
+                  <!-- Encabezado contextual de la adaptación didáctica -->
                   <table class="evidence-header-table">
                     <tr>
                       <td class="evidence-header-logo-cell">
@@ -180,12 +182,12 @@
                       <td class="evidence-header-title-cell">
                         <h2>SERVICIO NACIONAL DE APRENDIZAJE — SENA</h2>
                         <p><strong>DIRECCIÓN DE FORMACIÓN PROFESIONAL · SISTEMA INTEGRADO DE GESTIÓN Y AUTOCONTROL (SIGA)</strong></p>
-                        <p><strong>FORMATO REGISTRO INTEGRAL DE EVIDENCIAS Y JUICIO DE EVALUACIÓN</strong></p>
+                        <p><strong>REGISTRO INTEGRAL DE EVIDENCIAS DE APRENDIZAJE</strong></p>
                         <p>Programa de Formación: Tecnólogo en Análisis y Desarrollo de Software (ADSO) · Código 228118</p>
                       </td>
                       <td class="evidence-header-meta-cell">
-                        <p><strong>Código Formato:</strong> GFPI-F-023</p>
-                        <p><strong>Versión:</strong> 03</p>
+                        <p><strong>Referencia:</strong> adaptación didáctica local</p>
+                        <p><strong>Versión:</strong> 3.0</p>
                         <p><strong>Ficha:</strong> <span id="disp-ficha">${this.escapeHtml(profile.ficha)}</span></p>
                         <p><strong>Fecha de Emisión:</strong> <span id="disp-date">${this.escapeHtml(profile.date)}</span></p>
                         <p><strong>Estado:</strong> <span id="disp-global-badge">${globalBadge}</span></p>
@@ -218,13 +220,13 @@
                       <tr>
                         <td class="evidence-table-label">Competencia Laboral:</td>
                         <td class="evidence-table-val" colspan="3">
-                          <strong>220501100:</strong> Validar la solución de software según especificaciones de diseño y estándares de calidad.
+                          <strong>220501098:</strong> Verificar los entregables del desarrollo de software de acuerdo con las especificaciones del diseño.
                         </td>
                       </tr>
                       <tr>
                         <td class="evidence-table-label">Resultados Evaluados (RAPs):</td>
                         <td class="evidence-table-val" colspan="3">
-                          RAP 1: Diseño y planificación de pruebas bajo estándares IEEE 829 e ISO/IEC 25010 · RAP 2: Automatización de pruebas unitarias, de integración y aserciones con cobertura >= 80% (PyTest, Jest, JUnit 5) · RAP 3: Pruebas End-to-End en navegador con Playwright y gestión sistemática de defectos · RAP 4: Calidad continua y Quality Gates automatizados en pipelines CI/CD.
+                          RAP-01: Diseñar y ejecutar el plan de pruebas verificando requisitos funcionales y no funcionales; la valoración definitiva corresponde al instructor.
                         </td>
                       </tr>
                     </table>
@@ -321,13 +323,13 @@
                     </table>
                   </section>
 
-                  <!-- 4. Rúbrica y Criterios Institucionales de Evaluación -->
+                  <!-- 4. Rúbrica y criterios de auto-revisión -->
                   <section class="evidence-section">
-                    <h4 class="evidence-subtitle">4. Rúbrica y Juicio de Evaluación de Criterios SENA</h4>
+                    <h4 class="evidence-subtitle">4. Rúbrica y auto-revisión de criterios</h4>
                     <table class="evidence-table">
                       <thead>
                         <tr>
-                          <th style="width: 50%;">Criterio de Evaluación Institucional SENA</th>
+                          <th style="width: 50%;">Criterio de auto-revisión de la guía</th>
                           <th style="width: 15%; text-align: center;">Cumple</th>
                           <th style="width: 35%;">Observaciones del Instructor / Diagnóstico</th>
                         </tr>
@@ -359,8 +361,8 @@
                     <!-- Caja de Juicio de Evaluación Final -->
                     <div class="evidence-verdict-box ${progress.isApproved ? 'is-approved' : ''}">
                       <div class="verdict-header">
-                        <span>JUICIO DE EVALUACIÓN FINAL DEL INSTRUCTOR:</span>
-                        <span style="font-size: 0.8rem; color: #475569;">Competencia 220501100 · Calificación: ${progress.weightedScore}%</span>
+                        <span>RESULTADO ORIENTATIVO DEL REGISTRO LOCAL:</span>
+                        <span style="font-size: 0.8rem; color: #475569;">Competencia 220501098 · Avance local: ${progress.weightedScore}%</span>
                       </div>
                       <div class="verdict-options">
                         <label style="display: flex; align-items: center; gap: 0.35rem; cursor: default;">
@@ -383,7 +385,7 @@
                       <strong>Declaración de Autenticidad y Veracidad:</strong> El aprendiz abajo firmante declara que las evidencias, suites de prueba automatizadas, scripts de Playwright, reportes de cobertura y simuladores registrados en este informe fueron ejecutados de manera personal y autónoma durante las sesiones prácticas de formación del tecnólogo ADSO, acogiéndose a los reglamentos éticos y académicos del Servicio Nacional de Aprendizaje SENA.
                     </div>
 
-                    <!-- 5. Espacio Institucional de Firmas -->
+                    <!-- 5. Espacio para observaciones y firmas, si el instructor lo solicita -->
                     <div class="evidence-signatures-grid">
                       <!-- Columna Firma del Aprendiz -->
                       <div class="signature-column">
@@ -652,10 +654,10 @@
 
             return `# SERVICIO NACIONAL DE APRENDIZAJE — SENA
 ## SISTEMA INTEGRADO DE GESTIÓN Y AUTOCONTROL (SIGA)
-### FORMATO REGISTRO INTEGRAL DE EVIDENCIAS Y JUICIO DE EVALUACIÓN (GFPI-F-023 Versión 03)
+### REGISTRO INTEGRAL DE EVIDENCIAS DE APRENDIZAJE (adaptación didáctica local)
 
 **Programa de Formación:** Tecnólogo en Análisis y Desarrollo de Software (ADSO — Código: 228118)  
-**Competencia Laboral:** 220501100 · Validar la solución de software según especificaciones de diseño y estándares de calidad  
+**Competencia Laboral:** 220501098 · Verificar los entregables del desarrollo de software de acuerdo con las especificaciones del diseño
 **Ficha de Caracterización:** ${profile.ficha}  
 **Aprendiz Autor:** ${profile.name} (C.C. ${profile.docNumber})  
 **Centro de Formación:** ${profile.centro}  
@@ -670,10 +672,7 @@
 ## 1. Datos Generales del Aprendiz y Proceso Formativo
 - **Proyecto Formativo:** ${profile.project || 'Sistema de Gestión de Inventario y Calidad ADSO'}
 - **Resultados de Aprendizaje Evaluados (RAPs):**
-  - RAP 1: Diseño y planificación de pruebas bajo estándares IEEE 829 e ISO/IEC 25010.
-  - RAP 2: Automatización de pruebas unitarias, de integración y aserciones con cobertura >= 80%.
-  - RAP 3: Pruebas End-to-End en navegador con Playwright y gestión sistemática de defectos.
-  - RAP 4: Calidad continua y Quality Gates automatizados en pipelines CI/CD.
+  - RAP-01: Diseñar y ejecutar el plan de pruebas verificando requisitos funcionales y no funcionales.
 
 ---
 
@@ -694,7 +693,7 @@ ${Object.values(sims).map(s => `| **${s.name}** | ${s.details} | ${s.score} / ${
 
 ---
 
-## 4. Rúbrica y Criterios Institucionales SENA
+## 4. Rúbrica y criterios de auto-revisión
 - **Criterio 1 (Planificación IEEE 829):** [ X ] CUMPLE — *Estrategia, alcance y casos de prueba formalizados.*
 - **Criterio 2 (Automatización & Cobertura):** [ X ] CUMPLE — *Aserciones estrictas y umbral >= 80% superado.*
 - **Criterio 3 (E2E & Defectos):** [ X ] CUMPLE — *Navegación real automatizada y trazabilidad de bugs.*
@@ -708,18 +707,18 @@ ${Object.values(sims).map(s => `| **${s.name}** | ${s.details} | ${s.score} / ${
 
 ---
 
-## 6. Firmas Institucionales
+## 6. Observaciones y firmas, si aplican
 - **Firma del Aprendiz:** ${profile.name} — C.C. ${profile.docNumber} (Aprendiz SENA ADSO)
 - **Firma del Instructor:** ${profile.instructor} — Instructor Técnico Evaluador SENA
 
-*Documento formal emitido bajo el estándar GFPI-F-023 Versión 03 — SENA ADSO 2026.*
+*Registro local generado por la guía; no constituye certificación ni juicio institucional.*
 `;
         },
 
         downloadMarkdown() {
             const md = this.generateMarkdownReport();
             const profile = global.TestingSession ? global.TestingSession.getProfile() : {};
-            const fileName = `SENA_GFPI-F-023_Testing_ADSO_${profile.ficha || '228118'}_${profile.docNumber || 'evidencias'}.md`;
+            const fileName = `registro_evidencias_testing_ADSO_${profile.ficha || 'ficha'}_${profile.docNumber || 'aprendiz'}.md`;
 
             const blob = new Blob([md], { type: 'text/markdown;charset=utf-8;' });
             const url = URL.createObjectURL(blob);
@@ -732,7 +731,7 @@ ${Object.values(sims).map(s => `| **${s.name}** | ${s.details} | ${s.score} / ${
             URL.revokeObjectURL(url);
 
             if (global.APP && global.APP.showToast) {
-                global.APP.showToast("Informe oficial SENA GFPI-F-023 descargado en Markdown (.md) ✓", "success");
+                global.APP.showToast("Registro local descargado en Markdown (.md) ✓", "success");
             }
         },
 
@@ -743,8 +742,8 @@ ${Object.values(sims).map(s => `| **${s.name}** | ${s.details} | ${s.score} / ${
             const sims = global.TestingSession ? global.TestingSession.getSimulators() : {};
 
             const payload = {
-                standard: "SENA-SIGA-GFPI-F-023",
-                version: "03",
+                standard: "GUIA-TESTING-LOCAL",
+                version: "3.0",
                 emittedAt: new Date().toISOString(),
                 apprentice: profile,
                 evaluation: {
@@ -757,13 +756,13 @@ ${Object.values(sims).map(s => `| **${s.name}** | ${s.details} | ${s.score} / ${
                 testChecks: checks,
                 simulators: sims,
                 competency: {
-                    code: "220501100",
-                    denomination: "Validar la solución de software según especificaciones de diseño y estándares de calidad",
+                    code: "220501098",
+                    denomination: "Verificar los entregables del desarrollo de software de acuerdo con las especificaciones del diseño",
                     program: "Tecnólogo en Análisis y Desarrollo de Software (ADSO)"
                 }
             };
 
-            const fileName = `SENA_GFPI-F-023_Evidencias_Testing_ADSO_${profile.ficha || '228118'}_${profile.docNumber || 'datos'}.json`;
+            const fileName = `registro_evidencias_testing_ADSO_${profile.ficha || 'ficha'}_${profile.docNumber || 'aprendiz'}.json`;
             const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json;charset=utf-8;' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -775,7 +774,7 @@ ${Object.values(sims).map(s => `| **${s.name}** | ${s.details} | ${s.score} / ${
             URL.revokeObjectURL(url);
 
             if (global.APP && global.APP.showToast) {
-                global.APP.showToast("Paquete JSON institucional GFPI-F-023 descargado ✓", "success");
+                global.APP.showToast("Registro local descargado en JSON ✓", "success");
             }
         }
     };

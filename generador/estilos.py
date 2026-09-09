@@ -33,10 +33,12 @@ def configurar_estilos(doc):
             st.font.size = Pt(tamanos.get(nivel, 12))
     doc.core_properties.title = "Guía de Aprendizaje — Testing & QA (SENA ADSO)"
     doc.core_properties.subject = (
-        "Tecnólogo en Análisis y Desarrollo de Software — Guía 05 (GFPI-F-135)"
+        "Tecnólogo en Análisis y Desarrollo de Software — adaptación didáctica"
     )
     doc.core_properties.author = ELABORO
-    doc.core_properties.comments = "Formato institucional GFPI-F-135."
+    doc.core_properties.comments = (
+        "Adaptación didáctica local; validar datos y formato de entrega con el instructor."
+    )
 
 
 def sombrear(celda, color=AZUL_CLARO):
@@ -126,8 +128,7 @@ def agregar_campo_pagina(doc):
     p = pie.paragraphs[0]
     p.alignment = WD_ALIGN_PARAGRAPH.CENTER
     r = p.add_run(
-        "Guía de Aprendizaje — Testing & QA · SENA ADSO · Formato "
-        "GFPI-F-135 · Página "
+        "Guía de Aprendizaje — Testing & QA · SENA ADSO · Adaptación didáctica · Página "
     )
     r.font.size = Pt(8)
     run = p.add_run()

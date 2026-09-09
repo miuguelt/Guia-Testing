@@ -142,7 +142,7 @@
         },
         'sim-quiz': {
             id: 'sim-quiz',
-            name: 'Quiz de Certificación Técnica QA',
+            name: 'Quiz de fundamentos técnicos de QA',
             completed: false,
             score: 0,
             maxScore: 8,
@@ -206,13 +206,13 @@
                 if (data) return JSON.parse(data);
             } catch (e) {}
             return {
-                name: 'APRENDIZ SENA ADSO',
-                docNumber: '1.020.345.678',
-                ficha: '228118-ADSO',
-                centro: 'Centro de Gestión Agroempresarial del Oriente - Vélez',
-                regional: 'Regional Santander',
-                instructor: 'INSTRUCTOR TÉCNICO SENA - VÉLEZ',
-                project: 'Sistema de Gestión de Inventario y Calidad ADSO',
+                name: 'APRENDIZ ADSO',
+                docNumber: '',
+                ficha: '<NÚMERO_DE_FICHA>',
+                centro: 'Por diligenciar',
+                regional: 'Por diligenciar',
+                instructor: 'Por diligenciar',
+                project: 'Proyecto de práctica del aprendiz',
                 date: new Date().toLocaleDateString('es-CO', { year: 'numeric', month: 'long', day: 'numeric' })
             };
         },
@@ -329,7 +329,7 @@
          */
         getModulesProgress() {
             const completed = (window.GAMIFICATION && window.GAMIFICATION.completed) || [];
-            const totalModules = (window.MODULES && Object.keys(window.MODULES).length) || 13;
+            const totalModules = (window.MODULES && Object.keys(window.MODULES).length) || 16;
             const pct = totalModules > 0 ? Math.round((completed.length / totalModules) * 100) : 0;
             return {
                 completed: completed.length,
@@ -339,7 +339,7 @@
         },
 
         /**
-         * Obtiene el estado de las 3 evidencias institucionales de DevBrain / SSoT.
+         * Obtiene el estado de las 3 evidencias definidas en el registro local.
          */
         getDeliverablesProgress() {
             let readyCount = 0;
@@ -371,12 +371,12 @@
         },
 
         /**
-         * CÁLCULO VERÍDICO Y PONDERADO DEL AVANCE GLOBAL Y RESULTADO DEL APRENDIZ.
+         * Cálculo ponderado del avance local de aprendizaje.
          * Ponderación:
          * - Módulos teóricos estudiados: 20%
          * - Simuladores interactivos resueltos: 30%
          * - Checks de pruebas automatizadas: 30%
-         * - Entregables institucionales de calidad: 20%
+         * - Entregables de calidad registrados localmente: 20%
          */
         calculateProgress() {
             const modules = this.getModulesProgress();
@@ -406,22 +406,21 @@
                 (deliverables.percentage * 0.20)
             );
 
-            // Criterios institucionales SENA para dictamen:
-            // APROBADO: Puntaje ponderado >= 70% Y al menos 5 checks de prueba Y al menos 2 simuladores aprobados.
+            // Regla orientativa del simulador; el instructor define el juicio final.
             const isApproved = weightedScore >= 70 && passedChecks >= 5 && passedSims >= 2;
 
-            let verdict = 'NO APROBADO / EN FORMACIÓN';
+            let verdict = 'PENDIENTE / EN FORMACIÓN';
             let verdictBadgeClass = 'badge--pending';
             let verdictDescription = 'El aprendiz aún no alcanza los umbrales mínimos de cobertura y práctica.';
 
             if (isApproved) {
-                verdict = 'APROBADO (A)';
+                verdict = 'LOGRO ORIENTATIVO';
                 verdictBadgeClass = 'badge--success';
-                verdictDescription = 'El aprendiz ha demostrado las competencias de verificación y pruebas automatizadas según la norma ISO/IEC 25010 y criterios curriculares del SENA.';
+                verdictDescription = 'El avance local alcanza la regla orientativa del simulador. Presenta tus evidencias al instructor para la valoración correspondiente.';
             } else if (weightedScore >= 40) {
-                verdict = 'EN PROCESO DE EVALUACIÓN (EP)';
+                verdict = 'AVANCE EN PROCESO';
                 verdictBadgeClass = 'badge--warning';
-                verdictDescription = 'Avance significativo. Complete los simuladores pendientes y ejecute las suites de prueba para certificar.';
+                verdictDescription = 'Avance significativo. Completa los simuladores pendientes y ejecuta las suites de prueba para fortalecer tus evidencias.';
             }
 
             return {

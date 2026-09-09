@@ -1,20 +1,20 @@
 const MODULES = {
     "m-reflexion": {
-        title: "Reflexion Inicial: El Bug de 500M USD",
+        title: "Reflexión inicial: el costo de un defecto no detectado",
         badge: "Modulo 1",
         intro: "Antes de escribir un solo test, entendamos por que la calidad de software puede literalmente bankruptear una empresa.",
         blocks: [
             {
                 type: "alert", variant: "warning",
                 title: "Caso Real: Knight Capital (1 de Agosto, 2012)",
-                body: "En 45 minutos, un algoritmo de trading con codigo de prueba (DEAD code) no eliminado provoco perdidas por $440 millones USD. La empresa quebró en 2 dias. La causa raiz: un test de carga (SMBAT) se dejo activo en produccion. Sin testing adecuado, sin revision de codigo, sin CI/CD. 9 meses despues, Knight Capital fue adquirida por Getco por $1.50 por accion (antes cotizaba a $10+)."
+                body: "En 45 minutos, un algoritmo de trading con código de prueba no eliminado provocó pérdidas por $440 millones USD. Knight Capital quedó en una situación financiera crítica y nueve meses después fue adquirida por Getco. La causa se relacionó con un cambio de despliegue y controles insuficientes. Usa el caso para preguntar qué verificaciones y barreras habrían detenido el incidente; no lo conviertas en una receta causal simplificada."
             },
             {
                 type: "code", lang: "python", file: "knight_capital_bug.py",
                 title: "El tipo de bug que provoco la catastrofe",
                 code: `# Codigo de prueba que NUNCA debio llegar a produccion
 def perform_trades(market_data):
-    # SMBAT (codigo de prueba de carga) - DEBE ELIMINARSE
+    # Código de prueba de carga que nunca debe llegar a producción.
     if should_place_orders:  # <- Flag activado en produccion
         for i in range(1000):  # <- Loop sin fin
             place_order(market_data.symbol, quantity=999)  # <- Cantidades absurdas
@@ -33,7 +33,7 @@ def perform_trades(market_data):
             {
                 type: "alert", variant: "success",
                 title: "Lo que aprenderas en esta guia",
-                body: "Al finalizar los 12 modulos seras capaz de: escribir tests unitarios con PyTest y Jest, testear APIs REST con TestClient, testear componentes React, testear Servlets Java con JUnit 5, automatizar E2E con Playwright, medir cobertura, configurar CI/CD en GitHub Actions, y aplicar TDD/BDD."
+        body: "Al finalizar los 16 módulos serás capaz de: escribir tests unitarios con PyTest y Jest, probar APIs REST con TestClient, probar componentes React, probar servicios Java con JUnit 5, automatizar E2E con Playwright, medir cobertura, configurar CI/CD en GitHub Actions, aplicar TDD/BDD y usar IA con un flujo de verificación responsable."
             },
             {
                 type: "timeline",
@@ -92,7 +92,7 @@ def perform_trades(market_data):
                     {
                         icon: "📊", name: "pytest-cov / JaCoCo", tag: "Cobertura",
                         role: "Miden las lineas y ramas ejecutadas por los tests y producen reportes con umbrales.",
-                        when: "Verificar el objetivo de cobertura (80% SENA ADSO) y bloquear el avance si baja."
+                        when: "Verificar un umbral de cobertura acordado para el ejercicio y bloquear el avance si baja."
                     }
                 ]
             },
@@ -209,7 +209,7 @@ def perform_trades(market_data):
                         number: 6,
                         title: "Fase 6: Medición de Cobertura y Auditoría Multidimensional",
                         tag: "Compuerta de Calidad",
-                        desc: "Genera el reporte de cobertura de código (`pytest-cov`, `JaCoCo`, `c8`) para certificar que se supere el umbral del 80% exigido en ADSO. Ejecuta `qa_auditor` para detectar vulnerabilidades OWASP y código muerto.",
+                        desc: "Genera el reporte de cobertura de código (`pytest-cov`, `JaCoCo`, `c8`) para verificar si se supera el umbral del 80% definido para el ejercicio. Ejecuta `qa_auditor` para detectar vulnerabilidades OWASP y código muerto.",
                         command: "pytest --cov=app --cov-report=term-missing --cov-fail-under=80",
                         tip: "Examina no solo las líneas ejecutadas sino también la cobertura de ramas (`branch coverage`) en condicionales if/else.",
                         pitfall: "Confiar ciegamente en un 100% de cobertura cuando los tests carecen de aserciones profundas (tests cosméticos)."
@@ -579,14 +579,14 @@ def test_user_creation_and_login(client):
     # Registro
     response = client.post("/auth/register", data={
         "username": "testuser",
-        "email": "test@test.com",
-        "password": "Test123!",
+        "email": "<CORREO_DE_PRUEBA>",
+        "password": "<CONTRASEÑA_DE_PRUEBA>",
     }, follow_redirects=True)
     assert response.status_code == 200
     # Login
     response = client.post("/auth/login", data={
-        "email": "test@test.com",
-        "password": "Test123!",
+        "email": "<CORREO_DE_PRUEBA>",
+        "password": "<CONTRASEÑA_DE_PRUEBA>",
     }, follow_redirects=True)
     assert response.status_code == 200
     assert b"Bienvenido" in response.data or b"Dashboard" in response.data`
@@ -830,7 +830,7 @@ describe("useFetch", () => {
                         tag: "Paso 4: Aserciones & Verify",
                         desc: "Ejecuta el método del DAO/Servlet y valida el resultado con `assertEquals` o `assertTrue`. Usa `verify(mockStmt).executeUpdate()` para garantizar que la consulta se ejecutó.",
                         command: "mvn test",
-                        tip: "`verify(mockStmt, never()).createStatement()` certifica que nunca se concatenó SQL vulnerable a inyecciones.",
+                        tip: "`verify(mockStmt, never()).createStatement()` aporta evidencia de que esa interacción no ocurrió en el caso probado; complementa la revisión de seguridad.",
                         pitfall: "Verificar llamadas con parámetros exactos cuando los objetos comparados no implementan `equals()`; en ese caso usa `any()` o `argThat()`."
                     },
                     {
@@ -972,9 +972,9 @@ class ProductoDAOTest {
                     },
                     {
                         number: 5,
-                        title: "Paso 5: Documentar la evolución y certificar cobertura",
+                        title: "Paso 5: Documentar la evolución y verificar cobertura",
                         tag: "Calidad Continua",
-                        desc: "Verifica que el nuevo código tenga un 100% de cobertura natural y documenta los contratos en la suite de pruebas como documentación viva.",
+                        desc: "Verifica el nivel de cobertura alcanzado y documenta los contratos en la suite de pruebas como documentación viva. La cobertura no demuestra por sí sola la ausencia de defectos.",
                         command: "pytest --cov=app --cov-report=term-missing",
                         tip: "Los tests de TDD son la mejor especificación técnica del sistema: si alguien tiene dudas de qué hace una función, el test lo responde.",
                         pitfall: "Borrar tests de casos borde creyendo que ya no son necesarios una vez que el código funciona."

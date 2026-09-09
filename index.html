@@ -12,11 +12,12 @@
     <div class="main-wrapper">
         <header class="top-header">
             <h1>🧪 Guía de Testing de Software, QA & Pruebas Automatizadas</h1>
+            <p><a href="web/downloads/guia-testing-qa.zip" download>📦 Descargar proyecto de práctica (.zip)</a></p>
         </header>
 
         <main class="content" id="main-content">
             <!-- 1. PLAN DE PRUEBAS -->
-            <section id="m-plan-pruebas" class="page-section active">
+            <section id="m-piramide" class="page-section active">
                 <div class="section-card">
                     <h2>📋 Plan de Pruebas de Software (IEEE 829)</h2>
                     <p>Diseño y especificación de estrategias de prueba, matrices de cobertura y criterios de aceptación.</p>
@@ -25,7 +26,7 @@
             </section>
 
             <!-- 2. PRUEBAS UNITARIAS -->
-            <section id="m-unitarias" class="page-section">
+            <section id="m-pytest-fastapi" class="page-section">
                 <div class="section-card">
                     <h2>⚙️ Suite de Pruebas Unitarias & Mocks</h2>
                     <p>Desarrollo guiado por pruebas (TDD), aserciones estrictas y métricas de cobertura de código (>=80%).</p>
@@ -34,7 +35,7 @@
             </section>
 
             <!-- 3. E2E & BUG TRACKER -->
-            <section id="m-e2e" class="page-section">
+            <section id="m-playwright" class="page-section">
                 <div class="section-card">
                     <h2>🚀 Pruebas End-to-End con Playwright & Bug Tracking</h2>
                     <p>Automatización de flujos de usuario reales y gestión de defectos según severidad.</p>
@@ -45,13 +46,15 @@
             <!-- Formato de Evidencias -->
             <section id="m-dossier" class="page-section">
                 <div class="section-card">
-                    <h2>📄 Consolidación del Portafolio Oficial de Evidencias SENA (ADSO)</h2>
+                    <h2>📄 Consolidación del Portafolio de Evidencias (ADSO)</h2>
+                    <p>Este registro local organiza el trabajo del aprendiz y no sustituye el instrumento ni la valoración del instructor.</p>
                     <div data-db-evidence-dossier></div>
                 </div>
             </section>
         </main>
     </div>
 
+    <script src="web/js/deliverables-registry.js"></script>
     <script src="web/js/vendor/devbrain-evidence.js"></script>
 
   <script>
@@ -59,8 +62,9 @@
       const evidenceAPI = window.DevBrainEvidence || (window.DevBrainSDK && window.DevBrainSDK.evidence);
       if (evidenceAPI) {
         evidenceAPI.montar({
-          registro: 'deliverables.registry.json',
-          prefijo: 'guia_testing'
+          registro: window.GUIDE_DELIVERABLES,
+          prefijo: 'guia_testing',
+          dossierHref: '#m-dossier'
         });
       }
     });

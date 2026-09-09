@@ -60,7 +60,7 @@ def _matriz(doc):
 
 def _criterios(doc):
     doc.add_heading("5.1 Criterios de evaluación aplicados", level=2)
-    for item in [
+    for indice, item in enumerate([
         "Identifica los tipos de prueba de acuerdo con la pirámide de "
         "testing y sus criterios de aceptación.",
         "Ejecuta pruebas automatizadas unitarias, de integración y "
@@ -73,8 +73,10 @@ def _criterios(doc):
         "con evidencia real.",
         "Detecta ausencia de niveles de cobertura y usa auditorías "
         "estáticas para identificar vulnerabilidades.",
-    ]:
-        doc.add_paragraph(item, style="List Number")
+    ], start=1):
+        par = doc.add_paragraph(f"{indice}. {item}")
+        par.paragraph_format.space_before = 0
+        par.paragraph_format.space_after = 0
 
 
 def _rubrica(doc):

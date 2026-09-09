@@ -20,12 +20,12 @@ def presentacion(doc):
         "funcione bien en el laboratorio y colapse en la operación."
     )
     doc.add_paragraph(
-        "El caso transversal es el sistema de información de control de "
-        "acceso y de inventario de equipos y elementos de almacén. Sobre ese "
-        "entorno se trabajan los artefactos de las plataformas PyTest "
-        "(FastAPI y Flask), Vitest/Jest (React), JUnit 5 & Mockito (Java) y "
-        "Playwright (E2E), de modo que las mismas piezas que se probaron en "
-        "las guías anteriores se validan ahora de forma automatizada."
+        "El caso transversal es un sistema de información de inventario y "
+        "calidad. Sobre ese entorno se trabajan los artefactos de las "
+        "plataformas PyTest (FastAPI y Flask), Vitest/Jest (React), JUnit 5 "
+        "& Mockito (Java) y Playwright (E2E). Si el aprendiz continúa un "
+        "proyecto previo, debe reemplazar los datos del ejemplo por los de su "
+        "propio repositorio."
     )
     doc.add_heading("Pregunta orientadora", level=2)
     doc.add_paragraph(
@@ -63,12 +63,14 @@ def presentacion(doc):
         doc.add_paragraph(item, style="List Bullet")
     doc.add_heading("Uso responsable de las herramientas de apoyo (incluida la IA)", level=2)
     doc.add_paragraph(
-        "Las herramientas de IA pueden recuperar la competencia y los "
-        "resultados oficiales, proponer listas de chequeo, detectar vacíos "
+        "Las herramientas de IA pueden ayudar a consultar la documentación "
+        "compartida, proponer listas de chequeo, detectar vacíos "
         "entre actividad-evidencia-criterio y generar pruebas de referencia. "
         "No sustituyen la ejecución real de la suite ni la verificación "
-        "humana de los resultados. Esta guía incorpora además el sistema "
+        "humana de los resultados. Los códigos de programa, competencia, "
+        "resultados de aprendizaje y duración deben validarse con el "
+        "instructor antes de una entrega institucional. Esta guía incorpora "
+        "además el sistema "
         "qa_auditor, que detecta anomalías del código generado con IA: "
         "pruebas vacías, imports alucinados y vulnerabilidades OWASP."
     )
-    doc.add_page_break()

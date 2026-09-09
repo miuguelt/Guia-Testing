@@ -56,7 +56,7 @@ def portada(doc):
     p.alignment = WD_ALIGN_PARAGRAPH.CENTER
     r = p.add_run(
         f"Fase del proyecto: {FASE_PROYECTO} — Calidad de Software\n"
-        f"Formato: GFPI-F-135 · Versión {VERSION} · {fecha_es_co()}"
+        f"Adaptación didáctica · Versión {VERSION} · {fecha_es_co()}"
     )
     r.font.size = Pt(10)
     r.font.color.rgb = GRIS

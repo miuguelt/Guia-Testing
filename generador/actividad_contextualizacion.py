@@ -59,15 +59,17 @@ def _piramide(doc):
 
 def _procedimiento(doc):
     doc.add_heading("Procedimiento", level=3)
-    for item in [
+    for indice, item in enumerate([
         "Clasificar diez ejemplos de prueba como unitaria, de integración o "
         "end-to-end.",
         "Justificar los porcentajes de la pirámide en términos de velocidad y "
         "confiabilidad.",
         "Asociar cada una de las 7 fases con su herramienta y su objetivo.",
         "Completar el simulador de la pirámide de la guía web.",
-    ]:
-        doc.add_paragraph(item, style="List Number")
+    ], start=1):
+        par = doc.add_paragraph(f"{indice}. {item}")
+        par.paragraph_format.space_before = 0
+        par.paragraph_format.space_after = 0
 
 
 def _componentes(doc):

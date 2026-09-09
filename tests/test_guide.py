@@ -1,5 +1,6 @@
 """Tests de estructura de la guia Testing."""
 import os
+import json
 import pytest
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -210,9 +211,10 @@ def test_modulo_evidencias_sena_html():
     with open(html_path, "r", encoding="utf-8") as f:
         html = f.read()
     assert "m-evidencias-sena" in html
-    assert "sena-dossier-root" in html
     assert "testing-session.js" in html
-    assert "sena-dossier.js" in html
+    assert "js/deliverables-registry.js" in html
+    assert "sena-dossier.js" not in html
+    assert "sena-dossier-root" not in html
     assert "data-db-evidence-dossier" in html
     assert "ART-TEST-01" in html
     assert "ART-TEST-02" in html
@@ -261,6 +263,104 @@ def test_sena_dossier_js_y_estilos():
     assert ".evidence-header-table" in css
     assert ".signature-canvas-wrapper" in css
     assert ".evidence-verdict-box" in css
+
+
+def test_manifest_refleja_la_salida_web_y_la_secuencia_real():
+    with open(os.path.join(BASE, "guide.manifest.json"), encoding="utf-8") as f:
+        manifest = json.load(f)
+
+    assert manifest["guide"]["entrypoint"] == "./web/index.html"
+    assert manifest["platform"]["modules"] == 16
+    assert sum(fase["hours"] for fase in manifest["learningSequence"]) == 40
+    assert "adaptación didáctica" in manifest["sources"][0]["use"].lower()
+
+
+def test_registros_de_evidencias_son_una_fuente_unica_y_tienen_estaciones_reales():
+    with open(os.path.join(BASE, "deliverables.registry.json"), encoding="utf-8") as f:
+        root_registry = json.load(f)
+    with open(os.path.join(BASE, "web", "deliverables.registry.json"), encoding="utf-8") as f:
+        web_registry = json.load(f)
+    with open(os.path.join(BASE, "web", "index.html"), encoding="utf-8") as f:
+        html = f.read()
+
+    assert root_registry == web_registry
+    for artifact in root_registry["artifacts"]:
+        section_id = artifact["station"]["sectionId"]
+        assert f'id="{section_id}"' in html
+        assert f'data-db-evidence="{artifact["id"]}"' in html
+    assert 'data-db-evidence-dossier' in html
+
+
+def test_salida_web_funciona_sin_cdn_ni_motor_de_evidencias_duplicado():
+    with open(os.path.join(BASE, "web", "index.html"), encoding="utf-8") as f:
+        html = f.read()
+
+    assert "fonts.googleapis.com" not in html
+    assert "cdn.jsdelivr.net" not in html
+    assert "js/deliverables-registry.js" in html
+    assert "registro: window.GUIDE_DELIVERABLES" in html
+    assert "sena-dossier.js" not in html
+    assert "sena-dossier-root" not in html
+
+
+def test_material_de_aprendizaje_no_contiene_credenciales_de_ejemplo():
+    archivos = [
+        os.path.join(BASE, "web", "index.html"),
+        os.path.join(BASE, "web", "js", "modules-content.js"),
+        os.path.join(BASE, "web", "js", "modules-content-2.js"),
+        os.path.join(BASE, "web", "js", "testing-session.js"),
+    ]
+    texto = "\n".join(open(ruta, encoding="utf-8").read().lower() for ruta in archivos)
+
+    assert "admin123" not in texto
+    assert "test123!" not in texto
+    assert "1.020.345.678" not in texto
+
+
+def test_modulos_ia_incluyen_constructor_de_gema_y_laboratorio_de_herramientas():
+    html_path = os.path.join(BASE, "web", "index.html")
+    with open(html_path, encoding="utf-8") as f:
+        html = f.read()
+
+    assert 'id="m-gema-testing"' in html
+    assert 'id="m-herramientas-ia"' in html
+    assert "Constructor de Gema QA" in html
+    assert "Laboratorio de herramientas IA" in html
+    assert "js/ai-testing-coach.js" in html
+    assert "js/ai-tools-lab.js" in html
+    assert "css/ai-testing-coach.css" in html
+
+    content = ""
+    for name in ["modules-content-2.js", "ai-testing-coach.js", "ai-tools-lab.js"]:
+        with open(os.path.join(BASE, "web", "js", name), encoding="utf-8") as f:
+            content += f.read()
+
+    for expected in [
+        '"m-gema-testing"',
+        '"m-herramientas-ia"',
+        "generatePrompt",
+        "ACCEPTANCE CRITERIA",
+        "No pegues secretos",
+        "Diffblue Cover",
+        "GitHub Copilot",
+        "Qodo",
+        "mabl",
+    ]:
+        assert expected in content, f"Falta contenido del módulo IA: {expected}"
+
+
+def test_constructor_gema_tiene_persistencia_y_verificaciones_de_calidad():
+    path = os.path.join(BASE, "web", "js", "ai-testing-coach.js")
+    with open(path, encoding="utf-8") as f:
+        code = f.read()
+
+    assert "localStorage" in code
+    assert "navigator.clipboard" in code
+    assert "runSanityChecks" in code
+    assert "happyPath" in code
+    assert "errorCases" in code
+    assert "securityCases" in code
+    assert "qualityGate" in code
 
 
 

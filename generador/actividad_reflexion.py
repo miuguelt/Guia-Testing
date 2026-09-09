@@ -38,14 +38,16 @@ def _reto(doc):
 
 def _pensamiento_inicial(doc):
     doc.add_heading("Pensamiento inicial", level=3)
-    for item in [
+    for indice, item in enumerate([
         "¿Qué tipo de defecto pudo detectar una prueba automatizada y por "
         "qué no existía?",
         "¿Quién tomó la decisión de desplegar y con qué evidencia?",
         "¿Qué se habría automatizado para detener el despliegue en cinco "
         "segundos?",
-    ]:
-        doc.add_paragraph(item, style="List Number")
+    ], start=1):
+        par = doc.add_paragraph(f"{indice}. {item}")
+        par.paragraph_format.space_before = 0
+        par.paragraph_format.space_after = 0
 
 
 def _cierre(doc):

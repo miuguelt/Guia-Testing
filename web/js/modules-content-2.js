@@ -42,8 +42,8 @@ BASE_URL = "http://localhost:8000"
 @given('que estoy autenticado como admin')
 def step_auth(context):
     r = requests.post(f"{BASE_URL}/auth/login", json={
-        "email": "admin@sena.edu.co",
-        "password": "admin123"
+        "email": "<CORREO_DE_PRUEBA>",
+        "password": "<CONTRASEÑA_DE_PRUEBA>"
     })
     context.token = r.json()["access_token"]
     context.headers = {"Authorization": f"Bearer {context.token}"}
@@ -132,143 +132,182 @@ def step_status(context):
     },
 
     "m-playwright": {
-        title: "Pruebas E2E con Playwright",
+        title: "Playwright con Flask y Jinja",
         badge: "Modulo 9",
-        intro: "Automatiza pruebas de navegador reales: click, type, navigate, screenshot.",
+        intro: "Si ya dominas Flask, conserva ese mapa mental: ruta Flask -> render_template() -> HTML Jinja -> accion del usuario -> nueva peticion. Playwright automatiza y comprueba ese recorrido en un navegador real.",
         blocks: [
             {
+                type: "alert", variant: "info",
+                title: "Qué prueba cada herramienta",
+                body: "PyTest con test_client comprueba reglas, validaciones y respuestas del servidor sin red. Playwright comprueba el camino crítico que una persona recorre en la interfaz. No son rivales: una misma funcionalidad puede necesitar las dos pruebas, con responsabilidades distintas."
+            },
+            {
+                type: "diagram",
+                diagramType: "flask-playwright-flow",
+                title: "Del endpoint al navegador",
+                body: "@app.get('/productos') -> render_template('productos.html') -> el navegador recibe HTML -> locator.fill() y locator.click() -> Flask recibe request.form -> redirect() o flash() -> expect() comprueba la respuesta visible."
+            },
+            {
+                type: "comparison",
+                title: "Correspondencia Flask/Jinja y Playwright",
+                headers: ["En Flask/Jinja", "En Playwright", "Qué se comprueba"],
+                rows: [
+                    ["@app.get('/productos')", "page.goto('/productos')", "La ruta carga."],
+                    ["render_template()", "getByRole() / getByTestId()", "El HTML existe y es localizable."],
+                    ["<label for=\"nombre\"> + <input id=\"nombre\">", "getByLabel('Nombre')", "El campo es usable como lo percibe el usuario."],
+                    ["<form method=\"post\"> + request.form", "fill() + click()", "El formulario se diligencia y se envía."],
+                    ["redirect(url_for(...))", "expect(page).toHaveURL(...)", "La navegación termina en la URL correcta."],
+                    ["flash() mostrado por Jinja", "getByRole('status'/'alert')", "El éxito o el error se comunica." ]
+                ]
+            },
+            {
                 type: "tools",
-                title: "E2E: herramienta por contexto",
+                title: "Herramientas esenciales: un modelo mental por pieza",
                 stack: [
-                    {
-                        icon: "🎬", name: "Playwright", tag: "Microsoft",
-                        role: "E2E moderno multi-navegador (Chromium, Firefox, WebKit): auto-waiting, trace-viewer, videos y screenshots.",
-                        when: "Flujos criticos de usuario en CI: login, inventario, checkout. Es la herramienta de esta guia."
-                    },
-                    {
-                        icon: "🐭", name: "Cypress", tag: "Open source",
-                        role: "Corre dentro del navegador: resultados en tiempo real, debugging visual excelente y gran DX.",
-                        when: "Proyectos que ya estan sobre Cypress; equipos que priorizan la experiencia del desarrollador."
-                    },
-                    {
-                        icon: "🔍", name: "Selenium WebDriver", tag: "2004",
-                        role: "El estandar veterano de W3C: grid de navegadores remota, soporte masivo de drivers y muchos lenguajes.",
-                        when: "Automatizacion legada o entornos donde la compatibilidad multi-navegador institucional sea obligatoria."
-                    }
+                    { icon: "🧪", name: "test y fixtures", tag: "organización", role: "Define el caso, su preparación y su limpieza.", when: "Aislar cada flujo Flask para que una prueba no contamine a otra." },
+                    { icon: "🌐", name: "browser y context", tag: "aislamiento", role: "browser es el motor; context separa cookies, almacenamiento y permisos.", when: "Probar usuarios o sesiones independientes sin compartir estado." },
+                    { icon: "📄", name: "page", tag: "pestaña", role: "Representa una pestaña y permite navegar, escribir, hacer clic y observar.", when: "Seguir el recorrido completo de una persona por la aplicación." },
+                    { icon: "🎯", name: "locator", tag: "elemento", role: "Es una referencia viva a un elemento del DOM con espera automática.", when: "Localizar labels, botones, filas y mensajes sin depender de la maquetación." },
+                    { icon: "✅", name: "expect", tag: "aserción", role: "Comprueba URL, texto, visibilidad y estados esperando a que la web esté lista.", when: "Demostrar el resultado observable de una ruta o un formulario." },
+                    { icon: "🔌", name: "request", tag: "HTTP auxiliar", role: "Cliente HTTP para preparar datos o consultar un endpoint sin abrir la interfaz.", when: "Reducir el tiempo de preparación, no reemplazar el flujo que se quiere demostrar." },
+                    { icon: "🛣️", name: "page.route", tag: "red", role: "Intercepta una petición para continuarla, modificarla o aislar una dependencia externa.", when: "Controlar un servicio de terceros; no ocultar los errores propios de Flask." },
+                    { icon: "🔎", name: "trace, report y codegen", tag: "diagnóstico", role: "Generan evidencia: acciones, DOM, consola, red, capturas y video.", when: "Entender por qué falló un selector, un redirect o una respuesta visual." }
                 ]
             },
             {
                 type: "steps",
-                title: "Paso a Paso del Aprendiz: De Cero a Pruebas Automatizadas E2E con Playwright",
-                intro: "Aprende a automatizar navegadores reales (Chromium, Firefox, WebKit) simulando las acciones exactas de un usuario en producción.",
+                title: "Paso a paso: de una ruta Flask a un E2E confiable",
+                intro: "Avanza en este orden: primero el HTML y el contrato del usuario; después la interacción; por último el diagnóstico.",
                 steps: [
                     {
                         number: 1,
-                        title: "Instalar dependencias y binarios de navegadores",
-                        tag: "Paso 1: Setup",
-                        desc: "Instala `@playwright/test` como dependencia de desarrollo y descarga los binarios de los navegadores headless con el CLI de Playwright.",
-                        command: "npm install -D @playwright/test && npx playwright install chromium",
-                        tip: "En entornos locales puedes instalar solo `chromium` para ahorrar espacio y tiempo; en el pipeline CI instala los 3 motores si tu app es multiplataforma.",
-                        pitfall: "Olvidar ejecutar `npx playwright install`; el comando `playwright test` fallará diciendo que no encuentra el ejecutable del navegador."
+                        title: "Abrir el ejemplo Flask/Jinja",
+                        tag: "Orientar",
+                        desc: "Usa recursos/codigo-ejemplo/flask_jinja_demo/. Tiene productos, formulario POST, validación, redirect, flash y plantillas Jinja. Lee primero app.py y después productos.html.",
+                        tip: "El comportamiento de Flask es la fuente de verdad; Playwright solo lo observa desde fuera.",
+                        pitfall: "Empezar por un selector sin saber qué requisito debe demostrar el test."
                     },
                     {
                         number: 2,
-                        title: "Configurar playwright.config.js y servidor de prueba",
-                        tag: "Paso 2: Configuración",
-                        desc: "Configura `baseURL` (ej. `http://localhost:5173`), capturas automáticas en fallo (`screenshot: 'only-on-failure'`) y trazas para depuración (`trace: 'on-first-retry'`).",
-                        command: "npx playwright test --config=playwright.config.js",
-                        tip: "Puedes configurar la propiedad `webServer` en `playwright.config.js` para que Playwright arranque tu frontend automáticamente antes de correr los tests.",
-                        pitfall: "Usar URLs absolutas hardcodeadas en cada test (`page.goto('http://localhost:5173/...')`) en vez de rutas relativas (`page.goto('/...')`) aprovechando `baseURL`."
+                        title: "Instalar el ejecutor y Chromium",
+                        tag: "Preparar",
+                        desc: "Instala Playwright como dependencia de desarrollo y descarga el navegador. Define FLASK_SECRET_KEY solo en el entorno local porque flash() usa la sesión firmada de Flask.",
+                        command: "npm install -D @playwright/test; npx playwright install chromium; $env:FLASK_SECRET_KEY = \"<CLAVE_LOCAL_DE_PRUEBA>\"",
+                        tip: "Una clave local o efímera nunca debe ser una credencial de producción ni quedar guardada en Git.",
+                        pitfall: "Olvidar npx playwright install: el ejecutor estará instalado, pero no tendrá el navegador."
                     },
                     {
                         number: 3,
-                        title: "Escribir la prueba E2E con selectores data-testid",
-                        tag: "Paso 3: Redacción E2E",
-                        desc: "Crea `tests/e2e/inventario.spec.js`. Navega, llena formularios con `page.fill('[data-testid=...]')` y haz clic en botones con `page.click()`.",
-                        command: "npx playwright test inventario.spec.js",
-                        tip: "Los selectores `data-testid` son inmunes a cambios de diseño visual (CSS/Tailwind) y a modificaciones de texto en la interfaz.",
-                        pitfall: "Usar XPaths complejos o selectores CSS anidados (`div > table > tr:nth-child(2) > td:nth-child(3)`), que se rompen con cualquier cambio de maquetación."
+                        title: "Conectar Playwright con flask run",
+                        tag: "Configurar",
+                        desc: "playwright.flask.config.js define baseURL, captura en fallos, video, trace y webServer. webServer inicia Flask antes de los tests y permite usar page.goto('/productos').",
+                        command: "npx playwright test --config=playwright.flask.config.js",
+                        tip: "Una sola baseURL evita repetir host y puerto en todos los casos.",
+                        pitfall: "Usar una URL absoluta distinta en cada test: los casos se vuelven difíciles de mover a CI."
                     },
                     {
                         number: 4,
-                        title: "Aserciones web-first con auto-espera (Auto-waiting)",
-                        tag: "Paso 4: Aserciones",
-                        desc: "Usa siempre `await expect(locator).toBeVisible()` o `await expect(page).toHaveURL()`. Playwright esperará activamente hasta 5 segundos a que el elemento aparezca en el DOM.",
-                        command: "npx playwright test --ui",
-                        tip: "El modo interactivo `--ui` te permite ver la ejecución en tiempo real, viajar en el tiempo paso a paso y ver qué pasaba en el DOM en cada microsegundo.",
-                        pitfall: "Usar esperas fijas (`await new Promise(r => setTimeout(r, 3000))`); provocan tests lentos e inestables (flaky tests). Confía en el auto-waiting de Playwright."
+                        title: "Localizar con intención de usuario",
+                        tag: "Interactuar",
+                        desc: "Prefiere getByRole, getByLabel y getByText; usa getByTestId cuando necesitas un contrato explícito. Las etiquetas label for= y los roles HTML de la plantilla Jinja hacen la interfaz más accesible y el test más estable.",
+                        tip: "Un buen localizador explica qué control usa la persona, no dónde quedó dibujado.",
+                        pitfall: "Usar XPath o div > ul > li:nth-child(2): cualquier cambio de maquetación rompe el test."
                     },
                     {
                         number: 5,
-                        title: "Inspeccionar reportes y depurar con Trace Viewer",
-                        tag: "Paso 5: Diagnóstico",
-                        desc: "Cuando un test E2E falla, abre el reporte HTML interactivo con capturas de pantalla, video de la sesión y la traza completa de peticiones de red.",
-                        command: "npx playwright show-report",
-                        tip: "El Trace Viewer de Playwright te muestra las llamadas fetch del navegador, capturas de pantalla de antes y después de cada clic y la consola de JavaScript.",
-                        pitfall: "Borrar la carpeta `test-results/` antes de inspeccionar por qué falló un test en el servidor de CI."
+                        title: "Afirmar el flujo Flask completo",
+                        tag: "Verificar",
+                        desc: "Después del click comprueba la URL del redirect, el mensaje flash y la fila que Jinja agregó. En el caso inválido comprueba el alert y que el producto no apareció.",
+                        command: "npx playwright test --config=playwright.flask.config.js --ui",
+                        tip: "Cada acción importante necesita una aserción observable; hacer click no demuestra que el servidor aceptó los datos.",
+                        pitfall: "Usar esperas fijas con setTimeout: hacen el test lento y esconden problemas de sincronización."
+                    },
+                    {
+                        number: 6,
+                        title: "Preparar datos sin deformar el objetivo",
+                        tag: "Separar responsabilidades",
+                        desc: "Usa request para preparar un estado o consultar un endpoint, y context para aislar cookies y almacenamiento. Si el objetivo es comprobar el formulario, el alta debe ocurrir con page y no con request.",
+                        tip: "La preparación por HTTP ahorra tiempo; el camino crítico siempre debe conservar la interfaz que se quiere verificar.",
+                        pitfall: "Crear el registro con request y luego declarar que se probó el formulario: solo se probó la API."
+                    },
+                    {
+                        number: 7,
+                        title: "Diagnosticar y conservar evidencia",
+                        tag: "Transferir",
+                        desc: "Usa headed para ver el navegador, UI para avanzar paso a paso, codegen para descubrir una interacción y show-report para abrir la traza, la consola, las peticiones y las capturas.",
+                        command: "npx playwright test --config=playwright.flask.config.js --headed; npx playwright show-report",
+                        tip: "Primero clasifica el fallo: vista Flask, HTML/Jinja, localizador, sincronización o aserción.",
+                        pitfall: "Borrar test-results/ antes de revisar la causa de un fallo en CI."
                     }
                 ]
             },
             {
-                type: "code", lang: "javascript", file: "e2e/inventario.spec.js",
-                title: "inventario.spec.js - Flujo E2E completo",
+                type: "code", lang: "python", file: "flask_jinja_demo/app.py",
+                title: "La vista Flask que el navegador recorrerá",
+code: `@app.route("/productos", methods=["GET", "POST"])
+def products_view():
+    products = session.get("products", [])
+    if request.method == "POST":
+        name = request.form.get("nombre", "").strip()
+        price = float(request.form.get("precio", "0"))
+        if price <= 0:
+            flash("El precio debe ser mayor que cero.", "error")
+            return render_template("productos.html", products=products), 400
+        products.append({"nombre": name, "precio": f"{price:.2f}"})
+        session["products"] = products
+        flash("Producto creado.", "success")
+        return redirect(url_for("products_view"))
+    return render_template("productos.html", products=products)`
+            },
+            {
+                type: "code", lang: "html", file: "flask_jinja_demo/templates/productos.html",
+                title: "La plantilla Jinja expone contratos accesibles",
+                code: `{% extends "base.html" %}
+{% block content %}
+  <h1>Productos</h1>
+  <form method="post" aria-label="Crear producto">
+    <label for="nombre">Nombre</label>
+    <input id="nombre" name="nombre" required>
+    <label for="precio">Precio</label>
+    <input id="precio" name="precio" type="number" required>
+    <button type="submit">Guardar producto</button>
+  </form>
+  <section aria-label="Lista de productos" data-testid="lista-productos">
+    {% if products %}
+      {% for product in products %}
+        <li data-testid="producto-row">{{ product.nombre }}</li>
+      {% endfor %}
+    {% else %}
+      <p>No hay productos.</p>
+    {% endif %}
+  </section>
+{% endblock %}`
+            },
+            {
+                type: "code", lang: "javascript", file: "tests/e2e/flask_jinja.spec.js",
+                title: "El spec comprueba resultados, no solo acciones",
                 code: `import { test, expect } from "@playwright/test";
 
-test.describe("Flujo de Inventario", () => {
-    test.beforeEach(async ({ page }) => {
-        await page.goto("http://localhost:5173");
-    });
+test("crea un producto y sigue el redirect de Flask", async ({ page }) => {
+  await page.goto("/productos");
+  await page.getByLabel("Nombre").fill("Teclado");
+  await page.getByLabel("Precio").fill("45");
+  await page.getByRole("button", { name: "Guardar producto" }).click();
 
-    test("login y crear producto", async ({ page }) => {
-        // Login
-        await page.fill("[data-testid=email]", "admin@sena.edu.co");
-        await page.fill("[data-testid=password]", "admin123");
-        await page.click("[data-testid=login-btn]");
-        await expect(page).toHaveURL(/dashboard/);
-
-        // Navegar a productos
-        await page.click("text=Productos");
-        await expect(page.locator("h1")).toContainText("Lista de Productos");
-
-        // Crear producto
-        await page.click("[data-testid=new-product]");
-        await page.fill("[data-testid=nombre]", "Monitor LG 27");
-        await page.fill("[data-testid=precio]", "350");
-        await page.fill("[data-testid=stock]", "8");
-        await page.click("[data-testid=save]");
-
-        // Verificar
-        await expect(page.locator("text=Monitor LG 27")).toBeVisible();
-    });
-
-    test("validacion: precio negativo no se envia", async ({ page }) => {
-        await page.click("[data-testid=new-product]");
-        await page.fill("[data-testid=nombre]", "Test");
-        await page.fill("[data-testid=precio]", "-50");
-        await page.click("[data-testid=save]");
-        await expect(page.locator(".error")).toContainText(/precio/i);
-    });
-
-    test("screenshot del dashboard", async ({ page }) => {
-        await page.screenshot({ path: "screenshots/dashboard.png", fullPage: true });
-    });
+  await expect(page).toHaveURL(/\\/productos$/);
+  await expect(page.getByRole("status")).toContainText("Producto creado");
+  await expect(page.getByTestId("producto-row")).toContainText("Teclado");
 });`
             },
             {
-                type: "alert", variant: "info",
-                title: "Comandos Playwright",
-                body: "npx playwright install (instala navegadores) | npx playwright test (ejecuta) | npx playwright test --headed (con UI) | npx playwright codegen (genera codigo grabando)"
+                type: "alert", variant: "warning",
+                title: "Checklist antes de entregar",
+                body: "El test inicia con un estado conocido; usa localizadores accesibles; evita esperas fijas; afirma URL y resultado visible; separa server-side de E2E; conserva report, video o trace cuando falla; y nunca incluye credenciales reales."
             },
             {
-                type: "timeline",
-                title: "Historia: automatizacion E2E",
-                items: [
-                    { year: "2004", title: "Selenium nace en ThoughtWorks", desc: "Jason Huggins crea Selenium Core; en 2006 aparece Selenium RC y en 2008 el WebDriver de Simon Stewart. En 2009 ambos se fusionan en Selenium 2." },
-                    { year: "2016", title: "Cypress: E2E sin friction", desc: "Brian Mann lanza Cypress: los tests corren y ven el estado del navegador, con recargas en caliente y debugging como una web app." },
-                    { year: "2017", title: "Puppeteer: el protocolo Chrome DevTools", desc: "Google lanza Puppeteer y la automatizacion conecta directo al navegador; cambia el balance entre rapidez y control." },
-                    { year: "2020", title: "Microsoft lanza Playwright", desc: "Ingenieros provenientes de Puppeteer crean Playwright en Microsoft: Chromium, Firefox y WebKit con un solo API, auto-waiting y trazas." },
-                    { year: "Hoy", title: "E2E como puerta de la piramide", desc: "Los flujos criticos se automatizan y ejecutan en CI con evidencia (video + trace); la piramide de Cohn sigue mandando: pocos y buenos." }
-                ]
+                type: "alert", variant: "info",
+                title: "Comandos del laboratorio",
+                body: "npx playwright test --config=playwright.flask.config.js | --headed para ver el navegador | --ui para depurar paso a paso | codegen para descubrir acciones | show-report para revisar la evidencia"
             }
         ]
     },
@@ -276,7 +315,7 @@ test.describe("Flujo de Inventario", () => {
     "m-cobertura": {
         title: "Cobertura y Metricas de Calidad",
         badge: "Modulo 10",
-        intro: "Mide que porcentaje de tu codigo esta cubierto por tests. Objetivo SENA: 80%+ en logica de negocio.",
+        intro: "Mide qué porcentaje de tu código está cubierto por tests. Umbral didáctico orientativo: 80% o más en lógica de negocio.",
         blocks: [
             {
                 type: "tools",
@@ -561,14 +600,14 @@ jobs:
             {
                 type: "alert", variant: "danger",
                 title: "🔒 Seguridad en Pruebas: ¿Subir los tests revela información a los atacantes?",
-                body: "EL MITO DE LA SEGURIDAD POR OSCURIDAD: Ocultar los tests pensando que 'los atacantes sabrán cómo atacarnos o qué validaciones tenemos' es una falacia que viola el Principio de Kerckhoffs. Un software debe ser seguro por su arquitectura, validación de entradas, sanitización y control de accesos, NO por mantener el código o las pruebas en secreto. Los atacantes modernos usan herramientas automatizadas (Burp Suite, OWASP ZAP, SQLmap) que descubren fallas de seguridad en segundos sin necesidad de leer tus pruebas. Si una prueba demuestra que un endpoint no valida permisos o que un parámetro es vulnerable a inyección SQL, la vulnerabilidad está en el código de producción expuesto a internet, no en el test.\n\nLOS 3 RIESGOS REALES QUE SÍ PUEDEN AYUDAR A UN ATACANTE:\n1. Secretos quemados (Hardcoded Secrets): Dejar credenciales reales de staging o producción ('Admin123!', API keys de Stripe o AWS) en los tests pensando que 'solo es un archivo de prueba'. Si el repositorio se filtra o es público, el atacante tiene acceso directo.\n2. Fuga de PII en fixtures: Exportar tablas reales de clientes con correos, nombres o teléfonos para usarlos como datos de test (grave violación de normativas GDPR y Habeas Data).\n3. Endpoints de depuración huérfanos: Rutas como '/api/dev/reset-database' o '/admin/bypass-auth' probadas en tests pero que quedaron activas y desprotegidas en producción.\n\nSOLUCIÓN: Usa siempre generadores de datos sintéticos (Faker), inyecta credenciales efímeras mediante GitHub Secrets y simula servicios externos con Mocks y Stubs."
+                body: "EL MITO DE LA SEGURIDAD POR OSCURIDAD: Ocultar los tests pensando que 'los atacantes sabrán cómo atacarnos o qué validaciones tenemos' es una falacia que viola el Principio de Kerckhoffs. Un software debe ser seguro por su arquitectura, validación de entradas, sanitización y control de accesos, NO por mantener el código o las pruebas en secreto. Los atacantes modernos usan herramientas automatizadas (Burp Suite, OWASP ZAP, SQLmap) que descubren fallas de seguridad en segundos sin necesidad de leer tus pruebas. Si una prueba demuestra que un endpoint no valida permisos o que un parámetro es vulnerable a inyección SQL, la vulnerabilidad está en el código de producción expuesto a internet, no en el test.\n\nLOS 3 RIESGOS REALES QUE SÍ PUEDEN AYUDAR A UN ATACANTE:\n1. Secretos quemados (Hardcoded Secrets): Dejar credenciales reales de staging o producción ('<CONTRASEÑA_REAL>', claves de Stripe o AWS) en los tests pensando que 'solo es un archivo de prueba'. Si el repositorio se filtra o es público, el atacante tiene acceso directo.\n2. Fuga de PII en fixtures: Exportar tablas reales de clientes con correos, nombres o teléfonos para usarlos como datos de test (grave violación de normativas GDPR y Habeas Data).\n3. Endpoints de depuración huérfanos: Rutas como '/api/dev/reset-database' o '/admin/bypass-auth' probadas en tests pero que quedaron activas y desprotegidas en producción.\n\nSOLUCIÓN: Usa siempre generadores de datos sintéticos (Faker), inyecta credenciales efímeras mediante GitHub Secrets y simula servicios externos con Mocks y Stubs."
             },
             {
                 type: "comparison",
                 title: "🌐 Repositorios Públicos vs. Privados en Git: ¿Qué tan recomendable es hacer público tu código?",
                 headers: ["Criterio de Evaluación", "Repositorio Público", "Repositorio Privado", "Recomendación para el Aprendiz / Desarrollador"],
                 rows: [
-                    ["Portafolio y Empleabilidad", "⭐⭐⭐⭐⭐ Máxima visibilidad: Demuestra a reclutadores código limpio, pruebas con >=80% de cobertura y CI/CD verde.", "❌ Invisible para reclutadores sin invitación o acceso explícito.", "Tus proyectos de práctica, formativos y de código abierto DEBEN ser públicos para certificar tus competencias."],
+                    ["Portafolio y Empleabilidad", "⭐⭐⭐⭐⭐ Máxima visibilidad: Demuestra a reclutadores código limpio, pruebas con >=80% de cobertura y CI/CD verde.", "❌ Invisible para reclutadores sin invitación o acceso explícito.", "Haz públicos solo los proyectos de práctica que no contengan información sensible; la decisión no sustituye la valoración de competencias."],
                     ["Propiedad Intelectual (IP)", "⚠️ Código accesible para todos. Cualquiera puede clonar, bifurcar o aprender de tu software.", "🔒 Protegido. Ideal para ventajas comerciales, patentes y modelos de negocio propietarios.", "Usa repositorios privados para empresas, clientes con NDA o sistemas comerciales cerrados."],
                     ["Costos en GitHub Actions", "🆓 Ilimitado y gratuito: Runners públicos de GitHub con alta disponibilidad sin costo.", "⏱️ Minutos limitados (2.000 min/mes en plan gratuito compartidos entre todos tus repos).", "Los repos públicos son ideales para ejecutar suites completas de pruebas unitarias, integración y E2E sin agotar cuota."],
                     ["Auditoría Comunitaria", "👁️ Ley de Linus: 'Con suficientes ojos, todos los errores son superficiales'. La comunidad puede reportar fallos.", "🛡️ Auditoría restringida exclusivamente al equipo interno.", "REGLA DE ORO: Desarrolla y prueba TODO proyecto privado con los estándares de un repositorio público (cero secretos)."]
@@ -850,7 +889,7 @@ services:
     ports:
       - "9050:9050"
     environment:
-      - COOLIFY_WEBHOOK_SECRET=secreto_seguro_vps
+      - COOLIFY_WEBHOOK_SECRET=\${COOLIFY_WEBHOOK_SECRET}
       - DISCORD_WEBHOOK_URL=\${DISCORD_WEBHOOK_URL}
     restart: unless-stopped`
             },
@@ -923,7 +962,7 @@ services:
 
     "m-ia-testing": {
         title: "IA en Testing: Tu Copiloto de Calidad",
-        badge: "Modulo IA",
+        badge: "Modulo 13 · IA",
         intro: "La IA generativa puede escribir tests, encontrar bugs y sugerir casos borde. Pero TU decides que es correcto.",
         blocks: [
             {
@@ -1075,9 +1114,86 @@ Ademas, identifica:
         ]
     },
 
+    "m-gema-testing": {
+        title: "Constructor de Gema QA: de requisitos a pruebas",
+        badge: "Modulo 14 · taller interactivo",
+        intro: "Construye una Gema de IA que te haga las preguntas correctas, convierta tus riesgos en una estrategia de pruebas y te entregue un encargo verificable para tu proyecto.",
+        blocks: [
+            {
+                type: "alert", variant: "info",
+                title: "La mejor opción es un flujo, no una herramienta mágica",
+                body: "Para un aprendiz, la opción más segura es conservar el ejecutor del proyecto (PyTest, Vitest/Jest, JUnit o Playwright) y usar la IA como copiloto: primero entender, luego planear, después generar por capas y finalmente ejecutar y revisar. La Gema es independiente del proveedor para que puedas cambiar de asistente sin cambiar la disciplina."
+            },
+            { type: "ai-coach" },
+            {
+                type: "steps",
+                title: "Cómo usar la salida sin perder el control",
+                intro: "La instrucción generada no es una orden para aceptar a ciegas: es un contrato de trabajo y de verificación.",
+                steps: [
+                    { number: 1, title: "Pide diagnóstico y matriz antes del código", tag: "Entender", desc: "Entrega el encargo y exige que la IA inspeccione archivos, configuración y pruebas actuales. Verifica que cada requisito tenga riesgo, caso, archivo y aserciones.", tip: "Si la IA inventa una ruta o una librería, detén el proceso y pídele que cite el archivo real.", pitfall: "Pedir 'crea todos los tests' sin indicar qué significa correcto para el negocio." },
+                    { number: 2, title: "Genera por una capa y un riesgo a la vez", tag: "Construir", desc: "Empieza por lógica unitaria, continúa con integración y deja los flujos E2E críticos para el final. Ejecuta la suite después de cada lote pequeño.", tip: "Un test que falla por una razón clara enseña más que cien archivos generados de una sola vez.", pitfall: "Cambiar el código de producción solo para que el test pase sin registrar el defecto." },
+                    { number: 3, title: "Audita cada prueba como evidencia", tag: "Revisar", desc: "Comprueba imports, datos aislados, aserciones de resultado y efectos secundarios, mensajes de error y ausencia de esperas fijas o estados compartidos.", tip: "Pregunta: ¿por qué este test fallaría si la funcionalidad estuviera rota? Si no hay respuesta, rediseña la prueba.", pitfall: "Confundir cobertura de líneas con cobertura de riesgos." },
+                    { number: 4, title: "Cierra con ejecución y bitácora V.E.R.A.", tag: "Demostrar", desc: "Guarda comandos, resultados, cobertura, defectos encontrados y decisiones humanas. La evidencia es tu verificación, no el texto que generó la IA.", tip: "Conserva el diff y el reporte en tu rama de trabajo para poder explicar cada cambio.", pitfall: "Presentar una suite verde sin mostrar qué escenarios quedaron pendientes." }
+                ]
+            },
+            {
+                type: "alert", variant: "warning",
+                title: "No pegues secretos ni datos reales",
+                body: "No pegues secretos. Antes de copiar código, registros o configuración a cualquier IA, retira contraseñas, tokens, llaves privadas, datos personales y variables de entorno. Usa marcadores como <TU_TOKEN_AQUI>, datos ficticios y una cuenta desechable."
+            },
+            {
+                type: "alert", variant: "success",
+                title: "Producto de aprendizaje",
+                body: "Al terminar tendrás una instrucción de pruebas, una matriz de trazabilidad, una suite ejecutada y una bitácora que explica qué propuso la IA, qué verificaste y qué decidiste."
+            }
+        ]
+    },
+
+    "m-herramientas-ia": {
+        title: "Laboratorio de herramientas IA para calidad",
+        badge: "Modulo 15 · elección informada",
+        intro: "Conoce herramientas parecidas a una Gema, aprende qué construyen y escoge la que encaja con el lenguaje, la capa de pruebas y el nivel de control que necesita tu proyecto.",
+        blocks: [
+            {
+                type: "alert", variant: "info",
+                title: "Mapa rápido para el aprendiz",
+                body: "Asistentes y agentes (GitHub Copilot, Cursor, Gemini Code Assist, Claude Code y Amazon Q) ayudan a entender y escribir. Qodo revisa cambios y reglas. Diffblue Cover se especializa en unitarias Java/Kotlin. mabl ayuda a planear y autorizar pruebas de navegador y API. Ninguna herramienta decide por sí sola si el requisito de negocio está cumplido."
+            },
+            { type: "tool-lab" },
+            {
+                type: "comparison",
+                title: "Cómo escoger sin perseguir la novedad",
+                headers: ["Necesidad", "Primera opción para aprender", "Qué debe verificar el aprendiz"],
+                rows: [
+                    ["Escribir una primera prueba en un archivo del IDE", "Copilot, Cursor o Gemini Code Assist", "Imports reales, aserciones, comando y resultado."],
+                    ["Trabajar con un proyecto Java/Kotlin grande", "Diffblue Cover + JUnit", "Que compile, que la prueba valide una regla útil y que no capture un defecto como si fuera contrato."],
+                    ["Revisar código generado contra requisitos y reglas", "Qodo o Amazon Q", "Hallazgos reproducibles, severidad y pruebas de regresión."],
+                    ["Automatizar un viaje visible de navegador o una API", "Playwright para aprender código; mabl para explorar autoría asistida", "Aserciones observables, datos ficticios, costos y privacidad."],
+                    ["Aprender sin depender de una cuenta paga", "Framework local + cualquier asistente aprobado", "Que el proyecto siga siendo ejecutable sin el proveedor de IA." ]
+                ]
+            },
+            {
+                type: "steps",
+                title: "Ruta práctica de herramientas",
+                intro: "Construye criterio antes de aumentar la autonomía.",
+                steps: [
+                    { number: 1, title: "Identifica la capa y el lenguaje", tag: "Elegir", desc: "Escribe si necesitas unitarias, integración, E2E, revisión o seguridad y confirma el lenguaje y el ejecutor del proyecto.", tip: "Si no puedes nombrar la capa, todavía estás definiendo el problema.", pitfall: "Escoger una herramienta porque generó más líneas de código." },
+                    { number: 2, title: "Prueba una tarea pequeña y medible", tag: "Experimentar", desc: "Usa una función o un flujo pequeño. Mide si la respuesta compila, corre, cubre un riesgo y es entendible para ti.", tip: "Pide primero un plan y después el código; así puedes comparar intención contra resultado.", pitfall: "Entregar acceso a todo el repositorio cuando solo necesitas un archivo." },
+                    { number: 3, title: "Compara la propuesta con tu suite", tag: "Contrastar", desc: "Ejecuta el comando real, revisa la diferencia y agrega un caso que la IA no haya visto. Si hay un fallo, clasifícalo como aplicación, prueba o ambiente.", tip: "Una prueba adicional escrita por ti es una forma concreta de aprender a evaluar la IA.", pitfall: "Aceptar un parche automático sin mirar el diff." },
+                    { number: 4, title: "Registra decisión y límites", tag: "Transferir", desc: "Documenta por qué elegiste la herramienta, qué datos compartiste, qué costos o cuentas exige y qué verificación humana quedó pendiente.", tip: "La herramienta debe poder cambiarse sin perder tus requisitos ni tu suite.", pitfall: "Convertir la cuenta o el servicio en la única fuente de verdad del proyecto." }
+                ]
+            },
+            {
+                type: "alert", variant: "warning",
+                title: "Disponibilidad y planes cambian",
+                body: "Las fichas del laboratorio enlazan documentación oficial consultada en 2026. Antes de usar una herramienta en clase, confirma versión, licencia, país, privacidad, límites de uso e integración con tu entorno."
+            }
+        ]
+    },
+
     "m-reto": {
         title: "Reto Final: Pipeline QA Completo",
-        badge: "Modulo 13",
+        badge: "Modulo 16",
         intro: "Aplica todo lo aprendido en un proyecto real: pipeline completo que valida las 4 guias.",
         blocks: [
             {

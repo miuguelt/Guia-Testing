@@ -12,7 +12,8 @@
  * El fallo estaba oculto detrás de un error de sintaxis anterior en
  * `modules-content.js`, que abortaba la carga antes de llegar hasta aquí.
  *
- * Tipos de bloque soportados: code · alert · comparison · diagram.
+     * Tipos de bloque soportados: code · alert · comparison · diagram ·
+     * tools · timeline · steps · ai-coach · tool-lab.
  */
 
 const CodeRenderer = {
@@ -266,7 +267,8 @@ const CodeRenderer = {
         'm-reflexion', 'm-piramide',
         'm-pytest-fastapi', 'm-pytest-flask', 'm-jest-react', 'm-junit-jsp',
         'm-tdd', 'm-bdd', 'm-playwright', 'm-cobertura', 'm-cicd',
-        'm-observabilidad', 'm-reto', 'm-ia-testing'
+        'm-observabilidad', 'm-ia-testing', 'm-gema-testing',
+        'm-herramientas-ia', 'm-reto'
     ],
 
     bloque(bloque) {
@@ -278,6 +280,14 @@ const CodeRenderer = {
             case 'tools': return this.bloqueHerramientas(bloque);
             case 'timeline': return this.bloqueHistoria(bloque);
             case 'steps': return this.bloquePasos(bloque);
+            case 'ai-coach':
+                return window.AITestingCoach
+                    ? window.AITestingCoach.createMountPoint()
+                    : this.crear('p', 'alert-box warning', 'El constructor de Gema QA no pudo cargarse.');
+            case 'tool-lab':
+                return window.AIToolsLab
+                    ? window.AIToolsLab.createMountPoint()
+                    : this.crear('p', 'alert-box warning', 'El laboratorio de herramientas IA no pudo cargarse.');
             default: return this.crear('p', null, bloque.body || '');
         }
     },

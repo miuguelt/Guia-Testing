@@ -32,10 +32,15 @@ def step_dado_precio_cantidad(context, precio, cantidad):
     context.cantidad = cantidad
 
 
-@when('se aplica un descuento del {descuento:f} por ciento y un IVA del {iva:f} por ciento')
+@when('se aplica un descuento del {descuento} por ciento y un IVA del {iva} por ciento')
 def step_calcular_total(context, descuento, iva):
-    tasa_iva = iva / 100.0
-    context.total = calcular_total_con_impuestos(context.precio, context.cantidad, descuento, tasa_iva)
+    tasa_iva = float(iva) / 100.0
+    context.total = calcular_total_con_impuestos(
+        context.precio,
+        context.cantidad,
+        float(descuento),
+        tasa_iva,
+    )
 
 
 @then('el total final a facturar es {total_esperado:f}')

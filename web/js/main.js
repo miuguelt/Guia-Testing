@@ -93,8 +93,10 @@ const APP = {
                 'm-observabilidad': 'Observabilidad Coolify',
                 'm-reto': 'Reto Final',
                 'm-ia-testing': 'IA en Testing',
+                'm-gema-testing': 'Constructor de Gema QA',
+                'm-herramientas-ia': 'Herramientas IA',
                 'm-simuladores': 'Simuladores',
-                'm-evidencias-sena': 'Evidencias SENA',
+                'm-evidencias-sena': 'Registro de evidencias',
                 'descargar': 'Descargar Proyecto'
             };
             breadcrumb.textContent = names[pageId] || pageId;

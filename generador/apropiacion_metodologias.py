@@ -8,14 +8,16 @@ def tdd(doc):
         "El ciclo fundamental de TDD consiste en 3 pasos iterativos cortos "
         "(menos de 5 minutos):"
     )
-    for item in [
+    for indice, item in enumerate([
         "ROJO: escribir una prueba unitaria pequeña que falle antes de "
         "escribir el código de producción.",
         "VERDE: escribir la implementación mínima para hacer pasar la prueba.",
         "REFACTOR: limpiar el código y eliminar la duplicación manteniendo "
         "la prueba en verde.",
-    ]:
-        doc.add_paragraph(item, style="List Number")
+    ], start=1):
+        par = doc.add_paragraph(f"{indice}. {item}")
+        par.paragraph_format.space_before = 0
+        par.paragraph_format.space_after = 0
 
 
 def bdd_gherkin(doc):

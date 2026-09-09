@@ -27,7 +27,7 @@ def controles(doc):
                 "Instructor",
                 "Centro de formación",
                 fecha_es_co(),
-                f"Ajuste al formato institucional GFPI-F-135 (versión "
+                f"Ajuste de la adaptación didáctica (versión "
                 f"{VERSION}): enseñanza por proyectos, secuencia "
                 "reflexión-apropiación, evidencias y evaluación, ambientes, "
                 "glosario y ortografía es-CO.",

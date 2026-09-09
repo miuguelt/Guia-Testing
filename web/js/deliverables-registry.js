@@ -1,0 +1,206 @@
+// Registro derivado de deliverables.registry.json. No editar manualmente.
+window.GUIDE_DELIVERABLES = {
+  "version": "2.4.0",
+  "standard": "devbrain.educational-guide",
+  "guideId": "adso-testing-qa-calidad-2026",
+  "status": "learning-guide-adaptation",
+  "sourceStatus": "Registro local de trabajo para la guía; la valoración institucional corresponde al instructor y al LMS aplicable.",
+  "portfolioTemplate": "docs/evidencias-template.md",
+  "submission": {
+    "packageName": "EV-TESTING-QA-2026",
+    "namingRule": "EV-TESTING-QA-<ficha>-<apellido><nombre>.zip",
+    "format": "Repositorio Git con suite de pruebas, reporte de cobertura, bitácora docs/ai-log.md y este registro local en Markdown/JSON. Si el instructor solicita un formato institucional, diligéncialo en el canal oficial correspondiente.",
+    "where": "Actividad de Aseguramiento de Calidad y Pruebas en la plataforma LMS institucional del SENA.",
+    "whatIsGraded": "La guía propone revisar el plan de pruebas, la cobertura de unitarias/integración, la automatización E2E, la bitácora V.E.R.A. y la trazabilidad entre cada evidencia y su criterio. El instrumento y los umbrales definitivos los establece el instructor.",
+    "approval": [
+      "Las tres evidencias técnicas están completadas en estado 'lista', ninguna en blanco.",
+      "La suite de pruebas ejecuta con 100% de tests aprobados.",
+      "La cobertura de código supera el umbral mínimo del 80%.",
+      "El registro local está completo, se puede exportar y fue revisado contra el instrumento definido por el instructor."
+    ],
+    "competencyMap": [
+      {
+        "evidenceType": "conocimiento",
+        "artifacts": [
+          "ART-TEST-01"
+        ],
+        "criterion": "Define el alcance, estrategia, ambientes, criterios de aceptación y matriz de casos de prueba del sistema.",
+        "instrument": "Lista de chequeo de plan de pruebas.",
+        "learningResult": "RAP-01 · Diseño y planificación de pruebas de software."
+      },
+      {
+        "evidenceType": "desempeño",
+        "artifacts": [
+          "ART-TEST-02"
+        ],
+        "criterion": "Pruebas automatizadas con cobertura superior al 80% y aserciones de casos borde y excepciones.",
+        "instrument": "Rúbrica de pruebas automatizadas.",
+        "learningResult": "RAP-01 · Automatización de pruebas unitarias y de integración con métricas de cobertura."
+      },
+      {
+        "evidenceType": "producto",
+        "artifacts": [
+          "ART-TEST-03"
+        ],
+        "criterion": "Automatización exitosa de flujos de usuario completos y matriz de defectos categorizados por severidad.",
+        "instrument": "Rúbrica analítica de producto de software.",
+        "learningResult": "RAP-01 · Pruebas End-to-End y gestión de defectos."
+      }
+    ]
+  },
+  "artifacts": [
+    {
+      "id": "ART-TEST-01",
+      "code": "TEST-EV01",
+      "name": "Documento del Plan de Pruebas de Software (IEEE 829)",
+      "evidenceType": "conocimiento",
+      "purpose": "Estructurar la estrategia, ambientes, matriz de trazabilidad y casos de prueba del sistema.",
+      "inputs": [
+        "Historias de Usuario",
+        "Criterios Gherkin / BDD"
+      ],
+      "instructions": "Redacta el Plan de Pruebas de Software detallando los tipos de prueba, criterios de entrada/salida y matriz de casos funcionales y no funcionales.",
+      "example": "Plan de pruebas estructurado con 15 casos de prueba priorizados por riesgo e impacto en producción.",
+      "criterion": "Define el alcance, estrategia, ambientes, criterios de aceptación y matriz de casos de prueba del sistema.",
+      "instrument": "Lista de chequeo de plan de pruebas.",
+      "evidence": "Documento formal del Plan de Pruebas IEEE 829.",
+      "nextStep": "Avanzar a la automatización de la suite de pruebas unitarias e integración.",
+      "station": {
+        "sectionId": "m-piramide",
+        "order": 1,
+        "phase": "contextualizacion",
+        "minutes": 60
+      },
+      "fields": [
+        {
+          "key": "alcance_estrategia",
+          "label": "Alcance y Estrategia de Pruebas",
+          "type": "area",
+          "hint": "Definición de tipos de prueba, herramientas y ambientes."
+        },
+        {
+          "key": "matriz_casos",
+          "label": "Matriz de Casos de Prueba (ID, Precondición, Pasos, Resultado)",
+          "type": "area",
+          "hint": "Tabla de casos de prueba detallados."
+        }
+      ],
+      "checklist": [
+        "Criterios de entrada/salida definidos",
+        "Casos borde contemplados",
+        "Revisado bajo V.E.R.A."
+      ],
+      "aiAssist": {
+        "prompt": "Generar una matriz de casos de prueba para el módulo seleccionado del proyecto",
+        "verify": "Contrastar cada caso con un requisito y ejecutar la suite correspondiente",
+        "log": "docs/ai-log.md"
+      },
+      "upload": {
+        "fileName": "01-plan-pruebas-ieee829.md",
+        "format": "markdown"
+      }
+    },
+    {
+      "id": "ART-TEST-02",
+      "code": "TEST-EV02",
+      "name": "Suite de Pruebas Unitarias y de Integración con Cobertura",
+      "evidenceType": "desempeño",
+      "purpose": "Implementar pruebas automatizadas con aserciones rigurosas y mocks para alcanzar >= 80% de cobertura.",
+      "inputs": [
+        "Código de producción",
+        "PyTest / Jest / JUnit"
+      ],
+      "instructions": "Escribe las pruebas automatizadas aislando dependencias externas con Mocks y ejecuta el reporte de cobertura HTML/consola.",
+      "example": "Suite de 20 tests unitarios con pytest pasando en verde y reporte coverage al 88%.",
+      "criterion": "Pruebas automatizadas con cobertura superior al 80% y aserciones de casos borde y excepciones.",
+      "instrument": "Rúbrica de pruebas automatizadas.",
+      "evidence": "Código fuente de pruebas y reporte de cobertura.",
+      "nextStep": "Implementar pruebas End-to-End con Playwright.",
+      "station": {
+        "sectionId": "m-pytest-fastapi",
+        "order": 2,
+        "phase": "apropiacion",
+        "minutes": 60
+      },
+      "fields": [
+        {
+          "key": "codigo_tests",
+          "label": "Código Fuente de Pruebas Automatizadas",
+          "type": "area",
+          "hint": "Estructura de tests unitarios e integración."
+        },
+        {
+          "key": "reporte_cobertura",
+          "label": "Métricas de Cobertura de Código (Lines, Branch, Coverage %)",
+          "type": "area",
+          "hint": "Salida del comando de cobertura."
+        }
+      ],
+      "checklist": [
+        "Aserciones estrictas implementadas",
+        "Cobertura >= 80% verificada",
+        "Revisado bajo V.E.R.A."
+      ],
+      "aiAssist": {
+        "prompt": "Generar un borrador de tests unitarios con PyTest y mocks para una función del proyecto",
+        "verify": "Revisar las aserciones y ejecutar pytest en entorno local",
+        "log": "docs/ai-log.md"
+      },
+      "upload": {
+        "fileName": "02-suite-pruebas-cobertura.md",
+        "format": "markdown"
+      }
+    },
+    {
+      "id": "ART-TEST-03",
+      "code": "TEST-EV03",
+      "name": "Pruebas End-to-End con Playwright y Reporte de Defectos",
+      "evidenceType": "producto",
+      "purpose": "Automatizar flujos de usuario completos mediante Playwright y documentar defectos en Bug Tracker.",
+      "inputs": [
+        "Aplicación web desplegada",
+        "Playwright"
+      ],
+      "instructions": "Automatiza un flujo crítico del proyecto validando la interfaz y documenta los hallazgos en la matriz de defectos.",
+      "example": "Script Playwright con captura de vídeo en fallos y matriz Bug Tracker con 3 defectos clasificados.",
+      "criterion": "Automatización exitosa de flujos de usuario completos y matriz de defectos categorizados por severidad.",
+      "instrument": "Rúbrica analítica de producto de software.",
+      "evidence": "Scripts Playwright y reporte de Bug Tracker.",
+      "nextStep": "Consolidar el registro de evidencias y empaquetar la entrega final.",
+      "station": {
+        "sectionId": "m-playwright",
+        "order": 3,
+        "phase": "transferencia",
+        "minutes": 60
+      },
+      "fields": [
+        {
+          "key": "script_playwright",
+          "label": "Script de Automatización E2E Playwright",
+          "type": "area",
+          "hint": "Código del flujo E2E automatizado."
+        },
+        {
+          "key": "matriz_defectos",
+          "label": "Reporte de Defectos (Bug Tracker)",
+          "type": "area",
+          "hint": "ID, Severidad, Pasos de Reproducción y Estado."
+        }
+      ],
+      "checklist": [
+        "Flujo E2E verificado en verde",
+        "Defectos clasificados por severidad",
+        "Revisado bajo V.E.R.A."
+      ],
+      "aiAssist": {
+        "prompt": "Automatizar flujo E2E de login y creación de recursos con Playwright",
+        "verify": "Ejecutar npx playwright test",
+        "log": "docs/ai-log.md"
+      },
+      "upload": {
+        "fileName": "03-e2e-bug-tracker.md",
+        "format": "markdown"
+      }
+    }
+  ]
+};

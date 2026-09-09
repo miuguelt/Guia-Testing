@@ -1,1 +1,1 @@
-"""Paquete del generador de la guía de aprendizaje SENA (GFPI-F-135)."""
+"""Paquete del generador de la adaptación didáctica de la guía SENA."""

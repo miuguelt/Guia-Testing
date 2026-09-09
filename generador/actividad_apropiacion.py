@@ -1,4 +1,5 @@
 """Actividad 4.3 de apropiación: automatización con TDD y BDD."""
+from .apropiacion_e2e import playwright_e2e
 from .estilos import agregar_componentes
 
 
@@ -10,7 +11,6 @@ def actividad_apropiacion(doc):
     from .apropiacion_react import vitest_react
     from .apropiacion_java import junit_mockito
     from .apropiacion_metodologias import bdd_gherkin, tdd
-    from .apropiacion_e2e import playwright_e2e
     pytest_fastapi(doc)
     pytest_flask(doc)
     vitest_react(doc)

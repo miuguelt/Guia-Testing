@@ -1,15 +1,24 @@
 {
   "name": "guia-testing-qa",
   "version": "1.0.0",
+  "type": "module",
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "e2e": "playwright test",
-    "e2e:headed": "playwright test --headed"
+    "e2e": "playwright test --config=playwright.config.js",
+    "e2e:headed": "playwright test --config=playwright.config.js --headed",
+    "e2e:ui": "playwright test --config=playwright.config.js --ui",
+    "e2e:flask": "playwright test --config=playwright.flask.config.js",
+    "e2e:flask:ui": "playwright test --config=playwright.flask.config.js --ui"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
-    "vitest": "^2.0.0",
+    "vitest": "^4.1.11",
+    "@vitest/coverage-v8": "^4.1.11",
     "@testing-library/react": "^16.0.0",
     "@testing-library/jest-dom": "^6.4.0",
     "@playwright/test": "^1.48.0",

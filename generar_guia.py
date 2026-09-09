@@ -1,13 +1,13 @@
 """
-Generador de la Guía de Aprendizaje SENA — Testing & QA (DOCX).
-Formato institucional GFPI-F-135 (Proceso de Gestión de Formación
-Profesional Integral) con enseñanza por proyectos.
+Generador de la adaptación didáctica de la Guía de Aprendizaje SENA —
+Testing & QA (DOCX), con enseñanza por proyectos.
 
 Punto de entrada; el contenido vive en el paquete generador/ (una
-capacidad por archivo). Los datos institucionales se editan en
+capacidad por archivo). Los datos de contexto se editan en
 generador/config.py. Los fragmentos de código se leen de
 recursos/codigo-ejemplo/ (SSoT).
 """
+import json
 import os
 
 from docx import Document
@@ -26,7 +26,25 @@ from generador.presentacion import presentacion
 from generador.proyecto_formativo import proyecto_formativo
 
 
+def sincronizar_registro_web():
+    """Publica el registro único que consume la guía web y el documento."""
+    registro_path = os.path.join(BASE_DIR, "deliverables.registry.json")
+    web_registro_path = os.path.join(BASE_DIR, "web", "deliverables.registry.json")
+    js_registro_path = os.path.join(BASE_DIR, "web", "js", "deliverables-registry.js")
+    with open(registro_path, "r", encoding="utf-8") as archivo:
+        registro = json.load(archivo)
+    contenido = json.dumps(registro, ensure_ascii=False, indent=2) + "\n"
+    with open(web_registro_path, "w", encoding="utf-8", newline="\n") as archivo:
+        archivo.write(contenido)
+    with open(js_registro_path, "w", encoding="utf-8", newline="\n") as archivo:
+        archivo.write("// Registro derivado de deliverables.registry.json. No editar manualmente.\n")
+        archivo.write("window.GUIDE_DELIVERABLES = ")
+        archivo.write(contenido.rstrip())
+        archivo.write(";\n")
+
+
 def generar():
+    sincronizar_registro_web()
     doc = Document()
     configurar_estilos(doc)
     agregar_campo_pagina(doc)

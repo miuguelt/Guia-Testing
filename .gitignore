@@ -7,6 +7,16 @@ dist-ssr/
 !.env.example
 .DS_Store
 logs/
+.pytest_cache/
+.venv/
+__pycache__/
+*.py[cod]
+.coverage
+htmlcov/
+coverage/
+playwright-report/
+test-results/
+*.db
 
 # --- DevBrain: rastros de agentes IA (bloque gestionado) ---
 # Estado local de agentes (lo regenera Sync-DevBrainIdeIntegration)

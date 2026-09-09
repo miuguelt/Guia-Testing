@@ -34,6 +34,14 @@ La metacognicion es "pensar sobre como pienso". Esta bitacora te ayuda a reflexi
 - **Mi experiencia con Rojo-Verde-Refactor:**
 - **Diferencia entre codear primero vs testar primero:**
 
+## Modulo 9: Playwright con Flask y Jinja
+
+- **Ruta Flask que probé de punta a punta:**
+- **Qué representa `page` y qué representa `locator` en mi prueba:**
+- **Localizador accesible que elegí y por qué:**
+- **Diferencia entre `test_client` y Playwright en este caso:**
+- **Evidencia que conservaría si el test falla:** (reporte / captura / video / trace)
+
 ## Modulo 11: CI/CD
 
 - **Pipeline configurado:** Si / No
