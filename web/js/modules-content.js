@@ -416,7 +416,7 @@ def test_validacion_precio_cero(client):
     "m-pytest-flask": {
         title: "PyTest: Testeando la App Flask",
         badge: "Modulo 4",
-        intro: "Testamos la aplicacion Flask real de la Guia Flask con SQLite en memoria.",
+        intro: "Testamos la aplicacion Flask real de la Guia Flask con SQLite en memoria. Para seguir este modulo necesitas el proyecto Flask completo en tu computador: la carpeta con run.py, requirements.txt, app/ y tests/test_routes.py. Si no lo tienes, clonalo desde el repositorio que indique tu instructor o pidelo como entrega de la guia anterior.",
         blocks: [
             {
                 type: "tools",
@@ -442,52 +442,97 @@ def test_validacion_precio_cero(client):
             {
                 type: "steps",
                 title: "Paso a Paso del Aprendiz: De Cero a Pruebas Automatizadas en Flask",
-                intro: "Aprende a probar rutas, formularios CSRF, sesiones de usuario y plantillas Jinja con el test_client de Flask.",
+                intro: "Aprende a ejecutar la aplicacion Flask real (Guia-Flask) y a probar rutas, formularios CSRF, sesiones de usuario y plantillas Jinja con el test_client de Flask. Todos los comandos se ejecutan en la raiz del proyecto Guia-Flask.",
                 steps: [
                     {
                         number: 1,
-                        title: "Instalar dependencias de Flask y Testing",
-                        tag: "Paso 1: Setup",
-                        desc: "Instala Flask, SQLAlchemy y las extensiones de PyTest en tu entorno virtual.",
-                        command: "pip install pytest pytest-flask flask flask-sqlalchemy",
-                        tip: "Usa el patrón de fábrica de aplicaciones (`create_app()`) para poder instanciar múltiples apps de prueba con configuraciones distintas.",
-                        pitfall: "Tener la variable `app = Flask(__name__)` como singleton global en el módulo raíz dificulta reconfigurar variables de prueba como TESTING o bases de datos temporales."
+                        title: "Obtener el proyecto Flask (Guia-Flask)",
+                        tag: "Paso 1: Preparacion",
+                        desc: "Asegurate de tener en tu computador la aplicacion Flask completa: la carpeta que contiene run.py, requirements.txt, app/ y tests/test_routes.py. Si aun no la tienes, clonala desde el repositorio que te indique tu instructor.",
+                        command: "git clone <URL-del-repositorio-Guia-Flask>",
+                        tip: "Todo este paso a paso se ejecuta dentro de la raiz de ese proyecto, nunca dentro de la carpeta tests/.",
+                        pitfall: "Ejecutar los comandos en otra carpeta (por ejemplo el Escritorio): pytest no encontrara la aplicacion y fallara con ModuleNotFoundError."
                     },
                     {
                         number: 2,
-                        title: "Configurar TESTING=True y base de datos en memoria",
-                        tag: "Paso 2: Aislamiento",
-                        desc: "En `conftest.py`, define una fixture `client()` que establezca `app.config['TESTING'] = True`, desactive CSRF para tests y monte las tablas en `sqlite:///:memory:`.",
-                        command: "pytest tests/test_routes.py -v",
-                        tip: "`TESTING=True` desactiva la captura silenciosa de excepciones de Flask, haciendo que los errores de código se propaguen directamente al reporte de PyTest.",
-                        pitfall: "Dejar `WTF_CSRF_ENABLED=True` en pruebas automáticas sin inyectar tokens CSRF falsos causará rechazos 400 Bad Request en todas las peticiones POST."
+                        title: "Abrir el terminal en la raiz del proyecto",
+                        tag: "Paso 2: Terminal",
+                        desc: "Abre PowerShell (menu inicio y escribe PowerShell) y navega hasta la carpeta del proyecto. Reemplaza la ruta del ejemplo por la tuya.",
+                        command: "cd \"C:\\Users\\TuUsuario\\Guia-Flask\"",
+                        tip: "En PowerShell puedes arrastrar la carpeta sobre la ventana para pegar su ruta completa sin errores de escritura.",
+                        pitfall: "Olvidar las comillas cuando la ruta tiene espacios; PowerShell interpretaria dos carpetas distintas."
                     },
                     {
                         number: 3,
-                        title: "Escribir pruebas de rutas, sesiones y contenido HTML",
-                        tag: "Paso 3: Redacción",
-                        desc: "Usa `client.get()` o `client.post()` enviando datos con `data={'campo': 'valor'}`. Comprueba el código 200/302 y que el texto esperado aparezca en `response.data` decodificado.",
-                        command: "pytest -k 'test_login' -v",
-                        tip: "Para probar redirecciones de login, usa `follow_redirects=True` en la llamada para validar la página de destino final.",
-                        pitfall: "Comprobar `assert 'Bienvenido' in response.data` sin decodificar (`response.get_data(as_text=True)`), lo que falla si hay caracteres acentuados o bytes."
+                        title: "Crear el entorno virtual",
+                        tag: "Paso 3: Entorno virtual",
+                        desc: "Crea la carpeta venv: un entorno aislado con su propio Python y sus propias librerias, para no mezclarlas con otros proyectos del sistema.",
+                        command: "python -m venv venv",
+                        tip: "Si PowerShell responde que python no se reconoce, instala Python desde python.org marcando la casilla Add Python to PATH y abre un terminal nuevo.",
+                        pitfall: "Instalar las librerias directamente en el Python del sistema (sin venv) genera conflictos entre proyectos."
                     },
                     {
                         number: 4,
-                        title: "Simular sesiones de usuario con session_transaction",
-                        tag: "Paso 4: Contexto de Sesión",
-                        desc: "Inyecta variables en la sesión del usuario (`user_id`, `rol`) usando `with client.session_transaction() as sess:` antes de hacer la petición HTTP protegida.",
-                        command: "pytest tests/ -m 'auth' -v",
-                        tip: "`session_transaction()` te permite simular usuarios autenticados sin tener que ejecutar el formulario de login en cada prueba unitaria.",
-                        pitfall: "Modificar `session` fuera del contexto `session_transaction()`, lo cual no persiste las cookies en el cliente de prueba."
+                        title: "Activar el entorno virtual",
+                        tag: "Paso 4: Activacion",
+                        desc: "Activa el entorno para que pip y pytest usen las librerias del proyecto y no las globales.",
+                        command: ".\\venv\\Scripts\\activate",
+                        tip: "El prompt debe cambiar y mostrar (venv) al inicio; mientras ese texto no aparezca, los comandos usan el Python global.",
+                        pitfall: "Si PowerShell bloquea el script por politicas de ejecucion, ejecuta antes: Set-ExecutionPolicy -Scope Process Bypass."
                     },
                     {
                         number: 5,
-                        title: "Ejecución automatizada y validación con cobertura",
-                        tag: "Paso 5: Calidad",
-                        desc: "Ejecuta la suite completa de Flask asegurando que todas las vistas y blueprints alcancen el umbral del 80%.",
+                        title: "Instalar las dependencias de la aplicacion",
+                        tag: "Paso 5: Dependencias",
+                        desc: "Instala Flask y sus extensiones leyendo la lista del archivo requirements.txt de la raiz del proyecto.",
+                        command: "pip install -r requirements.txt",
+                        tip: "La bandera -r indica a pip que lea el archivo; si responde archivo no encontrado, revisa en que carpeta estas.",
+                        pitfall: "Ejecutar pip install sin activar el entorno instala las librerias en el Python global y los tests usaran otro entorno."
+                    },
+                    {
+                        number: 6,
+                        title: "Instalar las herramientas de prueba",
+                        tag: "Paso 6: PyTest",
+                        desc: "Instala el ejecutor de pruebas pytest y el medidor de cobertura pytest-cov.",
+                        command: "pip install pytest pytest-cov",
+                        tip: "pytest ejecuta las funciones test_* y pytest-cov mide el porcentaje de codigo cubierto por ellas.",
+                        pitfall: "Olvidar pytest-cov: el comando con --cov fallara porque pytest no reconoce esa bandera."
+                    },
+                    {
+                        number: 7,
+                        title: "Levantar la aplicacion para verificar (opcional)",
+                        tag: "Paso 7: Smoke check",
+                        desc: "Arranca el servidor de desarrollo y abre http://127.0.0.1:5000 en el navegador. Para detenerlo vuelve al terminal y presiona Ctrl+C.",
+                        command: "python run.py",
+                        tip: "No es obligatorio para correr los tests (el test_client no usa red), pero confirma que el entorno quedo bien configurado.",
+                        pitfall: "Si el puerto 5000 esta ocupado, el error Address already in use indica que ya hay otro proceso servidor corriendo."
+                    },
+                    {
+                        number: 8,
+                        title: "Ejecutar la suite completa de pruebas",
+                        tag: "Paso 8: Ejecucion",
+                        desc: "Ejecuta todas las pruebas del proyecto. PyTest lee pytest.ini, que define testpaths = tests, y muestra el resultado de cada prueba en pantalla.",
+                        command: "pytest",
+                        tip: "La ultima linea resume el resultado: N passed si todo paso o M failed si algo fallo; corrige los fallos de arriba hacia abajo.",
+                        pitfall: "ModuleNotFoundError al ejecutar pytest significa que no estas en la raiz del proyecto o que el entorno no esta activo."
+                    },
+                    {
+                        number: 9,
+                        title: "Ejecutar el archivo de rutas y una prueba puntual",
+                        tag: "Paso 9: Seleccion",
+                        desc: "Corre solo las pruebas del archivo test_routes.py (rutas, plantillas y sesiones). Con el formato archivo::prueba ejecutas un unico caso.",
+                        command: "pytest tests/test_routes.py -v",
+                        tip: "La bandera -v (verbose) muestra el nombre y el estado de cada prueba; para una sola prueba usa pytest tests/test_routes.py::test_health_check -v.",
+                        pitfall: "Escribir la ruta del archivo desde otra carpeta: PyTest respondera que el archivo no existe."
+                    },
+                    {
+                        number: 10,
+                        title: "Medir la cobertura",
+                        tag: "Paso 10: Calidad",
+                        desc: "Verifica el porcentaje de lineas ejecutadas por las pruebas en el paquete app y exige el umbral minimo del 80 %.",
                         command: "pytest --cov=app --cov-report=term-missing --cov-fail-under=80",
-                        tip: "Verifica que las rutas de error 404 y 500 tengan sus propias pruebas específicas.",
-                        pitfall: "No comprobar las excepciones lanzadas dentro de `app_context()`."
+                        tip: "--cov-report=term-missing agrega la columna Missing con las lineas que ninguna prueba ejecuto; si la cobertura baja del 80 %, la ejecucion termina en error.",
+                        pitfall: "Confundir el paquete a medir: --cov=app cubre la aplicacion Flask; --cov=. mediria tambien los archivos de tests."
                     }
                 ]
             },

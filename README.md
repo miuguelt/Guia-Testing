@@ -243,12 +243,25 @@ Para avanzar con rapidez sin perder profundidad, el aprendiz debe aplicar un **o
 * **Paso 4: Ejecución en terminal:** `pytest tests/ -v -s -x --tb=short`
 * **Paso 5: Depuración:** Si responde 422, inspeccionar `res.json()['detail']` para ver el campo exacto rechazado por Pydantic.
 
-#### 2. PyTest en Flask (Vistas Web y Jinja)
-* **Paso 1: Entorno:** `pip install pytest pytest-flask flask flask-sqlalchemy`
-* **Paso 2: Aislamiento:** Usar `app.config['TESTING'] = True` y `app.app_context()` en la fixture `client`.
-* **Paso 3: Redacción:** Probar rutas y verificar HTML decodificado con `res.get_data(as_text=True)` y `follow_redirects=True`.
-* **Paso 4: Sesiones:** Simular usuarios autenticados con `with client.session_transaction() as sess: sess['user_id'] = 1`.
-* **Paso 5: Ejecución:** `pytest tests/test_routes.py -v`
+#### 2. PyTest en Flask (Vistas Web y Jinja) — Proyecto Guia-Flask
+El aprendiz prueba la aplicación web Flask real que construyó en la fase anterior (**Guia-Flask**). Nada se supone: cada comando parte de la raíz del proyecto y del entorno virtual activo.
+
+* **Paso 1 — Obtener el proyecto:** Tener en el computador la carpeta de Guia-Flask (contiene `run.py`, `requirements.txt`, `app/` y `tests/test_routes.py`). Si falta, clonarla del repositorio indicado por el instructor (`git clone <URL>`).
+* **Paso 2 — Abrir PowerShell en la raíz del proyecto:**
+  ```powershell
+  cd "C:\Users\TuUsuario\Guia-Flask"
+  Get-ChildItem   # verificar que aparecen run.py, requirements.txt, app/ y tests/
+  ```
+* **Paso 3 — Crear el entorno virtual:** `python -m venv venv` (si `python` no se reconoce, instalar Python desde python.org marcando *Add Python to PATH*).
+* **Paso 4 — Activar el entorno (PowerShell):** `.\venv\Scripts\activate` → el prompt debe mostrar `(venv)`. Si PowerShell bloquea el script: `Set-ExecutionPolicy -Scope Process Bypass`.
+* **Paso 5 — Instalar dependencias de la aplicación:** `pip install -r requirements.txt`
+* **Paso 6 — Instalar herramientas de prueba:** `pip install pytest pytest-cov`
+* **Paso 7 — Levantar la app para verificar (opcional):** `python run.py` → abrir `http://127.0.0.1:5000` → detener con `Ctrl+C`.
+* **Paso 8 — Ejecutar la suite completa:** `pytest` (lee `pytest.ini` → `testpaths = tests`). La última línea resume: `N passed` o `M failed`.
+* **Paso 9 — Ejecutar el archivo de rutas:** `pytest tests/test_routes.py -v` (una sola prueba: `pytest tests/test_routes.py::test_health_check -v`).
+* **Paso 10 — Medir cobertura:** `pytest --cov=app --cov-report=term-missing --cov-fail-under=80` (umbral mínimo 80 %).
+* **Solución de errores:** `ModuleNotFoundError` → verificar carpeta raíz, entorno activo y dependencias instaladas en ese orden.
+* **Conceptos al redactar pruebas:** la fixture aísla con `TESTING=True` + `sqlite:///:memory:`; el HTML se valida decodificado (`response.get_data(as_text=True)` y `follow_redirects=True`); las sesiones se simulan con `with client.session_transaction() as sess:`.
 
 #### 3. Vitest + React Testing Library (Frontend React)
 * **Paso 1: Entorno:** `npm install -D vitest @testing-library/react @testing-library/jest-dom jsdom`

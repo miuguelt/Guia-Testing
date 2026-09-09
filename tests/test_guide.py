@@ -75,14 +75,14 @@ def test_teoria_git_github_seguridad():
     assert "Tests para Git" in mc
     assert ".pre-commit-config.yaml" in mc
 
-    # Validar que generar_guia.py incluye la teoría
-    gg_path = os.path.join(BASE, "generar_guia.py")
+    # Validar que el generador del DOCX incluye la teoría
+    gg_path = os.path.join(BASE, "generador", "transferencia_cicd.py")
     with open(gg_path, "r", encoding="utf-8") as f:
         gg = f.read()
-    assert "Relacion entre Testing y GitHub" in gg
+    assert "Relación entre Testing y GitHub" in gg
     assert "First-Class Citizens" in gg
     assert "seguridad por oscuridad" in gg
-    assert "Repositorios Publicos vs Privados" in gg
+    assert "Repositorios Públicos vs Privados" in gg
     assert "Tests para Git" in gg
 
 
@@ -171,11 +171,15 @@ def test_readme_metodologia_y_fases():
 
 
 def test_generador_docx_pasos():
-    gen_path = os.path.join(BASE, "generar_guia.py")
-    with open(gen_path, "r", encoding="utf-8") as f:
+    estilos_path = os.path.join(BASE, "generador", "estilos.py")
+    with open(estilos_path, "r", encoding="utf-8") as f:
         code = f.read()
     assert "agregar_pasos" in code
-    assert "Flujo Logico Maestro de 7 Fases" in code
+    ctx_path = os.path.join(BASE, "generador", "actividad_contextualizacion.py")
+    with open(ctx_path, "r", encoding="utf-8") as f:
+        ctx = f.read()
+    assert "Flujo Lógico Maestro" in ctx
+    assert "7 Fases" in ctx
 
 
 def test_simulador_secuenciador_fases():
