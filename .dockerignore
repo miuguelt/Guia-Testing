@@ -3,6 +3,7 @@ dist/
 .git/
 .env
 .env.*
+docker-compose.override.yml
 logs/
 .DS_Store
 
