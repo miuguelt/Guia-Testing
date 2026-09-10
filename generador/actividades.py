@@ -26,7 +26,9 @@ def formulacion_actividades(doc):
     from .actividad_contextualizacion import actividad_contextualizacion
     from .actividad_apropiacion import actividad_apropiacion
     from .actividad_transferencia import actividad_transferencia
+    from .actividad_documentacion import ruta_documentacion_pruebas
     actividad_reflexion(doc)
     actividad_contextualizacion(doc)
     actividad_apropiacion(doc)
     actividad_transferencia(doc)
+    ruta_documentacion_pruebas(doc)

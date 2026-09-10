@@ -4,6 +4,8 @@ services:
       context: .
       dockerfile: Dockerfile
     restart: unless-stopped
+    ports:
+      - "${GUIDE_HOST_PORT:-8035}:80"
     logging:
       driver: json-file
       options:

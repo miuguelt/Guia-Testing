@@ -226,6 +226,27 @@ const CodeRenderer = {
         return seccion;
     },
 
+    /** Bloque didáctico que descompone una palabra técnica en piezas pequeñas. */
+    bloqueDefinicion(bloque) {
+        return window.LearningVisuals
+            ? window.LearningVisuals.bloqueDefinicion(bloque)
+            : this.crear('p', 'alert-box warning', 'El modelo mental no pudo cargarse.');
+    },
+
+    /** Mapa visual accesible para relacionar etapas, herramientas y resultados. */
+    bloqueMapaMental(bloque) {
+        return window.LearningVisuals
+            ? window.LearningVisuals.bloqueMapaMental(bloque)
+            : this.crear('p', 'alert-box warning', bloque.body || 'El mapa visual no pudo cargarse.');
+    },
+
+    /** Glosario filtrable con definición, analogía y ejemplo de uso. */
+    bloqueGlosario(bloque) {
+        return window.LearningVisuals
+            ? window.LearningVisuals.bloqueGlosario(bloque)
+            : this.crear('p', 'alert-box warning', 'El glosario no pudo cargarse.');
+    },
+
     /**
      * Pie del módulo: botón "Marcar como completado" (XP y progreso) y
      * navegación secuencial al siguiente módulo.
@@ -264,9 +285,8 @@ const CodeRenderer = {
 
     /** Orden didáctico de los módulos, en la secuencia que se enseña. */
     MODULE_ORDER: [
-        'm-reflexion', 'm-piramide',
-        'm-pytest-fastapi', 'm-pytest-flask', 'm-jest-react', 'm-junit-jsp',
-        'm-tdd', 'm-bdd', 'm-playwright', 'm-cobertura', 'm-cicd',
+        'm-reflexion', 'm-piramide', 'm-tdd', 'm-bdd',
+        'm-pytest-fastapi', 'm-pytest-flask', 'm-jest-react', 'm-junit-jsp', 'm-playwright', 'm-cobertura', 'm-cicd',
         'm-observabilidad', 'm-ia-testing', 'm-gema-testing',
         'm-herramientas-ia', 'm-reto'
     ],
@@ -280,6 +300,9 @@ const CodeRenderer = {
             case 'tools': return this.bloqueHerramientas(bloque);
             case 'timeline': return this.bloqueHistoria(bloque);
             case 'steps': return this.bloquePasos(bloque);
+            case 'definition': return this.bloqueDefinicion(bloque);
+            case 'mental-map': return this.bloqueMapaMental(bloque);
+            case 'glossary': return this.bloqueGlosario(bloque);
             case 'ai-coach':
                 return window.AITestingCoach
                     ? window.AITestingCoach.createMountPoint()

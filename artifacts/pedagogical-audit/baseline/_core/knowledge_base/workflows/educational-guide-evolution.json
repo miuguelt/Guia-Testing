@@ -1,0 +1,17 @@
+{
+  "workflow_key": "workflow.educational-guide-evolution",
+  "name": "Evolución de guías educativas",
+  "description": "Convierte fuentes curriculares y retroalimentación en guías por proyectos verificables y aprendizaje institucional seguro.",
+  "steps": [
+    {"name": "Ground", "action": "Identifica programa, competencia, RAP, criterios, proyecto y fuentes; no inventa datos curriculares."},
+    {"name": "Contract", "action": "Crea o actualiza guide.manifest.json con reto, producto, fases, evidencias e instrumentos."},
+    {"name": "Design", "action": "Diseña actividades de reflexión, contextualización, apropiación y transferencia que incrementan el producto."},
+    {"name": "Build", "action": "Implementa contenido e interacciones con IA opcional, accesibilidad, privacidad y degradación útil."},
+    {"name": "Verify", "action": "Ejecuta el validador pedagógico, los gates técnicos y revisa las fuentes exactas."},
+    {"name": "Learn", "action": "Registra resultado, evidencia, feedback y reglas candidatas; promueve solo patrones validados."}
+  ],
+  "triggers": ["guia", "guía", "educativa", "sena", "adso", "proyecto formativo", "evidencia", "rap", "tgs"],
+  "applies_to": ["global"],
+  "risk_level": "normal"
+}
+

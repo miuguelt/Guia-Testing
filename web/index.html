@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="css/vendor/devbrain-code.css">
   <link rel="stylesheet" href="css/vendor/devbrain-evidence.css">
     <link rel="stylesheet" href="css/ai-testing-coach.css">
+    <link rel="stylesheet" href="css/design-refresh.css?v=3.5.0">
+    <link rel="stylesheet" href="css/module-learning-kit.css?v=3.5.0">
 </head>
 <body>
     <div class="background-orbs">
@@ -18,15 +20,15 @@
     </div>
     <div id="particles" class="particles-container"></div>
 
-    <button id="sidebar-toggle" class="sidebar-toggle" aria-label="Mostrar u ocultar navegación">&#9776;</button>
+    <button type="button" id="sidebar-toggle" class="sidebar-toggle" aria-label="Mostrar u ocultar navegación">&#9776;</button>
 
     <aside id="sidebar" class="sidebar glass-panel">
         <div class="sidebar-header">
             <div class="logo">
                 <span class="logo-icon">&#128269;</span>
-                <span class="logo-text">Guia <span class="highlight">Testing</span></span>
+                <span class="logo-text">Guía <span class="highlight">Testing</span></span>
             </div>
-            <span class="sidebar-version">v3.1</span>
+            <span class="sidebar-version">v3.5</span>
         </div>
         <div class="sidebar-user">
             <div class="user-level">
@@ -41,27 +43,30 @@
             <div class="progress-bar course-bar"><div id="course-progress" class="progress-fill"></div></div>
         </div>
         <div class="sidebar-search">
-            <input type="text" id="sidebar-search" placeholder="Buscar modulo... (Ctrl+K)">
+            <input type="text" id="sidebar-search" placeholder="Buscar módulo... (Ctrl+K)">
         </div>
         <nav class="sidebar-nav">
             <div class="nav-section">
                 <span class="nav-section-title">Fundamentos</span>
                 <a href="#welcome" class="nav-item active" data-module="welcome"><span class="nav-icon">&#127968;</span><span class="nav-text">Inicio</span></a>
-                <a href="#m-reflexion" class="nav-item" data-module="m-reflexion"><span class="nav-icon">&#128162;</span><span class="nav-text">Reflexion</span><span class="nav-badge">1</span></a>
-                <a href="#m-piramide" class="nav-item" data-module="m-piramide"><span class="nav-icon">&#128201;</span><span class="nav-text">Piramide Testing</span><span class="nav-badge">2</span></a>
+                <a href="#m-reflexion" class="nav-item" data-module="m-reflexion"><span class="nav-icon">&#128162;</span><span class="nav-text">Fundamentos</span><span class="nav-badge">1</span></a>
+                <a href="#m-piramide" class="nav-item" data-module="m-piramide"><span class="nav-icon">&#128201;</span><span class="nav-text">Diseño y niveles</span><span class="nav-badge">2</span></a>
             </div>
             <div class="nav-section">
-                <span class="nav-section-title">Practica</span>
-                <a href="#m-pytest-fastapi" class="nav-item" data-module="m-pytest-fastapi"><span class="nav-icon">&#9889;</span><span class="nav-text">PyTest FastAPI</span><span class="nav-badge">3</span></a>
-                <a href="#m-pytest-flask" class="nav-item" data-module="m-pytest-flask"><span class="nav-icon">&#127798;</span><span class="nav-text">PyTest Flask</span><span class="nav-badge">4</span></a>
-                <a href="#m-jest-react" class="nav-item" data-module="m-jest-react"><span class="nav-icon">&#9883;</span><span class="nav-text">Jest React</span><span class="nav-badge">5</span></a>
-                <a href="#m-junit-jsp" class="nav-item" data-module="m-junit-jsp"><span class="nav-icon">&#9749;</span><span class="nav-text">JUnit JSP</span><span class="nav-badge">6</span></a>
+                <span class="nav-section-title">Métodos de desarrollo</span>
+                <a href="#m-tdd" class="nav-item" data-module="m-tdd"><span class="nav-icon">&#128260;</span><span class="nav-text">TDD</span><span class="nav-badge">3</span></a>
+                <a href="#m-bdd" class="nav-item" data-module="m-bdd"><span class="nav-icon">&#127797;</span><span class="nav-text">BDD</span><span class="nav-badge">4</span></a>
+            </div>
+            <div class="nav-section">
+                <span class="nav-section-title">Elige una tecnología</span>
+                <a href="#m-pytest-fastapi" class="nav-item" data-module="m-pytest-fastapi"><span class="nav-icon">&#9889;</span><span class="nav-text">PyTest FastAPI</span><span class="nav-badge">5</span></a>
+                <a href="#m-pytest-flask" class="nav-item" data-module="m-pytest-flask"><span class="nav-icon">&#127798;</span><span class="nav-text">PyTest Flask</span><span class="nav-badge">6</span></a>
+                <a href="#m-jest-react" class="nav-item" data-module="m-jest-react"><span class="nav-icon">&#9883;</span><span class="nav-text">Jest React</span><span class="nav-badge">7</span></a>
+                <a href="#m-junit-jsp" class="nav-item" data-module="m-junit-jsp"><span class="nav-icon">&#9749;</span><span class="nav-text">JUnit Java</span><span class="nav-badge">8</span></a>
             </div>
             <div class="nav-section">
                 <span class="nav-section-title">Avanzado</span>
-                <a href="#m-tdd" class="nav-item" data-module="m-tdd"><span class="nav-icon">&#128260;</span><span class="nav-text">TDD</span><span class="nav-badge">7</span></a>
-                <a href="#m-bdd" class="nav-item" data-module="m-bdd"><span class="nav-icon">&#127797;</span><span class="nav-text">BDD</span><span class="nav-badge">8</span></a>
-                <a href="#m-playwright" class="nav-item" data-module="m-playwright"><span class="nav-icon">&#127916;</span><span class="nav-text">Playwright E2E</span><span class="nav-badge">9</span></a>
+                <a href="#m-playwright" class="nav-item" data-module="m-playwright"><span class="nav-icon">&#127916;</span><span class="nav-text">E2E y Playwright</span><span class="nav-badge">9</span></a>
                 <a href="#m-cobertura" class="nav-item" data-module="m-cobertura"><span class="nav-icon">&#128202;</span><span class="nav-text">Cobertura</span><span class="nav-badge">10</span></a>
                 <a href="#m-cicd" class="nav-item" data-module="m-cicd"><span class="nav-icon">&#128640;</span><span class="nav-text">CI/CD</span><span class="nav-badge">11</span></a>
                 <a href="#m-observabilidad" class="nav-item" data-module="m-observabilidad"><span class="nav-icon">&#128200;</span><span class="nav-text">Observabilidad</span><span class="nav-badge">12</span></a>
@@ -90,46 +95,97 @@
 
     <div class="main-wrapper">
         <header class="top-header glass-panel">
-            <div class="breadcrumb">Guia Testing & QA > <span id="breadcrumb-current">Inicio</span></div>
+            <div class="breadcrumb">Guía Testing & QA <span aria-hidden="true">›</span> <span id="breadcrumb-current">Inicio</span></div>
             <div class="header-actions">
-                <button class="btn btn-sm btn-primary" onclick="APP.navigateTo('m-simuladores')">Simuladores</button>
-                <button class="btn btn-sm btn-secondary" onclick="APP.navigateTo('m-evidencias-sena')">&#128196; Registro de evidencias</button>
+                <button type="button" class="btn btn-sm btn-primary" onclick="APP.navigateTo('m-simuladores')">Simuladores</button>
+                <button type="button" class="btn btn-sm btn-secondary" onclick="APP.navigateTo('m-evidencias-sena')">&#128196; Registro de evidencias</button>
             </div>
         </header>
 
         <main class="content">
             <section id="welcome" class="page-section active">
                 <div class="hero-section section-card glass-panel">
-                    <div class="badge">Fase 5 — Evaluación — adaptación didáctica para SENA ADSO</div>
+                    <div class="badge">Ruta de aprendizaje · SENA ADSO</div>
                     <h1 class="title">Calidad de Software con <span class="gradient-text">Testing & QA</span></h1>
-                    <p class="subtitle">Cierra el ciclo Construir -&gt; Verificar. Practica con ejemplos de Flask, FastAPI, JSP y React usando PyTest, Jest, JUnit, Playwright, CI/CD y observabilidad en escenarios locales o remotos.</p>
-                    <div class="hero-stats">
+                    <p class="subtitle">Aprende a tomar una decisión de calidad con evidencia: define una regla, diseña casos, ejecuta una prueba, interpreta el resultado y explica qué queda demostrado.</p>
+                    <div class="hero-stats" aria-label="Resumen de la guía">
                         <div class="stat"><span class="stat-number">16</span><span class="stat-label">Módulos</span></div>
-                        <div class="stat"><span class="stat-number">4</span><span class="stat-label">Simuladores</span></div>
-                        <div class="stat"><span class="stat-number">40h</span><span class="stat-label">Duracion</span></div>
+                        <div class="stat"><span class="stat-number">6</span><span class="stat-label">Simuladores</span></div>
+                        <div class="stat"><span class="stat-number">40h</span><span class="stat-label">Estimación didáctica</span></div>
                         <div class="stat"><span class="stat-number">4</span><span class="stat-label">Frameworks</span></div>
                     </div>
+                    <div class="hero-route" aria-label="Ruta de aprendizaje: de la regla a la evidencia">
+                        <div class="hero-route-step"><span>01</span><strong>Define</strong><small>Qué debe ocurrir</small></div>
+                        <span class="hero-route-arrow" aria-hidden="true">→</span>
+                        <div class="hero-route-step"><span>02</span><strong>Diseña</strong><small>Casos que lo pongan a prueba</small></div>
+                        <span class="hero-route-arrow" aria-hidden="true">→</span>
+                        <div class="hero-route-step"><span>03</span><strong>Observa</strong><small>Resultado esperado y real</small></div>
+                        <span class="hero-route-arrow" aria-hidden="true">→</span>
+                        <div class="hero-route-step"><span>04</span><strong>Decide</strong><small>Evidencia y siguiente paso</small></div>
+                    </div>
                     <div class="alert-box note">
-                        <h3>&#129300; Pregunta Esencial (PBL)</h3>
-                        <p>Como garantizas que el software que construyas no falle en produccion y cueste millones? El bug de Knight Capital (2012) perdio $440 millones en 45 minutos por un codigo de prueba no eliminado.</p>
+                        <h3>&#129300; Pregunta esencial</h3>
+                        <p>¿Qué necesitas saber para decidir si un cambio puede avanzar? El caso de Knight Capital muestra que una decisión segura combina pruebas, revisión, controles de despliegue y límites operativos; una sola prueba no garantiza por sí misma que no habrá fallas.</p>
                     </div>
                     <div class="hero-actions">
-                        <button class="btn btn-primary" onclick="APP.navigateTo('m-reflexion')">Comenzar Mision 1</button>
-                        <button class="btn btn-secondary" onclick="APP.navigateTo('m-simuladores')">Ver Simuladores</button>
+                        <button type="button" class="btn btn-primary" onclick="document.getElementById('inicio-ruta').scrollIntoView({behavior:'smooth'})">Empezar por la ruta básica</button>
+                        <button type="button" class="btn btn-secondary" onclick="APP.navigateTo('m-simuladores')">Ver Simuladores</button>
                     </div>
                 </div>
+                <section id="inicio-ruta" class="section-card glass-panel onboarding-card" aria-labelledby="inicio-ruta-title">
+                    <div class="module-hero">
+                        <span class="module-badge">Ruta de inicio · 20 min</span>
+                        <h2 id="inicio-ruta-title">Antes de automatizar: aprende a decidir qué probar</h2>
+                        <p>La guía sigue una secuencia: primero entiendes el problema, luego practicas con un caso pequeño y al final transfieres la decisión a tu propio proyecto. El framework llega después de la pregunta, no antes.</p>
+                    </div>
+                    <ol class="onboarding-steps">
+                        <li><strong>Define una regla observable.</strong><span>Escribe qué entrada recibe tu función o pantalla y qué resultado correcto esperas.</span></li>
+                        <li><strong>Elige casos representativos.</strong><span>Incluye un caso válido, uno inválido y los valores que están justo en el límite.</span></li>
+                        <li><strong>Ejecuta primero un caso manual.</strong><span>Registra entrada, pasos, resultado esperado, resultado observado y si hubo un defecto.</span></li>
+                        <li><strong>Automatiza el mismo comportamiento.</strong><span>Usa preparar–actuar–comprobar; una prueba verde sin una aserción útil no demuestra nada.</span></li>
+                        <li><strong>Transfiere la técnica.</strong><span>Cambia el ejemplo por una regla de tu aplicación y explica qué conservarías y qué adaptarías.</span></li>
+                    </ol>
+                    <div class="alert-box info">
+                        <h3>Orden recomendado para comprender y practicar</h3>
+                        <p>Fundamentos → Diseño y niveles → TDD → BDD → una tecnología (FastAPI, Flask, React o Java) → E2E → Cobertura → CI/CD → Reto y evidencias. Observabilidad e IA son ampliaciones. Los módulos se pueden consultar por separado; las cuatro tecnologías son alternativas.</p>
+                        <p>En TDD y BDD usarás el mismo laboratorio de préstamos. Primero explica la regla, luego ejecútala y finalmente registra lo que demostraste. Conserva ART-TEST-01 como plan, ART-TEST-02 como suite y ART-TEST-03 como recorridos y defectos.</p>
+                        <a class="btn btn-secondary" href="#m-tdd">Entender TDD paso a paso</a>
+                        <a class="btn btn-secondary" href="#m-bdd">Entender BDD con ejemplos</a>
+                    </div>
+                    <div id="inicio-diagnostico" class="onboarding-choice" aria-labelledby="inicio-diagnostico-title">
+                        <h3 id="inicio-diagnostico-title">Elige tu punto de entrada</h3>
+                        <div class="onboarding-choice-grid">
+                            <a class="onboarding-choice-card" href="#descargar" onclick="APP.navigateTo('descargar'); return false;">
+                                <strong>Necesito preparar el entorno</strong>
+                                <span>Abre el paquete, verifica las versiones y ejecuta una prueba de humo.</span>
+                            </a>
+                            <a class="onboarding-choice-card" href="#m-piramide" onclick="APP.navigateTo('m-piramide'); return false;">
+                                <strong>Quiero aprender a diseñar casos</strong>
+                                <span>Resuelve el ejemplo de cantidades, límites, permisos y resultados esperados.</span>
+                            </a>
+                            <a class="onboarding-choice-card" href="#m-reflexion" onclick="APP.navigateTo('m-reflexion'); return false;">
+                                <strong>Quiero entender el propósito</strong>
+                                <span>Distingue calidad, QA, error, defecto y fallo antes de diseñar pruebas.</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="alert-box info onboarding-boundary">
+                        <h3>Qué puede demostrar esta guía</h3>
+                        <p>La guía ayuda a diseñar, ejecutar y documentar pruebas en un entorno de práctica. No certifica que una aplicación esté libre de defectos, segura o aprobada; esas decisiones requieren alcance, datos, versiones y revisión humana explícitos.</p>
+                    </div>
+                </section>
             </section>
 
-            <section id="m-reflexion" class="page-section module-page"><div class="section-card glass-panel"></div></section>
-            <section id="m-piramide" class="page-section module-page"><div class="section-card glass-panel"></div><div class="evidence-station-anchor" data-db-evidence="ART-TEST-01"></div></section>
+            <section id="m-reflexion" class="page-section module-page"><div class="section-card glass-panel"></div><aside class="alert-box info"><h3>Fuentes para profundizar</h3><p>Consulta: 10 de septiembre de 2026. Ejemplos y talleres de elaboración didáctica propia.</p><ul><li><a href="https://istqb.org/certifications/certified-tester-foundation-level-ctfl-v4-0/" target="_blank" rel="noopener noreferrer">ISTQB: fundamentos de pruebas</a></li></ul></aside></section>
+            <section id="m-piramide" class="page-section module-page"><div class="section-card glass-panel"></div><div class="evidence-station-anchor" data-db-evidence="ART-TEST-01"></div><aside class="alert-box info"><h3>Fuentes para profundizar</h3><p>Consulta: 10 de septiembre de 2026. Ejemplos y talleres de elaboración didáctica propia.</p><ul><li><a href="https://istqb.org/certifications/certified-tester-foundation-level-ctfl-v4-0/" target="_blank" rel="noopener noreferrer">ISTQB: diseño y gestión de pruebas</a></li><li><a href="https://martinfowler.com/articles/mocksArentStubs.html" target="_blank" rel="noopener noreferrer">Martin Fowler: dobles de prueba</a></li></ul></aside></section>
             <section id="m-pytest-fastapi" class="page-section module-page"><div class="section-card glass-panel"></div><div class="evidence-station-anchor" data-db-evidence="ART-TEST-02"></div></section>
             <section id="m-pytest-flask" class="page-section module-page"><div class="section-card glass-panel"></div></section>
             <section id="m-jest-react" class="page-section module-page"><div class="section-card glass-panel"></div></section>
             <section id="m-junit-jsp" class="page-section module-page"><div class="section-card glass-panel"></div></section>
-            <section id="m-tdd" class="page-section module-page"><div class="section-card glass-panel"></div></section>
-            <section id="m-bdd" class="page-section module-page"><div class="section-card glass-panel"></div></section>
+            <section id="m-tdd" class="page-section module-page"><div class="section-card glass-panel"></div><aside class="alert-box info"><h3>Fuentes para profundizar</h3><p>Consulta: 10 de septiembre de 2026. Ejemplos y talleres de elaboración didáctica propia.</p><ul><li><a href="https://martinfowler.com/bliki/TestDrivenDevelopment.html" target="_blank" rel="noopener noreferrer">Martin Fowler: Test Driven Development</a></li><li><a href="https://docs.pytest.org/en/stable/how-to/parametrize.html" target="_blank" rel="noopener noreferrer">pytest: parametrización</a></li></ul></aside></section>
+            <section id="m-bdd" class="page-section module-page"><div class="section-card glass-panel"></div><aside class="alert-box info"><h3>Fuentes para profundizar</h3><p>Consulta: 10 de septiembre de 2026. Ejemplos y talleres de elaboración didáctica propia.</p><ul><li><a href="https://cucumber.io/docs/bdd/" target="_blank" rel="noopener noreferrer">Cucumber: BDD</a></li><li><a href="https://cucumber.io/docs/gherkin/reference/" target="_blank" rel="noopener noreferrer">Cucumber: referencia Gherkin</a></li><li><a href="https://behave.readthedocs.io/en/latest/" target="_blank" rel="noopener noreferrer">Behave: documentación</a></li></ul></aside></section>
             <section id="m-playwright" class="page-section module-page"><div class="section-card glass-panel"></div><div class="evidence-station-anchor" data-db-evidence="ART-TEST-03"></div></section>
-            <section id="m-cobertura" class="page-section module-page"><div class="section-card glass-panel"></div></section>
+            <section id="m-cobertura" class="page-section module-page"><div class="section-card glass-panel"></div><aside class="alert-box info"><h3>Fuentes para profundizar</h3><p>Consulta: 10 de septiembre de 2026. Ejemplos y talleres de elaboración didáctica propia.</p><ul><li><a href="https://istqb.org/certifications/certified-tester-foundation-level-ctfl-v4-0/" target="_blank" rel="noopener noreferrer">ISTQB: seguimiento, control y cierre</a></li></ul></aside></section>
             <section id="m-cicd" class="page-section module-page"><div class="section-card glass-panel"></div></section>
             <section id="m-observabilidad" class="page-section module-page"><div class="section-card glass-panel"></div></section>
             <section id="m-reto" class="page-section module-page"><div class="section-card glass-panel"></div></section>
@@ -142,8 +198,11 @@
                     <div class="module-hero">
                         <span class="module-badge">Simuladores</span>
                         <h1>Simuladores Interactivos QA</h1>
-                        <p>Practica con 9 herramientas interactivas y gana XP.</p>
-                    </div>
+                    <p>Usa los simuladores para ensayar decisiones concretas. Son apoyos de práctica: no sustituyen la ejecución del proyecto ni convierten una respuesta acertada en certificación.</p>
+                </div>
+                    <h3>Recorrido E2E: del objetivo a la evidencia</h3>
+                    <p class="simulator-intro">Elige un escenario y observa cómo una prueba de extremo a extremo pasa por navegador, localizador, acción, sistema y aserción. La simulación es local: no modifica datos ni reemplaza una ejecución real.</p>
+                    <div class="sim-e2e-container"></div>
                     <h3>Test Pyramid Builder</h3>
                     <div class="sim-pyramid-container"></div>
                     <h3 class="mt-4">Assertion Validator</h3>
@@ -162,7 +221,7 @@
                 <div class="section-card glass-panel">
                     <div class="module-hero">
                         <span class="module-badge">&#128196; Registro local de evidencias</span>
-                        <h1>Registro Integral de Evidencias & Calidad QA</h1>
+                        <h1>Registro Integral de Evidencias y calidad QA</h1>
                         <p>Consolida los artefactos producidos durante la ruta, sus criterios y la evidencia de ejecución. Este registro local no es una certificación ni reemplaza la valoración del instructor.</p>
                     </div>
                     <div data-db-evidence-dossier></div>
@@ -177,23 +236,46 @@
                         <h1>Descarga y ejecuta las pruebas</h1>
                         <p>Descarga el proyecto de práctica autocontenido para trabajar con PyTest, Vitest, JUnit 5 y Playwright.</p>
                         <div class="hero-actions">
-                            <a class="btn btn-primary" href="downloads/guia-testing-qa.zip" download>&#128229; Descargar proyecto de práctica (.zip)</a>
+                            <a id="download-project-link" class="btn btn-primary" href="downloads/guia-testing-qa.zip" download aria-label="Descargar directamente el proyecto de práctica en formato ZIP">&#128229; Descargar proyecto de práctica (.zip)</a>
                         </div>
+                        <p class="download-direct-link"><strong>Enlace directo:</strong> <a href="downloads/guia-testing-qa.zip" download>descargar el proyecto en formato ZIP</a></p>
                         <p class="text-muted">El paquete incluye código fuente, pruebas, configuración y una guía propia de ejecución. No contiene credenciales ni archivos generados de tu computador.</p>
                     </div>
 
-                    <h3>&#128221; Requisitos</h3>
-                    <ul>
-                        <li>Python 3.11+ (para tests PyTest de FastAPI y Flask)</li>
-                        <li>Node.js 20+ (para Vitest, React y Playwright)</li>
-                        <li>JDK 21 + Maven (para tests JUnit de JSP)</li>
-                        <li>Navegador Chromium (para Playwright E2E)</li>
-                    </ul>
+                    <div class="download-content-grid">
+                        <div class="download-main-column">
+                            <section class="download-panel" aria-labelledby="download-preparar-title">
+                                <div class="download-panel-heading">
+                                    <span class="download-step">01</span>
+                                    <div>
+                                        <p class="download-eyebrow">Antes de comenzar</p>
+                                        <h2 id="download-preparar-title">Prepara tu entorno</h2>
+                                    </div>
+                                </div>
+                                <p class="download-panel-intro">Instala solo las herramientas de la tecnología que vas a practicar. No necesitas configurar todos los stacks para empezar.</p>
+                                <ul class="download-requirements">
+                                    <li><strong>Python 3.11+</strong><span>PyTest para FastAPI y Flask</span></li>
+                                    <li><strong>Node.js 20+</strong><span>Vitest, React y Playwright</span></li>
+                                    <li><strong>JDK 21 + Maven</strong><span>Pruebas JUnit 5 en Spring Boot</span></li>
+                                    <li><strong>Chromium</strong><span>Flujos E2E con Playwright</span></li>
+                                </ul>
+                            </section>
 
-                    <h3 class="mt-4">&#128736; Instrucciones paso a paso</h3>
-                    <div class="code-block-wrapper">
-                        <div class="code-file-header"><span class="file-icon">&#128194;</span><span class="file-path">Terminal — Tests Python (FastAPI + Flask)</span></div>
-                        <pre class="code-block"><code># Después de descargar y extraer guia-testing-qa.zip
+                            <section class="download-panel" aria-labelledby="download-ejecutar-title">
+                                <div class="download-panel-heading">
+                                    <span class="download-step">02</span>
+                                    <div>
+                                        <p class="download-eyebrow">Elige una ruta</p>
+                                        <h2 id="download-ejecutar-title">Ejecuta las pruebas por tecnología</h2>
+                                    </div>
+                                </div>
+                                <p class="download-panel-intro">Comienza por Python si quieres validar la API y continúa con el stack que corresponda a tu proyecto.</p>
+                                <div class="download-command-grid">
+                                    <article class="download-command-card">
+                                        <h3>Python · FastAPI + Flask</h3>
+                                        <div class="code-block-wrapper">
+                                            <div class="code-file-header"><span class="file-icon">&#128194;</span><span class="file-path">Terminal — Suite Python</span></div>
+                                            <pre class="code-block"><code># Después de descargar y extraer guia-testing-qa.zip
 cd guia-testing-qa
 
 # Entorno virtual
@@ -206,45 +288,138 @@ pytest tests/unit/ -v              # Fase 1: lógica pura
 pytest tests/integration/ -v       # Fase 3: API y SQLite en memoria
 pytest tests/ -v                   # Suite Python completa
 pytest --cov=services --cov=routers --cov=schemas --cov-report=term-missing</code></pre>
-                    </div>
+                                        </div>
+                                    </article>
 
-                    <div class="code-block-wrapper mt-4">
-                        <div class="code-file-header"><span class="file-icon">&#128194;</span><span class="file-path">Terminal — Tests JavaScript (Vitest, API compatible con Jest)</span></div>
-<pre class="code-block"><code>cd guia-testing-qa
+                                    <article class="download-command-card">
+                                        <h3>JavaScript · Vitest</h3>
+                                        <div class="code-block-wrapper">
+                                            <div class="code-file-header"><span class="file-icon">&#128194;</span><span class="file-path">Terminal — Tests JavaScript</span></div>
+                                            <pre class="code-block"><code>cd guia-testing-qa
 npm ci
 npm test
 npm run test:coverage</code></pre>
-                    </div>
+                                        </div>
+                                    </article>
 
-                    <div class="code-block-wrapper mt-4">
-                        <div class="code-file-header"><span class="file-icon">&#128194;</span><span class="file-path">Terminal — Tests JUnit 5 (Maven / Spring Boot)</span></div>
-                        <pre class="code-block"><code>cd guia-testing-qa
+                                    <article class="download-command-card">
+                                        <h3>Java · JUnit 5</h3>
+                                        <div class="code-block-wrapper">
+                                            <div class="code-file-header"><span class="file-icon">&#128194;</span><span class="file-path">Terminal — Maven / Spring Boot</span></div>
+                                            <pre class="code-block"><code>cd guia-testing-qa
 mvn test
 mvn test jacoco:report</code></pre>
-                    </div>
+                                        </div>
+                                    </article>
 
-                    <div class="code-block-wrapper mt-4">
-                        <div class="code-file-header"><span class="file-icon">&#128194;</span><span class="file-path">Terminal — Playwright E2E</span></div>
-                        <pre class="code-block"><code>cd guia-testing-qa
+                                    <article class="download-command-card">
+                                        <h3>Playwright · E2E</h3>
+                                        <div class="code-block-wrapper">
+                                            <div class="code-file-header"><span class="file-icon">&#128194;</span><span class="file-path">Terminal — Navegador Chromium</span></div>
+                                            <pre class="code-block"><code>cd guia-testing-qa
 $env:FLASK_SECRET_KEY = "&lt;CLAVE_LOCAL_DE_PRUEBA&gt;"
 npx playwright install chromium
 npm run e2e
 npx playwright show-report</code></pre>
-                    </div>
+                                        </div>
+                                    </article>
+                                </div>
+                            </section>
 
-                    <div class="alert-box success mt-4">
-                        <h4>&#128200; Ver cobertura</h4>
-                        <p>Cada herramienta produce su propio reporte. Abre los reportes en la raíz del proyecto:</p>
-                        <ul>
-                            <li><strong>Python:</strong> <code>pytest --cov=services --cov=routers --cov=schemas --cov-report=html</code> abre <code>htmlcov/index.html</code>.</li>
-                            <li><strong>JavaScript:</strong> <code>npm run test:coverage</code> genera <code>coverage/index.html</code>.</li>
-                            <li><strong>Java:</strong> <code>mvn jacoco:report</code> abre <code>target/site/jacoco/index.html</code>.</li>
-                        </ul>
-                    </div>
+                            <section class="download-panel" aria-labelledby="download-diagnostico-title">
+                                <div class="download-panel-heading">
+                                    <span class="download-step">02A</span>
+                                    <div>
+                                        <p class="download-eyebrow">Si algo falla</p>
+                                        <h2 id="download-diagnostico-title">Diagnostica antes de cambiar el código</h2>
+                                    </div>
+                                </div>
+                                <p class="download-panel-intro">Sigue siempre el mismo orden: ubicación, versión, entorno activo, dependencia y después la prueba. Así separas un problema de preparación de un defecto del aplicativo.</p>
+                                <div class="download-diagnosis-grid">
+                                    <article class="download-diagnosis-card">
+                                        <h3>1. ¿Estás en la carpeta correcta?</h3>
+                                        <p>La carpeta debe contener <code>requirements.txt</code> y <code>tests/</code>. Si no aparecen, vuelve a la carpeta que extrajiste.</p>
+                                        <pre><code>Get-Location
+Test-Path requirements.txt
+Test-Path tests</code></pre>
+                                    </article>
+                                    <article class="download-diagnosis-card">
+                                        <h3>2. ¿Usas el Python del proyecto?</h3>
+                                        <p>Activa el entorno y comprueba la ruta que ejecutará la suite. Si la ruta no termina en <code>.venv</code>, activa de nuevo.</p>
+                                        <pre><code>.\.venv\Scripts\Activate.ps1
+python --version
+python -c "import sys; print(sys.executable)"</code></pre>
+                                    </article>
+                                    <article class="download-diagnosis-card">
+                                        <h3>3. Falta una dependencia</h3>
+                                        <p>Instala desde el archivo del proyecto y ejecuta PyTest a través del mismo intérprete.</p>
+                                        <pre><code>python -m pip install -r requirements.txt
+python -m pytest tests/unit/ -q</code></pre>
+                                    </article>
+                                    <article class="download-diagnosis-card">
+                                        <h3>4. La prueba falla de verdad</h3>
+                                        <p>Conserva el comando, caso, esperado, observado y versión. Un error <code>422</code> suele indicar datos de entrada inválidos; revisa <code>response.json()['detail']</code> antes de corregir.</p>
+                                        <pre><code>python -m pytest tests/ -v
+python -m pytest tests/ --tb=short</code></pre>
+                                    </article>
+                                </div>
+                                <div class="alert-box info download-diagnosis-note">
+                                    <h3>Regla de decisión</h3>
+                                    <p>Si falla la preparación, corrige el entorno y repite la misma prueba. Si el entorno está correcto y el resultado contradice el oráculo, registra un defecto; no lo ocultes desactivando la aserción.</p>
+                                </div>
+                            </section>
 
-                    <div class="alert-box note mt-4">
-                        <h4>&#128736; Script de preparación automática</h4>
-                        <pre><code class="language-powershell"># Desde la carpeta extraída del proyecto
+                            <section class="download-panel" aria-labelledby="download-verificar-title">
+                                <div class="download-panel-heading">
+                                    <span class="download-step">03</span>
+                                    <div>
+                                        <p class="download-eyebrow">Cierra el ciclo</p>
+                                        <h2 id="download-verificar-title">Verifica y conserva el resultado</h2>
+                                    </div>
+                                </div>
+                                <div class="download-results-grid">
+                                    <div class="alert-box success">
+                                        <h3>&#128200; Reportes de cobertura</h3>
+                                        <p>Cada herramienta produce su propio reporte. Ábrelo después de ejecutar la suite:</p>
+                                        <ul>
+                                            <li><strong>Python:</strong> <code>htmlcov/index.html</code></li>
+                                            <li><strong>JavaScript:</strong> <code>coverage/index.html</code></li>
+                                            <li><strong>Java:</strong> <code>target/site/jacoco/index.html</code></li>
+                                        </ul>
+                                    </div>
+                                    <div class="download-next-card">
+                                        <h3>Siguiente paso</h3>
+                                        <ol>
+                                            <li>Guarda el reporte de la suite.</li>
+                                            <li>Anota fallos y casos borde.</li>
+                                            <li>Consolida la evidencia en la guía.</li>
+                                        </ol>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+
+                        <aside class="download-side-column" aria-label="Ruta rápida de descarga y preparación">
+                            <div class="download-quick-card">
+                                <p class="download-eyebrow">Ruta rápida</p>
+                                <h2>Empieza en tres pasos</h2>
+                                <ol>
+                                    <li><span>1</span><div><strong>Descarga</strong><small>Obtén el ZIP desde este mismo panel.</small></div></li>
+                                    <li><span>2</span><div><strong>Extrae</strong><small>Abre la carpeta <code>guia-testing-qa</code>.</small></div></li>
+                                    <li><span>3</span><div><strong>Ejecuta</strong><small>Elige una ruta y conserva su reporte.</small></div></li>
+                                </ol>
+                            </div>
+
+                            <div class="alert-box note download-setup-card">
+                                <div class="alert-box info">
+                                    <h3>Laboratorio compartido de TDD y BDD</h3>
+                                    <p>El ZIP incluye <code>laboratorios/prestamos/</code> con función, 13 casos pytest, seis escenarios Gherkin y pasos Behave. Entra a esa carpeta y sigue su README. El taller de TDD explica las etapas rojas; el paquete contiene la solución final.</p>
+                                    <a class="btn btn-secondary" href="#m-tdd">Abrir el taller TDD</a>
+                                    <a class="btn btn-secondary" href="#m-bdd">Abrir el taller BDD</a>
+                                </div>
+                                <h3>&#128736; Preparación automática</h3>
+                                <p>Si usarás Python en Windows, puedes preparar el entorno con este script:</p>
+                                <pre><code class="language-powershell"># Desde la carpeta extraída del proyecto
 .\setup-windows.ps1
 .\.venv\Scripts\Activate.ps1
 $env:FLASK_SECRET_KEY = "&lt;CLAVE_LOCAL_DE_PRUEBA&gt;"
@@ -254,6 +429,15 @@ Write-Host "Listo. Ejecuta 'pytest tests/ -v' para comenzar." -ForegroundColor G
 #### Prueba rápida de la API ####
 # En otra ventana: uvicorn main:app --reload --port 8009
 Invoke-RestMethod http://127.0.0.1:8009/productos/</code></pre>
+                            </div>
+
+                            <div class="alert-box success download-runner-card">
+                                <h3>&#9989; Una orden para empezar</h3>
+                                <p>Después de preparar el entorno, usa el ejecutor incluido para recorrer Python, BDD y React. Puedes añadir Java y E2E cuando instales esas herramientas.</p>
+                                <pre><code class="language-powershell">.\run-tests.ps1 -SkipJava -SkipE2E
+# Suite completa: .\run-tests.ps1 -Coverage</code></pre>
+                            </div>
+                        </aside>
                     </div>
                 </div>
             </section>
@@ -288,7 +472,7 @@ Invoke-RestMethod http://127.0.0.1:8009/productos/</code></pre>
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-primary" onclick="APP.closeVictoryModal()">Cerrar</button>
+                <button type="button" class="btn btn-primary" onclick="APP.closeVictoryModal()">Cerrar</button>
             </div>
         </div>
     </div>
@@ -297,14 +481,27 @@ Invoke-RestMethod http://127.0.0.1:8009/productos/</code></pre>
     <script src="js/testing-session.js"></script>
     <script src="js/gamification.js"></script>
     <script src="js/simulators.js"></script>
-    <script src="js/modules-content.js"></script>
-    <script src="js/modules-content-2.js"></script>
+    <script src="js/learning-visuals.js"></script>
+    <script src="js/modules-content.js?v=3.5.0"></script>
+    <script src="js/modules-content-2.js?v=3.5.0"></script>
+    <script src="js/modules-cicd.js?v=3.5.0"></script>
+    <script src="js/modules-observability.js?v=3.5.0"></script>
+    <script src="js/modules-ai-testing.js?v=3.5.0"></script>
+    <script src="js/modules-ai-coach.js?v=3.5.0"></script>
+    <script src="js/modules-ai-tools.js?v=3.5.0"></script>
+    <script src="js/modules-challenge.js?v=3.5.0"></script>
+    <script src="js/modules-tdd.js?v=3.5.0"></script>
+    <script src="js/modules-bdd.js?v=3.5.0"></script>
+    <script src="js/modules-foundations.js?v=3.5.0"></script>
+    <script src="js/modules-test-strategy.js?v=3.5.0"></script>
     <script src="js/ai-testing-coach.js"></script>
     <script src="js/ai-tools-lab.js"></script>
     <script src="js/code-renderer.js"></script>
+    <script src="js/module-learning-kit-data.js?v=3.5.0"></script>
+    <script src="js/module-learning-kit.js?v=3.5.0"></script>
     <script src="js/deliverables-registry.js"></script>
     <script src="js/vendor/devbrain-evidence.js"></script>
-    <script src="js/main.js"></script>
+    <script src="js/main.js?v=3.5.0"></script>
     <script>
       // Convierte en tarjetas DevBrain cada <pre> de la guia, ahora y cada
       // vez que el enrutador pinte contenido nuevo.

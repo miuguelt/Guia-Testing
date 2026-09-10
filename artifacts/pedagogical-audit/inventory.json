@@ -1,0 +1,1727 @@
+[
+  {
+    "name": "guia 1 Descubrimiento del Negocio y Modelado de Procesos",
+    "manifest": true,
+    "entry": "index.html",
+    "title": "Guía 01 web - Descubrimiento del negocio, recolección de información y SIPOC",
+    "standard": "2.0.0",
+    "sections": 29,
+    "sources": [
+      "js\\simulator.js",
+      "js\\app.js",
+      "js\\workshop.js"
+    ],
+    "registry": true,
+    "glossary": 0,
+    "checkpoints": 4,
+    "sampleHeadings": [
+      "Visitante o integrante autorizado",
+      "Área o instructor anfitrión",
+      "Datos de identidad y del equipo",
+      "Política y autorizaciones vigentes",
+      "Verificar identidad y autorización",
+      "Registrar decisión y movimiento",
+      "Decisión de acceso comunicada",
+      "Registro trazable del equipo",
+      "Persona que solicita el ingreso",
+      "Responsable de seguridad y auditoría",
+      "Compilar una aplicación móvil",
+      "Liquidar la nómina mensual"
+    ],
+    "contentChars": 31777,
+    "contentFiles": [
+      "js\\simulator.js",
+      "js\\workshop.js"
+    ],
+    "sampleModuleNames": [],
+    "fixedSuccessSignals": []
+  },
+  {
+    "name": "guia 2 Ingeniería de Contexto (Requisitos Funcionales y Arquitectura)",
+    "manifest": true,
+    "entry": "index.html",
+    "title": "Guía 02 web - Análisis de requerimientos y base documental del software",
+    "standard": "2.0.0",
+    "sections": 58,
+    "sources": [
+      "js\\app.js",
+      "js\\simulator.js",
+      "js\\workshop.js"
+    ],
+    "registry": true,
+    "glossary": 0,
+    "checkpoints": 6,
+    "sampleHeadings": [],
+    "contentChars": 40369,
+    "contentFiles": [
+      "js\\simulator.js",
+      "js\\workshop.js"
+    ],
+    "sampleModuleNames": [],
+    "fixedSuccessSignals": []
+  },
+  {
+    "name": "guia 3 Prototipado Estático, Interfaz de Usuario (UI) y Validación Continua",
+    "manifest": true,
+    "entry": "index.html",
+    "title": "Guía 03 web - Prototipado estático, interfaz y validación continua",
+    "standard": "2.3.0",
+    "sections": 12,
+    "sources": [
+      "js\\simulator.js",
+      "js\\workshop.js",
+      "js\\deliverables.js",
+      "js\\app.js",
+      "js\\registro-entregables.js",
+      "js\\evidencias.js"
+    ],
+    "registry": true,
+    "glossary": 8,
+    "checkpoints": 4,
+    "sampleHeadings": [
+      "Registrar ingreso de equipo",
+      "Acceso del personal de seguridad",
+      "Consultar equipos presentes"
+    ],
+    "contentChars": 40513,
+    "contentFiles": [
+      "js\\simulator.js",
+      "js\\workshop.js"
+    ],
+    "sampleModuleNames": [],
+    "fixedSuccessSignals": []
+  },
+  {
+    "name": "guia 4 Metodologías Ágiles (ScrumKanban) y Planeación de Sprints",
+    "manifest": true,
+    "entry": "index.html",
+    "title": "Guía 04 web - Metodologías ágiles y planeación de Sprints",
+    "standard": "2.0.0",
+    "sections": 16,
+    "sources": [
+      "js\\app.js",
+      "js\\simulator.js",
+      "js\\workshop.js"
+    ],
+    "registry": true,
+    "glossary": 0,
+    "checkpoints": 4,
+    "sampleHeadings": [
+      "Como guarda, quiero registrar el ingreso de un equipo para dejar trazabilidad.",
+      "Como guarda, quiero consultar equipos presentes para verificar una salida.",
+      "Como responsable de seguridad, quiero resolver excepciones para controlar ingresos no previstos.",
+      "Como visitante, quiero preregistrar mi equipo para reducir datos repetidos en garita.",
+      "Como auditor, quiero revisar movimientos para explicar decisiones de acceso.",
+      "Como responsable, quiero exportar un resumen anonimizado para analizar tendencias."
+    ],
+    "contentChars": 20312,
+    "contentFiles": [
+      "js\\simulator.js",
+      "js\\workshop.js"
+    ],
+    "sampleModuleNames": [],
+    "fixedSuccessSignals": []
+  },
+  {
+    "name": "guia 5 TGS",
+    "manifest": true,
+    "entry": "index.html",
+    "title": "Guía 05 web - Teoría General de Sistemas, arquitectura de software e Inteligencia Artificial",
+    "standard": "2.0.0",
+    "sections": 14,
+    "sources": [
+      "js\\content.js",
+      "js\\app.js",
+      "js\\evolution-map.js",
+      "js\\neural-sim.js",
+      "js\\architecture-lab.js"
+    ],
+    "registry": true,
+    "glossary": 0,
+    "checkpoints": 3,
+    "sampleHeadings": [
+      "Bogdanov escribe la Tektología",
+      "Cannon nombra la homeostasis",
+      "Turing define la máquina universal",
+      "Bertalanffy presenta la teoría general de sistemas",
+      "La neurona se vuelve un circuito lógico",
+      "Conferencias Macy",
+      "Cibernética e información, el mismo año",
+      "Bertalanffy publica los sistemas abiertos en «Science»",
+      "La TGS se vuelve una comunidad",
+      "Rosenblatt construye el perceptrón",
+      "Forrester y Simon ordenan la complejidad",
+      "El año bisagra",
+      "Cybersyn: la TGS en producción",
+      "Autopoiesis, límites y modularidad"
+    ],
+    "contentChars": 71737,
+    "contentFiles": [
+      "js\\content.js"
+    ],
+    "sampleModuleNames": [
+      "Bogdanov escribe la Tektología",
+      "Cannon nombra la homeostasis",
+      "Turing define la máquina universal",
+      "Bertalanffy presenta la teoría general de sistemas",
+      "La neurona se vuelve un circuito lógico",
+      "Conferencias Macy",
+      "Cibernética e información, el mismo año",
+      "Bertalanffy publica los sistemas abiertos en «Science»",
+      "La TGS se vuelve una comunidad",
+      "Rosenblatt construye el perceptrón"
+    ],
+    "fixedSuccessSignals": []
+  },
+  {
+    "name": "guia desarrollo guiado",
+    "manifest": false,
+    "entry": "index.html",
+    "title": null,
+    "standard": null,
+    "sections": 0,
+    "sources": [
+      "js\\modules-data.js",
+      "js\\generators.js",
+      "js\\quizzes.js",
+      "js\\app.js"
+    ],
+    "registry": false,
+    "glossary": 0,
+    "checkpoints": 0,
+    "sampleHeadings": [
+      "1. Conceptos Clave Desmitificados (Sin Jerga)",
+      "🌱 ¿Primera vez creando software? ¡Estás en el lugar correcto!",
+      "🍽️ La Metáfora Maestra: La Aplicación Web es un Restaurante",
+      "1. Frontend (La Interfaz)",
+      "2. API (El Mensajero)",
+      "3. Supabase (Base de Datos)",
+      "4. Row Level Security (RLS)",
+      "5. SPA (Single Page App)",
+      "6. Prompt como Especificación",
+      "📖 Mini-Diccionario de Términos que Verás en la Guía",
+      "2. Checklist Cero a Clic: Configuración de Cuentas Gratuitas",
+      "🚀 Tu Arsenal Gratuito para Construir Aplicaciones",
+      "💎 Google Gemini",
+      "🎨 Google Stitch"
+    ],
+    "contentChars": 178322,
+    "contentFiles": [
+      "js\\modules-data.js"
+    ],
+    "sampleModuleNames": [
+      "1. Conceptos Clave Desmitificados (Sin Jerga)",
+      "2. Checklist Cero a Clic: Configuración de Cuentas Gratuitas",
+      "3. Visión Holística del Software y las 7 Fases del SDLC",
+      "4. Fundamentos del Pipeline SDLC con IA",
+      "5. Asistente de Ideación y Proyectos por Niveles",
+      "6. Cadena de Gemas y Sección ",
+      "7. Tetralogía Documental Canónica (.md / .sql)",
+      "8. Prototipado Visual en Stitch (40 Estilos)",
+      "9. Trasvase UI: De Stitch a AI Studio",
+      "10. Conexión de AI Studio a Supabase (.env)"
+    ],
+    "fixedSuccessSignals": []
+  },
+  {
+    "name": "Guia IA para Codificar",
+    "manifest": true,
+    "entry": "index.html",
+    "title": "Guía 06 - La IA como copiloto cognitivo en el Ciclo de Vida del Desarrollo de Software",
+    "standard": "2.0.0",
+    "sections": 0,
+    "sources": [
+      "js\\renderer.js",
+      "js\\simulators\\sim-base.js",
+      "js\\content\\modulos-00-fundamentos.js",
+      "js\\content\\modulos-00b-gemas-y-gobernanza.js",
+      "js\\content\\modulos-01-analisis.js",
+      "js\\content\\modulos-02-arquitectura.js",
+      "js\\content\\modulos-03-ejecucion.js",
+      "js\\content\\modulos-03b-seguridad.js",
+      "js\\content\\modulos-04-despliegue.js",
+      "js\\content\\modulos-05-transferencia.js",
+      "js\\content\\indice.js",
+      "js\\simulators\\prompt-lab.js",
+      "js\\simulators\\hallucination-hunt.js",
+      "js\\simulators\\vera-audit.js",
+      "js\\simulators\\invest-builder.js",
+      "js\\simulators\\traceability.js",
+      "js\\simulators\\security-review.js",
+      "js\\simulators\\pipeline-sim.js",
+      "js\\dashboard-link.js",
+      "js\\learning-path.js",
+      "js\\portfolio.js",
+      "js\\main.js"
+    ],
+    "registry": true,
+    "glossary": 0,
+    "checkpoints": 5,
+    "sampleHeadings": [
+      "Arma un prompt profesional con las seis palancas",
+      "De escribir código a dirigir su producción bajo normas ISO",
+      "Principio rector: Supervisión Humana Obligatoria (ISO/IEC 42001 HITL)",
+      "Datos del caso transversal",
+      "El endpoint que funcionaba (y filtraba datos)",
+      "El caso real: La trampa del Vibe Coding",
+      "Protocolo V.E.R.A. v2",
+      "Las seis palancas del prompt de ingeniería",
+      "docs/prompts/00-system-prompt.md",
+      "Compuertas automáticas: la primera línea de defensa",
+      "Gemas de Gemini, Custom GPTs, MCP y Gobernanza (.rules / AGENTS.md)",
+      "Sinergia Estratégica Multi-Modelo (Dual-Brain Pattern)",
+      "Regla de Oro de la Calidad",
+      "Separe hechos de invenciones del modelo"
+    ],
+    "contentChars": 144699,
+    "contentFiles": [
+      "js\\simulators\\sim-base.js",
+      "js\\content\\modulos-00-fundamentos.js",
+      "js\\content\\modulos-00b-gemas-y-gobernanza.js",
+      "js\\content\\modulos-01-analisis.js",
+      "js\\content\\modulos-02-arquitectura.js",
+      "js\\content\\modulos-03-ejecucion.js",
+      "js\\content\\modulos-03b-seguridad.js",
+      "js\\content\\modulos-04-despliegue.js",
+      "js\\content\\modulos-05-transferencia.js",
+      "js\\content\\indice.js",
+      "js\\simulators\\prompt-lab.js",
+      "js\\simulators\\hallucination-hunt.js",
+      "js\\simulators\\vera-audit.js",
+      "js\\simulators\\invest-builder.js",
+      "js\\simulators\\traceability.js",
+      "js\\simulators\\security-review.js",
+      "js\\simulators\\pipeline-sim.js"
+    ],
+    "sampleModuleNames": [
+      "Arma un prompt profesional con las seis palancas",
+      "De escribir código a dirigir su producción bajo normas ISO",
+      "Principio rector: Supervisión Humana Obligatoria (ISO/IEC 42001 HITL)",
+      "Datos del caso transversal",
+      "El endpoint que funcionaba (y filtraba datos)",
+      "El caso real: La trampa del Vibe Coding",
+      "Protocolo V.E.R.A. v2",
+      "Las seis palancas del prompt de ingeniería",
+      "docs/prompts/00-system-prompt.md",
+      "Compuertas automáticas: la primera línea de defensa"
+    ],
+    "fixedSuccessSignals": []
+  },
+  {
+    "name": "Guia React",
+    "manifest": true,
+    "entry": "index.html",
+    "title": "React 19: Desarrollo de Aplicaciones Web Frontend SPA",
+    "standard": "2.4.0",
+    "sections": 4,
+    "sources": [],
+    "registry": true,
+    "glossary": 3,
+    "checkpoints": 3,
+    "sampleHeadings": [
+      "Aprende React 19 Consumiendo Spring Boot 3.5",
+      "Anatomía de Componentes y Props",
+      "CRUD N:M Completo Fincas & Cultivos",
+      "📄 Portafolio y Bitácora de Evidencias ADSO"
+    ],
+    "contentChars": 7026,
+    "contentFiles": [
+      "index.html"
+    ],
+    "sampleModuleNames": [],
+    "fixedSuccessSignals": []
+  },
+  {
+    "name": "Guia Testing",
+    "manifest": true,
+    "entry": "web\\index.html",
+    "title": "Testing de Software, Aseguramiento de Calidad (QA) y Pruebas Automatizadas",
+    "standard": "2.4.0",
+    "sections": 23,
+    "sources": [
+      "web\\js\\testing-session.js",
+      "web\\js\\gamification.js",
+      "web\\js\\simulators.js",
+      "web\\js\\modules-content.js",
+      "web\\js\\modules-content-2.js",
+      "web\\js\\ai-testing-coach.js",
+      "web\\js\\ai-tools-lab.js",
+      "web\\js\\code-renderer.js",
+      "web\\js\\deliverables-registry.js",
+      "web\\js\\main.js"
+    ],
+    "registry": true,
+    "glossary": 3,
+    "checkpoints": 3,
+    "sampleHeadings": [
+      "Pruebas Unitarias de Lógica Pura",
+      "TDD: Ciclo Rojo-Verde-Refactor",
+      "Pruebas de Integración y Mocks",
+      "BDD: Especificaciones de Comportamiento",
+      "Pruebas End-to-End (E2E) en Navegador",
+      "Auditoría de Cobertura y Quality Gate",
+      "Pipeline CI/CD Automatizado",
+      "Reflexión inicial: el costo de un defecto no detectado",
+      "Caso Real: Knight Capital (1 de Agosto, 2012)",
+      "El tipo de bug que provoco la catastrofe",
+      "Preguntas de Reflexion (discute con tu equipo)",
+      "Lo que aprenderas en esta guia",
+      "Historia: como nacio la disciplina de las pruebas",
+      "SUnit — el patron xUnit"
+    ],
+    "contentChars": 178400,
+    "contentFiles": [
+      "web\\js\\simulators.js",
+      "web\\js\\modules-content.js",
+      "web\\js\\modules-content-2.js"
+    ],
+    "sampleModuleNames": [
+      "Reflexión inicial: el costo de un defecto no detectado",
+      "Caso Real: Knight Capital (1 de Agosto, 2012)",
+      "El tipo de bug que provoco la catastrofe",
+      "Preguntas de Reflexion (discute con tu equipo)",
+      "Lo que aprenderas en esta guia",
+      "Historia: como nacio la disciplina de las pruebas",
+      "SUnit — el patron xUnit",
+      "JUnit lleva xUnit a Java",
+      "pytest nace en Python",
+      "La piramide toma forma"
+    ],
+    "fixedSuccessSignals": []
+  },
+  {
+    "name": "guia-algoritmia",
+    "manifest": true,
+    "entry": "index.html",
+    "title": "Algoritmia, Estructuras de Datos y Pensamiento Computacional",
+    "standard": "2.4.0",
+    "sections": 0,
+    "sources": [
+      "js\\content\\modulos-data.js",
+      "js\\simulators\\simulador-principal.js",
+      "js\\renderer.js",
+      "js\\learning-path.js",
+      "js\\portfolio.js",
+      "js\\main.js"
+    ],
+    "registry": true,
+    "glossary": 3,
+    "checkpoints": 5,
+    "sampleHeadings": [
+      "🐘 PostgreSQL Query Planner & Index Optimizer",
+      "🌿 Git DAG & Rebase Interactive Simulator",
+      "📐 Hexagonal Architecture & Dependency Inversion Linter",
+      "🛡️ OWASP Vulnerability & Payload Simulator",
+      "🐳 Multi-Stage Dockerfile Inspector",
+      "🔷 TypeScript Type-Level Sandbox & Zod Validator",
+      "📊 Telemetry Stream & Correlation ID Tracer",
+      "🧱 Big-O Benchmark & Dijkstra Shortest Path Explorer"
+    ],
+    "contentChars": 17544,
+    "contentFiles": [
+      "js\\content\\modulos-data.js",
+      "js\\simulators\\simulador-principal.js"
+    ],
+    "sampleModuleNames": [
+      "Algoritmia, Estructuras de Datos y Pensamiento Computacional",
+      "M0 · Pensamiento Computacional y Notación Big-O",
+      "M1 · Estructuras de Datos Lineales: Pilas, Colas y Listas Enlazadas",
+      "M2 · Grafos y Algoritmo de Dijkstra para Rutas Óptimas",
+      "M3 · Benchmark de Rendimiento y Reto Final"
+    ],
+    "fixedSuccessSignals": []
+  },
+  {
+    "name": "guia-apis-modernas",
+    "manifest": true,
+    "entry": "index.html",
+    "title": "APIs Modernas: Más allá de REST (GraphQL, gRPC, WebSockets y SSE)",
+    "standard": "2.4.0",
+    "sections": 0,
+    "sources": [
+      "js\\content\\modulos-data.js",
+      "js\\simulators\\simulador-principal.js",
+      "js\\renderer.js",
+      "js\\learning-path.js",
+      "js\\portfolio.js",
+      "js\\main.js"
+    ],
+    "registry": true,
+    "glossary": 5,
+    "checkpoints": 5,
+    "sampleHeadings": [
+      "⚡ ApiLab — Resultados de Simulación"
+    ],
+    "contentChars": 8738,
+    "contentFiles": [
+      "js\\content\\modulos-data.js",
+      "js\\simulators\\simulador-principal.js"
+    ],
+    "sampleModuleNames": [
+      "APIs Modernas: Más allá de REST (GraphQL, gRPC, WebSockets y SSE)",
+      "M0 · Las Limitaciones de REST en Sistemas Modernos",
+      "M1 · Microservicios de Alta Velocidad con gRPC y Protocol Buffers",
+      "M2 · Comunicación Bidireccional en Tiempo Real con WebSockets",
+      "M3 · Consultas Flexibles con GraphQL y Reto Final"
+    ],
+    "fixedSuccessSignals": [
+      {
+        "file": "js\\simulators\\simulador-principal.js",
+        "line": 20,
+        "text": "<div style=\"color:#38bdf8;\">✔ Latencia promedio: 12.4 ms | Rendimiento: ÓPTIMO</div>"
+      },
+      {
+        "file": "js\\simulators\\simulador-principal.js",
+        "line": 21,
+        "text": "<div style=\"color:#e2e8f0;\">✔ Protocolo V.E.R.A.: 100% de verificaciones superadas.</div>"
+      }
+    ]
+  },
+  {
+    "name": "guia-arquitectura-software",
+    "manifest": true,
+    "entry": "index.html",
+    "title": "Arquitectura Limpia, Principios SOLID y Patrones de Diseño",
+    "standard": "2.4.0",
+    "sections": 0,
+    "sources": [
+      "js\\content\\modulos-data.js",
+      "js\\simulators\\simulador-principal.js",
+      "js\\renderer.js",
+      "js\\learning-path.js",
+      "js\\portfolio.js",
+      "js\\main.js"
+    ],
+    "registry": true,
+    "glossary": 3,
+    "checkpoints": 5,
+    "sampleHeadings": [
+      "🐘 PostgreSQL Query Planner & Index Optimizer",
+      "🌿 Git DAG & Rebase Interactive Simulator",
+      "🧩 GoF Design Pattern Linter & Test Harness (Refactoring Guru)",
+      "💎 SOLID Principles Static Analysis & Cohesion Scanner",
+      "📐 Hexagonal Architecture & Dependency Inversion Linter",
+      "🛡️ OWASP Vulnerability & Payload Simulator",
+      "🐳 Multi-Stage Dockerfile Inspector",
+      "🔷 TypeScript Type-Level Sandbox & Zod Validator",
+      "📊 Telemetry Stream & Correlation ID Tracer",
+      "🧱 Big-O Benchmark & Dijkstra Shortest Path Explorer"
+    ],
+    "contentChars": 21385,
+    "contentFiles": [
+      "js\\content\\modulos-data.js",
+      "js\\simulators\\simulador-principal.js"
+    ],
+    "sampleModuleNames": [
+      "Arquitectura Limpia, Principios SOLID y Patrones de Diseño",
+      "M0 · El Gran Monolito de Barro y Principios SOLID",
+      "M1 · Capas de Clean Architecture y Regla de Dependencia",
+      "M2 · Repository Pattern y Factory Pattern en Finanzas",
+      "M3 · Documentación Arquitectónica: Modelo C4 y ADRs"
+    ],
+    "fixedSuccessSignals": []
+  },
+  {
+    "name": "guia-bases-de-datos",
+    "manifest": true,
+    "entry": "index.html",
+    "title": "Bases de Datos Relacionales, SQL Avanzado y PostgreSQL Profundo",
+    "standard": "2.4.0",
+    "sections": 0,
+    "sources": [
+      "js\\content\\modulos-data.js",
+      "js\\simulators\\simulador-principal.js",
+      "js\\renderer.js",
+      "js\\learning-path.js",
+      "js\\portfolio.js",
+      "js\\main.js"
+    ],
+    "registry": true,
+    "glossary": 5,
+    "checkpoints": 5,
+    "sampleHeadings": [
+      "Pilares del Modelo Relacional:",
+      "Errores Comunes que Destruyen el Rendimiento:",
+      "Reglas de Oro de las Formas Normales:",
+      "🐘 PostgreSQL Query Planner & Index Optimizer",
+      "🌿 Git DAG & Rebase Interactive Simulator",
+      "📐 Hexagonal Architecture & Dependency Inversion Linter",
+      "🛡️ OWASP Vulnerability & Payload Simulator",
+      "🐳 Multi-Stage Dockerfile Inspector",
+      "🔷 TypeScript Type-Level Sandbox & Zod Validator",
+      "📊 Telemetry Stream & Correlation ID Tracer",
+      "🧱 Big-O Benchmark & Dijkstra Shortest Path Explorer"
+    ],
+    "contentChars": 34380,
+    "contentFiles": [
+      "js\\content\\modulos-data.js",
+      "js\\simulators\\simulador-principal.js"
+    ],
+    "sampleModuleNames": [
+      "Bases de Datos Relacionales, SQL Avanzado y PostgreSQL Profundo",
+      "M0 · Presentación y Modelo Relacional en Logística",
+      "M1 · El día que la base de datos colapsó en Black Friday",
+      "M2 · Normalización Formal: 1FN, 2FN, 3FN y BCNF",
+      "M3 · Tipos de Datos Avanzados de PostgreSQL",
+      "M4 · Consultas Complejas: Joins y Agregaciones",
+      "M5 · CTEs (Common Table Expressions) y Jerarquías",
+      "M6 · Window Functions para Analítica de Alto Rendimiento",
+      "M7 · Índices y Optimización con EXPLAIN ANALYZE",
+      "M8 · Transacciones ACID, Concurrencia y Bloqueos"
+    ],
+    "fixedSuccessSignals": []
+  },
+  {
+    "name": "guia-calidad",
+    "manifest": true,
+    "entry": "index.html",
+    "title": "Guía de Calidad del Software: Estándares, Métricas, Quality Gates e IA",
+    "standard": "2.4.0",
+    "sections": 10,
+    "sources": [
+      "js\\data-curriculum.js",
+      "js\\data-iso25010.js",
+      "js\\data-cleancode.js",
+      "js\\data-gems.js",
+      "js\\data-exercises.js",
+      "js\\simulators.js",
+      "js\\tools.js",
+      "js\\evidence.js",
+      "js\\app.js"
+    ],
+    "registry": true,
+    "glossary": 5,
+    "checkpoints": 5,
+    "sampleHeadings": [
+      "Aseguramiento de Calidad (Quality Assurance - QA)",
+      "Control de Calidad (Quality Control - QC)",
+      "Sistemas y Software de Ingeniería — Requisitos de Calidad y Evaluación de Software (SQuaRE)",
+      "Clean Code, Principios SOLID y Mitigación de Deuda Técnica",
+      "Gema 1: Auditor y Arquitecto ISO/IEC 25010",
+      "Gema 2: SonarGema — Clean Code & Refactoring Mentor",
+      "Gema 3: TestCraft AI — Generador de Suites de Pruebas",
+      "Gema 4: Quality Gate & CI/CD Enforcer",
+      "Gema 5: Root Cause Analysis (RCA) & Bug Hunter",
+      "Gema 6: Redactor del Formato de Evidencias de Calidad SENA",
+      "1. Cálculo de Complejidad Ciclomática de McCabe",
+      "2. Detección de Violación de Principios SOLID (SRP)",
+      "3. Técnica de Prueba de Valores Límite (BVA)",
+      "4. Diagnóstico de la Pirámide de Pruebas"
+    ],
+    "contentChars": 115145,
+    "contentFiles": [
+      "js\\data-curriculum.js",
+      "js\\data-iso25010.js",
+      "js\\data-cleancode.js",
+      "js\\data-gems.js",
+      "js\\data-exercises.js",
+      "js\\simulators.js"
+    ],
+    "sampleModuleNames": [
+      "Aseguramiento de Calidad (Quality Assurance - QA)",
+      "Control de Calidad (Quality Control - QC)",
+      "Sistemas y Software de Ingeniería — Requisitos de Calidad y Evaluación de Software (SQuaRE)",
+      "Clean Code, Principios SOLID y Mitigación de Deuda Técnica",
+      "Gema 1: Auditor y Arquitecto ISO/IEC 25010",
+      "Gema 2: SonarGema — Clean Code & Refactoring Mentor",
+      "Gema 3: TestCraft AI — Generador de Suites de Pruebas",
+      "Gema 4: Quality Gate & CI/CD Enforcer",
+      "Gema 5: Root Cause Analysis (RCA) & Bug Hunter",
+      "Gema 6: Redactor del Formato de Evidencias de Calidad SENA"
+    ],
+    "fixedSuccessSignals": []
+  },
+  {
+    "name": "guia-configuracion-espacio-ia",
+    "manifest": true,
+    "entry": "index.html",
+    "title": "Configuración y Gobernanza del Espacio de Trabajo con IA",
+    "standard": "2.4.0",
+    "sections": 0,
+    "sources": [
+      "js\\content\\modulos-data.js",
+      "js\\simulators\\simulador-principal.js",
+      "js\\renderer.js",
+      "js\\learning-path.js",
+      "js\\portfolio.js",
+      "js\\main.js"
+    ],
+    "registry": true,
+    "glossary": 3,
+    "checkpoints": 5,
+    "sampleHeadings": [
+      "Configuración y Gobernanza del Espacio de Trabajo de Desarrollo con Inteligencia Artificial",
+      "M0 · El Cambio de Paradigma: Del Chat Desgobernado al Espacio AI-Ready",
+      "El Paradigma del Espacio de Trabajo Gobernado",
+      "M1 · Runtime Limpio, Puertos Locales y Git Estandarizado",
+      "Matriz de Puertos y Servicios Locales",
+      "M2 · Estrategia Zero-Leak de Secretos y Credenciales",
+      "La Jerarquía de Seguridad Zero-Leak",
+      "M3 · Laboratorio: Simulador de Escaneo Pre-Commit",
+      "Simulador de Intercepción de Secretos",
+      "M4 · Integración y Conectores del Protocolo MCP",
+      "El Protocolo MCP en la Práctica",
+      "M5 · Sincronización de Reglas Multi-IDE (Rules SSoT)",
+      "Directivas Unificadas SSoT",
+      "M6 · Smoke Tests Automatizados y Formato Final de Evidencias"
+    ],
+    "contentChars": 17360,
+    "contentFiles": [
+      "js\\content\\modulos-data.js",
+      "js\\simulators\\simulador-principal.js"
+    ],
+    "sampleModuleNames": [
+      "Configuración y Gobernanza del Espacio de Trabajo de Desarrollo con Inteligencia Artificial",
+      "M0 · El Cambio de Paradigma: Del Chat Desgobernado al Espacio AI-Ready",
+      "M1 · Runtime Limpio, Puertos Locales y Git Estandarizado",
+      "M2 · Estrategia Zero-Leak de Secretos y Credenciales",
+      "M3 · Laboratorio: Simulador de Escaneo Pre-Commit",
+      "M4 · Integración y Conectores del Protocolo MCP",
+      "M5 · Sincronización de Reglas Multi-IDE (Rules SSoT)",
+      "M6 · Smoke Tests Automatizados y Formato Final de Evidencias",
+      "M7 · Cierre de Guía y Juicio Evaluativo"
+    ],
+    "fixedSuccessSignals": []
+  },
+  {
+    "name": "guia-devops-docker",
+    "manifest": true,
+    "entry": "index.html",
+    "title": "DevOps, Contenedores Docker, Nginx y Despliegue Continuo (CI/CD)",
+    "standard": "2.4.0",
+    "sections": 0,
+    "sources": [
+      "js\\content\\modulos-data.js",
+      "js\\simulators\\simulador-principal.js",
+      "js\\renderer.js",
+      "js\\learning-path.js",
+      "js\\portfolio.js",
+      "js\\main.js"
+    ],
+    "registry": true,
+    "glossary": 3,
+    "checkpoints": 5,
+    "sampleHeadings": [
+      "🐘 PostgreSQL Query Planner & Index Optimizer",
+      "🌿 Git DAG & Rebase Interactive Simulator",
+      "📐 Hexagonal Architecture & Dependency Inversion Linter",
+      "🛡️ OWASP Vulnerability & Payload Simulator",
+      "🐳 Multi-Stage Dockerfile Inspector",
+      "🔷 TypeScript Type-Level Sandbox & Zod Validator",
+      "📊 Telemetry Stream & Correlation ID Tracer",
+      "🧱 Big-O Benchmark & Dijkstra Shortest Path Explorer"
+    ],
+    "contentChars": 17530,
+    "contentFiles": [
+      "js\\content\\modulos-data.js",
+      "js\\simulators\\simulador-principal.js"
+    ],
+    "sampleModuleNames": [
+      "DevOps, Contenedores Docker, Nginx y Despliegue Continuo (CI/CD)",
+      "M0 · El Síndrome de ",
+      "M1 · Dockerfiles Multietapa (Multi-Stage Builds) de Producción",
+      "M2 · Orquestación Multi-Servicio con Docker Compose",
+      "M3 · Pipelines de Integración y Despliegue Continuo (CI/CD)"
+    ],
+    "fixedSuccessSignals": []
+  },
+  {
+    "name": "guia-documentacion-software",
+    "manifest": true,
+    "entry": "index.html",
+    "title": "Documentación Integral del Software: Manuales, Arquitectura, ADRs y Runbooks",
+    "standard": "2.4.0",
+    "sections": 0,
+    "sources": [
+      "js\\content\\modulos-data.js",
+      "js\\simulators\\simulador-principal.js",
+      "js\\renderer.js",
+      "js\\learning-path.js",
+      "js\\portfolio.js",
+      "js\\main.js"
+    ],
+    "registry": true,
+    "glossary": 5,
+    "checkpoints": 5,
+    "sampleHeadings": [
+      "📚 DocLab — Resultados de Simulación"
+    ],
+    "contentChars": 8547,
+    "contentFiles": [
+      "js\\content\\modulos-data.js",
+      "js\\simulators\\simulador-principal.js"
+    ],
+    "sampleModuleNames": [
+      "Documentación Integral del Software: Manuales, Arquitectura, ADRs y Runbooks",
+      "M0 · La Documentación como Entregable de Primera Clase",
+      "M1 · Manual Técnico de Arquitectura y Diccionario de Datos",
+      "M2 · Manual de Usuario Ilustrado y Guías de Operación",
+      "M3 · Paquete Documental Completo y Reto Final"
+    ],
+    "fixedSuccessSignals": [
+      {
+        "file": "js\\simulators\\simulador-principal.js",
+        "line": 20,
+        "text": "<div style=\"color:#38bdf8;\">✔ Calidad de aserciones: 100% | Cobertura efectiva: ÓPTIMA</div>"
+      },
+      {
+        "file": "js\\simulators\\simulador-principal.js",
+        "line": 21,
+        "text": "<div style=\"color:#e2e8f0;\">✔ Protocolo V.E.R.A.: 100% de verificaciones superadas.</div>"
+      }
+    ]
+  },
+  {
+    "name": "guia-event-driven-redis",
+    "manifest": true,
+    "entry": "index.html",
+    "title": "Arquitectura Basada en Eventos, Mensajería y Caching con Redis",
+    "standard": "2.4.0",
+    "sections": 0,
+    "sources": [
+      "js\\content\\modulos-data.js",
+      "js\\simulators\\simulador-principal.js",
+      "js\\renderer.js",
+      "js\\learning-path.js",
+      "js\\portfolio.js",
+      "js\\main.js"
+    ],
+    "registry": true,
+    "glossary": 5,
+    "checkpoints": 5,
+    "sampleHeadings": [
+      "📬 EventLab — Resultados de Simulación"
+    ],
+    "contentChars": 8855,
+    "contentFiles": [
+      "js\\content\\modulos-data.js",
+      "js\\simulators\\simulador-principal.js"
+    ],
+    "sampleModuleNames": [
+      "Arquitectura Basada en Eventos, Mensajería y Caching con Redis",
+      "M0 · El Colapso de las Llamadas Síncronas en Cascada",
+      "M1 · Estrategias de Caché: Cache-Aside, TTL y Throttling",
+      "M2 · Redis Streams y Consumer Groups para Trabajo Distribuido",
+      "M3 · Transacciones Distribuidas (Saga Pattern) y Reto Final"
+    ],
+    "fixedSuccessSignals": [
+      {
+        "file": "js\\simulators\\simulador-principal.js",
+        "line": 20,
+        "text": "<div style=\"color:#38bdf8;\">✔ Latencia promedio: 12.4 ms | Rendimiento: ÓPTIMO</div>"
+      },
+      {
+        "file": "js\\simulators\\simulador-principal.js",
+        "line": 21,
+        "text": "<div style=\"color:#e2e8f0;\">✔ Protocolo V.E.R.A.: 100% de verificaciones superadas.</div>"
+      }
+    ]
+  },
+  {
+    "name": "guia-fastapi",
+    "manifest": true,
+    "entry": "index.html",
+    "title": "FastAPI: el backend que dará vida a la app Flutter",
+    "standard": "2.4.0",
+    "sections": 14,
+    "sources": [
+      "js\\renderer.js",
+      "js\\renderer-diagrams.js",
+      "js\\enhancements.js",
+      "js\\lib\\zip.js",
+      "js\\descargas.js",
+      "js\\simulators\\sim-base.js",
+      "js\\content\\codigo\\m1-setup.js",
+      "js\\content\\codigo\\m3-persistencia.js",
+      "js\\content\\codigo\\transferencia.js",
+      "js\\content\\codigo\\paquete-arranque.js",
+      "js\\content\\modulos-00-inicio.js",
+      "js\\content\\modulos-01-reflexion.js",
+      "js\\content\\modulos-02-contexto.js",
+      "js\\content\\modulos-02b-entorno.js",
+      "js\\content\\modulos-03-setup.js",
+      "js\\content\\modulos-04-pydantic.js",
+      "js\\content\\modulos-05-persistencia.js",
+      "js\\content\\modulos-06-routers.js",
+      "js\\content\\modulos-07-depends.js",
+      "js\\content\\modulos-08-jwt.js",
+      "js\\content\\modulos-09-errores.js",
+      "js\\content\\modulos-10-entrega.js",
+      "js\\content\\modulos-11-calidad.js",
+      "js\\content\\modulos-11b-escala.js",
+      "js\\content\\modulos-12-transferencia.js",
+      "js\\content\\indice.js",
+      "js\\simulators\\lib\\route-codegen.js",
+      "js\\simulators\\lib\\dart-codegen.js",
+      "js\\simulators\\lib\\jwt-codec.js",
+      "js\\simulators\\lib\\sge-escenarios.js",
+      "js\\simulators\\async-race.js",
+      "js\\simulators\\route-studio.js",
+      "js\\simulators\\cors-ataque.js",
+      "js\\simulators\\pydantic-validator.js",
+      "js\\simulators\\pydantic-dart.js",
+      "js\\simulators\\depends-inspector.js",
+      "js\\simulators\\jwt-flow.js",
+      "js\\simulators\\bug-hunter.js",
+      "js\\simulators\\network-helper.js",
+      "js\\simulators\\flutter-screen.js",
+      "js\\registro-entregables.js",
+      "js\\evidencias.js",
+      "js\\dashboard-link.js",
+      "js\\learning-path.js",
+      "js\\search.js",
+      "js\\portfolio.js",
+      "js\\main.js"
+    ],
+    "registry": true,
+    "glossary": 8,
+    "checkpoints": 6,
+    "sampleHeadings": [
+      "La carrera: 50 celulares contra dos servidores",
+      "La estación que conecta el servidor con el celular",
+      "Principio rector de la guía",
+      "El esqueleto, listo para arrancar",
+      "Qué hacer con el .zip, en tres minutos",
+      "Datos del caso",
+      "El día que la app del almacén se congeló",
+      "El caso",
+      "WSGI síncrono",
+      "Flask + Gunicorn, 4 trabajadores",
+      "ASGI asíncrono",
+      "FastAPI + Uvicorn, 1 bucle de eventos",
+      "La idea que hay que entender antes de seguir",
+      "El borrador del acuerdo, en veinte minutos"
+    ],
+    "contentChars": 474515,
+    "contentFiles": [
+      "js\\simulators\\sim-base.js",
+      "js\\content\\codigo\\m1-setup.js",
+      "js\\content\\codigo\\m3-persistencia.js",
+      "js\\content\\codigo\\transferencia.js",
+      "js\\content\\codigo\\paquete-arranque.js",
+      "js\\content\\modulos-00-inicio.js",
+      "js\\content\\modulos-01-reflexion.js",
+      "js\\content\\modulos-02-contexto.js",
+      "js\\content\\modulos-02b-entorno.js",
+      "js\\content\\modulos-03-setup.js",
+      "js\\content\\modulos-04-pydantic.js",
+      "js\\content\\modulos-05-persistencia.js",
+      "js\\content\\modulos-06-routers.js",
+      "js\\content\\modulos-07-depends.js",
+      "js\\content\\modulos-08-jwt.js",
+      "js\\content\\modulos-09-errores.js",
+      "js\\content\\modulos-10-entrega.js",
+      "js\\content\\modulos-11-calidad.js",
+      "js\\content\\modulos-11b-escala.js",
+      "js\\content\\modulos-12-transferencia.js",
+      "js\\content\\indice.js",
+      "js\\simulators\\lib\\route-codegen.js",
+      "js\\simulators\\lib\\dart-codegen.js",
+      "js\\simulators\\lib\\jwt-codec.js",
+      "js\\simulators\\lib\\sge-escenarios.js",
+      "js\\simulators\\async-race.js",
+      "js\\simulators\\route-studio.js",
+      "js\\simulators\\cors-ataque.js",
+      "js\\simulators\\pydantic-validator.js",
+      "js\\simulators\\pydantic-dart.js",
+      "js\\simulators\\depends-inspector.js",
+      "js\\simulators\\jwt-flow.js",
+      "js\\simulators\\bug-hunter.js",
+      "js\\simulators\\network-helper.js",
+      "js\\simulators\\flutter-screen.js"
+    ],
+    "sampleModuleNames": [
+      "La carrera: 50 celulares contra dos servidores",
+      "La estación que conecta el servidor con el celular",
+      "Principio rector de la guía",
+      "El esqueleto, listo para arrancar",
+      "Qué hacer con el .zip, en tres minutos",
+      "Datos del caso",
+      "El día que la app del almacén se congeló",
+      "El caso",
+      "WSGI síncrono",
+      "Flask + Gunicorn, 4 trabajadores"
+    ],
+    "fixedSuccessSignals": []
+  },
+  {
+    "name": "Guia-Flask",
+    "manifest": true,
+    "entry": "index.html",
+    "title": "Python Flask: Desarrollo de Aplicaciones Web Monolíticas y Patrón MVC",
+    "standard": "2.4.0",
+    "sections": 4,
+    "sources": [],
+    "registry": true,
+    "glossary": 3,
+    "checkpoints": 3,
+    "sampleHeadings": [
+      "🐍 Guía de Desarrollo Web Monolítico con Python Flask & MVC",
+      "🏛️ Arquitectura MVC & Contextos de Flask",
+      "🔒 Autenticación, Hashing de Claves y Sesiones",
+      "📦 Aplicación Monolítica de Gestión de Inventarios",
+      "📄 Consolidación del Formato de Evidencias"
+    ],
+    "contentChars": 2769,
+    "contentFiles": [
+      "index.html"
+    ],
+    "sampleModuleNames": [],
+    "fixedSuccessSignals": []
+  },
+  {
+    "name": "guia-flutter",
+    "manifest": true,
+    "entry": "index.html",
+    "title": "Flutter: la app que convierte SGE-API en pantallas",
+    "standard": "2.4.0",
+    "sections": 0,
+    "sources": [
+      "js\\renderer.js",
+      "js\\renderer-diagrams.js",
+      "js\\enhancements.js",
+      "js\\lib\\zip.js",
+      "js\\descargas.js",
+      "js\\simulators\\sim-base.js",
+      "js\\content\\codigo\\proyecto.js",
+      "js\\content\\modulos-00-inicio.js",
+      "js\\content\\modulos-01-reflexion.js",
+      "js\\content\\modulos-01b-entorno.js",
+      "js\\content\\modulos-02-dart.js",
+      "js\\content\\modulos-03-widgets.js",
+      "js\\content\\modulos-04-layout.js",
+      "js\\content\\modulos-05-diseno.js",
+      "js\\content\\modulos-06-modelos.js",
+      "js\\content\\modulos-07-red.js",
+      "js\\content\\modulos-08-estado.js",
+      "js\\content\\modulos-09-sesion.js",
+      "js\\content\\modulos-10-listas.js",
+      "js\\content\\modulos-11-calidad.js",
+      "js\\content\\modulos-11b-escala.js",
+      "js\\content\\modulos-12-transferencia.js",
+      "js\\content\\indice.js",
+      "js\\simulators\\lib\\contraste.js",
+      "js\\simulators\\lib\\json-dart.js",
+      "js\\simulators\\lib\\sge-cliente.js",
+      "js\\simulators\\widget-tree.js",
+      "js\\simulators\\layout.js",
+      "js\\simulators\\tema.js",
+      "js\\simulators\\json-dart.js",
+      "js\\simulators\\red.js",
+      "js\\simulators\\estados.js",
+      "js\\simulators\\sesion.js",
+      "js\\simulators\\paginacion.js",
+      "js\\simulators\\pruebas.js",
+      "js\\registro-entregables.js",
+      "js\\evidencias.js",
+      "js\\dashboard-link.js",
+      "js\\learning-path.js",
+      "js\\search.js",
+      "js\\portfolio.js",
+      "js\\main.js"
+    ],
+    "registry": true,
+    "glossary": 8,
+    "checkpoints": 3,
+    "sampleHeadings": [
+      "SGE Móvil",
+      "SGE Móvil",
+      "La estación donde el JSON se vuelve pantalla",
+      "Qué hay que traer de la estación anterior",
+      "El proyecto completo, listo para ejecutar",
+      "Qué hacer con el .zip",
+      "Datos personales",
+      "La app que se veía bien y nadie podía usar",
+      "Lo que hacía la app",
+      "Dos estados: cargando y con datos",
+      "Los cuatro finales posibles",
+      "Ninguno se puede saltar",
+      "Vacío no es lo mismo que cargando, y ninguno es un error",
+      "Lo que salía en pantalla"
+    ],
+    "contentChars": 568278,
+    "contentFiles": [
+      "js\\simulators\\sim-base.js",
+      "js\\content\\codigo\\proyecto.js",
+      "js\\content\\modulos-00-inicio.js",
+      "js\\content\\modulos-01-reflexion.js",
+      "js\\content\\modulos-01b-entorno.js",
+      "js\\content\\modulos-02-dart.js",
+      "js\\content\\modulos-03-widgets.js",
+      "js\\content\\modulos-04-layout.js",
+      "js\\content\\modulos-05-diseno.js",
+      "js\\content\\modulos-06-modelos.js",
+      "js\\content\\modulos-07-red.js",
+      "js\\content\\modulos-08-estado.js",
+      "js\\content\\modulos-09-sesion.js",
+      "js\\content\\modulos-10-listas.js",
+      "js\\content\\modulos-11-calidad.js",
+      "js\\content\\modulos-11b-escala.js",
+      "js\\content\\modulos-12-transferencia.js",
+      "js\\content\\indice.js",
+      "js\\simulators\\lib\\contraste.js",
+      "js\\simulators\\lib\\json-dart.js",
+      "js\\simulators\\lib\\sge-cliente.js",
+      "js\\simulators\\widget-tree.js",
+      "js\\simulators\\layout.js",
+      "js\\simulators\\tema.js",
+      "js\\simulators\\json-dart.js",
+      "js\\simulators\\red.js",
+      "js\\simulators\\estados.js",
+      "js\\simulators\\sesion.js",
+      "js\\simulators\\paginacion.js",
+      "js\\simulators\\pruebas.js"
+    ],
+    "sampleModuleNames": [
+      "SGE Móvil",
+      "SGE Móvil",
+      "La estación donde el JSON se vuelve pantalla",
+      "Qué hay que traer de la estación anterior",
+      "El proyecto completo, listo para ejecutar",
+      "Qué hacer con el .zip",
+      "Datos personales",
+      "La app que se veía bien y nadie podía usar",
+      "Lo que hacía la app",
+      "Dos estados: cargando y con datos"
+    ],
+    "fixedSuccessSignals": []
+  },
+  {
+    "name": "guia-git-github",
+    "manifest": true,
+    "entry": "index.html",
+    "title": "Git Profesional, Trunk-Based Development y Colaboración en Equipo",
+    "standard": "2.4.0",
+    "sections": 0,
+    "sources": [
+      "js\\content\\gitopedia-data.js",
+      "js\\content\\modulos-fase1.js",
+      "js\\content\\modulos-fase2.js",
+      "js\\content\\modulos-data.js",
+      "js\\simulators\\dag-graph.js",
+      "js\\simulators\\terminal-engine.js",
+      "js\\simulators\\quiz-engine.js",
+      "js\\simulators\\simulador-principal.js",
+      "js\\renderer.js",
+      "js\\learning-path.js",
+      "js\\portfolio.js",
+      "js\\main.js"
+    ],
+    "registry": true,
+    "glossary": 5,
+    "checkpoints": 5,
+    "sampleHeadings": [
+      "M0 · Presentación: La Máquina del Tiempo de Git",
+      "Configuración Inicial Profesional en Windows",
+      "M1 · El Commit que Destruyó Dos Semanas de Trabajo",
+      "Análisis Forense de Diferencia de Ramas",
+      "M2 · Anatomía Interna de Git: Blobs, Trees y Commits",
+      "Inspección de Objetos Git con cat-file",
+      "M3 · Ramas, Fast-Forward y Fusiones de 3 Vías",
+      "Creación de Ramas y Fusión de Funcionalidad",
+      "M4 · Rebase Interactivo: Reescribir la Historia Limpiamente",
+      "Consolidación de Commits con Squash",
+      "M5 · Rescate de Emergencia con git reflog y git reset",
+      "Protocolo de Rescate de Commits Perdidos",
+      "M6 · Trunk-Based Development frente a GitFlow",
+      "Feature Flag en TypeScript para Integración Continua"
+    ],
+    "contentChars": 50226,
+    "contentFiles": [
+      "js\\content\\gitopedia-data.js",
+      "js\\content\\modulos-fase1.js",
+      "js\\content\\modulos-fase2.js",
+      "js\\content\\modulos-data.js",
+      "js\\simulators\\dag-graph.js",
+      "js\\simulators\\terminal-engine.js",
+      "js\\simulators\\quiz-engine.js",
+      "js\\simulators\\simulador-principal.js"
+    ],
+    "sampleModuleNames": [
+      "M0 · Presentación: La Máquina del Tiempo de Git",
+      "Configuración Inicial Profesional en Windows",
+      "M1 · El Commit que Destruyó Dos Semanas de Trabajo",
+      "Análisis Forense de Diferencia de Ramas",
+      "M2 · Anatomía Interna de Git: Blobs, Trees y Commits",
+      "Inspección de Objetos Git con cat-file",
+      "M3 · Ramas, Fast-Forward y Fusiones de 3 Vías",
+      "Creación de Ramas y Fusión de Funcionalidad",
+      "M4 · Rebase Interactivo: Reescribir la Historia Limpiamente",
+      "Consolidación de Commits con Squash"
+    ],
+    "fixedSuccessSignals": []
+  },
+  {
+    "name": "guia-ia",
+    "manifest": false,
+    "entry": "web\\index.html",
+    "title": null,
+    "standard": null,
+    "sections": 2,
+    "sources": [
+      "web\\src\\js\\course-config.js",
+      "web\\src\\js\\api-client.js",
+      "web\\src\\js\\module-runtime.js",
+      "web\\src\\js\\config\\learning-config.js",
+      "web\\src\\js\\config\\gems-config.js",
+      "web\\src\\js\\app.js",
+      "web\\src\\js\\dna_components.js",
+      "web\\src\\js\\sovereign_ui.js",
+      "web\\src\\core\\secret-terminal.js"
+    ],
+    "registry": false,
+    "glossary": 0,
+    "checkpoints": 0,
+    "sampleHeadings": [
+      "Elige el enfoque que más se parece a tu trabajo",
+      "Usuario Cotidiano",
+      "Personal Administrativo",
+      "Docente / Educador",
+      "Coordinador / Líder",
+      "Analista de Datos",
+      "Emprendedor",
+      "Aprende a Usar la IA en tu Trabajo y tu Vida",
+      "Vida Laboral",
+      "Vida Personal",
+      "Aprender Jugando",
+      "Empieza por una victoria rapida y sigue una progresion clara",
+      "CERTIFICADO DE EXCELENCIA",
+      "Constitución Técnica Antigravity"
+    ],
+    "contentChars": 27348,
+    "contentFiles": [
+      "web\\index.html"
+    ],
+    "sampleModuleNames": [],
+    "fixedSuccessSignals": []
+  },
+  {
+    "name": "guia-induccion",
+    "manifest": true,
+    "entry": "index.html",
+    "title": "Inducción a la Formación Profesional Integral SENA y Ruta ADSO",
+    "standard": "2.4.0",
+    "sections": 6,
+    "sources": [],
+    "registry": true,
+    "glossary": 3,
+    "checkpoints": 3,
+    "sampleHeadings": [
+      "Bienvenido a tu Ruta Tecnológica ADSO SENA",
+      "\"Hello World\" — El Mercado Tech",
+      "Cloud Computing",
+      "¿Qué hace el tecnólogo?",
+      "Big Data & Datos",
+      "¿Qué hace el tecnólogo?",
+      "Desarrollo Web & Móvil",
+      "¿Qué hace el tecnólogo?",
+      "Ciberseguridad & QA",
+      "¿Qué hace el tecnólogo?",
+      "El Timebox — Tiempos y Estructura ADSO",
+      "Hito 1: Fundamentos e Inducción SENA",
+      "El Ciclo de Vida del Software (Competencias Técnicas)",
+      "1. Análisis"
+    ],
+    "contentChars": 76344,
+    "contentFiles": [
+      "index.html"
+    ],
+    "sampleModuleNames": [],
+    "fixedSuccessSignals": []
+  },
+  {
+    "name": "guia-jsp",
+    "manifest": true,
+    "entry": "index.html",
+    "title": "Java Empresarial: Servlets, JSP, JDBC y Arquitectura en Capas",
+    "standard": "2.4.0",
+    "sections": 4,
+    "sources": [],
+    "registry": true,
+    "glossary": 3,
+    "checkpoints": 3,
+    "sampleHeadings": [
+      "☕ Guía de Java Empresarial: Servlets, JSP, JDBC & Arquitectura en Capas",
+      "🏛️ Ciclo de Vida de Servlets & Pools JDBC",
+      "⚙️ Patrón DAO & Transacciones ACID",
+      "🚀 Vistas JSTL & Despliegue WAR en Tomcat",
+      "📄 consolidación del Formato de Evidencias Empresarial"
+    ],
+    "contentChars": 2787,
+    "contentFiles": [
+      "index.html"
+    ],
+    "sampleModuleNames": [],
+    "fixedSuccessSignals": []
+  },
+  {
+    "name": "guia-legal-software-dian",
+    "manifest": true,
+    "entry": "index.html",
+    "title": "Marco Legal, Licenciamiento y Cumplimiento Tributario DIAN en Software",
+    "standard": "2.4.0",
+    "sections": 12,
+    "sources": [
+      "js\\data-laws.js",
+      "js\\data-cases.js",
+      "js\\data-gems.js",
+      "js\\data-tools.js",
+      "js\\data-sectoral.js",
+      "js\\foundations.js",
+      "js\\simulators.js",
+      "js\\sectoral.js",
+      "js\\exercises.js",
+      "js\\evidence.js",
+      "js\\gems.js",
+      "js\\tools.js",
+      "js\\app.js"
+    ],
+    "registry": false,
+    "glossary": 0,
+    "checkpoints": 0,
+    "sampleHeadings": [
+      "Régimen General de Derecho de Autor y Asimilación del Software a Obra Literaria",
+      "Reglamentación del Registro del Soporte Lógico (Software) en la DNDA",
+      "Presunción de Cesión de Derechos Patrimoniales en Obras por Encargo y Laborales",
+      "Cumplimiento de Propiedad Intelectual en Informes de Gestión Empresarial",
+      "De la Protección de la Información y de los Datos (Delitos Informáticos)",
+      "Régimen General de Protección de Datos Personales (Habeas Data)",
+      "Estatuto del Consumidor en Comercio Electrónico y Plataformas Digitales",
+      "Comercio Electrónico, Mensajes de Datos, Firmas Digitales y Valor Probatorio",
+      "Arquitectura Fiscal del Software, IVA, Retenciones y Régimen Simple (RST)",
+      "Sistema de Facturación Electrónica UBL 2.1 con Validación Previa",
+      "Régimen de Retenciones en la Fuente por Pagos Digitales y Agregadores",
+      "Registro RADIAN: Factura Electrónica como Título Valor, Factoring y Eventos Obligatorios",
+      "Documento Soporte de Pago de Nómina Electrónica y Notas de Ajuste (CUNE)",
+      "Documento Soporte Electrónico en Adquisiciones a No Obligados a Facturar (CUDS)"
+    ],
+    "contentChars": 312506,
+    "contentFiles": [
+      "js\\data-laws.js",
+      "js\\data-cases.js",
+      "js\\data-gems.js",
+      "js\\data-tools.js",
+      "js\\data-sectoral.js",
+      "js\\simulators.js"
+    ],
+    "sampleModuleNames": [
+      "Régimen General de Derecho de Autor y Asimilación del Software a Obra Literaria",
+      "Reglamentación del Registro del Soporte Lógico (Software) en la DNDA",
+      "Presunción de Cesión de Derechos Patrimoniales en Obras por Encargo y Laborales",
+      "Cumplimiento de Propiedad Intelectual en Informes de Gestión Empresarial",
+      "De la Protección de la Información y de los Datos (Delitos Informáticos)",
+      "Régimen General de Protección de Datos Personales (Habeas Data)",
+      "Estatuto del Consumidor en Comercio Electrónico y Plataformas Digitales",
+      "Comercio Electrónico, Mensajes de Datos, Firmas Digitales y Valor Probatorio",
+      "Arquitectura Fiscal del Software, IVA, Retenciones y Régimen Simple (RST)",
+      "Sistema de Facturación Electrónica UBL 2.1 con Validación Previa"
+    ],
+    "fixedSuccessSignals": []
+  },
+  {
+    "name": "guia-observabilidad",
+    "manifest": true,
+    "entry": "index.html",
+    "title": "Observabilidad, Logging Estructurado, Métricas y Telemetría",
+    "standard": "2.4.0",
+    "sections": 0,
+    "sources": [
+      "js\\content\\modulos-data.js",
+      "js\\simulators\\simulador-principal.js",
+      "js\\renderer.js",
+      "js\\learning-path.js",
+      "js\\portfolio.js",
+      "js\\main.js"
+    ],
+    "registry": true,
+    "glossary": 3,
+    "checkpoints": 5,
+    "sampleHeadings": [
+      "🐘 PostgreSQL Query Planner & Index Optimizer",
+      "🌿 Git DAG & Rebase Interactive Simulator",
+      "📐 Hexagonal Architecture & Dependency Inversion Linter",
+      "🛡️ OWASP Vulnerability & Payload Simulator",
+      "🐳 Multi-Stage Dockerfile Inspector",
+      "🔷 TypeScript Type-Level Sandbox & Zod Validator",
+      "📊 Telemetry Stream & Correlation ID Tracer",
+      "🧱 Big-O Benchmark & Dijkstra Shortest Path Explorer"
+    ],
+    "contentChars": 17591,
+    "contentFiles": [
+      "js\\content\\modulos-data.js",
+      "js\\simulators\\simulador-principal.js"
+    ],
+    "sampleModuleNames": [
+      "Observabilidad, Logging Estructurado, Métricas y Telemetría",
+      "M0 · Los Tres Pilares de la Observabilidad",
+      "M1 · Logging Estructurado JSON y Correlación con Trace ID",
+      "M2 · Métricas RED (Rate, Errors, Duration) y Dashboards",
+      "M3 · Runbooks de Incidentes, SLAs y Reto Final"
+    ],
+    "fixedSuccessSignals": []
+  },
+  {
+    "name": "guia-orquestacion-agentes-ia",
+    "manifest": true,
+    "entry": "index.html",
+    "title": "Orquestación y Trabajo con Agentes Autónomos de IA en SDLC",
+    "standard": "2.4.0",
+    "sections": 0,
+    "sources": [
+      "js\\content\\modulos-data.js",
+      "js\\simulators\\simulador-principal.js",
+      "js\\renderer.js",
+      "js\\learning-path.js",
+      "js\\portfolio.js",
+      "js\\main.js"
+    ],
+    "registry": true,
+    "glossary": 3,
+    "checkpoints": 5,
+    "sampleHeadings": [
+      "Orquestación y Trabajo con Agentes Autónomos de IA en el Desarrollo de Software",
+      "M0 · El Colapso del Chat Monolítico y la Emergencia Agéntica",
+      "El Paradigma Antiguo vs. La Era Agéntica",
+      "M1 · Especificación Formal del Catálogo de 6 Agentes",
+      "Anatomía de un Agente Especializado",
+      "M2 · Laboratorio Interactivo: Simulador de Swarm Agéntico",
+      "Orquestación en Tiempo Real",
+      "M3 · Protocolo de Traspaso Inmutable (Agent Handover)",
+      "Eliminación de la Contaminación Cruzada",
+      "M4 · Arquitectura Vertical Slices y Contratos OpenAPI 3.1",
+      "Vertical Slices: Modularidad Real",
+      "M5 · Construcción TDD Autónoma con el Coding Agent",
+      "TDD: El Ancla Determinista de la IA",
+      "M6 · Quality Gate Adversarial y Auditoría con Reviewer Agent"
+    ],
+    "contentChars": 26828,
+    "contentFiles": [
+      "js\\content\\modulos-data.js",
+      "js\\simulators\\simulador-principal.js"
+    ],
+    "sampleModuleNames": [
+      "Orquestación y Trabajo con Agentes Autónomos de IA en el Desarrollo de Software",
+      "M0 · El Colapso del Chat Monolítico y la Emergencia Agéntica",
+      "M1 · Especificación Formal del Catálogo de 6 Agentes",
+      "M2 · Laboratorio Interactivo: Simulador de Swarm Agéntico",
+      "M3 · Protocolo de Traspaso Inmutable (Agent Handover)",
+      "M4 · Arquitectura Vertical Slices y Contratos OpenAPI 3.1",
+      "M5 · Construcción TDD Autónoma con el Coding Agent",
+      "M6 · Quality Gate Adversarial y Auditoría con Reviewer Agent",
+      "M7 · Empaquetado Endurecido y CI/CD con el DevOps Agent",
+      "M8 · Reto Integrador: Construcción del Módulo de Notificaciones"
+    ],
+    "fixedSuccessSignals": []
+  },
+  {
+    "name": "guia-refactoring-legacy",
+    "manifest": true,
+    "entry": "index.html",
+    "title": "Mantenimiento, Refactorización de Código Legacy y Patrón Strangler",
+    "standard": "2.4.0",
+    "sections": 0,
+    "sources": [
+      "js\\content\\modulos-data.js",
+      "js\\simulators\\simulador-principal.js",
+      "js\\renderer.js",
+      "js\\learning-path.js",
+      "js\\portfolio.js",
+      "js\\main.js"
+    ],
+    "registry": true,
+    "glossary": 5,
+    "checkpoints": 5,
+    "sampleHeadings": [
+      "🔧 LegacyArena — Resultados de Simulación"
+    ],
+    "contentChars": 8749,
+    "contentFiles": [
+      "js\\content\\modulos-data.js",
+      "js\\simulators\\simulador-principal.js"
+    ],
+    "sampleModuleNames": [
+      "Mantenimiento, Refactorización de Código Legacy y Patrón Strangler",
+      "M0 · ¿Qué es Código Legacy y Deuda Técnica?",
+      "M1 · Pruebas de Caracterización (Golden Master) como Red de Seguridad",
+      "M2 · Catálogo de Refactorizaciones: Extract Method, Replace Conditional with Polymorphism",
+      "M3 · El Patrón Strangler Fig (Higo Estrangulador) y Reto Final"
+    ],
+    "fixedSuccessSignals": [
+      {
+        "file": "js\\simulators\\simulador-principal.js",
+        "line": 20,
+        "text": "<div style=\"color:#38bdf8;\">✔ Latencia promedio: 12.4 ms | Rendimiento: ÓPTIMO</div>"
+      },
+      {
+        "file": "js\\simulators\\simulador-principal.js",
+        "line": 21,
+        "text": "<div style=\"color:#e2e8f0;\">✔ Protocolo V.E.R.A.: 100% de verificaciones superadas.</div>"
+      }
+    ]
+  },
+  {
+    "name": "guia-seguridad-owasp",
+    "manifest": true,
+    "entry": "index.html",
+    "title": "Seguridad en Aplicaciones Web, APIs y DevSecOps (OWASP Top 10)",
+    "standard": "2.4.0",
+    "sections": 0,
+    "sources": [
+      "js\\content\\modulos-data.js",
+      "js\\simulators\\simulador-principal.js",
+      "js\\renderer.js",
+      "js\\learning-path.js",
+      "js\\portfolio.js",
+      "js\\main.js"
+    ],
+    "registry": true,
+    "glossary": 3,
+    "checkpoints": 5,
+    "sampleHeadings": [
+      "🐘 PostgreSQL Query Planner & Index Optimizer",
+      "🌿 Git DAG & Rebase Interactive Simulator",
+      "📐 Hexagonal Architecture & Dependency Inversion Linter",
+      "🛡️ OWASP Vulnerability & Payload Simulator",
+      "🐳 Multi-Stage Dockerfile Inspector",
+      "🔷 TypeScript Type-Level Sandbox & Zod Validator",
+      "📊 Telemetry Stream & Correlation ID Tracer",
+      "🧱 Big-O Benchmark & Dijkstra Shortest Path Explorer"
+    ],
+    "contentChars": 17697,
+    "contentFiles": [
+      "js\\content\\modulos-data.js",
+      "js\\simulators\\simulador-principal.js"
+    ],
+    "sampleModuleNames": [
+      "Seguridad en Aplicaciones Web, APIs y DevSecOps (OWASP Top 10)",
+      "M0 · Panorama de Amenazas y OWASP Top 10",
+      "M1 · Inyección SQL, XSS y Sanitización de Entradas",
+      "M2 · Criptografía, Hashing con Argon2 y JWT Seguro",
+      "M3 · DevSecOps: SAST, DAST y Auditoría en CI/CD"
+    ],
+    "fixedSuccessSignals": []
+  },
+  {
+    "name": "guia-software-ia-rag",
+    "manifest": true,
+    "entry": "index.html",
+    "title": "Ingeniería de Software con IA: RAG, Embeddings y pgvector",
+    "standard": "2.4.0",
+    "sections": 0,
+    "sources": [
+      "js\\content\\modulos-data.js",
+      "js\\simulators\\simulador-principal.js",
+      "js\\renderer.js",
+      "js\\learning-path.js",
+      "js\\portfolio.js",
+      "js\\main.js"
+    ],
+    "registry": true,
+    "glossary": 5,
+    "checkpoints": 5,
+    "sampleHeadings": [
+      "🧠 RagLab — Resultados de Simulación"
+    ],
+    "contentChars": 9493,
+    "contentFiles": [
+      "js\\content\\modulos-data.js",
+      "js\\simulators\\simulador-principal.js"
+    ],
+    "sampleModuleNames": [
+      "Ingeniería de Software con IA: RAG, Embeddings y pgvector",
+      "M0 · De los LLMs Aislados a los Sistemas RAG Fundamentados",
+      "M1 · Estrategias de Chunking y Generación de Embeddings",
+      "M2 · Almacenamiento y Búsqueda Vectorial con pgvector en PostgreSQL",
+      "M3 · Pipeline RAG Completo, Citas y Evaluación de Alucinaciones"
+    ],
+    "fixedSuccessSignals": [
+      {
+        "file": "js\\simulators\\simulador-principal.js",
+        "line": 20,
+        "text": "<div style=\"color:#38bdf8;\">✔ Latencia promedio: 12.4 ms | Rendimiento: ÓPTIMO</div>"
+      },
+      {
+        "file": "js\\simulators\\simulador-principal.js",
+        "line": 21,
+        "text": "<div style=\"color:#e2e8f0;\">✔ Protocolo V.E.R.A.: 100% de verificaciones superadas.</div>"
+      }
+    ]
+  },
+  {
+    "name": "guia-spring",
+    "manifest": true,
+    "entry": "web\\index.html",
+    "title": "Spring Boot 3.5: de una idea a una API profesional",
+    "standard": "2.0.0",
+    "sections": 11,
+    "sources": [
+      "web\\js\\modules-content.js",
+      "web\\js\\modules-content-2.js",
+      "web\\js\\modules-content-3.js",
+      "web\\js\\modules-content-4.js",
+      "web\\js\\modules-content-5.js",
+      "web\\js\\modules-content-6.js",
+      "web\\js\\modules-content-7.js",
+      "web\\js\\generated-crud-modules.js",
+      "web\\js\\learning-path.js",
+      "web\\js\\glossary.js",
+      "web\\js\\glossary-view.js",
+      "web\\js\\evidence-journal.js",
+      "web\\js\\evidence-workbench.js",
+      "web\\js\\portfolio-exporter.js",
+      "web\\js\\portfolio-download.js",
+      "web\\js\\simulators.js",
+      "web\\js\\simulators-extra.js",
+      "web\\js\\code-renderer.js",
+      "web\\js\\main.js"
+    ],
+    "registry": true,
+    "glossary": 0,
+    "checkpoints": 4,
+    "sampleHeadings": [
+      "${title}",
+      "✅ ${title}",
+      "¿Qué problema resuelve Spring Boot?",
+      "Tu mapa de carpetas",
+      "¿Por qué dividimos todo en capas y archivos separados?",
+      "¿Por qué usamos REST y no cualquier URL?",
+      "¿Por qué importan los Códigos de Estado (Status Codes)?",
+      "Listar Colección",
+      "Obtener Recurso",
+      "Crear Recurso",
+      "Actualizar Recurso",
+      "Eliminar Recurso",
+      "Checklist de una ruta",
+      "💡 Analogías con lo que ya sabes"
+    ],
+    "contentChars": 196512,
+    "contentFiles": [
+      "web\\js\\modules-content.js",
+      "web\\js\\modules-content-2.js",
+      "web\\js\\modules-content-3.js",
+      "web\\js\\modules-content-4.js",
+      "web\\js\\modules-content-5.js",
+      "web\\js\\modules-content-6.js",
+      "web\\js\\modules-content-7.js",
+      "web\\js\\glossary.js",
+      "web\\js\\glossary-view.js",
+      "web\\js\\simulators.js",
+      "web\\js\\simulators-extra.js"
+    ],
+    "sampleModuleNames": [
+      "Workflow Antigravity",
+      "Workflow VS Code"
+    ],
+    "fixedSuccessSignals": []
+  },
+  {
+    "name": "guia-testing-qa-universal",
+    "manifest": true,
+    "entry": "index.html",
+    "title": "Testing Universal, QA Multi-Lenguaje y Calidad de Software (ISO/IEC 25010)",
+    "standard": "2.4.0",
+    "sections": 0,
+    "sources": [
+      "js\\content\\modulos-data.js",
+      "js\\simulators\\simulador-principal.js",
+      "js\\renderer.js",
+      "js\\learning-path.js",
+      "js\\portfolio.js",
+      "js\\main.js"
+    ],
+    "registry": true,
+    "glossary": 5,
+    "checkpoints": 5,
+    "sampleHeadings": [
+      "🧪 QALab — Resultados de Simulación"
+    ],
+    "contentChars": 26582,
+    "contentFiles": [
+      "js\\content\\modulos-data.js",
+      "js\\simulators\\simulador-principal.js"
+    ],
+    "sampleModuleNames": [
+      "Testing Universal, QA Multi-Lenguaje y Calidad de Software (ISO/IEC 25010)",
+      "M0 · Identificación y Mapa Políglota de Aplicaciones",
+      "M1 · Las Pruebas más Importantes del Software y Dobles de Prueba",
+      "M2 · Gran Comparativa ",
+      "M3 · Técnica Maestra de Escalado de Bases de Datos (2 a 40+ Tablas)",
+      "M4 · Pruebas Prácticas en Python con Flask",
+      "M5 · Pruebas Prácticas en Python con FastAPI",
+      "M6 · Pruebas en Java Clásico: Swing y JSP / Servlets",
+      "M7 · Pruebas en Java Moderno con Spring Boot 3.5",
+      "M8 · Pruebas en Frontend con React 19 y TypeScript"
+    ],
+    "fixedSuccessSignals": [
+      {
+        "file": "js\\simulators\\simulador-principal.js",
+        "line": 20,
+        "text": "<div style=\"color:#38bdf8;\">✔ Calidad de aserciones: 100% | Cobertura efectiva: ÓPTIMA</div>"
+      },
+      {
+        "file": "js\\simulators\\simulador-principal.js",
+        "line": 21,
+        "text": "<div style=\"color:#e2e8f0;\">✔ Protocolo V.E.R.A.: 100% de verificaciones superadas.</div>"
+      }
+    ]
+  },
+  {
+    "name": "guia-typescript",
+    "manifest": true,
+    "entry": "index.html",
+    "title": "JavaScript Moderno ES2024+ y TypeScript Profesional",
+    "standard": "2.4.0",
+    "sections": 0,
+    "sources": [
+      "js\\content\\modulos-data.js",
+      "js\\simulators\\simulador-principal.js",
+      "js\\renderer.js",
+      "js\\learning-path.js",
+      "js\\portfolio.js",
+      "js\\main.js"
+    ],
+    "registry": true,
+    "glossary": 3,
+    "checkpoints": 5,
+    "sampleHeadings": [
+      "🐘 PostgreSQL Query Planner & Index Optimizer",
+      "🌿 Git DAG & Rebase Interactive Simulator",
+      "📐 Hexagonal Architecture & Dependency Inversion Linter",
+      "🛡️ OWASP Vulnerability & Payload Simulator",
+      "🐳 Multi-Stage Dockerfile Inspector",
+      "🔷 TypeScript Type-Level Sandbox & Zod Validator",
+      "📊 Telemetry Stream & Correlation ID Tracer",
+      "🧱 Big-O Benchmark & Dijkstra Shortest Path Explorer"
+    ],
+    "contentChars": 17189,
+    "contentFiles": [
+      "js\\content\\modulos-data.js",
+      "js\\simulators\\simulador-principal.js"
+    ],
+    "sampleModuleNames": [
+      "JavaScript Moderno ES2024+ y TypeScript Profesional",
+      "M0 · De JavaScript Dinámico al Tipado Estricto",
+      "M1 · Interfaces, Type Aliases y Genéricos Avanzados",
+      "M2 · Utility Types y Type Narrowing en Reglas de Negocio",
+      "M3 · Reto Final: Motor de Facturación y Evidencias"
+    ],
+    "fixedSuccessSignals": []
+  },
+  {
+    "name": "guias_sena_word",
+    "manifest": false,
+    "entry": null,
+    "title": null,
+    "standard": null,
+    "sections": 0,
+    "sources": [],
+    "registry": false,
+    "glossary": 0,
+    "checkpoints": 0,
+    "sampleHeadings": [],
+    "contentChars": 0,
+    "contentFiles": [],
+    "sampleModuleNames": [],
+    "fixedSuccessSignals": []
+  }
+]

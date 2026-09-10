@@ -1,0 +1,13 @@
+{
+  "skill_key": "skill.educational-guide-builder",
+  "name": "Construcción de guías educativas por proyectos",
+  "description": "Diseña, implementa, valida y mejora guías web educativas completas para SENA y ADSO, asegurando que cada producto entregable tenga explicación, ejemplo, plantilla, criterio, instrumento, evidencia y transferencia.",
+  "source_path": "_core/skills/educational-guide-builder/SKILL.md",
+  "content": "## Construcción de guías educativas\n\n1. Consulta el contexto de la tarea y la fuente curricular; separa texto oficial, adaptación, ejemplo ficticio, supuesto y pregunta abierta.\n2. Crea o actualiza `guide.manifest.json` con programa, competencia, RAP, fase, actividad, reto, producto, secuencia SENA, evidencias, criterios, instrumentos, duración, fuentes y límites.\n3. Crea `deliverables.registry.json` y registra cada artefacto con `purpose`, `inputs`, `instructions`, `example`, `templateFields`, `criterion`, `instrument`, `evidence` y `nextStep`.\n4. Diseña `reflexion -> contextualizacion -> apropiacion -> transferencia` y `orientar -> ejemplo -> practicar -> evidencia -> transferir`.\n5. Cada actividad debe explicar que es, para que sirve, como se hace, como se reconoce un buen resultado y como se transfiere al proyecto.\n6. Si es web, combina `skill.build-high-quality-web` y `skill.web-learning-design-coach`; exige HTML semantico, teclado, foco, responsive 320-2560 px, estados, privacidad, modo local y ausencia de secretos.\n7. Usa constructores locales y exportaciones Markdown/CSV cuando faciliten la evidencia. Declara lo que comprueban y lo que no pueden demostrar.\n8. No inventes codigos SENA, competencias, nombres institucionales, horas oficiales, datos de usuarios ni certificados. Usa por confirmar con instructor cuando no exista fuente.\n9. Valida con `Test-DevBrainEducationalGuide.ps1 -Path <guia> -Strict`, `Test-GuideDeliverables.ps1 -Path <guia> -Strict` y los gates de calidad web.\n10. Registra la iteracion y realiza un recorrido de primera vez; no declares aprendizaje logrado solo por navegar, conversar o acumular puntos.\n\nFuentes: `_core/skills/educational-guide-builder/SKILL.md`, `_core/knowledge_base/EDUCATIONAL_GUIDE_STANDARD.md` y `_core/knowledge_base/WEB_DESIGN_PATTERN_CATALOG.md`.",
+  "triggers": [
+    "guia", "guía", "educativa", "educational", "sena", "adso", "aprendiz", "instructor",
+    "proyecto formativo", "producto entregable", "producto de aprendizaje", "formacion por proyectos", "formación por proyectos",
+    "resultado de aprendizaje", "rap", "evidencia", "rubrica", "rúbrica", "dossier", "transferencia", "tgs", "curso", "learning"
+  ],
+  "applies_to": ["global"]
+}

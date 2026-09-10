@@ -1,14 +1,34 @@
 """Tests de estructura de la guia Testing."""
 import os
 import json
+from pathlib import Path
 import pytest
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+MODULE_CONTENT_FILES = sorted(path.name for path in (Path(BASE) / "web/js").glob("modules-*.js"))
 
 
 def test_estructura_web():
     assert os.path.isfile(os.path.join(BASE, "web", "index.html"))
     assert os.path.isfile(os.path.join(BASE, "web", "css", "styles.css"))
+
+
+def test_navegacion_revela_modulos_renderizados_dinamicamente():
+    """Los módulos cargados después del HTML deben ser visibles al navegar."""
+    main_path = os.path.join(BASE, "web", "js", "main.js")
+    with open(main_path, "r", encoding="utf-8") as f:
+        main = f.read()
+    assert "target.querySelectorAll('.section-card, .simulator-card, .concept-card')" in main
+    assert "classList.add('animate-in')" in main
+
+
+def test_enlace_profundo_sincroniza_menu_activo():
+    """Una URL con hash debe resaltar su módulo, no dejar activo Inicio."""
+    main_path = os.path.join(BASE, "web", "js", "main.js")
+    with open(main_path, "r", encoding="utf-8") as f:
+        main = f.read()
+    assert "this.updateSidebarActive(this.currentPage)" in main
+    assert "this.updateSidebarActive(pageId)" in main
 
 
 def test_js_modulares():
@@ -42,6 +62,39 @@ def test_github_actions():
     ci = os.path.join(BASE, "recursos", "codigo-ejemplo", ".github", "workflows", "ci.yml")
     assert os.path.isfile(ci), "Falta .github/workflows/ci.yml"
 
+    with open(ci, "r", encoding="utf-8") as f:
+        workflow = f.read()
+    assert "python -m pytest tests" in workflow
+    assert "python -m behave -q" in workflow
+    assert "npm run test:coverage" in workflow
+    assert "mvn --batch-mode test jacoco:report" in workflow
+    assert "npx playwright install --with-deps chromium" in workflow
+    assert "quality-gate" in workflow
+    assert "needs: [python-tests, javascript-tests, java-tests, e2e-tests]" in workflow
+
+
+def test_github_actions_del_monorepo_se_declara_en_la_raiz():
+    """GitHub solo descubre workflows dentro de .github/workflows en la raíz."""
+    ci = os.path.join(BASE, ".github", "workflows", "ci.yml")
+    assert os.path.isfile(ci), "Falta el workflow raíz del monorepo"
+    with open(ci, "r", encoding="utf-8") as f:
+        workflow = f.read()
+    assert "recursos/codigo-ejemplo" in workflow
+    assert "quality-gate" in workflow
+    assert "mvn --batch-mode test jacoco:report" in workflow
+
+
+def test_ejemplo_ofrece_un_comando_unificado_y_ignora_artifacts_locales():
+    """El aprendiz debe contar con una ruta única y un ignore dentro del ZIP."""
+    ej = os.path.join(BASE, "recursos", "codigo-ejemplo")
+    assert os.path.isfile(os.path.join(ej, "run-tests.ps1"))
+    assert os.path.isfile(os.path.join(ej, "run-tests.sh"))
+    with open(os.path.join(ej, ".gitignore"), encoding="utf-8") as f:
+        ignore = f.read()
+    assert "node_modules/" in ignore
+    assert "target/" in ignore
+    assert ".env" in ignore
+
 
 def test_git_pre_commit_hooks():
     pc = os.path.join(BASE, "recursos", "codigo-ejemplo", ".pre-commit-config.yaml")
@@ -65,8 +118,8 @@ def test_teoria_git_github_seguridad():
     assert "Repositorio Público" in readme and "Repositorio Privado" in readme
     assert "Tests para Git" in readme
 
-    # Validar que modules-content-2.js contiene los bloques interactivos
-    mc_path = os.path.join(BASE, "web", "js", "modules-content-2.js")
+    # Validar los bloques del catálogo de CI/CD.
+    mc_path = os.path.join(BASE, "web", "js", "modules-cicd.js")
     with open(mc_path, "r", encoding="utf-8") as f:
         mc = f.read()
     assert "Relación Simbiótica: Testing y GitHub" in mc
@@ -113,7 +166,7 @@ def test_pyramid_in_simulators():
 
 def test_modules_content():
     content = ""
-    for f in ["modules-content.js", "modules-content-2.js"]:
+    for f in MODULE_CONTENT_FILES:
         p = os.path.join(BASE, "web", "js", f)
         if os.path.exists(p):
             with open(p, "r", encoding="utf-8") as file:
@@ -133,7 +186,7 @@ def test_modules_content():
 
 def test_paso_a_paso_en_modulos():
     content = ""
-    for f in ["modules-content.js", "modules-content-2.js"]:
+    for f in MODULE_CONTENT_FILES:
         p = os.path.join(BASE, "web", "js", f)
         if os.path.exists(p):
             with open(p, "r", encoding="utf-8") as file:
@@ -288,7 +341,62 @@ def test_registros_de_evidencias_son_una_fuente_unica_y_tienen_estaciones_reales
         section_id = artifact["station"]["sectionId"]
         assert f'id="{section_id}"' in html
         assert f'data-db-evidence="{artifact["id"]}"' in html
-    assert 'data-db-evidence-dossier' in html
+
+
+def test_guia_e2e_tiene_modelo_mental_glosario_y_simulador():
+    """La ruta E2E debe enseñar el significado antes de pedir comandos."""
+    content = ""
+    for name in ("modules-content-2.js", "learning-visuals.js"):
+        path = os.path.join(BASE, "web", "js", name)
+        if os.path.isfile(path):
+            with open(path, encoding="utf-8") as f:
+                content += f.read()
+
+    assert 'type: "definition"' in content
+    assert 'type: "mental-map"' in content
+    assert 'type: "glossary"' in content
+    assert "End" in content and "to" in content
+    assert "sim-e2e-container" in content
+
+
+def test_renderizador_reconoce_bloques_de_aprendizaje_visual():
+    """Los nuevos bloques se renderizan con un componente dedicado."""
+    path = os.path.join(BASE, "web", "js", "code-renderer.js")
+    with open(path, encoding="utf-8") as f:
+        renderer = f.read()
+
+    assert "bloqueDefinicion" in renderer
+    assert "bloqueMapaMental" in renderer
+    assert "bloqueGlosario" in renderer
+    assert "case 'definition':" in renderer
+    assert "case 'mental-map':" in renderer
+    assert "case 'glossary':" in renderer
+
+
+def test_simulador_e2e_muestra_recorrido_y_resultado_observable():
+    """El simulador E2E debe permitir observar cada paso y clasificar el resultado."""
+    files = [
+        os.path.join(BASE, "web", "js", "learning-visuals.js"),
+        os.path.join(BASE, "web", "index.html"),
+        os.path.join(BASE, "web", "css", "styles.css"),
+    ]
+    content = "".join(open(path, encoding="utf-8").read() for path in files if os.path.isfile(path))
+
+    assert "renderE2EJourney" in content
+    assert "e2e-stage" in content
+    assert "selector" in content
+    assert "sim-e2e-container" in content
+
+
+def test_testing_session_migra_simuladores_nuevos_sin_borrar_progreso():
+    """Una versión nueva debe agregar simuladores al registro local existente."""
+    path = os.path.join(BASE, "web", "js", "testing-session.js")
+    with open(path, encoding="utf-8") as f:
+        session = f.read()
+
+    assert "Object.entries(DEFAULT_SIMULATORS)" in session
+    assert "simulators[simId]" in session
+    assert "JSON.stringify(simulators)" in session
 
 
 def test_salida_web_funciona_sin_cdn_ni_motor_de_evidencias_duplicado():
@@ -299,6 +407,7 @@ def test_salida_web_funciona_sin_cdn_ni_motor_de_evidencias_duplicado():
     assert "cdn.jsdelivr.net" not in html
     assert "js/deliverables-registry.js" in html
     assert "registro: window.GUIDE_DELIVERABLES" in html
+    assert 'data-db-evidence-dossier' in html
     assert "sena-dossier.js" not in html
     assert "sena-dossier-root" not in html
 
@@ -310,6 +419,7 @@ def test_material_de_aprendizaje_no_contiene_credenciales_de_ejemplo():
         os.path.join(BASE, "web", "js", "modules-content-2.js"),
         os.path.join(BASE, "web", "js", "testing-session.js"),
     ]
+    archivos.extend(os.path.join(BASE, "web", "js", name) for name in MODULE_CONTENT_FILES)
     texto = "\n".join(open(ruta, encoding="utf-8").read().lower() for ruta in archivos)
 
     assert "admin123" not in texto
@@ -331,7 +441,7 @@ def test_modulos_ia_incluyen_constructor_de_gema_y_laboratorio_de_herramientas()
     assert "css/ai-testing-coach.css" in html
 
     content = ""
-    for name in ["modules-content-2.js", "ai-testing-coach.js", "ai-tools-lab.js"]:
+    for name in MODULE_CONTENT_FILES + ["ai-testing-coach.js", "ai-tools-lab.js"]:
         with open(os.path.join(BASE, "web", "js", name), encoding="utf-8") as f:
             content += f.read()
 

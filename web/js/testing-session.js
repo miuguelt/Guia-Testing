@@ -116,8 +116,19 @@
         }
     ];
 
-    // Catálogo maestro de los 4 simuladores interactivos
+    // Catálogo maestro de los 6 simuladores interactivos
     const DEFAULT_SIMULATORS = {
+        'sim-e2e': {
+            id: 'sim-e2e',
+            name: 'Recorrido E2E: del objetivo a la evidencia',
+            completed: false,
+            score: 0,
+            maxScore: 1,
+            percentage: 0,
+            passed: false,
+            details: 'Reconocer navegador, localizador, acción, sistema y aserción en un flujo completo.',
+            completedAt: null
+        },
         'sim-pyramid': {
             id: 'sim-pyramid',
             name: 'Test Pyramid Builder (Pirámide de Cohn)',
@@ -161,6 +172,28 @@
             passed: false,
             details: 'Ordenar las 7 fases lógicas del flujo maestro de testing desde pruebas unitarias hasta CI/CD.',
             completedAt: null
+        },
+        'sim-module-decisions': {
+            id: 'sim-module-decisions',
+            name: 'Decisiones QA por módulo',
+            completed: false,
+            score: 0,
+            maxScore: 1,
+            percentage: 0,
+            passed: false,
+            details: 'Resolver una decisión de calidad en los módulos y explicar la evidencia que respalda el siguiente paso.',
+            completedAt: null
+        },
+        'sim-module-special': {
+            id: 'sim-module-special',
+            name: 'Micro-laboratorios por módulo',
+            completed: false,
+            score: 0,
+            maxScore: 1,
+            percentage: 0,
+            passed: false,
+            details: 'Resolver una interacción específica del módulo: riesgo, secuencia, contrato, señal o evidencia.',
+            completedAt: null
         }
     };
 
@@ -178,7 +211,28 @@
             if (!localStorage.getItem(STORAGE_KEYS.TEST_CHECKS)) {
                 localStorage.setItem(STORAGE_KEYS.TEST_CHECKS, JSON.stringify(DEFAULT_TEST_CHECKS));
             }
-            if (!localStorage.getItem(STORAGE_KEYS.SIMULATORS)) {
+            const rawSimulators = localStorage.getItem(STORAGE_KEYS.SIMULATORS);
+            if (!rawSimulators) {
+                localStorage.setItem(STORAGE_KEYS.SIMULATORS, JSON.stringify(DEFAULT_SIMULATORS));
+                return;
+            }
+
+            // Las guías ya abiertas pueden tener el catálogo anterior. Agregar
+            // solo claves ausentes conserva el progreso que el aprendiz ya ganó.
+            try {
+                const simulators = JSON.parse(rawSimulators);
+                let changed = false;
+                Object.entries(DEFAULT_SIMULATORS).forEach(([simId, definition]) => {
+                    if (!simulators[simId]) {
+                        simulators[simId] = Object.assign({}, definition);
+                        changed = true;
+                    }
+                });
+                if (changed) {
+                    localStorage.setItem(STORAGE_KEYS.SIMULATORS, JSON.stringify(simulators));
+                }
+            } catch (error) {
+                console.warn('No se pudo leer el catálogo local de simuladores; se restaurará el catálogo base.', error);
                 localStorage.setItem(STORAGE_KEYS.SIMULATORS, JSON.stringify(DEFAULT_SIMULATORS));
             }
         },

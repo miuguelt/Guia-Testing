@@ -6,11 +6,16 @@ const APP = {
         this.initSearch();
         this.initProgressTracking();
         this.initCopyButtons();
+        this.initProjectDownload();
         this.initParticles();
         this.initScrollAnimations();
         this.initRouting();
         GAMIFICATION.renderStats();
         GAMIFICATION.updateSidebarBadges();
+        // La ruta inicial puede llegar en el hash antes de que termine la
+        // inicialización de todos los módulos; reafirma el estado visual del
+        // menú para que no quede resaltado "Inicio" por defecto.
+        this.updateSidebarActive(this.currentPage);
     },
 
     initRouting() {
@@ -49,6 +54,12 @@ const APP = {
         const target = document.getElementById(pageId);
         if (target) {
             target.classList.add('active');
+            // Los módulos se renderizan después de cargar el HTML y permanecen
+            // ocultos hasta que entran en el viewport. Como el módulo estaba
+            // oculto al registrarse en el IntersectionObserver, podía quedar
+            // con opacity: 0 aunque su contenido ya existiera en el DOM.
+            target.querySelectorAll('.section-card, .simulator-card, .concept-card')
+                .forEach((element) => element.classList.add('animate-in'));
             this.currentPage = pageId;
             this.updateBreadcrumb(pageId);
             this.updateSidebarActive(pageId);
@@ -79,12 +90,12 @@ const APP = {
         if (breadcrumb) {
             const names = {
                 'welcome': 'Inicio',
-                'm-reflexion': 'Reflexión',
-                'm-piramide': 'Pirámide de Testing',
+                'm-reflexion': 'Fundamentos',
+                'm-piramide': 'Diseño y niveles',
                 'm-pytest-fastapi': 'PyTest FastAPI',
                 'm-pytest-flask': 'PyTest Flask',
                 'm-jest-react': 'Jest React',
-                'm-junit-jsp': 'JUnit JSP',
+                'm-junit-jsp': 'JUnit Java',
                 'm-tdd': 'TDD',
                 'm-bdd': 'BDD',
                 'm-playwright': 'Playwright E2E',
@@ -205,11 +216,34 @@ const APP = {
             });
         }, { threshold: 0.1 });
         document.querySelectorAll('.section-card, .simulator-card, .concept-card').forEach(el => observer.observe(el));
+    },
+
+    initProjectDownload() {
+        const downloadUrl = resolveProjectDownloadUrl();
+        const primaryLink = document.getElementById('download-project-link');
+        const downloadLinks = primaryLink
+            ? [primaryLink, ...document.querySelectorAll('a[href="downloads/guia-testing-qa.zip"]')]
+            : [...document.querySelectorAll('a[href="downloads/guia-testing-qa.zip"]')];
+        [...new Set(downloadLinks)].forEach((link) => {
+            link.href = downloadUrl;
+            link.setAttribute('download', 'guia-testing-qa.zip');
+        });
     }
 };
 
 window.APP = APP;
 document.addEventListener('DOMContentLoaded', () => APP.init());
+
+/**
+ * Builds the ZIP URL from the resolved main.js path. This keeps the download
+ * working when the static guide is served from a repository subdirectory.
+ */
+function resolveProjectDownloadUrl() {
+    const fallback = 'downloads/guia-testing-qa.zip';
+    const mainScript = Array.from(document.scripts).find((script) => /\/js\/main\.js(?:[?#]|$)/.test(script.src));
+    if (!mainScript || !mainScript.src) return fallback;
+    return new URL('../downloads/guia-testing-qa.zip', mainScript.src).href;
+}
 
 function openTab(evt, tabName) {
     var i, tabcontent, tablinks;

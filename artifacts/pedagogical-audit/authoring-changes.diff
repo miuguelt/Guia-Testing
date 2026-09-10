@@ -1,0 +1,295 @@
+--- _core\knowledge_base\EDUCATIONAL_GUIDE_STANDARD.md
++++ C:\Users\Miguel\Documents\Aplicaciones\_core\knowledge_base\EDUCATIONAL_GUIDE_STANDARD.md
+@@ -1,8 +1,8 @@
+ # Estándar DevBrain para guías educativas
+ 
+ **Identificador:** `devbrain.educational-guide`  
+-**Versión:** 2.4.0  
+-**Fecha:** 2026-08-27  
++**Versión:** 2.5.0  
++**Fecha:** 2026-09-09  
+ **Estado:** canónico para guías nuevas o intervenidas por IA
+ 
+ ## 1. Propósito
+@@ -181,7 +181,8 @@
+    - **A (Atribuir en Bitácora):** Registrar en `docs/ai-log.md` los prompts utilizados, el modelo, la validación realizada y la decisión humana final.
+    - *Regla de Descarte:* Si el asistente alucina dos veces en un problema, suspender el prompting y escribir el código consultando la documentación oficial.
+ 
+-2. **Capa Interactiva y Simuladores en Vivo (Mínimo 4 Motores por Guía):**
++2. **Interactividad proporcional al aprendizaje:**
++   - Elegir herramientas que permitan comprender y practicar el concepto; las categorías siguientes son opciones, no una cuota de motores. Cada herramienta declara qué calcula y qué no demuestra, según la sección 14.
+    - *Simulador Visual/Arquitectura:* Modelador interactivo (ciclo de vida de peticiones HTTP, pipeline de estados, drag & drop de componentes o mapa conceptual).
+    - *Laboratorio de Código/Editor en Vivo:* Split-pane donde modificar parámetros (JSON de contexto, consultas ORM/SQL, payloads) y observar el resultado renderizado en tiempo real.
+    - *Modo Debugging / Bug Hunter:* Retos interactivos con código roto para identificar la causa raíz, seleccionar la solución correcta y verificar la corrección.
+@@ -222,24 +223,19 @@
+ 
+ Cada estación muestra tres estados: `pendiente`, `borrador` y `lista`. `lista` significa que los campos obligatorios están diligenciados y que el aprendiz contrastó su trabajo con el criterio declarado. **No existe un estado `verificada`**: la web no emite juicio evaluativo, y fingirlo sería el peor daño que una guía SENA puede hacer. Todo texto de estado debe decir de qué habla.
+ 
+-### 11.4 Consolidación, Medición de Desempeño y Dossier Institucional SENA
+-
+-Toda guía culmina obligatoriamente con la herramienta estandarizada de medición de desempeño y consolidación de evidencias, generando de forma precisa y perfecta el **Dossier Integral de Evidencias SENA (ADSO)** institucional para sustentar la entrega y calificar en la plataforma LMS (Territorium / Zajuna / SofiaPlus):
+-
+-1. **Datos de Identificación del Aprendiz**: Formulario interactivo reactivo (Nombre, Documento, Ficha, Centro de Formación, Regional, Instructor Técnico Líder) persistido en `localStorage` y sincronizado en tiempo real con la hoja formal de entrega.
+-2. **Acciones de Exportación para la Plataforma**:
+-   - `🖨️ Imprimir / Guardar Dossier en PDF`: Exportación institucional gobernada por `@media print` optimizado en blanco y negro formal, ocultando botones, formularios y navegación de la guía, lista para subir a la plataforma.
+-   - `💾 Descargar Evidencia en JSON`: Expediente digital estructurado con metadatos institucionales, datos del aprendiz, competencia, RAP, evidencias completadas y marca temporal ISO.
+-   - `📄 Descargar el paquete completo (.md)`: Respaldo editable para trazabilidad en repositorios Git.
+-3. **Hoja Formal Imprimible del SENA (`.sena-dossier-sheet`)**:
+-   - Encabezado con escudo verde SENA (`#39a900`), "SERVICIO NACIONAL DE APRENDIZAJE — SENA", Dirección de Formación Profesional, programa (ADSO) y el título/competencia de la guía.
+-   - Metadata lateral: Ficha, Fecha de emisión (en formato colombiano `es-CO`) y Badge de Estado `EVIDENCIA CONSOLIDADA`.
+-   - **Sección 1. Datos Generales del Aprendiz**: Tabla formal de 2x2 filas con Nombre, Documento, Centro, Regional e Instructor Técnico.
+-   - **Sección 2. Registro de Evidencias Técnicas Realizadas**: Tabla estructurada con `Código` (EV-01, EV-02... o los códigos de artefacto), `Denominación de la Evidencia`, `Instrumento de Evaluación` (Lista de Chequeo, Rúbrica, Prueba Objetiva) y `Resultado` (Badges: `CUMPLIDO`, `APROBADO`, `OPERATIVO`, etc.).
+-   - **Sección 3. Rúbrica y Juicio de Evaluación del Instructor**: Criterios de evaluación SENA según la guía, columnas `Cumple` (`[ X ] SÍ   [   ] NO`), `Observaciones del Instructor`, recuadro de `JUICIO DE EVALUACIÓN FINAL` (`APROBADO [A]` / `NO APROBADO [NA]`) y firmas formales del Aprendiz y del Instructor SENA.
+-   - Bitácora Humano–IA y protocolo de entrega declarado en el bloque `submission` de `deliverables.registry.json`.
+-
+-Todo se ejecuta en el navegador sin red, sin servidor y sin servicios de terceros: una guía debe funcionar desde un USB en cualquier ambiente de aprendizaje SENA.
++### 11.4 Consolidación y Portafolio de Evidencias
++
++El cierre reúne el trabajo producido en las estaciones y permite prepararlo para entrega. El módulo compartido del SDK genera el **Portafolio de Evidencias** con:
++
++1. Datos de identificación que requiera la entrega, explicando almacenamiento local, exportación y eliminación en equipos compartidos. No exigir documento de identidad para practicar.
++2. Acciones de imprimir/guardar en PDF, descargar JSON y descargar Markdown cuando estén disponibles en el módulo. Esta capacidad de la web no autoriza al agente a generar documentos durante una revisión web; rige la solicitud explícita del operador.
++3. Hoja imprimible con título, versión de la guía, fecha, datos de entrega, inventario de evidencias, criterios, observaciones y espacios de revisión del instructor. Conservar los selectores técnicos existentes por compatibilidad; usar «Portafolio de Evidencias» en el texto visible.
++4. Estado de preparación calculado a partir de campos y autochequeo: pendiente, borrador o lista. No rellenar automáticamente «aprobado», firmas ni juicio del instructor.
++5. Bitácora humano–IA y protocolo de entrega declarado en `submission`.
++
++La salida generada es una adaptación didáctica y no sustituye el formato institucional vigente ni certifica competencia. Denominaciones, códigos y formatos oficiales se contrastan con la fuente aportada por el instructor; no se deducen de otra guía. La evaluación humana se registra solo cuando efectivamente existe.
++
++La consulta del contenido y la consolidación local deben funcionar sin servicios externos cuando así se declaren. La instalación de dependencias, los enlaces externos y las prácticas que requieren red llevan sus propios requisitos; no prometer que todo el laboratorio funciona desde un USB por tener una página local.
+ 
+ ### 11.5 La IA de 2026 se enseña por estación, no en un capítulo aparte
+ 
+@@ -288,7 +284,7 @@
+ 5. **Reto opcional:** extensión sin guía para quien termina antes, claramente marcada como no evaluable.
+ 6. **Estación de evidencia** según la sección 11, con su `aiAssist`.
+ 
+-Un módulo sin estación solo es admisible cuando no produce artefacto propio (portadas, contexto puro) y así se justifica en el manifiesto. Los simuladores de la sección 10 se distribuyen por categoría: ninguna guía técnica se libera sin al menos un laboratorio de código, un bug hunter y un comparador de seguridad o de decisiones, además del simulador visual.
++Un módulo sin estación solo es admisible cuando no produce artefacto propio (portadas, contexto puro) y así se justifica en el manifiesto. Las categorías de la sección 10 se seleccionan según el resultado de aprendizaje. La guía justifica qué interacción ayuda a comprender el concepto y verifica su comportamiento; contar simuladores no demuestra calidad pedagógica.
+ 
+ ## 13. Estrategia de construcción con IA
+ 
+@@ -300,3 +296,26 @@
+ 4. **Rechazo razonado:** el aprendiz aprende a rechazar propuestas de la IA —sobre-ingeniería, dependencias innecesarias, patrones de moda— y a registrar la razón del rechazo en la bitácora.
+ 5. **Escalabilidad desde el primer archivo:** la guía muestra la estructura de carpetas que aguanta el crecimiento real del producto, y enseña a pedirle a la IA código que respete esa estructura, no código que la rompa.
+ 6. **Bitácora como evidencia:** `docs/ai-log.md` registra encargo, verificación, aceptación o rechazo y razón. Se entrega como una evidencia más; en 2026 la pregunta no es si se usó IA, sino qué se le pidió, contra qué se contrastó y quién decidió.
++
++
++## 14. Autoría orientada a la autonomía del principiante
++
++La estructura operativa y plantilla reutilizable están en
++`_core/skills/educational-guide-builder/references/authoring-blueprint.md`.
++Leerlas antes de redactar una guía nueva. Esta sección amplía el criterio editorial;
++no modifica los esquemas JSON de las guías existentes ni certifica su conformidad.
++
++1. **Ruta explícita.** Separar preparación, núcleo común, variante por tecnología y ampliación. Mostrar un producto terminado de muestra y un diagnóstico con recuperación antes de exigir herramientas o conocimientos.
++2. **Un caso conductor.** Mantener reglas, datos e identificadores coherentes entre explicación, ejercicio, paquete descargable y evaluación. Transferir el método a otro dominio sin obligar a copiar nombres del ejemplo.
++3. **Módulo comprobable.** Declarar objetivo, prerrequisitos, tiempo estimado, teoría accionable, ejemplo completamente resuelto, contraejemplo, práctica guiada, error con recuperación, práctica independiente y evidencia aplicable al proyecto propio. La sección 12 define su integración.
++4. **Ejemplos utilizables.** Mostrar entradas y resultados reales del ejemplo. Toda receta ejecutable declara terminal, carpeta, archivo, comando, salida esperada y forma de reconocer un fallo. Un fragmento ilustrativo se etiqueta y no se presenta como un programa completo.
++5. **Laboratorios honestos.** Diferenciar ilustración, simulación, comprobación estática y ejecución real. Verificar entradas válidas, inválidas, vacías y reinicio. Texto fijo de éxito tras una espera no puede anunciar pruebas ejecutadas, cobertura, latencia ni V.E.R.A. verificado.
++6. **Reglas y cifras contextualizadas.** Explicar unidades, condiciones, versión y fuente de cada umbral. Ningún porcentaje de cobertura, reparto de tipos de prueba ni duración universal garantiza calidad. La evaluación observa decisiones y resultados, no cantidad de puntos o de texto.
++7. **Evaluación por evidencia.** Mantener la cadena resultado → actividad → artefacto → criterio → instrumento. Cada rúbrica muestra un cumplimiento observable y un resultado insuficiente, con recuperación. El cierre consolida; no introduce tareas nuevas.
++8. **Perfil de pruebas.** En guías de QA, enseñar diseño de casos y ejecución manual antes de depender de automatización. Incluir requisitos, riesgo, límites, decisiones, estados, defectos, regresión, aislamiento de datos y límites de cobertura. Profundizar por riesgos en API, persistencia, interfaz, accesibilidad, seguridad, rendimiento, recuperación y CI.
++9. **Revisión explícita.** Registrar `GUIDE_READINESS_REVIEW.md` con referencias y estados. Los validadores existentes comprueban contratos y aspectos técnicos; no prueban comprensión ni autonomía. Distinguir revisión editorial, ejecución técnica y validación con un aprendiz real.
++10. **Mejora del sistema.** Consultar patrones de otras guías con fuente y límite; conservarlos como candidatos cuando solo haya inspección editorial. No copiar contenido genérico o simuladores sin relación con el tema. En revisiones, cambiar únicamente lo solicitado por el operador.
++
++Origen: auditoría de Guía Testing y revisión estructural de 34 guías web del entorno,
++2026-09-09. Informe: `_projects/Guia Testing/docs/auditoria-pedagogica-2026-09-09.md`.
++Se observaron patrones en fuentes; no se realizó un estudio de aprendizaje con personas.
+--- _core\knowledge_base\WEB_DESIGN_PATTERN_CATALOG.md
++++ C:\Users\Miguel\Documents\Aplicaciones\_core\knowledge_base\WEB_DESIGN_PATTERN_CATALOG.md
+@@ -337,3 +337,47 @@
+ ## Maintenance
+ 
+ Every new web project should create or update `WEB-DESIGN-LEARNING.md`. Promote only evidence-backed patterns; record deprecations with their reason. This catalog is operational memory, not a license to copy a design wholesale.
++
++
++## Candidates from the 2026-09-09 guide authoring review
++
++These are source-level observations, not measured learning outcomes. The user requested
++incorporation into authoring; no global pedagogical validation is implied.
++
++### `first-result-with-recovery`
++
++- **Status:** candidate.
++- **Problem:** The first command fails before the learner understands the topic.
++- **Pattern:** Put a prerequisites check, a small first result, expected output and an error-recovery path before the main workshop; allow learners who pass the check to continue.
++- **Evidence:** `_projects/guia-fastapi/js/content/modulos-02b-entorno.js`; `_projects/Guia Testing/recursos/codigo-ejemplo/README.md` (partial preparation to extend).
++- **Expected benefit:** Make environment failures distinguishable from subject-matter failures.
++- **Boundary:** Recheck versions and permissions; do not copy environment changes or unverified download/time estimates.
++- **Observed result:** Preparation and diagnostic steps found in source. No beginner usability session was conducted.
++- **Adoption:** observed in 1 developed example and 1 partial example; verify on the next authored guide.
++- **Owner/review:** educational-guide-builder; 2026-09-09.
++
++### `worked-practice-independent-transfer`
++
++- **Status:** candidate.
++- **Problem:** A completed demo does not show whether the learner can act in their own project.
++- **Pattern:** Pair a worked example with guided practice, an independent variant, a criterion and a project-specific evidence station.
++- **Evidence:** `_projects/guia-spring/web/js/learning-path.js`; `_projects/guia-flutter/js/content/modulos-12-transferencia.js`.
++- **Expected benefit:** Reduce reliance on copying and reveal where conceptual help is still needed.
++- **Boundary:** Character counts and completed fields are preparation checks, not proof of understanding; retain separate instructor judgment.
++- **Observed result:** Exercises, transfer prompts and explicit contracts found in source. Learning benefit remains unmeasured.
++- **Adoption:** observed across 2 projects; candidate until the complete sequence is tested with learners.
++- **Owner/review:** educational-guide-builder; 2026-09-09.
++
++### `simulation-output-must-match-its-claim`
++
++- **Status:** candidate corrective pattern; fixed-success-as-real-verification is an anti-pattern.
++- **Problem:** A timer reveals a prewritten success message that looks like an executed test or measured latency.
++- **Pattern:** Label illustration, simulation, static checking and real execution separately. Make input-dependent outcomes observable and test valid, invalid, empty and reset paths.
++- **Evidence:** `_projects/guia-testing-qa-universal/js/simulators/simulador-principal.js`; `_projects/guia-documentacion-software/js/simulators/simulador-principal.js`; `_projects/guia-event-driven-redis/js/simulators/simulador-principal.js`.
++- **Expected benefit:** Prevent false confidence about tests, coverage, performance and V.E.R.A. verification.
++- **Boundary:** A fixed scenario may be a useful illustration when explicitly labeled; it is never evidence that a user's application passed.
++- **Observed result:** Source inspection confirmed fixed success output after 400 ms in three motors; six guide sources contain the suspect fixed metrics. No application suites were executed by these inspected functions.
++- **Adoption:** corrective requirement in authoring standard 2.5.0; remediation of existing guide motors is pending, not claimed complete.
++- **Owner/review:** educational-guide-builder; 2026-09-09.
++
++Review record: `_projects/Guia Testing/docs/auditoria-pedagogica-2026-09-09.md`.
+--- _core\knowledge_base\skills\educational-guide-builder.json
++++ C:\Users\Miguel\Documents\Aplicaciones\_core\knowledge_base\skills\educational-guide-builder.json
+@@ -1,13 +1,35 @@
+ {
+   "skill_key": "skill.educational-guide-builder",
+   "name": "Construcción de guías educativas por proyectos",
+-  "description": "Diseña, implementa, valida y mejora guías web educativas completas para SENA y ADSO, asegurando que cada producto entregable tenga explicación, ejemplo, plantilla, criterio, instrumento, evidencia y transferencia.",
++  "description": "Crea y revisa guías por proyectos para principiantes con preparación verificable, ejemplo resuelto, práctica, recuperación de errores, transferencia, evidencias y revisión de veracidad de laboratorios.",
+   "source_path": "_core/skills/educational-guide-builder/SKILL.md",
+-  "content": "## Construcción de guías educativas\n\n1. Consulta el contexto de la tarea y la fuente curricular; separa texto oficial, adaptación, ejemplo ficticio, supuesto y pregunta abierta.\n2. Crea o actualiza `guide.manifest.json` con programa, competencia, RAP, fase, actividad, reto, producto, secuencia SENA, evidencias, criterios, instrumentos, duración, fuentes y límites.\n3. Crea `deliverables.registry.json` y registra cada artefacto con `purpose`, `inputs`, `instructions`, `example`, `templateFields`, `criterion`, `instrument`, `evidence` y `nextStep`.\n4. Diseña `reflexion -> contextualizacion -> apropiacion -> transferencia` y `orientar -> ejemplo -> practicar -> evidencia -> transferir`.\n5. Cada actividad debe explicar que es, para que sirve, como se hace, como se reconoce un buen resultado y como se transfiere al proyecto.\n6. Si es web, combina `skill.build-high-quality-web` y `skill.web-learning-design-coach`; exige HTML semantico, teclado, foco, responsive 320-2560 px, estados, privacidad, modo local y ausencia de secretos.\n7. Usa constructores locales y exportaciones Markdown/CSV cuando faciliten la evidencia. Declara lo que comprueban y lo que no pueden demostrar.\n8. No inventes codigos SENA, competencias, nombres institucionales, horas oficiales, datos de usuarios ni certificados. Usa por confirmar con instructor cuando no exista fuente.\n9. Valida con `Test-DevBrainEducationalGuide.ps1 -Path <guia> -Strict`, `Test-GuideDeliverables.ps1 -Path <guia> -Strict` y los gates de calidad web.\n10. Registra la iteracion y realiza un recorrido de primera vez; no declares aprendizaje logrado solo por navegar, conversar o acumular puntos.\n\nFuentes: `_core/skills/educational-guide-builder/SKILL.md`, `_core/knowledge_base/EDUCATIONAL_GUIDE_STANDARD.md` y `_core/knowledge_base/WEB_DESIGN_PATTERN_CATALOG.md`.",
++  "content": "# Educational Guide Builder\n\nConstruir una experiencia que permita al aprendiz comprender, practicar, producir evidencia y transferirla al proyecto. La guía no es un temario ni un simulador aislado.\n\n## Flujo obligatorio\n\n1. Consultar el contexto de la tarea, leer `references/authoring-blueprint.md` y la fuente curricular disponible. Separar texto oficial, adaptación didáctica, ejemplo ficticio, supuesto y pregunta pendiente.\n2. Crear o actualizar `guide.manifest.json` antes del contenido. Incluir programa, competencia, resultado de aprendizaje, fase, actividad, reto, producto, secuencia SENA, evidencias, criterios, instrumentos, duración declarada, fuentes y límites.\n3. Crear `deliverables.registry.json` cuando exista un producto final, validable contra `_core/knowledge_base/schemas/deliverables.registry.schema.json`. Registrar cada artefacto con `purpose`, `inputs`, `instructions`, `example`, `fields`, `checklist`, `criterion`, `instrument`, `evidence`, `nextStep`, `evidenceType`, `aiAssist` y `station`. Declarar además el bloque `submission`: qué se carga, con qué nomenclatura, dónde, qué se califica y el mapa `tipo de evidencia → artefactos → criterio → instrumento`.\n4. Diseñar la ruta `reflexión → contextualización → apropiación → transferencia` y la experiencia visible `orientar → ejemplo → practicar → evidencia → transferir`. Separar núcleo, variantes por tecnología y ampliaciones; añadir diagnóstico con recuperación, caso conductor y primera ejecución. Aplicar la plantilla de módulo de `references/authoring-blueprint.md`: ejemplo resuelto, contraejemplo, práctica guiada, recuperación del error, práctica independiente y transferencia.\n5. **Distribuir las evidencias, no acumularlas.** Cada artefacto declara `station.sectionId` y la sección correspondiente monta `data-db-evidence=\"<id>\"` después de su teoría, su ejemplo resuelto y su ejercicio. El cierre monta `data-db-evidence-dossier` y solo consolida: ninguna evidencia puede aparecer allí por primera vez. La mecánica la pinta `DevBrainEvidence` (paquete `devbrain-evidence.js` + `.css`) o `DevBrainSDK.evidence`; no se escribe un motor de formularios por guía. Publicar la copia cargable con `Publish-GuideEvidenceRegistry.ps1 -Path <guía> -Apply` para que las estaciones funcionen con `file://`. Contrato completo en la sección 11 del estándar y en `rule.evidence-per-station`.\n6. Para cada artefacto, explicar qué es, para qué sirve, cómo se construye, cómo se ve un buen resultado, cómo se comprueba y cómo llega a la siguiente guía.\n7. Si el formato es web, combinar esta skill con `skill.web-learning-design-coach` y `skill.build-high-quality-web`. Integrar `devbrain-learner-sdk` para gamificación (XP, niveles, toasts, persistencia) y arquitectura SPA.\n8. Aplicar el **Protocolo V.E.R.A.** (Verificar existencia, Ejecutar TDD, Revisar calidad/seguridad, Atribuir en bitácora) al tamaño de cada evidencia mediante `aiAssist`, no como un capítulo aparte sobre IA. Elegir interacciones según el objetivo, sin cuota fija. Distinguir ilustración, simulación, comprobación estática y ejecución real; probar entrada válida, inválida, vacía y reinicio. Nunca presentar una salida fija de éxito como prueba ejecutada o métrica medida.\n9. Preferir constructores locales, tablas copiables, plantillas y exportaciones Markdown/CSV cuando ayuden a producir evidencia. Etiquetar siempre lo que la herramienta comprueba y lo que no puede demostrar.\n10. Nunca inventar códigos SENA, competencias, nombres institucionales, horas oficiales, datos de usuarios o certificaciones. Marcar como “por confirmar con instructor” aquello que no tenga fuente.\n11. Validar con:\n\n   ```powershell\n   & 'C:\\Users\\Miguel\\Documents\\Aplicaciones\\_infrastructure\\devbraind\\scripts\\Test-DevBrainEducationalGuide.ps1' -Path '<guia>' -Strict\n   & 'C:\\Users\\Miguel\\Documents\\Aplicaciones\\_infrastructure\\devbraind\\scripts\\Test-GuideDeliverables.ps1' -Path '<guia>' -Strict\n   & 'C:\\Users\\Miguel\\Documents\\Aplicaciones\\_core\\skills\\build-high-quality-web\\scripts\\Test-WebQuality.ps1' -Path '<guia>' -FailOn Error\n   ```\n\n12. Completar `GUIDE_READINESS_REVIEW.md` con evidencias según la referencia de autoría. Recorrer propósito → preparación → actividad → error y recuperación → artefacto → transferencia. Contrastar la web con el paquete descargable y las versiones efectivamente probadas. Distinguir revisión editorial, ejecución técnica y prueba con un principiante real; registrar como pendiente la validación que no ocurrió. En guías de pruebas, aplicar el perfil QA de la referencia antes de ampliar herramientas.\n13. Registrar la iteración en `GUIDE_ITERATION_LOG.md` y el aprendizaje de diseño en `WEB-DESIGN-LEARNING.md`. Promover patrones globales solo con evidencia repetida o aprobación explícita.\n\n## Gates de liberación\n\n- **Curricular:** la alineación tiene fuente o está marcada como adaptación.\n- **Proyecto:** cada actividad incrementa el producto auténtico.\n- **Entregable:** cada artefacto tiene explicación, ejemplo, plantilla, criterio, instrumento, evidencia y transferencia.\n- **Distribución:** cada evidencia se pide en su sección, el cierre solo consolida y el protocolo de carga está declarado.\n- **Pedagógico:** existen reflexión, contextualización, apropiación, transferencia y retroalimentación accionable.\n- **Web:** pasan estáticos, responsive, teclado, foco, zoom, estados y revisión visual.\n- **Seguridad:** no hay secretos en navegador, datos sensibles ni certificados engañosos.\n- **Humano:** la validación con personas y la decisión del instructor siguen siendo externas a la automatización.\n\n## Recursos\n\n- Estructura, plantilla de módulo y perfil QA: `references/authoring-blueprint.md`.\n- Contrato de artefactos: `references/deliverable-contract.md`.\n- Esquema del registro: `_core/knowledge_base/schemas/deliverables.registry.schema.json`.\n- Regla de distribución: `_core/knowledge_base/rules/evidence-per-station.json`.\n- Estándar canónico: `_core/knowledge_base/EDUCATIONAL_GUIDE_STANDARD.md`.\n- Skill de aprendizaje web: `_core/skills/web-learning-design-coach/SKILL.md`.\n- Skill de calidad web: `_core/skills/build-high-quality-web/SKILL.md`.",
+   "triggers": [
+-    "guia", "guía", "educativa", "educational", "sena", "adso", "aprendiz", "instructor",
+-    "proyecto formativo", "producto entregable", "producto de aprendizaje", "formacion por proyectos", "formación por proyectos",
+-    "resultado de aprendizaje", "rap", "evidencia", "rubrica", "rúbrica", "dossier", "transferencia", "tgs", "curso", "learning"
++    "guia",
++    "guía",
++    "educativa",
++    "educational",
++    "sena",
++    "adso",
++    "aprendiz",
++    "instructor",
++    "proyecto formativo",
++    "producto entregable",
++    "producto de aprendizaje",
++    "formacion por proyectos",
++    "formación por proyectos",
++    "resultado de aprendizaje",
++    "rap",
++    "evidencia",
++    "rubrica",
++    "rúbrica",
++    "dossier",
++    "transferencia",
++    "tgs",
++    "curso",
++    "learning"
+   ],
+-  "applies_to": ["global"]
++  "applies_to": [
++    "global"
++  ]
+ }
+--- _core\knowledge_base\workflows\educational-guide-evolution.json
++++ C:\Users\Miguel\Documents\Aplicaciones\_core\knowledge_base\workflows\educational-guide-evolution.json
+@@ -1,17 +1,54 @@
+ {
+   "workflow_key": "workflow.educational-guide-evolution",
+   "name": "Evolución de guías educativas",
+-  "description": "Convierte fuentes curriculares y retroalimentación en guías por proyectos verificables y aprendizaje institucional seguro.",
++  "description": "Construye guías completas para principiantes y mejora el estándar con evidencia editorial, técnica y de aprendizaje diferenciada.",
+   "steps": [
+-    {"name": "Ground", "action": "Identifica programa, competencia, RAP, criterios, proyecto y fuentes; no inventa datos curriculares."},
+-    {"name": "Contract", "action": "Crea o actualiza guide.manifest.json con reto, producto, fases, evidencias e instrumentos."},
+-    {"name": "Design", "action": "Diseña actividades de reflexión, contextualización, apropiación y transferencia que incrementan el producto."},
+-    {"name": "Build", "action": "Implementa contenido e interacciones con IA opcional, accesibilidad, privacidad y degradación útil."},
+-    {"name": "Verify", "action": "Ejecuta el validador pedagógico, los gates técnicos y revisa las fuentes exactas."},
+-    {"name": "Learn", "action": "Registra resultado, evidencia, feedback y reglas candidatas; promueve solo patrones validados."}
++    {
++      "name": "Ground",
++      "action": "Delimita análisis, creación o modificación; lee fuente curricular, estándar 2.5.0 y _core/skills/educational-guide-builder/references/authoring-blueprint.md. Identifica audiencia y fuentes; no inventa datos institucionales."
++    },
++    {
++      "name": "Compare",
++      "action": "Si se solicita comparación, inventaría las guías disponibles, declara profundidad de revisión y extrae patrones con archivo fuente y límites. No confunde cantidad de módulos con calidad."
++    },
++    {
++      "name": "Contract",
++      "action": "Crea o actualiza guide.manifest.json y deliverables.registry.json; define caso conductor, producto observable, núcleo, variantes, ampliaciones, diagnóstico recuperable y tiempos por ruta."
++    },
++    {
++      "name": "Design",
++      "action": "Aplica la plantilla de módulo: objetivo, preparación, teoría mínima, ejemplo resuelto, contraejemplo, práctica guiada, error con recuperación, práctica autónoma y estación de transferencia. Distribuye evidencias antes del cierre."
++    },
++    {
++      "name": "Build",
++      "action": "Implementa primero la web con módulos compartidos del SDK, IA opcional y accesibilidad. Cada comando declara contexto y resultado. Cada laboratorio identifica si ilustra, simula, analiza estáticamente o ejecuta realmente. No clona una guía genérica como resultado terminado."
++    },
++    {
++      "name": "Verify",
++      "action": "Ejecuta validadores pedagógicos y pruebas técnicas proporcionales. Contrasta web y descarga en la ruta elegida. Prueba entradas válidas, inválidas y vacías de laboratorios; rechaza métricas o éxitos prefijados presentados como mediciones. Revisa fuentes y contexto de umbrales."
++    },
++    {
++      "name": "Readiness",
++      "action": "Completa GUIDE_READINESS_REVIEW.md con referencias, pendientes y excepciones justificadas. Recorre la primera actividad, un fallo recuperable y la transferencia. Separa revisión editorial, ejecución técnica y prueba con un principiante; nunca inventa participación humana."
++    },
++    {
++      "name": "Learn",
++      "action": "Registra recomendaciones, cambios, evidencias y limitaciones; incorpora patrones al catálogo con su nivel real de validación. El cierre consolida lo producido y conserva evaluación humana; una auditoría no autoriza por sí sola reescribir o publicar otras guías."
++    }
+   ],
+-  "triggers": ["guia", "guía", "educativa", "sena", "adso", "proyecto formativo", "evidencia", "rap", "tgs"],
+-  "applies_to": ["global"],
++  "triggers": [
++    "guia",
++    "guía",
++    "educativa",
++    "sena",
++    "adso",
++    "proyecto formativo",
++    "evidencia",
++    "rap",
++    "tgs"
++  ],
++  "applies_to": [
++    "global"
++  ],
+   "risk_level": "normal"
+ }
+-
+--- _core\skills\educational-guide-builder\SKILL.md
++++ C:\Users\Miguel\Documents\Aplicaciones\_core\skills\educational-guide-builder\SKILL.md
+@@ -9,14 +9,14 @@
+ 
+ ## Flujo obligatorio
+ 
+-1. Consultar el contexto de la tarea y leer la fuente curricular disponible. Separar texto oficial, adaptación didáctica, ejemplo ficticio, supuesto y pregunta pendiente.
++1. Consultar el contexto de la tarea, leer `references/authoring-blueprint.md` y la fuente curricular disponible. Separar texto oficial, adaptación didáctica, ejemplo ficticio, supuesto y pregunta pendiente.
+ 2. Crear o actualizar `guide.manifest.json` antes del contenido. Incluir programa, competencia, resultado de aprendizaje, fase, actividad, reto, producto, secuencia SENA, evidencias, criterios, instrumentos, duración declarada, fuentes y límites.
+ 3. Crear `deliverables.registry.json` cuando exista un producto final, validable contra `_core/knowledge_base/schemas/deliverables.registry.schema.json`. Registrar cada artefacto con `purpose`, `inputs`, `instructions`, `example`, `fields`, `checklist`, `criterion`, `instrument`, `evidence`, `nextStep`, `evidenceType`, `aiAssist` y `station`. Declarar además el bloque `submission`: qué se carga, con qué nomenclatura, dónde, qué se califica y el mapa `tipo de evidencia → artefactos → criterio → instrumento`.
+-4. Diseñar la ruta `reflexión → contextualización → apropiación → transferencia` y la experiencia visible `orientar → ejemplo → practicar → evidencia → transferir`.
++4. Diseñar la ruta `reflexión → contextualización → apropiación → transferencia` y la experiencia visible `orientar → ejemplo → practicar → evidencia → transferir`. Separar núcleo, variantes por tecnología y ampliaciones; añadir diagnóstico con recuperación, caso conductor y primera ejecución. Aplicar la plantilla de módulo de `references/authoring-blueprint.md`: ejemplo resuelto, contraejemplo, práctica guiada, recuperación del error, práctica independiente y transferencia.
+ 5. **Distribuir las evidencias, no acumularlas.** Cada artefacto declara `station.sectionId` y la sección correspondiente monta `data-db-evidence="<id>"` después de su teoría, su ejemplo resuelto y su ejercicio. El cierre monta `data-db-evidence-dossier` y solo consolida: ninguna evidencia puede aparecer allí por primera vez. La mecánica la pinta `DevBrainEvidence` (paquete `devbrain-evidence.js` + `.css`) o `DevBrainSDK.evidence`; no se escribe un motor de formularios por guía. Publicar la copia cargable con `Publish-GuideEvidenceRegistry.ps1 -Path <guía> -Apply` para que las estaciones funcionen con `file://`. Contrato completo en la sección 11 del estándar y en `rule.evidence-per-station`.
+ 6. Para cada artefacto, explicar qué es, para qué sirve, cómo se construye, cómo se ve un buen resultado, cómo se comprueba y cómo llega a la siguiente guía.
+ 7. Si el formato es web, combinar esta skill con `skill.web-learning-design-coach` y `skill.build-high-quality-web`. Integrar `devbrain-learner-sdk` para gamificación (XP, niveles, toasts, persistencia) y arquitectura SPA.
+-8. Aplicar el **Protocolo V.E.R.A.** (Verificar existencia, Ejecutar TDD, Revisar calidad/seguridad, Atribuir en bitácora) al tamaño de cada evidencia mediante `aiAssist`, no como un capítulo aparte sobre IA. Incorporar además al menos 4 simuladores interactivos en vivo (Visual/Arquitectura, Editor/Sandbox, Debugging/Bug Hunter y Security/Assertion Validator).
++8. Aplicar el **Protocolo V.E.R.A.** (Verificar existencia, Ejecutar TDD, Revisar calidad/seguridad, Atribuir en bitácora) al tamaño de cada evidencia mediante `aiAssist`, no como un capítulo aparte sobre IA. Elegir interacciones según el objetivo, sin cuota fija. Distinguir ilustración, simulación, comprobación estática y ejecución real; probar entrada válida, inválida, vacía y reinicio. Nunca presentar una salida fija de éxito como prueba ejecutada o métrica medida.
+ 9. Preferir constructores locales, tablas copiables, plantillas y exportaciones Markdown/CSV cuando ayuden a producir evidencia. Etiquetar siempre lo que la herramienta comprueba y lo que no puede demostrar.
+ 10. Nunca inventar códigos SENA, competencias, nombres institucionales, horas oficiales, datos de usuarios o certificaciones. Marcar como “por confirmar con instructor” aquello que no tenga fuente.
+ 11. Validar con:
+@@ -27,7 +27,7 @@
+    & 'C:\Users\Miguel\Documents\Aplicaciones\_core\skills\build-high-quality-web\scripts\Test-WebQuality.ps1' -Path '<guia>' -FailOn Error
+    ```
+ 
+-12. Hacer un recorrido de primera vez: localizar propósito, entender siglas, completar una actividad, recuperar un error, producir el artefacto y reconocer qué queda pendiente de validación humana.
++12. Completar `GUIDE_READINESS_REVIEW.md` con evidencias según la referencia de autoría. Recorrer propósito → preparación → actividad → error y recuperación → artefacto → transferencia. Contrastar la web con el paquete descargable y las versiones efectivamente probadas. Distinguir revisión editorial, ejecución técnica y prueba con un principiante real; registrar como pendiente la validación que no ocurrió. En guías de pruebas, aplicar el perfil QA de la referencia antes de ampliar herramientas.
+ 13. Registrar la iteración en `GUIDE_ITERATION_LOG.md` y el aprendizaje de diseño en `WEB-DESIGN-LEARNING.md`. Promover patrones globales solo con evidencia repetida o aprobación explícita.
+ 
+ ## Gates de liberación
+@@ -43,6 +43,7 @@
+ 
+ ## Recursos
+ 
++- Estructura, plantilla de módulo y perfil QA: `references/authoring-blueprint.md`.
+ - Contrato de artefactos: `references/deliverable-contract.md`.
+ - Esquema del registro: `_core/knowledge_base/schemas/deliverables.registry.schema.json`.
+ - Regla de distribución: `_core/knowledge_base/rules/evidence-per-station.json`.

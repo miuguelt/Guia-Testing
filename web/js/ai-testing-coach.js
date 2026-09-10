@@ -52,7 +52,7 @@ const AITestingCoach = (() => {
                     <div>
                         <span class="gema-eyebrow">Taller guiado · 4 estaciones</span>
                         <h3 id="gema-builder-title">Construye tu Gema QA</h3>
-                        <p>Responde con información de tu proyecto. La salida será un encargo listo para pegar en tu asistente de IA.</p>
+                        <p>Completa las cuatro estaciones para generar una instrucción QA. Después la pegarás en tu asistente; la Gema no ejecuta ni aprueba tus pruebas.</p>
                     </div>
                     <div class="gema-progress-card">
                         <span id="gema-progress-label">Estación 1 de 4</span>
@@ -70,7 +70,7 @@ const AITestingCoach = (() => {
                         <div class="gema-step-panel" data-gema-panel="0">
                             <span class="gema-panel-kicker">01 · Contexto mínimo</span>
                             <h4>¿Qué estás construyendo?</h4>
-                            <p class="gema-help">La IA necesita conocer el propósito y las herramientas reales antes de proponer un solo test.</p>
+                            <p class="gema-help">Escribe el contexto mínimo para que el asistente no tenga que adivinar el proyecto, el framework ni el comando de pruebas.</p>
                             <div class="gema-form-grid">
                                 <label class="gema-field"><span>Nombre del proyecto <b>*</b></span><input class="sim-input" id="projectName" type="text" placeholder="Ej. Inventario de finca" autocomplete="off"></label>
                                 <label class="gema-field"><span>Tipo de aplicación <b>*</b></span><select class="sim-select" id="appType" title="Tipo de aplicación"><option value="">Selecciona una opción</option><option>API o servicio web</option><option>Aplicación web con interfaz</option><option>Aplicación móvil</option><option>Aplicación de escritorio</option><option>Librería o paquete</option><option>Otro</option></select></label>
@@ -82,7 +82,7 @@ const AITestingCoach = (() => {
                         <div class="gema-step-panel" data-gema-panel="1" hidden>
                             <span class="gema-panel-kicker">02 · Riesgo y comportamiento</span>
                             <h4>¿Qué no puede fallar?</h4>
-                            <p class="gema-help">Prioriza el daño real para que la IA no confunda cantidad de pruebas con calidad.</p>
+                            <p class="gema-help">Describe los usuarios y flujos cuyo fallo tendría mayor impacto. Aquí conviertes el proyecto en riesgos comprobables.</p>
                             <div class="gema-form-grid">
                                 <label class="gema-field"><span>Personas, roles o perfiles</span><textarea class="sim-textarea" id="users" rows="3" placeholder="Ej. aprendiz, instructor, administrador"></textarea></label>
                                 <label class="gema-field"><span>Flujos críticos <b>*</b></span><textarea class="sim-textarea" id="criticalFlows" rows="3" placeholder="Un flujo por línea: iniciar sesión, crear producto, pagar..."></textarea></label>
@@ -94,7 +94,7 @@ const AITestingCoach = (() => {
                         <div class="gema-step-panel" data-gema-panel="2" hidden>
                             <span class="gema-panel-kicker">03 · Estrategia de pruebas</span>
                             <h4>Define la red antes de pedir código</h4>
-                            <p class="gema-help">La Gema convertirá tus respuestas en casos rastreables, no en una colección de aserciones al azar.</p>
+                            <p class="gema-help">Indica casos válidos, errores, abuso y capas de prueba. La Gema convertirá tus respuestas en casos rastreables, no en aserciones al azar.</p>
                             <div class="gema-form-grid">
                                 <label class="gema-field"><span>Camino feliz <b>*</b></span><textarea class="sim-textarea" id="happyPath" rows="3" placeholder="Qué debe ocurrir cuando todo es válido."></textarea></label>
                                 <label class="gema-field"><span>Errores y casos borde <b>*</b></span><textarea class="sim-textarea" id="errorCases" rows="3" placeholder="Vacíos, límites, duplicados, 404, 422, timeouts..."></textarea></label>
@@ -108,7 +108,7 @@ const AITestingCoach = (() => {
                         <div class="gema-step-panel" data-gema-panel="3" hidden>
                             <span class="gema-panel-kicker">04 · Entrega responsable</span>
                             <h4>Acota y define cuándo está bien</h4>
-                            <p class="gema-help">Una buena instrucción obliga al asistente a inspeccionar, explicar, ejecutar y dejar evidencia.</p>
+                            <p class="gema-help">Define qué trabajarás ahora, qué ya existe y qué significa terminar. Solo después confirma la casilla de privacidad y genera la instrucción.</p>
                             <div class="gema-form-grid">
                                 <label class="gema-field"><span>Alcance de esta iteración</span><textarea class="sim-textarea" id="scope" rows="3" placeholder="Módulos, rutas o historias que sí se trabajarán ahora."></textarea></label>
                                 <label class="gema-field"><span>Pruebas que ya existen</span><textarea class="sim-textarea" id="currentTests" rows="3" placeholder="Carpetas, archivos, comandos o cobertura actual."></textarea></label>

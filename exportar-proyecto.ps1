@@ -27,6 +27,8 @@ if (-not (Test-Path $SourceDir)) {
 
 try {
     New-Item -ItemType Directory -Path $TempDir -Force | Out-Null
+    $PackageRoot = Join-Path $TempDir "guia-testing-qa"
+    New-Item -ItemType Directory -Path $PackageRoot -Force | Out-Null
     $OutputDirectory = Split-Path -Parent $OutputFile
     New-Item -ItemType Directory -Path $OutputDirectory -Force | Out-Null
 
@@ -36,15 +38,15 @@ try {
             -not ($_.PSIsContainer -and $ExcludedDirectories -contains $_.Name)
         } |
         ForEach-Object {
-            Copy-Item -LiteralPath $_.FullName -Destination $TempDir -Recurse -Force
+            Copy-Item -LiteralPath $_.FullName -Destination $PackageRoot -Recurse -Force
         }
 
-    Get-ChildItem -LiteralPath $TempDir -Force -Directory -Recurse |
+    Get-ChildItem -LiteralPath $PackageRoot -Force -Directory -Recurse |
         Where-Object { $ExcludedDirectories -contains $_.Name } |
         Sort-Object { $_.FullName.Length } -Descending |
         Remove-Item -Recurse -Force
 
-    Get-ChildItem -LiteralPath $TempDir -Force -File -Recurse |
+    Get-ChildItem -LiteralPath $PackageRoot -Force -File -Recurse |
         Where-Object {
             $_.Name -in @(".coverage", "test.db") -or
             $_.Name -like ".env*" -or

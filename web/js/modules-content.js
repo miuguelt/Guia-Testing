@@ -1,49 +1,48 @@
 const MODULES = {
     "m-reflexion": {
         title: "Reflexión inicial: el costo de un defecto no detectado",
-        badge: "Modulo 1",
-        intro: "Antes de escribir un solo test, entendamos por que la calidad de software puede literalmente bankruptear una empresa.",
+        badge: "Módulo 1",
+        intro: "Antes de escribir una prueba, identifica qué daño quieres evitar y qué evidencia te permitiría decidir si el cambio es seguro.",
         blocks: [
             {
                 type: "alert", variant: "warning",
-                title: "Caso Real: Knight Capital (1 de Agosto, 2012)",
-                body: "En 45 minutos, un algoritmo de trading con código de prueba no eliminado provocó pérdidas por $440 millones USD. Knight Capital quedó en una situación financiera crítica y nueve meses después fue adquirida por Getco. La causa se relacionó con un cambio de despliegue y controles insuficientes. Usa el caso para preguntar qué verificaciones y barreras habrían detenido el incidente; no lo conviertas en una receta causal simplificada."
+                title: "Caso real: Knight Capital (1 de agosto de 2012)",
+                body: "El 1 de agosto de 2012, un fallo de despliegue en Knight Capital provocó una actividad de negociación no deseada y pérdidas superiores a 440 millones de dólares. La investigación de la SEC describe controles de despliegue, revisión y límites de mercado insuficientes. Usa el caso para preguntar qué barreras habrían reducido el riesgo; no lo conviertas en la afirmación simplificada de que un único test habría evitado todo el incidente."
             },
             {
                 type: "code", lang: "python", file: "knight_capital_bug.py",
-                title: "El tipo de bug que provoco la catastrofe",
-                code: `# Codigo de prueba que NUNCA debio llegar a produccion
+                title: "Un ejemplo de control insuficiente",
+                code: `# Pseudocódigo didáctico: no reproduce el sistema real de Knight Capital.
 def perform_trades(market_data):
-    # Código de prueba de carga que nunca debe llegar a producción.
+    # Un modo de prueba activado por error puede cambiar el comportamiento.
     if should_place_orders:  # <- Flag activado en produccion
-        for i in range(1000):  # <- Loop sin fin
+        for i in range(1000):  # <- muchas ordenes no deseadas
             place_order(market_data.symbol, quantity=999)  # <- Cantidades absurdas
     # Codigo real
     execute_real_trade(market_data)
 
-# LECCION: Sin tests automatizados que validen el deploy,
-# sin revision de codigo (code review), sin pipeline CI/CD,
-# este tipo de bugs son inevitables.`
+# LECCION: combina pruebas, revision, controles de despliegue,
+# limites operativos y una respuesta que detenga la actividad anomala.`
             },
             {
                 type: "alert", variant: "info",
-                title: "Preguntas de Reflexion (discute con tu equipo)",
-                body: "1. Como verificas que tu codigo funciona antes de subirlo? 2. Como sabes que un cambio no rompio algo que funcionaba? 3. Que pasa si el desarrollador que escribio el codigo ya no esta? 4. Como garantizas calidad en un equipo de 50 desarrolladores? 5. Cuanto costaria un bug en produccion para tu proyecto?"
+                title: "Preguntas de reflexión (discútelas con tu equipo)",
+                body: "1. ¿Cómo verificas que tu código funciona antes de subirlo? 2. ¿Cómo sabes que un cambio no rompió algo que funcionaba? 3. ¿Qué ocurre si la persona que escribió el código ya no está? 4. ¿Qué controles necesita un equipo para trabajar con confianza? 5. ¿Cuánto costaría un defecto en producción para tu proyecto?"
             },
             {
                 type: "alert", variant: "success",
                 title: "Lo que aprenderas en esta guia",
-        body: "Al finalizar los 16 módulos serás capaz de: escribir tests unitarios con PyTest y Jest, probar APIs REST con TestClient, probar componentes React, probar servicios Java con JUnit 5, automatizar E2E con Playwright, medir cobertura, configurar CI/CD en GitHub Actions, aplicar TDD/BDD y usar IA con un flujo de verificación responsable."
+                body: "Al finalizar la ruta podrás convertir un requisito en casos de prueba, ejecutar una prueba manual y automatizada, interpretar un fallo, registrar un defecto, repetir tras la corrección y aplicar la técnica en PyTest, Jest/Vitest, JUnit o Playwright según tu aplicativo. Las herramientas son medios: la evidencia y el criterio son el centro."
             },
             {
                 type: "timeline",
-                title: "Historia: como nacio la disciplina de las pruebas",
+                title: "Historia: cómo nació la disciplina de las pruebas",
                 items: [
                     { year: "1994", title: "SUnit — el patron xUnit", desc: "Kent Beck escribe SUnit en Smalltalk y define lo que hoy llamamos 'framework de pruebas': setup, una asercion por caso, y resultados en verde o rojo." },
                     { year: "1997", title: "JUnit lleva xUnit a Java", desc: "Beck junto a Erich Gamma portan la idea a Java. El modelo se convierte en el estandar que despues copiarian Python, PHP, Ruby y JavaScript." },
                     { year: "2003-2004", title: "pytest nace en Python", desc: "Holger Krekel publica 'py' (luego pytest): asserts naturales, fixtures por inyeccion y un modelo de plugins que lo convierte en el estandar de Python." },
-                    { year: "2009", title: "La piramide toma forma", desc: "Mike Cohn populariza el modelo 70/20/10 en 'Succeeding with Agile' y el testing se organiza alrededor de la velocidad y el costo." },
-                    { year: "2012", title: "Knight Capital: el costo de no probar", desc: "Un codigo de carga activo en produccion causa perdidas por $440 millones en 45 minutos. La industria entera entiende el testing como inversion." },
+                    { year: "2009", title: "La piramide toma forma", desc: "Mike Cohn populariza la pirámide de pruebas en 'Succeeding with Agile' y el testing se organiza alrededor de la velocidad y el costo." },
+                    { year: "2012", title: "Knight Capital: controles de despliegue insuficientes", desc: "La SEC documenta una falla de despliegue y controles operativos insuficientes que causaron actividad no deseada. El caso sirve para estudiar capas de prevención y respuesta, no para atribuirlo a una sola causa." },
                     { year: "2017", title: "JUnit 5 y la modernizacion", desc: "JUnit 5 (Jupiter) renueva el estandar Java con extensiones, parametrizacion y display names, mientras el E2E se vuelve automatizable real con Selenium y Playwright." }
                 ]
             }
@@ -51,22 +50,70 @@ def perform_trades(market_data):
     },
 
     "m-piramide": {
-        title: "La Piramide de Testing",
-        badge: "Modulo 2",
-        intro: "El modelo de Mike Cohn (2009) que organiza los tests por costo, velocidad y cantidad.",
+        title: "La pirámide de pruebas",
+        badge: "Módulo 2",
+        intro: "El modelo de Mike Cohn ayuda a conversar sobre costo, velocidad y alcance. No fija porcentajes universales: primero diseña casos a partir de una regla y después elige el nivel de prueba que aporta más información.",
         blocks: [
             {
+                type: "alert", variant: "info",
+                title: "Primero define el oráculo: qué significa que el resultado sea correcto",
+                body: "Caso ficticio de esta guía: una persona puede solicitar entre 1 y 5 equipos disponibles y debe tener permiso. El oráculo es la regla que decide aceptar o rechazar la solicitud; la herramienta y el porcentaje de cobertura vienen después. Reemplaza la entidad, el rango y el rol por los de tu aplicativo cuando hagas la transferencia."
+            },
+            {
+                type: "comparison",
+                title: "Ejemplo resuelto: de una regla a seis casos de prueba",
+                headers: ["ID", "Entrada", "Técnica", "Resultado esperado"],
+                rows: [
+                    ["CP-01", "Cantidad 0 + permiso", "Fuera del límite inferior", "Rechazar; no crear solicitud"],
+                    ["CP-02", "Cantidad 1 + permiso", "Límite inferior válido", "Crear solicitud por una unidad"],
+                    ["CP-03", "Cantidad 3 + permiso", "Representante de partición válida", "Crear solicitud por tres unidades"],
+                    ["CP-04", "Cantidad 5 + permiso", "Límite superior válido", "Crear solicitud por cinco unidades"],
+                    ["CP-05", "Cantidad 6 + permiso", "Fuera del límite superior", "Rechazar; no crear solicitud"],
+                    ["CP-06", "Cantidad 1 + sin permiso", "Regla de autorización", "Denegar; no crear solicitud"]
+                ]
+            },
+            {
+                type: "steps",
+                title: "Práctica guiada: ejecuta CP-05 y registra un defecto",
+                intro: "Haz la prueba manual antes de escribir el test. La evidencia útil conserva lo esperado, lo observado y la decisión tomada.",
+                steps: [
+                    { number: 1, title: "Prepara el escenario", tag: "Entrada", desc: "Usa un usuario de prueba con permiso y una aplicación limpia. Anota versión, ambiente y disponibilidad inicial." },
+                    { number: 2, title: "Ejecuta la cantidad 6", tag: "Actuar", desc: "Envía la solicitud con seis equipos y conserva la respuesta visible o el registro de la interfaz." },
+                    { number: 3, title: "Compara con el oráculo", tag: "Comprobar", desc: "Si se creó la solicitud, el resultado observado contradice CP-05. No lo marques como aprobado porque la pantalla respondió 200." },
+                    { number: 4, title: "Describe el defecto", tag: "Diagnóstico", desc: "Escribe pasos reproducibles, resultado esperado, resultado observado, severidad, prioridad y evidencia. Si falla la preparación, clasifícalo como problema de entorno." },
+                    { number: 5, title: "Repite después de corregir", tag: "Regresión", desc: "Ejecuta CP-01 a CP-06 y registra qué cambió. Una corrección sin repetición no demuestra que el defecto quedó resuelto." }
+                ]
+            },
+            {
+                type: "alert", variant: "warning",
+                title: "Ahora cambia el ejemplo",
+                body: "Elige una regla de tu aplicativo. Escribe una partición válida, una inválida, dos valores frontera y una combinación de permiso o estado. Justifica por qué cada caso puede revelar un defecto. Si todavía no tienes aplicativo, usa el caso de préstamos y completa la plantilla de ART-TEST-01."
+            },
+            {
                 type: "diagram", diagramType: "pyramid",
-                title: "Piramide de Testing de Mike Cohn",
-                body: "70% Unit (rapidos, baratos, aislados) / 20% Integration (medios, lentos) / 10% E2E (caros, lentos, completos)"
+                title: "Pirámide de pruebas de Mike Cohn",
+                body: "Base: pruebas rápidas y aisladas. Centro: interacción entre componentes y contratos. Punta: recorridos críticos completos. La mezcla se decide por riesgo, velocidad, costo de mantenimiento y confianza necesaria; 70/20/10 es una proporción ilustrativa, no una garantía."
+            },
+            {
+                type: "mental-map",
+                title: "Mapa visual: cada capa responde una pregunta distinta",
+                body: "No subas a una prueba más costosa si una capa inferior puede darte la misma evidencia. La pregunta del riesgo orienta la herramienta.",
+                center: "Evidencia útil",
+                accessibleText: "La evidencia útil se divide en regla aislada, conexión entre componentes, recorrido del usuario y repetición automática.",
+                nodes: [
+                    { title: "Unitarias", detail: "¿La regla calcula bien?" },
+                    { title: "Integración", detail: "¿Los componentes conversan?" },
+                    { title: "E2E", detail: "¿La persona logra su objetivo?" },
+                    { title: "CI/CD", detail: "¿Lo repetimos en cada cambio?" }
+                ]
             },
             {
                 type: "tools",
-                title: "El stack de herramientas de esta guia",
+                title: "Qué necesitas para esta práctica",
                 stack: [
                     {
                         icon: "⚡", name: "PyTest", tag: "Python",
-                        role: "Framework de pruebas para Python: aserciones simples con assert, fixtures y parametrizacion.",
+                        role: "Framework de pruebas para Python: aserciones simples con assert, fixtures y parametrización.",
                         when: "Logica de negocio y APIs (FastAPI, Flask). 70% inferior de la piramide y quality gates en CI."
                     },
                     {
@@ -101,14 +148,14 @@ def perform_trades(market_data):
                 title: "Estructura recomendada de carpetas",
                 code: `proyecto/
 ├── tests/
-│   ├── unit/              # 70% - Pruebas unitarias (aisladas, rapidas)
+│   ├── unit/              # Referencia inicial; ajusta por riesgo (aisladas, rapidas)
 │   │   ├── test_models.py
 │   │   ├── test_services.py
 │   │   └── test_utils.py
-│   ├── integration/       # 20% - Pruebas de integracion
+│   ├── integration/       # Integracion; cantidad segun contratos y riesgos
 │   │   ├── test_api.py     # API + BD real o test-db
 │   │   └── test_db.py
-│   └── e2e/               # 10% - End-to-end (Playwright)
+│   └── e2e/               # E2E; solo recorridos criticos (Playwright)
 │       └── test_flujo_compra.py
 ├── src/
 │   └── app/
@@ -117,12 +164,12 @@ def perform_trades(market_data):
             },
             {
                 type: "comparison",
-                title: "Unit vs Integration vs E2E",
+                title: "Unit vs Integration vs E2E (proporciones orientativas)",
                 headers: ["Aspecto", "Unit", "Integration", "E2E"],
                 rows: [
                     ["Velocidad", "ms (<10)", "segundos", "minutos"],
                     ["Costo", "Bajo", "Medio", "Alto"],
-                    ["Cantidad", "70%", "20%", "10%"],
+                    ["Cantidad", "Referencia histórica", "Referencia histórica", "Referencia histórica"],
                     ["Aislamiento", "Total (mocks)", "Parcial", "Ninguno"],
                     ["Confianza", "Baja", "Media", "Alta"],
                     ["Mantenibilidad", "Alta", "Media", "Baja"]
@@ -130,17 +177,33 @@ def perform_trades(market_data):
             },
             {
                 type: "comparison",
-                title: "Pruebas Funcionales vs Pruebas de Rendimiento y Servidor",
+                title: "Pruebas funcionales, de rendimiento y de servidor",
                 headers: ["Tipo de Prueba", "Qué Evalúa", "Herramienta", "Métrica de Éxito"],
                 rows: [
-                    ["Funcional: Unitarias", "Lógica pura, cálculos, validaciones aisladas", "PyTest, Jest, JUnit 5", "Aserción booleana (True/False) en <5ms"],
+                    ["Funcional: Unitarias", "Lógica pura, cálculos, validaciones aisladas", "PyTest, Jest, JUnit 5", "Aserciones correctas y tiempo objetivo medido en tu entorno"],
                     ["Funcional: Integración", "Endpoints REST + Base de datos real", "TestClient, Testcontainers", "Status HTTP y persistencia correcta"],
                     ["Funcional: E2E", "Flujo crítico completo del usuario (UI)", "Playwright, Cypress", "Flujo sin errores visuales ni roturas"],
-                    ["Servidor: Carga (Load)", "Comportamiento bajo tráfico normal esperado", "k6, Locust", "Latencia p95 < 200ms, 0% errores"],
-                    ["Servidor: Estrés (Stress)", "Punto de quiebre (Breaking Point) del VPS", "k6, Apache Bench", "Identificar CPU 100% o DB Pool agotado"],
-                    ["Servidor: Pico (Spike)", "Saltos bruscos de 10 a 1000 usuarios en 5s", "k6 (stages ramping)", "Recuperación automática sin reinicio"],
-                    ["Servidor: Resistencia (Soak)", "Carga continua por horas (Fugas de memoria)", "Locust, k6", "RAM y descriptores de archivo estables"],
-                    ["Despliegue: Humo (Smoke)", "Salud crítica post-despliegue en VPS", "curl, scripts bash", "/health responde 200 OK y DB viva"]
+                    ["Servidor: Carga (Load)", "Comportamiento bajo tráfico normal esperado", "k6, Locust", "SLO/p95 y tasa de errores acordados para el ambiente"],
+                    ["Servidor: Estrés (Stress)", "Punto de quiebre (Breaking Point) del VPS", "k6, Apache Bench", "Caracterizar saturación, errores y recuperación observados"],
+                    ["Servidor: Pico (Spike)", "Saltos bruscos de usuarios definidos por la hipótesis", "k6 (stages ramping)", "Degradación y recuperación comparadas con el criterio acordado"],
+                    ["Servidor: Resistencia (Soak)", "Carga continua durante el período acordado", "Locust, k6", "Tendencias estables de memoria, errores y descriptores"],
+                    ["Despliegue: Humo (Smoke)", "Salud crítica post-despliegue en VPS", "curl, scripts bash", "Endpoints críticos responden según el contrato y la dependencia está disponible"]
+                ]
+            },
+            {
+                type: "glossary",
+                title: "Glosario transversal: las palabras que conectan la guía",
+                intro: "Cuando una palabra parezca abstracta, busca primero su idea sencilla, luego la analogía y finalmente el ejemplo.",
+                entries: [
+                    { term: "Unidad", alias: "unit test", meaning: "Parte pequeña y aislada del código, como una función o una clase.", analogy: "Revisar una sola pieza de una bicicleta antes de probar toda la bicicleta.", example: "calcular_descuento(100, 10) devuelve 90." },
+                    { term: "Integración", alias: "integration test", meaning: "Prueba que dos o más componentes intercambian datos correctamente.", analogy: "Comprobar que el cajero, la caja y el recibo se pasan la información correcta.", example: "POST /productos guarda y devuelve el registro esperado." },
+                    { term: "Mock", alias: "doble de prueba", meaning: "Sustituto controlado de una dependencia real, como un correo o una base de datos.", analogy: "Un teléfono de juguete que permite practicar la conversación sin llamar a nadie.", example: "Mockito verifica que el repositorio fue consultado." },
+                    { term: "TDD", alias: "Test-Driven Development", meaning: "Ciclo en el que primero se escribe una prueba que falla, luego el código mínimo y después se mejora.", analogy: "Dibujar la ruta antes de construir la carretera y usarla para comprobar cada avance.", example: "Rojo → Verde → Refactor." },
+                    { term: "BDD", alias: "Behavior-Driven Development", meaning: "Forma de describir comportamientos con ejemplos que negocio y técnica pueden leer.", analogy: "Un libreto común para que actores, director y público sepan qué debe suceder.", example: "Given una condición, When una acción, Then un resultado." },
+                    { term: "Cobertura", alias: "coverage", meaning: "Medida de qué líneas o ramas fueron ejecutadas por las pruebas.", analogy: "Un mapa que marca calles recorridas; no confirma que la calle esté bien construida.", example: "pytest-cov reporta líneas y ramas no ejecutadas." },
+                    { term: "Quality Gate", alias: "compuerta de calidad", meaning: "Regla que debe cumplirse antes de permitir una entrega o despliegue.", analogy: "La puerta de un peaje que solo se abre cuando el vehículo cumple las condiciones.", example: "El pipeline se detiene si la suite falla o la cobertura baja." },
+                    { term: "CI/CD", alias: "integración y entrega continuas", meaning: "Automatización que construye, prueba y prepara entregas cada vez que cambia el código.", analogy: "Una banda de revisión que inspecciona cada paquete antes de enviarlo.", example: "GitHub Actions ejecuta la suite en cada pull request." },
+                    { term: "Observabilidad", alias: "logs, métricas y trazas", meaning: "Capacidad de entender qué ocurre dentro de un sistema a partir de sus señales.", analogy: "El tablero, los testigos y la caja negra de un vehículo.", example: "Un log con request_id ayuda a seguir una falla." }
                 ]
             },
             {
@@ -158,7 +221,7 @@ def perform_trades(market_data):
             {
                 type: "steps",
                 title: "Ruta de Ejecución Lógica del Aprendiz: Las 7 Fases para Probar Cualquier Proyecto",
-                intro: "Sigue este orden secuencial estricto en cada proyecto que desarrolles. Probar de la base a la cúspide te garantiza resolver el 80% de los fallos con retroalimentación instantánea (< 10 ms) antes de invertir tiempo en pruebas pesadas de navegador.",
+                intro: "Sigue este orden como una ruta de aprendizaje, no como una ley universal. Empieza por el comportamiento y el riesgo; luego elige la prueba más pequeña que pueda darte evidencia útil. Las duraciones y proporciones cambian según el proyecto.",
                 steps: [
                     {
                         number: 1,
@@ -175,7 +238,7 @@ def perform_trades(market_data):
                         tag: "Lógica Pura & Algoritmos",
                         desc: "Escribe pruebas unitarias aisladas para funciones de cálculo, validaciones de esquemas Pydantic/JPA y reglas de negocio. Emplea mocks y stubs para aislar la base de datos y la red.",
                         command: "pytest tests/unit -v",
-                        tip: "Aplica el patrón AAA (Arrange, Act, Assert). Cada prueba unitaria debe durar menos de 5 ms.",
+                        tip: "Aplica el patrón AAA (Arrange, Act, Assert). Acordar un tiempo objetivo ayuda a detectar I/O accidental, pero el umbral debe medirse en tu entorno y no se convierte en una garantía universal.",
                         pitfall: "Intentar conectar una base de datos real en un test unitario destruye la velocidad de la suite y añade dependencias frágiles."
                     },
                     {
@@ -209,10 +272,10 @@ def perform_trades(market_data):
                         number: 6,
                         title: "Fase 6: Medición de Cobertura y Auditoría Multidimensional",
                         tag: "Compuerta de Calidad",
-                        desc: "Genera el reporte de cobertura de código (`pytest-cov`, `JaCoCo`, `c8`) para verificar si se supera el umbral del 80% definido para el ejercicio. Ejecuta `qa_auditor` para detectar vulnerabilidades OWASP y código muerto.",
+                        desc: "Genera el reporte de cobertura de código (`pytest-cov`, `JaCoCo`, `c8`) y relaciona las líneas y ramas cubiertas con requisitos y riesgos. El umbral del ejercicio es una decisión didáctica; no demuestra por sí solo la calidad ni la seguridad.",
                         command: "pytest --cov=app --cov-report=term-missing --cov-fail-under=80",
                         tip: "Examina no solo las líneas ejecutadas sino también la cobertura de ramas (`branch coverage`) en condicionales if/else.",
-                        pitfall: "Confiar ciegamente en un 100% de cobertura cuando los tests carecen de aserciones profundas (tests cosméticos)."
+                        pitfall: "Confiar ciegamente en un 100% de cobertura cuando los tests carecen de aserciones profundas, casos borde o comprobación de efectos secundarios."
                     },
                     {
                         number: 7,
@@ -229,13 +292,13 @@ def perform_trades(market_data):
     },
 
     "m-pytest-fastapi": {
-        title: "PyTest: Testeando el Microservicio FastAPI",
-        badge: "Modulo 3",
-        intro: "Testamos el codigo REAL de la Guia FastAPI con TestClient y fixtures.",
+        title: "PyTest: prueba un microservicio FastAPI",
+        badge: "Variante 5",
+        intro: "Prueba endpoints FastAPI sin levantar un servidor real: controla las dependencias, prepara datos aislados y relaciona cada respuesta con una regla.",
         blocks: [
             {
                 type: "tools",
-                title: "Herramientas de este modulo y sus contextos",
+                title: "Qué necesitas para esta práctica",
                 stack: [
                     {
                         icon: "⚡", name: "PyTest", tag: "Python",
@@ -414,13 +477,13 @@ def test_validacion_precio_cero(client):
     },
 
     "m-pytest-flask": {
-        title: "PyTest: Testeando la App Flask",
-        badge: "Modulo 4",
-        intro: "Testamos la aplicacion Flask real de la Guia Flask con SQLite en memoria. Para seguir este modulo necesitas el proyecto Flask completo en tu computador: la carpeta con run.py, requirements.txt, app/ y tests/test_routes.py. Si no lo tienes, clonalo desde el repositorio que indique tu instructor o pidelo como entrega de la guia anterior.",
+        title: "PyTest: prueba una aplicación Flask",
+        badge: "Variante 6",
+        intro: "Prueba las rutas de una aplicación Flask con SQLite en memoria. Necesitas el proyecto completo —run.py, requirements.txt, app/ y tests/test_routes.py— para ejecutar esta práctica.",
         blocks: [
             {
                 type: "tools",
-                title: "Herramientas de este modulo y sus contextos",
+                title: "Qué necesitas para esta práctica",
                 stack: [
                     {
                         icon: "⚡", name: "PyTest", tag: "Python",
@@ -441,14 +504,14 @@ def test_validacion_precio_cero(client):
             },
             {
                 type: "steps",
-                title: "Paso a Paso del Aprendiz: De Cero a Pruebas Automatizadas en Flask",
-                intro: "Aprende a ejecutar la aplicacion Flask real (Guia-Flask) y a probar rutas, formularios CSRF, sesiones de usuario y plantillas Jinja con el test_client de Flask. Todos los comandos se ejecutan en la raiz del proyecto Guia-Flask.",
+                title: "Práctica guiada: de la ruta al caso automatizado",
+                intro: "Ejecuta la aplicación desde la raíz del proyecto y prueba rutas, formularios CSRF, sesiones y plantillas Jinja con el cliente de pruebas de Flask.",
                 steps: [
                     {
                         number: 1,
-                        title: "Obtener el proyecto Flask (Guia-Flask)",
-                        tag: "Paso 1: Preparacion",
-                        desc: "Asegurate de tener en tu computador la aplicacion Flask completa: la carpeta que contiene run.py, requirements.txt, app/ y tests/test_routes.py. Si aun no la tienes, clonala desde el repositorio que te indique tu instructor.",
+                        title: "Obtén el proyecto Flask",
+                        tag: "Paso 1: Preparación",
+                        desc: "Asegúrate de tener la aplicación completa: la carpeta que contiene run.py, requirements.txt, app/ y tests/test_routes.py. Si aún no la tienes, clónala desde el repositorio que te indique tu instructor.",
                         command: "git clone <URL-del-repositorio-Guia-Flask>",
                         tip: "Todo este paso a paso se ejecuta dentro de la raiz de ese proyecto, nunca dentro de la carpeta tests/.",
                         pitfall: "Ejecutar los comandos en otra carpeta (por ejemplo el Escritorio): pytest no encontrara la aplicacion y fallara con ModuleNotFoundError."
@@ -604,13 +667,13 @@ def test_user_creation_and_login(client):
     },
 
     "m-jest-react": {
-        title: "Jest: Testeando Componentes React",
-        badge: "Modulo 5",
-        intro: "Testamos los componentes de la Guia React con Jest y React Testing Library.",
+        title: "Jest: prueba componentes React",
+        badge: "Variante 7",
+        intro: "Prueba componentes React desde el comportamiento visible: interacción, estados, accesibilidad y mensajes que la persona puede reconocer.",
         blocks: [
             {
                 type: "tools",
-                title: "Herramientas de este modulo y sus contextos",
+                title: "Qué necesitas para esta práctica",
                 stack: [
                     {
                         icon: "⚛️", name: "Jest", tag: "JavaScript",
@@ -767,23 +830,23 @@ describe("useFetch", () => {
     },
 
     "m-junit-jsp": {
-        title: "JUnit 5: Testeando Servlets JSP",
-        badge: "Modulo 6",
-        intro: "Testamos los Servlets y DAOs de la Guia JSP con JUnit 5 y Mockito.",
+        title: "JUnit 5: Pruebas de Spring Boot",
+        badge: "Variante 8",
+        intro: "Probamos servicios, controladores y repositorios de Spring Boot con JUnit 5, Mockito y H2.",
         blocks: [
             {
                 type: "tools",
-                title: "Herramientas de este modulo y sus contextos",
+                title: "Qué necesitas para esta práctica",
                 stack: [
                     {
                         icon: "☕", name: "JUnit 5 (Jupiter)", tag: "Java",
                         role: "Framework xUnit moderno: @Test, @BeforeEach, @DisplayName, @ParameterizedTest y extensiones para Maven/Spring Boot.",
-                        when: "Backend Java clasico (Servlets, DAOs, Spring Boot) y cualquier logica de negocio que deba pasar por Maven."
+                        when: "Servicios, controladores y repositorios de Spring Boot, además de cualquier lógica de negocio que deba pasar por Maven."
                     },
                     {
                         icon: "🔧", name: "Mockito", tag: "Java",
-                        role: "Crea dobles de dependencias (Connection, PreparedStatement, repositorios HTTP) y verifica interacciones con verify().",
-                        when: "Aislar la unidad de BD y red en tests locales rapidos; simular errores SQL y comprobar que la consulta usa parametros."
+                        role: "Crea dobles de dependencias como repositorios HTTP o de datos y verifica interacciones con `verify()`.",
+                        when: "Aislar la unidad de la base de datos y la red en pruebas locales rápidas; simular errores y comprobar interacciones."
                     },
                     {
                         icon: "💾", name: "H2 / Testcontainers", tag: "DB test",
@@ -795,7 +858,7 @@ describe("useFetch", () => {
             {
                 type: "steps",
                 title: "Paso a Paso del Aprendiz: De Cero a Pruebas Automatizadas en Java con JUnit 5 & Mockito",
-                intro: "Aprende a probar DAOs, Servlets y servicios de negocio en Java aislando la base de datos y la red con Mockito.",
+                intro: "Aprende a probar servicios y controladores de Spring Boot aislando el repositorio con Mockito y usando H2 para integración.",
                 steps: [
                     {
                         number: 1,
@@ -810,7 +873,7 @@ describe("useFetch", () => {
                         number: 2,
                         title: "Crear clase de prueba con @ExtendWith(MockitoExtension.class)",
                         tag: "Paso 2: Estructura",
-                        desc: "Crea la clase correspondiente en `src/test/java/` (ej. `ProductoDAOTest.java`) y añade la extensión de Mockito para habilitar inyección automática de mocks.",
+                        desc: "Crea la clase correspondiente en `tests/` (por ejemplo, `FincaServiceTest.java`) y añade la extensión de Mockito para habilitar inyección automática de mocks.",
                         command: "mvn test-compile",
                         tip: "Usa `@DisplayName` con descripciones legibles en español para documentar la intención de negocio de cada método de prueba.",
                         pitfall: "Olvidar inicializar los mocks si no se usa `@ExtendWith(MockitoExtension.class)` ni `MockitoAnnotations.openMocks(this)`."
@@ -819,8 +882,8 @@ describe("useFetch", () => {
                         number: 3,
                         title: "Declarar Mocks y definir comportamientos con when...thenReturn",
                         tag: "Paso 3: Aislamiento",
-                        desc: "Crea dobles de `Connection`, `PreparedStatement` o `HttpServletRequest`. Simula sus respuestas usando la sintaxis fluida de Mockito.",
-                        command: "mvn test -Dtest=ProductoDAOTest",
+                        desc: "Crea un doble de `FincaRepository` y simula sus respuestas usando la sintaxis `when(...).thenReturn(...)` de Mockito.",
+                        command: "mvn test -Dtest=FincaServiceTest",
                         tip: "Simula excepciones SQLException con `when(mockStmt.executeUpdate()).thenThrow(new SQLException('Conexión perdida'))` para probar manejo de errores.",
                         pitfall: "Intentar hacer mock de tipos primitivos o clases finales (`final class`) sin la extensión adecuada de Mockito."
                     },
@@ -828,7 +891,7 @@ describe("useFetch", () => {
                         number: 4,
                         title: "Escribir aserciones y verificar interacciones con verify()",
                         tag: "Paso 4: Aserciones & Verify",
-                        desc: "Ejecuta el método del DAO/Servlet y valida el resultado con `assertEquals` o `assertTrue`. Usa `verify(mockStmt).executeUpdate()` para garantizar que la consulta se ejecutó.",
+                        desc: "Ejecuta el servicio o controlador y valida el resultado con aserciones de JUnit. Usa `verify(repository)` para comprobar las interacciones importantes.",
                         command: "mvn test",
                         tip: "`verify(mockStmt, never()).createStatement()` aporta evidencia de que esa interacción no ocurrió en el caso probado; complementa la revisión de seguridad.",
                         pitfall: "Verificar llamadas con parámetros exactos cuando los objetos comparados no implementan `equals()`; en ese caso usa `any()` o `argThat()`."
@@ -845,64 +908,48 @@ describe("useFetch", () => {
                 ]
             },
             {
-                type: "code", lang: "java", file: "src/test/java/ProductoDAOTest.java",
-                title: "ProductoDAOTest.java - Test del DAO con Mockito",
-                code: `import org.junit.jupiter.api.*;
-import org.mockito.Mockito;
-import java.sql.*;
+                type: "code", lang: "java", file: "tests/FincaServiceTest.java",
+                title: "FincaServiceTest.java - Servicio aislado con Mockito",
+                code: `import co.sena.adso.fincas.entity.Finca;
+import co.sena.adso.fincas.repository.FincaRepository;
+import org.junit.jupiter.api.*;
+import org.mockito.*;
 import java.util.List;
+import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@DisplayName("ProductoDAO - Tests del CRUD")
-class ProductoDAOTest {
+@DisplayName("FincaService - reglas de negocio")
+class FincaServiceTest {
 
-    private Connection mockConn;
-    private PreparedStatement mockStmt;
-    private ResultSet mockRs;
-    private ProductoDAO productoDAO;
+    @Mock private FincaRepository repository;
+    @InjectMocks private co.sena.adso.fincas.service.FincaService service;
 
     @BeforeEach
-    void setUp() throws SQLException {
-        mockConn = mock(Connection.class);
-        mockStmt = mock(PreparedStatement.class);
-        mockRs = mock(ResultSet.class);
-        when(mockConn.prepareStatement(anyString())).thenReturn(mockStmt);
-        productoDAO = new ProductoDAO(mockConn);
+    void setUp() { MockitoAnnotations.openMocks(this); }
+
+    @Test
+    @DisplayName("listar retorna las fincas del repositorio")
+    void testListar() {
+        when(repository.findAll()).thenReturn(List.of(
+            new Finca(1L, "La Esperanza", "Carlos", "El Gualilo", "Vélez", 12.5)
+        ));
+
+        List<Finca> resultado = service.listar();
+
+        assertEquals(1, resultado.size());
+        assertEquals("La Esperanza", resultado.get(0).getNombre());
+        verify(repository).findAll();
     }
 
     @Test
-    @DisplayName("crear producto ejecuta INSERT correctamente")
-    void testCrearProducto() throws SQLException {
-        Producto p = new Producto(0, "Laptop", 1500.0, 10, "Electronica");
-        when(mockStmt.executeUpdate()).thenReturn(1);
-        boolean result = productoDAO.crear(p);
-        assertTrue(result);
-        verify(mockStmt).executeUpdate();
-    }
+    @DisplayName("obtenerPorId informa cuando no existe")
+    void testObtenerPorIdNoExistente() {
+        when(repository.findById(999L)).thenReturn(Optional.empty());
 
-    @Test
-    @DisplayName("listar productos retorna lista no vacia")
-    void testListarProductos() throws SQLException {
-        when(mockStmt.executeQuery()).thenReturn(mockRs);
-        when(mockRs.next()).thenReturn(true, true, false);
-        when(mockRs.getInt("id")).thenReturn(1, 2);
-        when(mockRs.getString("nombre")).thenReturn("Mouse", "Teclado");
-        when(mockRs.getDouble("precio")).thenReturn(25.0, 40.0);
-
-        List<Producto> productos = productoDAO.listar();
-        assertEquals(2, productos.size());
-        assertEquals("Mouse", productos.get(0).nombre());
-    }
-
-    @Test
-    @DisplayName("PreparedStatement previene SQL Injection")
-    void testPreparedStatementPrevieneInyeccion() throws SQLException {
-        Producto malicioso = new Producto(0, "'; DROP TABLE productos; --", 100.0, 1, "X");
-        productoDAO.crear(malicioso);
-        // Verifica que se use setString (no concatenacion)
-        verify(mockStmt).setString(eq(1), contains("DROP TABLE"));
-        verify(mockStmt, never()).createStatement();
+        assertThrows(IllegalArgumentException.class,
+            () -> service.obtenerPorId(999L));
+        verify(repository).findById(999L);
     }
 }`
             },
@@ -914,126 +961,6 @@ class ProductoDAOTest {
                     { year: "2006", title: "JUnit 4: las anotaciones", desc: "@Test, @Before, @Ignore reemplazan clases y metodos por convencion; el estandar se vuelve mas declarativo y facil de leer." },
                     { year: "2008", title: "Mockito: mocks sin ruido", desc: "Szczepan Faber libera Mockito ('dynamic mocks for Java') y el aislamiento total de la unidad deja de requerir XML de configuracion." },
                     { year: "2017", title: "JUnit 5 (Jupiter)", desc: "Rediseño total: extensiones via @ExtendWith, DisplayName, parametrizacion y @Nested. Mockito 5 (2023) requiere JDK 11+; esta guia corre en Spring Boot 3/JDK 21." }
-                ]
-            }
-        ]
-    },
-
-    "m-tdd": {
-        title: "TDD: Test-Driven Development",
-        badge: "Modulo 7",
-        intro: "Rojo - Verde - Refactor: el ciclo de Kent Beck que revoluciono la programacion.",
-        blocks: [
-            {
-                type: "diagram", diagramType: "tdd-cycle",
-                title: "Ciclo TDD: Rojo -> Verde -> Refactor",
-                body: "1. ROJO: Escribe un test que FALLA (define que quieres). 2. VERDE: Escribe el codigo MINIMO para que pase. 3. REFACTOR: Mejora el codigo sin romper tests."
-            },
-            {
-                type: "steps",
-                title: "Paso a Paso del Aprendiz: Dominando el Ciclo TDD en 5 Pasos",
-                intro: "Aprende a programar guiado por pruebas bajo la disciplina de Kent Beck: pensar el contrato antes de escribir una sola línea de código.",
-                steps: [
-                    {
-                        number: 1,
-                        title: "Paso 1: Rojo (Red) - Escribir el test que falla",
-                        tag: "Fase Roja",
-                        desc: "Escribe una prueba unitaria pequeña que describa una expectativa de negocio antes de que la función o método exista. Ejecuta la prueba y verifica que falle exactamente por la razón esperada.",
-                        command: "pytest tests/unit/test_calculo.py -v",
-                        tip: "El test debe fallar inicialmente por NameError o por aserción no cumplida, nunca por un error de sintaxis en el archivo de prueba.",
-                        pitfall: "Escribir código de producción antes de ver la prueba fallar; si no la viste fallar, no sabes si realmente está probando algo."
-                    },
-                    {
-                        number: 2,
-                        title: "Paso 2: Verde (Green) - El código mínimo indispensable",
-                        tag: "Fase Verde",
-                        desc: "Escribe la implementación más simple posible que haga que el test pase a verde. Está permitido devolver un valor hardcodeado (técnica Fake It) para validar el cableado.",
-                        command: "pytest -k 'test_calculo' -v",
-                        tip: "No intentes escribir la solución perfecta o hiper-optimizada en este paso. El único objetivo es poner la barra en verde en menos de 2 minutos.",
-                        pitfall: "Ponerse a programar funcionalidades adicionales no cubiertas por el test actual (over-engineering)."
-                    },
-                    {
-                        number: 3,
-                        title: "Paso 3: Refactorización (Refactor) - Limpiar sin alterar comportamiento",
-                        tag: "Fase Refactor",
-                        desc: "Con las pruebas en verde que actúan como red de seguridad, elimina código duplicado, renombra variables confusas y divide funciones largas.",
-                        command: "pytest -v",
-                        tip: "Ejecuta la suite completa tras cada cambio pequeño de refactorización. Si algo se rompe, haz `Ctrl+Z` inmediatamente.",
-                        pitfall: "Añadir nueva funcionalidad durante la fase de refactorización; la refactorización solo mejora el diseño del código existente."
-                    },
-                    {
-                        number: 4,
-                        title: "Paso 4: Triangular casos borde (Baby Steps)",
-                        tag: "Iteración Corta",
-                        desc: "Agrega un segundo y tercer caso de prueba que obligue a generalizar la implementación (técnica de triangulación: 0, negativos, nulos, colecciones vacías).",
-                        command: "pytest --tb=line -v",
-                        tip: "Mantén el ritmo de los ciclos: cada ciclo Rojo-Verde-Refactor debe tomar entre 2 y 5 minutos.",
-                        pitfall: "Escribir suites gigantescas de 50 tests antes de implementar la primera línea de código."
-                    },
-                    {
-                        number: 5,
-                        title: "Paso 5: Documentar la evolución y verificar cobertura",
-                        tag: "Calidad Continua",
-                        desc: "Verifica el nivel de cobertura alcanzado y documenta los contratos en la suite de pruebas como documentación viva. La cobertura no demuestra por sí sola la ausencia de defectos.",
-                        command: "pytest --cov=app --cov-report=term-missing",
-                        tip: "Los tests de TDD son la mejor especificación técnica del sistema: si alguien tiene dudas de qué hace una función, el test lo responde.",
-                        pitfall: "Borrar tests de casos borde creyendo que ya no son necesarios una vez que el código funciona."
-                    }
-                ]
-            },
-            {
-                type: "code", lang: "python", file: "tdd_ejemplo.py",
-                title: "TDD paso a paso: funcion es_primo()",
-                code: `# === PASO 1: ROJO - Test que falla ===
-def test_es_primo_deberia_retornar_true_para_2():
-    assert es_primo(2) == True  # NameError: es_primo no existe
-
-# === PASO 2: VERDE - Implementacion minima ===
-def es_primo(n):
-    if n < 2: return False
-    for i in range(2, n):
-        if n % i == 0: return False
-    return True
-
-# === PASO 3: REFACTOR - Optimizar ===
-import math
-def es_primo(n):
-    if n < 2: return False
-    if n == 2: return True
-    if n % 2 == 0: return False
-    for i in range(3, int(math.sqrt(n)) + 1, 2):  # Solo impares hasta raiz
-        if n % i == 0: return False
-    return True
-
-# === MAS TESTS (casos borde) ===
-def test_es_primo_casos_borde():
-    assert es_primo(0) == False
-    assert es_primo(1) == False
-    assert es_primo(2) == True
-    assert es_primo(3) == True
-    assert es_primo(4) == False
-    assert es_primo(97) == True  # Primo grande
-    assert es_primo(100) == False`
-            },
-            {
-                type: "alert", variant: "success",
-                title: "Beneficios del TDD",
-                body: "1. Diseno mejorado: piensas en la interfaz antes de implementar. 2. Documentacion viva: los tests describen el comportamiento. 3. Confianza para refactorizar. 4. Menos bugs en produccion. 5. Cobertura natural (100% del codigo nuevo)."
-            },
-            {
-                type: "alert", variant: "info",
-                title: "¿En que contextos usar TDD?",
-                body: "IDEAL: logica con reglas de negocio (impuestos, validaciones, calculos), algoritmos y utilidades — codigo puro sin IO. DIFICIL: manejo de dependencias externas muy voluminosas (BD compleja, servicios de terceros), prototipos exploratorios UI y sus casos: practica la tecnica primero en estos ultimos con mocks, o limita el TDD al dominio (la capa de servicios)."
-            },
-            {
-                type: "timeline",
-                title: "Historia: TDD, de Smalltalk a la IA",
-                items: [
-                    { year: "1998", title: "Beck formaliza test-first", desc: "Kent Beck describe el ciclo rojo-verde-refactor en Smalltalk y lo integra a XP (Extreme Programming) como disciplina central." },
-                    { year: "2002", title: "El libro que lo hizo masivo", desc: "'Test-Driven Development: By Example' (Beck) define la receta practica y los patrones: FakeIt, TwoStep, Triple A." },
-                    { year: "2008", title: "TDD en las corrientes mainstream", desc: "Grandes equipos lo asumen (Google, Amazon reconocen su adopcion interna); aparece el debate sobre su impacto real con respecto al coverage." },
-                    { year: "2012-2019", title: "Characterization testing y refactor legacy", desc: "Michael Feathers ('Working Effectively with Legacy Code') soporta el TDD para sistemas viejos: escribir la red para poder cambiar." },
-                    { year: "2023-2025", title: "TDD con IA asistida", desc: "Los LLM redactan el test inicial ya escrito (la 'red') y el humano decide el contrato; la disciplina sigue siendo el proceso, no la herramienta." }
                 ]
             }
         ]

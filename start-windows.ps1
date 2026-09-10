@@ -1,27 +1,96 @@
 param(
     [switch]$Stop,
-    [switch]$Status
+    [switch]$Status,
+    [ValidateRange(1, 65535)]
+    [int]$Port = 8035
 )
 
-$Port = 8035
 $WebDir = Join-Path $PSScriptRoot "web"
+$GuideUrl = "http://localhost:$Port/index.html"
+$GuideProbeUrl = "http://127.0.0.1:$Port/index.html"
+
+function Test-PortInUse {
+    # Get-NetTCPConnection no está disponible en algunas instalaciones de
+    # PowerShell. La conexión TCP local funciona sin depender del módulo NetTCPIP.
+    $client = [System.Net.Sockets.TcpClient]::new()
+    try {
+        $connection = $client.ConnectAsync("127.0.0.1", $Port)
+        return $connection.Wait(500) -and $client.Connected
+    }
+    catch {
+        return $false
+    }
+    finally {
+        $client.Dispose()
+    }
+}
+
+function Test-GuideHttp {
+    try {
+        $response = Invoke-WebRequest -Uri $GuideProbeUrl -UseBasicParsing -TimeoutSec 2
+        return $response.StatusCode -eq 200 -and
+            $response.Content -match "Guía de Testing y QA" -and
+            $response.Content -match "js/main\.js"
+    }
+    catch {
+        return $false
+    }
+}
+
+function Stop-GuideServer {
+    $escapedWebDir = [Regex]::Escape($WebDir.TrimEnd("\"))
+    $pattern = "(?i)-m\s+http\.server\s+$Port(\s|$)"
+    $servers = @(
+        Get-CimInstance Win32_Process -Filter "Name = 'python.exe'" -ErrorAction SilentlyContinue |
+            Where-Object {
+                $_.CommandLine -and
+                $_.CommandLine -match $pattern -and
+                $_.CommandLine -match $escapedWebDir
+            }
+    )
+
+    if (-not $servers) {
+        Write-Host "No se encontró una instancia de la guía en el puerto $Port." -ForegroundColor Yellow
+        return
+    }
+
+    foreach ($server in $servers) {
+        Stop-Process -Id $server.ProcessId -Force -ErrorAction Stop
+    }
+    Write-Host "Servidor de la guía detenido en el puerto $Port." -ForegroundColor Yellow
+}
 
 if ($Status) {
-    $conn = Get-NetTCPConnection -LocalPort $Port -ErrorAction SilentlyContinue
-    if ($conn) { Write-Host "ONLINE - Puerto $Port en uso" -ForegroundColor Green }
-    else { Write-Host "OFFLINE - Puerto $Port libre" -ForegroundColor Yellow }
+    if (Test-PortInUse) {
+        if (Test-GuideHttp) {
+            Write-Host "ONLINE - Guía disponible en $GuideUrl" -ForegroundColor Green
+        }
+        else {
+            Write-Host "EN USO - El puerto $Port responde, pero no parece ser esta guía." -ForegroundColor Yellow
+        }
+    }
+    else {
+        Write-Host "OFFLINE - Puerto $Port libre" -ForegroundColor Yellow
+    }
     exit
 }
 
 if ($Stop) {
-    Get-Process -Name node,livereload -ErrorAction SilentlyContinue | Stop-Process -Force
-    Write-Host "Servidor detenido." -ForegroundColor Yellow
+    Stop-GuideServer
     exit
+}
+
+if (Test-PortInUse) {
+    if (Test-GuideHttp) {
+        Write-Host "La guía ya está disponible en $GuideUrl" -ForegroundColor Green
+        exit
+    }
+    throw "El puerto $Port ya está ocupado por otro servicio. Usa -Port con un puerto libre o detén el servicio que lo ocupa."
 }
 
 Write-Host "
   Guia Testing QA v3.0" -ForegroundColor Cyan
-Write-Host "  http://localhost:$Port
+Write-Host "  $GuideUrl
 " -ForegroundColor Green
 
 # Primero intenta servir la guía con el servidor estático incluido en Python,

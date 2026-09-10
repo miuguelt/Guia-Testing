@@ -18,6 +18,8 @@ La guía publica un paquete fuente listo para trabajar en
 [`recursos/codigo-ejemplo/`](recursos/codigo-ejemplo/). También se puede descargar
 el mismo paquete desde la opción **Descargar Proyecto** de la interfaz o desde
 [`web/downloads/guia-testing-qa.zip`](web/downloads/guia-testing-qa.zip).
+El archivo se extrae dentro de una carpeta `guia-testing-qa/`, para que los
+comandos de la guía funcionen sin reorganizar archivos manualmente.
 
 La guía paso a paso del paquete está en
 [`recursos/codigo-ejemplo/README.md`](recursos/codigo-ejemplo/README.md). Allí se
@@ -28,6 +30,27 @@ Si se actualiza el código del ejemplo, regenera el archivo público con
 `& .\exportar-proyecto.ps1`; el comando reemplaza
 `web/downloads/guia-testing-qa.zip` usando únicamente archivos fuente y de
 configuración.
+
+### Inicio rápido del aprendiz
+
+Después de extraer el ZIP, abre PowerShell dentro de `guia-testing-qa` y ejecuta:
+
+```powershell
+.\setup-windows.ps1
+$env:FLASK_SECRET_KEY = "<CLAVE_LOCAL_DE_PRUEBA>"
+.\run-tests.ps1 -SkipJava -SkipE2E
+```
+
+Ese recorrido prepara Python, Node.js y las dependencias de la práctica, y luego
+ejecuta las pruebas unitarias, de integración, BDD y de componentes React. Para
+recorrer también JUnit y Playwright instala JDK 21, Maven y Chromium, y ejecuta
+`.\run-tests.ps1 -Coverage`. Si una tecnología no está disponible todavía,
+puedes omitirla de forma explícita con `-SkipJava` o `-SkipE2E`; el script nunca
+presenta como verde una verificación que falló.
+
+En macOS o Linux, usa `bash run-tests.sh`. El archivo `.github/workflows/ci.yml`
+repite estas verificaciones en GitHub Actions y termina en un `quality-gate` que
+solo aprueba cuando Python, JavaScript, Java y E2E finalizaron correctamente.
 
 ---
 
@@ -107,7 +130,7 @@ Así como probamos el código de la aplicación con PyTest o Jest, también debe
    * Si detectan espacios en blanco sobrantes, YAML mal formateado o si falla una prueba unitaria rápida, **Git aborta físicamente el commit**.
 2. **Secret Scanning en Git (`gitleaks`):**
    * Hook estático de seguridad que inspecciona los diffs en stage buscando patrones de regex de tokens de GitHub, llaves privadas RSA, secretos de AWS y contraseñas.
-   * Si un aprendiz intenta cometer un archivo `.env` o una constante `API_KEY = "sk_live_..."`, el commit es rechazado de inmediato.
+   * Si un aprendiz intenta cometer un archivo `.env` o una credencial completa, el commit es rechazado de inmediato. Las muestras truncadas de documentación se convierten automáticamente en placeholders explícitos antes del escaneo.
 3. **Commitlint (Conventional Commits):**
    * Prueba automática sobre el mensaje del commit para forzar el estándar (`feat:`, `fix:`, `test:`, `docs:`), permitiendo generar *Changelogs* y versionamiento semántico (*SemVer*) automático.
 4. **Pruebas Locales de Workflows con `act`:**
@@ -437,9 +460,21 @@ pero con responsabilidades diferentes.
 * **Regla de oro:** 80% en lógica de negocio es obligatorio. Auditar que cada línea cubierta contenga aserciones reales.
 
 #### 9. Pipeline CI/CD en GitHub Actions
-* Configurar `.github/workflows/ci.yml` con compuerta estricta:
-  `Lint -> Unit Tests -> Integration Tests -> Coverage Check (>=80%) -> Docker Build`.
-* Si un solo test falla, el runner detiene el workflow (`exit 1`) y el servidor VPS no sufre alteraciones.
+* Este proyecto implementa CI en `.github/workflows/ci.yml`:
+  `PyTest + Behave`, `Vitest`, `JUnit 5 + JaCoCo`, `Playwright E2E` y un
+  `quality-gate` final.
+* En este monorepo, GitHub descubre y ejecuta la copia raíz
+  `.github/workflows/ci.yml`; la copia dentro del proyecto descargable permite
+  que el ZIP funcione como repositorio independiente.
+* La cobertura Python exige mínimo 80 % y Vitest aplica el mismo umbral en
+  líneas, funciones, ramas y sentencias. Los reportes y las evidencias E2E se
+  guardan como artefactos de la ejecución.
+* Si un solo trabajo falla o queda omitido, `quality-gate` termina con error. En
+  GitHub se debe marcar ese trabajo como verificación obligatoria en la
+  protección de `main`.
+* CI no es todavía CD: el despliegue debe agregarse como un trabajo posterior
+  con `needs: quality-gate`, un entorno protegido y secretos del proveedor.
+  Así nunca se despliega código que no superó las pruebas.
 
 #### 10. Auditoría Multidimensional con `qa_auditor`
 * Ejecutar en `recursos/auditoria-seguridad/`:
@@ -455,10 +490,20 @@ pero con responsabilidades diferentes.
   .\start-windows.ps1
   # Disponible en http://localhost:8035
   ```
-  El script usa el servidor estático de Python y no descarga paquetes. Como alternativa
-  rápida, abre `web/index.html` directamente en el navegador; la ruta de aprendizaje
-  y sus simuladores funcionan sin red porque los recursos de la guía están versionados
-  localmente.
+  El script usa el servidor estático de Python y no descarga paquetes. Si el puerto ya
+  está ocupado por la guía, informa la dirección existente; si pertenece a otro servicio,
+  indica cómo elegir otro puerto (`.\start-windows.ps1 -Port 8040`). Para consultar o
+  detener la instancia actual usa, respectivamente, `.\start-windows.ps1 -Status` y
+  `.\start-windows.ps1 -Stop`. Como alternativa rápida, abre `web/index.html` directamente
+  en el navegador; la ruta de aprendizaje y sus simuladores funcionan sin red porque los
+  recursos de la guía están versionados localmente.
+* **Iniciar con Docker Compose:**
+  ```powershell
+  docker compose up --build
+  # Disponible en http://localhost:8035
+  ```
+  Compose publica el Nginx del contenedor en el equipo anfitrión. Si 8035 está ocupado,
+  usa `$env:GUIDE_HOST_PORT = "8040"` antes de ejecutar `docker compose up --build`.
 * **Ejecutar Suite de Pruebas de la Guía:**
   ```powershell
   pytest tests/test_guide.py -v
@@ -678,3 +723,14 @@ que defina el instructor. Para preparar la entrega, usa
 [`docs/evidencias-template.md`](docs/evidencias-template.md), conserva los
 resultados reproducibles y revisa los umbrales acordados antes de cargar el
 paquete en el LMS.
+
+
+## Fundamentos y métodos: revisión de septiembre de 2026
+
+La web ordena la ruta como fundamentos, diseño y niveles, TDD, BDD, una
+variante técnica, E2E, cobertura y CI. Incluye vocabulario de QA, técnicas
+de casos, dobles, exploración, defectos, riesgo residual y pruebas no funcionales.
+El [laboratorio de préstamos](recursos/codigo-ejemplo/laboratorios/prestamos/README.md)
+conecta pytest y Behave; la descarga conserva los mismos ejemplos que la web.
+La [revisión de contenidos](docs/revision-fundamentos-tdd-bdd-2026-09-10.md)
+registra cobertura temática, verificaciones y límites.

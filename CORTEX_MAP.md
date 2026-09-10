@@ -3,7 +3,7 @@
 **Proyecto:** Guia Testing | SENA ADSO
 **Fase ADSO:** 5 - Evaluacion
 **Version:** 1.0
-**Ultima actualizacion:** Junio 2026
+**Ultima actualizacion:** Septiembre 2026
 
 ---
 
@@ -12,12 +12,12 @@
 ```
 Guia Testing/
 ├── web/                          # Guia web interactiva (puerto 8035)
-│   ├── index.html                # 12 modulos + simuladores + gamificacion
+│   ├── index.html                # 16 modulos + simuladores + evidencias
 │   ├── css/styles.css            # Glassmorphism dark theme
 │   └── js/
-│       ├── modules-content.js    # 12 modulos con codigo real
+│       ├── modules-content.js    # Modulos base con codigo real
 │       ├── code-renderer.js      # Render con file headers
-│       ├── simulators.js         # 3 simuladores activos
+│       ├── simulators.js         # 4 simuladores QA
 │       ├── gamification.js       # XP y niveles (testing_xp)
 │       └── main.js               # Navegacion y logica
 ├── recursos/
@@ -58,6 +58,27 @@ Guia Testing/
 | Servicio | Puerto | Descripcion |
 |----------|--------|-------------|
 | Guia Web | 8035 | Guia interactiva HTML/CSS/JS |
+
+## 3.1 Contrato de distribución responsiva
+
+- `web/css/styles.css` parte de una composición Mobile First desde 320 px:
+  menú lateral oculto, contenido de ancho completo y rejillas apiladas.
+- Todo texto natural de la web ocupa el `100%` del ancho interno disponible:
+  `.content`, párrafos, listas, citas, avisos, introducciones y ayudas no deben
+  heredar límites tipográficos como `70ch` o `78ch` que creen huecos laterales.
+  Los únicos límites válidos son excepciones semánticas documentadas como
+  modales, controles compactos, sellos, hojas imprimibles y código con scroll
+  interno.
+- Las rejillas de módulos se expanden mediante `@container` cuando el panel
+  tiene holgura real; no se deben reintroducir columnas rígidas como estado
+  base ni reemplazarlas por correcciones tardías con `max-width`.
+- A partir de `85rem` se muestra el menú lateral. En ese estado
+  `.main-wrapper` usa `width: calc(100% - var(--sidebar-width))` junto con su
+  margen para evitar desbordar el documento.
+- El código conserva el desplazamiento horizontal dentro de su bloque; la
+  página completa debe mantener `scrollWidth === clientWidth`.
+- `tests/test_responsive_layout.py` protege este contrato y documenta la
+  ausencia de PrimeNG, PrimeVue y PrimeReact en este repositorio.
 
 ---
 

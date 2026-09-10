@@ -1,7 +1,7 @@
 {
   "standard": {
     "id": "devbrain.educational-guide",
-    "version": "2.4.0"
+    "version": "2.5.0"
   },
   "guide": {
     "id": "adso-testing-qa-calidad-2026",
@@ -9,9 +9,9 @@
     "format": "web",
     "entrypoint": "./web/index.html",
     "language": "es-CO",
-    "version": "3.1.0",
+    "version": "3.5.0",
     "servicePort": 8035,
-    "summary": "Formación integral en aseguramiento de calidad del software (QA), diseño de planes de pruebas, pruebas unitarias, de integración y end-to-end con PyTest, Jest, JUnit 5 y Playwright bajo el estándar ISO/IEC 25010."
+    "summary": "Ruta de fundamentos, diseño de casos, TDD, BDD, variantes de automatización y evaluación de calidad. Incluye un caso ficticio de préstamo de equipos y un laboratorio Python reproducible; las fuentes y los umbrales se interpretan según el contexto."
   },
   "curricularAlignment": {
     "program": {
@@ -77,7 +77,7 @@
     "checkpoints": [
       {
         "id": "CP-01",
-        "name": "Plan de Pruebas IEEE 829",
+        "name": "Plan de pruebas y matriz de casos (adaptación 29119-3)",
         "evidence": "ART-TEST-01",
         "criterion": "Define alcance, estrategia y matriz de casos."
       },
@@ -85,7 +85,7 @@
         "id": "CP-02",
         "name": "Suite de Pruebas Unitarias",
         "evidence": "ART-TEST-02",
-        "criterion": "Automatiza pruebas con cobertura >= 80%."
+        "criterion": "Automatiza pruebas con aserciones de casos borde y documenta un umbral de cobertura justificado para el alcance."
       },
       {
         "id": "CP-03",
@@ -138,7 +138,11 @@
   "glossary": [
     {
       "term": "Test-Driven Development (TDD)",
-      "meaning": "Metodología de desarrollo donde se escribe primero la prueba que falla antes de implementar el código de producción."
+      "meaning": "Desarrollo guiado por pruebas: elegir un comportamiento pequeño, observar una prueba roja por una causa pertinente, implementar lo necesario para pasar y refactorizar manteniendo la suite verde."
+    },
+    {
+      "term": "Behavior-Driven Development (BDD)",
+      "meaning": "Desarrollo guiado por comportamiento: negocio, desarrollo y pruebas descubren reglas mediante ejemplos, acuerdan escenarios y automatizan los relevantes como especificación viva. Gherkin es una forma de expresarlos."
     },
     {
       "term": "Pirámide de Pruebas",
@@ -147,16 +151,36 @@
     {
       "term": "Protocolo V.E.R.A.",
       "meaning": "Verificar en docs, Ejecutar TDD, Revisar calidad/seguridad, Atribuir en bitácora."
+    },
+    {
+      "term": "Pruebas End-to-End (E2E)",
+      "meaning": "Pruebas que recorren una funcionalidad desde la interfaz que usa la persona hasta el resultado observable, atravesando las partes conectadas del sistema."
+    },
+    {
+      "term": "Localizador (locator)",
+      "meaning": "Referencia para encontrar un elemento del DOM; se recomienda elegirla por la intención del usuario, como getByRole o getByLabel."
+    },
+    {
+      "term": "Aserción (assertion)",
+      "meaning": "Comprobación que compara el resultado observado con el resultado esperado y hace visible una contradicción."
+    },
+    {
+      "term": "Prueba intermitente (flaky)",
+      "meaning": "Prueba que alterna entre pasar y fallar sin cambios relevantes en el producto; investigar tiempos, datos compartidos, red y orden de ejecución."
+    },
+    {
+      "term": "Prueba frágil (brittle)",
+      "meaning": "Prueba que se rompe ante cambios de implementación o presentación que conservan el comportamiento requerido."
     }
   ],
   "sources": [
     {
-      "title": "Estándar IEEE 829 para Documentación de Pruebas de Software",
-      "locator": "IEEE Standard for Software and System Test Documentation",
-      "use": "Adaptación didáctica de la estructura del plan de pruebas y casos de prueba; validar la versión aplicable con el instructor."
+      "title": "ISO/IEC/IEEE 29119-3:2021 — Documentación de pruebas de software",
+      "locator": "https://www.iso.org/standard/79429.html",
+      "use": "Adaptación didáctica de plantillas de documentación de pruebas; la guía no declara conformidad y el instructor confirma la versión aplicable."
     },
     {
-      "title": "Estándar Canónico DevBrain v2.4.0",
+      "title": "Estándar Canónico DevBrain v2.5.0",
       "locator": "_core/knowledge_base/EDUCATIONAL_GUIDE_STANDARD.md",
       "use": "Estructura de estaciones distribuidas, evidencias, criterios y gates de calidad."
     },
@@ -164,6 +188,21 @@
       "title": "Documentación oficial de asistentes y herramientas IA para pruebas",
       "locator": "GitHub Copilot, Cursor, Gemini Code Assist, Amazon Q Developer, Qodo, Diffblue Cover, Claude Code y mabl",
       "use": "Contrastar capacidades, requisitos, privacidad y disponibilidad; la guía enseña a verificar sus propuestas y no las presenta como autoridad final."
+    },
+    {
+      "title": "Cucumber — BDD y referencia Gherkin",
+      "locator": "https://cucumber.io/docs/bdd/",
+      "use": "Consulta 2026-09-10. Descubrimiento, formulación y automatización; sintaxis contrastada en https://cucumber.io/docs/gherkin/reference/."
+    },
+    {
+      "title": "Martin Fowler — Test Driven Development",
+      "locator": "https://martinfowler.com/bliki/TestDrivenDevelopment.html",
+      "use": "Consulta 2026-09-10. Ciclos pequeños de prueba, implementación y refactorización; ejemplos de esta guía elaborados para el caso ficticio."
+    },
+    {
+      "title": "ISTQB — Certified Tester Foundation Level v4.0",
+      "locator": "https://istqb.org/certifications/certified-tester-foundation-level-ctfl-v4-0/",
+      "use": "Consulta 2026-09-10. Referencia para revisar amplitud de fundamentos, diseño, gestión y herramientas; esta guía no equivale a certificación."
     }
   ]
 }

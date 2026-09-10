@@ -83,8 +83,8 @@ const SIMULATORS = {
             <p style="color:var(--text-muted);margin-bottom:1rem;">Adivina si el assertion PASA o FALLA:</p>
             <div id="assert-code" style="font-family:'JetBrains Mono',monospace;background:rgba(0,0,0,0.3);padding:1rem;border-radius:8px;margin-bottom:1rem;font-size:0.95rem;"></div>
             <div style="display:flex;gap:0.5rem;">
-                <button class="btn btn-primary" id="assert-pass">&#10004; Pasa</button>
-                <button class="btn btn-secondary" id="assert-fail">&#10006; Falla</button>
+                <button type="button" class="btn btn-primary" id="assert-pass">&#10004; Pasa</button>
+                <button type="button" class="btn btn-secondary" id="assert-fail">&#10006; Falla</button>
             </div>
             <div id="assert-feedback" style="margin-top:1rem;"></div>
             <div style="margin-top:1rem;color:var(--text-muted);">Aciertos: <span id="assert-score">0</span>/${tests.length}</div>
@@ -151,7 +151,7 @@ const SIMULATORS = {
             content.innerHTML = `
                 <div style="margin-bottom:1rem;font-weight:600;">${idx+1}. ${q.q}</div>
                 <div style="display:grid;gap:0.5rem;">
-                    ${q.opts.map((o,i) => `<button class="btn btn-secondary quiz-opt" data-i="${i}" style="text-align:left;">${o}</button>`).join("")}
+                    ${q.opts.map((o,i) => `<button type="button" class="btn btn-secondary quiz-opt" data-i="${i}" style="text-align:left;">${o}</button>`).join("")}
                 </div>
                 <div id="quiz-feedback" style="margin-top:1rem;"></div>
             `;
@@ -303,10 +303,10 @@ const SIMULATORS = {
                     </div>
 
                     <div style="display:flex;gap:0.75rem;flex-wrap:wrap;align-items:center;">
-                        <button class="btn btn-primary" id="btn-validate-seq" style="padding:0.6rem 1.5rem;">
+                        <button type="button" class="btn btn-primary" id="btn-validate-seq" style="padding:0.6rem 1.5rem;">
                             &#10004; Validar Orden del Pipeline
                         </button>
-                        <button class="btn btn-secondary" id="btn-reset-seq" style="padding:0.6rem 1.2rem;">
+                        <button type="button" class="btn btn-secondary" id="btn-reset-seq" style="padding:0.6rem 1.2rem;">
                             &#8634; Reiniciar / Mezclar
                         </button>
                     </div>

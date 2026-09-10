@@ -1,5 +1,5 @@
 {
-  "version": "2.4.0",
+  "version": "2.5.0",
   "standard": "devbrain.educational-guide",
   "guideId": "adso-testing-qa-calidad-2026",
   "status": "learning-guide-adaptation",
@@ -14,7 +14,7 @@
     "approval": [
       "Las tres evidencias técnicas están completadas en estado 'lista', ninguna en blanco.",
       "La suite de pruebas ejecuta con 100% de tests aprobados.",
-      "La cobertura de código supera el umbral mínimo del 80%.",
+      "La cobertura de código alcanza el umbral acordado para el alcance y se revisa junto con aserciones, riesgos y casos no probados.",
       "El registro local está completo, se puede exportar y fue revisado contra el instrumento definido por el instructor."
     ],
     "competencyMap": [
@@ -32,7 +32,7 @@
         "artifacts": [
           "ART-TEST-02"
         ],
-        "criterion": "Pruebas automatizadas con cobertura superior al 80% y aserciones de casos borde y excepciones.",
+        "criterion": "Pruebas automatizadas con aserciones de casos borde y excepciones, cobertura contextualizada y límites documentados.",
         "instrument": "Rúbrica de pruebas automatizadas.",
         "learningResult": "RAP-01 · Automatización de pruebas unitarias y de integración con métricas de cobertura."
       },
@@ -41,7 +41,7 @@
         "artifacts": [
           "ART-TEST-03"
         ],
-        "criterion": "Automatización exitosa de flujos de usuario completos y matriz de defectos categorizados por severidad.",
+        "criterion": "Automatización de un flujo crítico y registro reproducible de resultados, defectos, severidad, estado y regresión, con alcance declarado cuando no hay hallazgos.",
         "instrument": "Rúbrica analítica de producto de software.",
         "learningResult": "RAP-01 · Pruebas End-to-End y gestión de defectos."
       }
@@ -51,18 +51,18 @@
     {
       "id": "ART-TEST-01",
       "code": "TEST-EV01",
-      "name": "Documento del Plan de Pruebas de Software (IEEE 829)",
+      "name": "Documento del Plan de Pruebas de Software (adaptación 29119-3)",
       "evidenceType": "conocimiento",
       "purpose": "Estructurar la estrategia, ambientes, matriz de trazabilidad y casos de prueba del sistema.",
       "inputs": [
         "Historias de Usuario",
         "Criterios Gherkin / BDD"
       ],
-      "instructions": "Redacta el Plan de Pruebas de Software detallando los tipos de prueba, criterios de entrada/salida y matriz de casos funcionales y no funcionales.",
-      "example": "Plan de pruebas estructurado con 15 casos de prueba priorizados por riesgo e impacto en producción.",
+      "instructions": "Redacta el plan de pruebas con alcance, riesgos, criterios de entrada y salida, oráculos y una matriz de casos funcionales y no funcionales. Comienza con los casos válidos, inválidos y de frontera del ejemplo resuelto; amplía según las reglas de tu aplicativo.",
+      "example": "Plan resuelto con seis casos para una regla de cantidad y autorización, incluyendo dos límites, un caso válido, uno inválido y una justificación de la selección.",
       "criterion": "Define el alcance, estrategia, ambientes, criterios de aceptación y matriz de casos de prueba del sistema.",
       "instrument": "Lista de chequeo de plan de pruebas.",
-      "evidence": "Documento formal del Plan de Pruebas IEEE 829.",
+      "evidence": "Documento del plan de pruebas con matriz, riesgos y límites declarados.",
       "nextStep": "Avanzar a la automatización de la suite de pruebas unitarias e integración.",
       "station": {
         "sectionId": "m-piramide",
@@ -95,7 +95,7 @@
         "log": "docs/ai-log.md"
       },
       "upload": {
-        "fileName": "01-plan-pruebas-ieee829.md",
+        "fileName": "01-plan-pruebas-29119-3.md",
         "format": "markdown"
       }
     },
@@ -104,14 +104,14 @@
       "code": "TEST-EV02",
       "name": "Suite de Pruebas Unitarias y de Integración con Cobertura",
       "evidenceType": "desempeño",
-      "purpose": "Implementar pruebas automatizadas con aserciones rigurosas y mocks para alcanzar >= 80% de cobertura.",
+      "purpose": "Implementar pruebas automatizadas con aserciones rigurosas, aislamiento adecuado y cobertura interpretada según el riesgo.",
       "inputs": [
         "Código de producción",
         "PyTest / Jest / JUnit"
       ],
-      "instructions": "Escribe las pruebas automatizadas aislando dependencias externas con Mocks y ejecuta el reporte de cobertura HTML/consola.",
-      "example": "Suite de 20 tests unitarios con pytest pasando en verde y reporte coverage al 88%.",
-      "criterion": "Pruebas automatizadas con cobertura superior al 80% y aserciones de casos borde y excepciones.",
+      "instructions": "Escribe las pruebas automatizadas aislando dependencias externas con dobles apropiados. Ejecuta la suite antes y después de una corrección, conserva el reporte de cobertura y explica qué riesgos y aserciones quedaron fuera del alcance.",
+      "example": "Muestra de una suite con casos válidos, bordes y excepciones, resultado observado de la ejecución y reporte de cobertura interpretado; el porcentaje se informa como dato del entorno, no como meta universal.",
+      "criterion": "Pruebas automatizadas con aserciones de casos borde y excepciones, cobertura contextualizada y límites documentados.",
       "instrument": "Rúbrica de pruebas automatizadas.",
       "evidence": "Código fuente de pruebas y reporte de cobertura.",
       "nextStep": "Implementar pruebas End-to-End con Playwright.",
@@ -137,7 +137,8 @@
       ],
       "checklist": [
         "Aserciones estrictas implementadas",
-        "Cobertura >= 80% verificada",
+        "Casos borde y excepciones ejecutados",
+        "Cobertura y límites documentados",
         "Revisado bajo V.E.R.A."
       ],
       "aiAssist": {
@@ -155,16 +156,16 @@
       "code": "TEST-EV03",
       "name": "Pruebas End-to-End con Playwright y Reporte de Defectos",
       "evidenceType": "producto",
-      "purpose": "Automatizar flujos de usuario completos mediante Playwright y documentar defectos en Bug Tracker.",
+      "purpose": "Automatizar flujos de usuario completos mediante Playwright y documentar defectos, correcciones y regresiones en un registro reproducible.",
       "inputs": [
         "Aplicación web desplegada",
         "Playwright"
       ],
-      "instructions": "Automatiza un flujo crítico del proyecto validando la interfaz y documenta los hallazgos en la matriz de defectos.",
-      "example": "Script Playwright con captura de vídeo en fallos y matriz Bug Tracker con 3 defectos clasificados.",
-      "criterion": "Automatización exitosa de flujos de usuario completos y matriz de defectos categorizados por severidad.",
+      "instructions": "Automatiza un flujo crítico del proyecto con precondiciones, datos, resultado esperado y aserciones observables. Conserva la evidencia de ejecución; si aparece un defecto, reprodúcelo, registra pasos, severidad, estado y vuelve a ejecutar el caso después de corregirlo. Si no aparece, declara el alcance y la ausencia de defectos dentro de lo probado.",
+      "example": "Script Playwright con evidencia de ejecución y una matriz de defectos que muestra al menos un caso completo de reproducción y regresión, o una declaración del alcance probado cuando no se encontró un defecto.",
+      "criterion": "Automatización de un flujo crítico y registro reproducible de resultados, defectos, severidad, estado y regresión, con alcance declarado cuando no hay hallazgos.",
       "instrument": "Rúbrica analítica de producto de software.",
-      "evidence": "Scripts Playwright y reporte de Bug Tracker.",
+      "evidence": "Scripts Playwright, artefactos de ejecución y reporte de defectos o alcance sin hallazgos.",
       "nextStep": "Consolidar el registro de evidencias y empaquetar la entrega final.",
       "station": {
         "sectionId": "m-playwright",
@@ -187,8 +188,9 @@
         }
       ],
       "checklist": [
-        "Flujo E2E verificado en verde",
-        "Defectos clasificados por severidad",
+        "Precondiciones, datos y aserciones documentados",
+        "Evidencia de ejecución conservada",
+        "Defectos reproducidos y regresión repetida, o alcance sin hallazgos declarado",
         "Revisado bajo V.E.R.A."
       ],
       "aiAssist": {
