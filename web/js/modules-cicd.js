@@ -166,7 +166,7 @@ jobs:
             {
                 type: "alert", variant: "info",
                 title: "🐙 Relación Simbiótica: Testing y GitHub como Quality Gate en la Nube",
-                body: "GitHub transforma las pruebas de un simple script en la máquina del programador ('en mi máquina sí funciona') en un árbitro automatizado e inmutable. A través de GitHub Actions, cada evento de push o pull request arranca runners efímeros e independientes que clonan el repositorio, instalan dependencias y ejecutan la suite de tests (PyTest, Jest, JUnit, Playwright). Mediante Branch Protection Rules (Reglas de Protección de Ramas), GitHub impide físicamente que un desarrollador fusione código hacia 'main' o 'develop' si el pipeline de pruebas no está 100% en verde. Además, proporciona feedback directo e interactivo: anotaciones de error sobre las líneas exactas del código en el Pull Request, badges de estado para el README, almacenamiento de artefactos (videos y trazas de Playwright) y compuertas de cobertura conectadas a herramientas como Codecov."
+                body: "GitHub permite ejecutar comprobaciones fuera de la máquina del programador y reducir el 'en mi máquina sí funciona'. Con GitHub Actions, eventos como push o pull request pueden iniciar runners independientes que clonan el repositorio, instalan dependencias y ejecutan la suite (PyTest, Jest, JUnit, Playwright). Si el repositorio configura reglas de protección y marca esos checks como obligatorios, GitHub bloquea la fusión mientras no cumplan; sin esa configuración, un pipeline fallido por sí solo no protege la rama. También puede mostrar anotaciones en el Pull Request, badges, artefactos como videos y trazas, y compuertas de cobertura conectadas a servicios como Codecov."
             },
             {
                 type: "comparison",
@@ -174,7 +174,7 @@ jobs:
                 headers: ["Elemento de QA / Testing", "¿Se sube a Git?", "Archivos / Ejemplos", "Justificación Técnica (SSoT y CI/CD)"],
                 rows: [
                     ["Código de Pruebas", "✅ SÍ (Obligatorio)", "tests/test_*.py, *.spec.js, *Test.java", "Ciudadano de primera clase. Sin ellos, el runner de GitHub Actions no tiene nada que ejecutar y no hay Quality Gate."],
-                    ["Fixtures y Datos Sintéticos", "✅ SÍ (Obligatorio)", "conftest.py, fábricas Faker, mocks", "Garantiza reproducibilidad determinista para que cualquier clon del repositorio ejecute la suite."],
+                    ["Fixtures y Datos Sintéticos", "✅ SÍ (cuando la suite los necesita)", "conftest.py, fábricas Faker, mocks", "Favorecen resultados repetibles cuando controlan estado, semillas, reloj y dependencias; por sí solos no eliminan toda variación."],
                     ["Configuraciones de Testing", "✅ SÍ (Obligatorio)", "pytest.ini, vitest.config.js, playwright.config.js", "Define cómo se descubren los casos, flags de ejecución, timeouts y umbrales de cobertura obligatorios."],
                     ["Pipelines CI y Hooks de Git", "✅ SÍ (Obligatorio)", ".github/workflows/ci.yml, .pre-commit-config.yaml", "Formaliza el contrato de calidad que todos los colaboradores y runners deben cumplir obligatoriamente."],
                     ["Secretos y Credenciales Reales", "❌ NUNCA (.gitignore)", ".env, .env.local, id_rsa, *.pem, API keys", "Vulnerabilidad crítica. Un secreto comiteado queda en el historial de Git para siempre, incluso si se borra luego."],

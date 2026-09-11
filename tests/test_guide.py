@@ -29,6 +29,8 @@ def test_enlace_profundo_sincroniza_menu_activo():
         main = f.read()
     assert "this.updateSidebarActive(this.currentPage)" in main
     assert "this.updateSidebarActive(pageId)" in main
+    assert "behavior: updateHash ? 'smooth' : 'auto'" in main
+    assert "window.addEventListener('load', resetInitialScroll" in main
 
 
 def test_js_modulares():
@@ -243,7 +245,9 @@ def test_simulador_secuenciador_fases():
     assert "renderPhaseSequencer" in code
     assert "sim-sequencer-container" in code
     assert "addXP(100" in code
-    assert "Pruebas Unitarias de Lógica Pura" in code
+    assert "Pruebas unitarias de lógica" in code
+    assert "Comprobaciones estáticas" in code
+    assert "Compuerta: evidencia y decisión" in code
     assert "Pipeline CI/CD Automatizado" in code
 
     html_path = os.path.join(BASE, "web", "index.html")

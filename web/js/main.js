@@ -28,6 +28,15 @@ const APP = {
         const initialHash = window.location.hash.replace(/^#/, '');
         if (initialHash && document.getElementById(initialHash)) {
             this.navigateTo(initialHash, false);
+            // Algunos navegadores aplican el desplazamiento nativo del ancla
+            // después de DOMContentLoaded. En móvil eso dejaba el título bajo
+            // la cabecera fija, aun cuando navigateTo ya había vuelto al inicio.
+            const resetInitialScroll = () => window.scrollTo({ top: 0, behavior: 'auto' });
+            if (document.readyState === 'complete') {
+                resetInitialScroll();
+            } else {
+                window.addEventListener('load', resetInitialScroll, { once: true });
+            }
         }
     },
 
@@ -70,7 +79,7 @@ const APP = {
                     window.location.hash = pageId;
                 }
             }
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.scrollTo({ top: 0, behavior: updateHash ? 'smooth' : 'auto' });
         }
     },
 

@@ -256,12 +256,12 @@ test("crea un producto y sigue el redirect de Flask", async ({ page }) => {
                     {
                         icon: "📊", name: "pytest-cov / coverage.py", tag: "Python",
                         role: "Mide lineas y ramas ejecutadas; umbral con --cov-fail-under y reportes HTML/XML intercomunicables con CI.",
-                        when: "Cada pull request: bloquear el merge si la logica de negocio baja del 80%."
+                        when: "Cada pull request: aplicar a la lógica de negocio el umbral acordado y revisar las líneas relevantes no cubiertas."
                     },
                     {
                         icon: "📊", name: "V8 Coverage (Vitest + c8)", tag: "JavaScript",
                         role: "Cobertura nativa del motor V8 (via Istanbul o c8): reportes HTML, LCOV y umbrales configurados junto al runner del proyecto.",
-                        when: "Componentes y hooks: detectar ramas no cubiertas y sostener el 80% en el frontend."
+                        when: "Componentes y hooks: detectar ramas importantes no cubiertas y sostener el umbral contextual del frontend."
                     },
                     {
                         icon: "📊", name: "JaCoCo", tag: "Java",
@@ -286,7 +286,7 @@ test("crea un producto y sigue el redirect de Flask", async ({ page }) => {
                     },
                     {
                         number: 2,
-                        title: "Configurar el umbral de bloqueo al 80%",
+                        title: "Configurar un umbral de bloqueo contextual",
                         tag: "Paso 2: Umbral",
                         desc: "Configura la bandera `--cov-fail-under=80`. Si el porcentaje global o de lógica de negocio es 79.9%, el comando retornará código de error 1 rompiendo el build.",
                         command: "pytest --cov=app --cov-fail-under=80",

@@ -94,7 +94,7 @@
         },
         {
             id: 'check-coverage-audit',
-            name: 'Auditoría de Cobertura de Código (>= 80%)',
+            name: 'Auditoría de cobertura con umbral contextual',
             framework: 'pytest-cov / coverage.py',
             file: 'recursos/codigo-ejemplo/htmlcov/',
             phase: 'Fase 7: Quality Gate de Cobertura',
@@ -112,12 +112,56 @@
             description: 'Ejecución orquestada y desatendida de linters, SAST, suite de pruebas y compilación de artefactos.',
             passed: false,
             executedAt: null,
-            outputSnippet: 'Job: ci-quality-gate\n  ✓ Set up Python 3.11 (4s)\n  ✓ Install dependencies (12s)\n  ✓ Run PyTest suite with coverage (8s)\n  ✓ Run Flake8 & Bandit Security Scan (3s)\n  ✓ Check Quality Gate threshold >= 80% (1s)\nConclusion: success (All checks passed)'
+            outputSnippet: 'Job: ci-quality-gate\n  ✓ Set up Python 3.11 (4s)\n  ✓ Install dependencies (12s)\n  ✓ Run PyTest suite with coverage (8s)\n  ✓ Run Flake8 & Bandit Security Scan (3s)\n  ✓ Check the project quality gate (1s)\nConclusion: success (All configured checks passed)'
         }
     ];
 
-    // Catálogo maestro de los 6 simuladores interactivos
+    // Catálogo maestro de los simuladores interactivos QA
     const DEFAULT_SIMULATORS = {
+        'sim-bva': {
+            id: 'sim-bva',
+            name: 'Diseño de Casos: Partición de Equivalencia y Valores Límite (BVA)',
+            completed: false,
+            score: 0,
+            maxScore: 6,
+            percentage: 0,
+            passed: false,
+            details: 'Diseñar casos de prueba analizando clases válidas, inválidas y fronteras críticas (n-1, n, n+1).',
+            completedAt: null
+        },
+        'sim-tdd': {
+            id: 'sim-tdd',
+            name: 'TDD Interactivo: Ciclo Rojo - Verde - Refactor',
+            completed: false,
+            score: 0,
+            maxScore: 3,
+            percentage: 0,
+            passed: false,
+            details: 'Experimentar en código vivo el flujo: fallo esperado (Rojo), código mínimo (Verde) y limpieza (Refactor).',
+            completedAt: null
+        },
+        'sim-doubles': {
+            id: 'sim-doubles',
+            name: 'Aislamiento con Dobles de Prueba (Mocks, Stubs, Fakes, Spies)',
+            completed: false,
+            score: 0,
+            maxScore: 4,
+            percentage: 0,
+            passed: false,
+            details: 'Decidir la estrategia de sustitución para APIs externas, base de datos y servicios de notificación.',
+            completedAt: null
+        },
+        'sim-triage': {
+            id: 'sim-triage',
+            name: 'Diagnóstico & Triage de Defectos (Bug Triage)',
+            completed: false,
+            score: 0,
+            maxScore: 4,
+            percentage: 0,
+            passed: false,
+            details: 'Clasificar la causa raíz de un fallo, severidad vs prioridad y formular el reporte de defecto.',
+            completedAt: null
+        },
         'sim-e2e': {
             id: 'sim-e2e',
             name: 'Recorrido E2E: del objetivo a la evidencia',
@@ -137,7 +181,7 @@
             maxScore: 50,
             percentage: 0,
             passed: false,
-            details: 'Asignar correctamente los 3 niveles: Unit (70%), Integration (20%), E2E (10%).',
+            details: 'Relacionar unidad, integración y E2E con su costo, alcance y tipo de evidencia.',
             completedAt: null
         },
         'sim-assertion': {
@@ -193,6 +237,17 @@
             percentage: 0,
             passed: false,
             details: 'Resolver una interacción específica del módulo: riesgo, secuencia, contrato, señal o evidencia.',
+            completedAt: null
+        },
+        'sim-ai-guided-practice': {
+            id: 'sim-ai-guided-practice',
+            name: 'Práctica humano–IA por módulo',
+            completed: false,
+            score: 0,
+            maxScore: 1,
+            percentage: 0,
+            passed: false,
+            details: 'Verificar una propuesta de IA y registrar una decisión humana explicable.',
             completedAt: null
         }
     };

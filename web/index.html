@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="css/vendor/devbrain-code.css">
   <link rel="stylesheet" href="css/vendor/devbrain-evidence.css">
     <link rel="stylesheet" href="css/ai-testing-coach.css">
+    <link rel="stylesheet" href="css/ai-guided-practice.css?v=3.6.0">
     <link rel="stylesheet" href="css/design-refresh.css?v=3.5.0">
     <link rel="stylesheet" href="css/module-learning-kit.css?v=3.5.0">
 </head>
@@ -28,7 +29,7 @@
                 <span class="logo-icon">&#128269;</span>
                 <span class="logo-text">Guía <span class="highlight">Testing</span></span>
             </div>
-            <span class="sidebar-version">v3.5</span>
+            <span class="sidebar-version">v3.6</span>
         </div>
         <div class="sidebar-user">
             <div class="user-level">
@@ -110,7 +111,7 @@
                     <p class="subtitle">Aprende a tomar una decisión de calidad con evidencia: define una regla, diseña casos, ejecuta una prueba, interpreta el resultado y explica qué queda demostrado.</p>
                     <div class="hero-stats" aria-label="Resumen de la guía">
                         <div class="stat"><span class="stat-number">16</span><span class="stat-label">Módulos</span></div>
-                        <div class="stat"><span class="stat-number">6</span><span class="stat-label">Simuladores</span></div>
+                        <div class="stat"><span class="stat-number">9</span><span class="stat-label">Simuladores</span></div>
                         <div class="stat"><span class="stat-number">40h</span><span class="stat-label">Estimación didáctica</span></div>
                         <div class="stat"><span class="stat-number">4</span><span class="stat-label">Frameworks</span></div>
                     </div>
@@ -173,6 +174,17 @@
                         <h3>Qué puede demostrar esta guía</h3>
                         <p>La guía ayuda a diseñar, ejecutar y documentar pruebas en un entorno de práctica. No certifica que una aplicación esté libre de defectos, segura o aprobada; esas decisiones requieren alcance, datos, versiones y revisión humana explícitos.</p>
                     </div>
+                    <div class="human-ai-route" aria-labelledby="human-ai-route-title">
+                        <h3 id="human-ai-route-title">Cómo trabajarás con IA sin perder el criterio</h3>
+                        <p>En cada módulo encontrarás una práctica opcional con la misma secuencia. La IA acelera el borrador; tú entiendes la regla, compruebas el resultado y respondes por la decisión.</p>
+                        <ol class="human-ai-steps">
+                            <li><span>1</span><strong>Comprender</strong><small>Explica la regla y el riesgo con tus palabras.</small></li>
+                            <li><span>2</span><strong>Encargar</strong><small>Entrega contexto mínimo y pide una salida verificable.</small></li>
+                            <li><span>3</span><strong>Cuestionar</strong><small>Busca supuestos, omisiones y nombres inventados.</small></li>
+                            <li><span>4</span><strong>Comprobar</strong><small>Ejecuta la prueba o contrasta con fuentes reales.</small></li>
+                            <li><span>5</span><strong>Decidir</strong><small>Acepta, corrige o rechaza y registra por qué.</small></li>
+                        </ol>
+                    </div>
                 </section>
             </section>
 
@@ -196,21 +208,95 @@
             <section id="m-simuladores" class="page-section module-page">
                 <div class="section-card glass-panel">
                     <div class="module-hero">
-                        <span class="module-badge">Simuladores</span>
-                        <h1>Simuladores Interactivos QA</h1>
-                    <p>Usa los simuladores para ensayar decisiones concretas. Son apoyos de práctica: no sustituyen la ejecución del proyecto ni convierten una respuesta acertada en certificación.</p>
-                </div>
-                    <h3>Recorrido E2E: del objetivo a la evidencia</h3>
-                    <p class="simulator-intro">Elige un escenario y observa cómo una prueba de extremo a extremo pasa por navegador, localizador, acción, sistema y aserción. La simulación es local: no modifica datos ni reemplaza una ejecución real.</p>
-                    <div class="sim-e2e-container"></div>
-                    <h3>Test Pyramid Builder</h3>
-                    <div class="sim-pyramid-container"></div>
-                    <h3 class="mt-4">Assertion Validator</h3>
-                    <div class="sim-assertion-container"></div>
-                    <h3 class="mt-4">Quiz de Testing</h3>
-                    <div class="sim-quiz-container"></div>
-                    <h3 class="mt-4">&#9881;&#65039; Secuenciador de Fases: Pipeline de Pruebas Automatizadas</h3>
-                    <div class="sim-sequencer-container"></div>
+                        <span class="module-badge">Simuladores Interactivos QA</span>
+                        <h1>Laboratorio de Pruebas: Orden Lógico & Decisiones QA</h1>
+                        <p>Domina qué son las pruebas de software y su secuencia crítica en dos dimensiones complementarias: <strong>cómo se desarrollan (Shift-Left)</strong> y <strong>cómo se ejecutan (Pipeline CI/CD)</strong>.</p>
+                        <div class="sim-meta-bar" style="margin-top:1rem;display:flex;gap:1rem;flex-wrap:wrap;align-items:center;background:rgba(255,255,255,0.03);padding:0.75rem 1.25rem;border-radius:8px;border:1px solid rgba(255,255,255,0.08);">
+                            <div><strong>⚡ Enfoque didáctico:</strong> Del diseño de casos frontera a la automatización desatendida.</div>
+                            <div style="margin-left:auto;color:var(--accent-primary);font-weight:600;"><span id="sim-completed-counter">0</span> de 9 simuladores completados</div>
+                        </div>
+                    </div>
+
+                    <!-- NAVEGACIÓN POR PERSPECTIVAS LÓGICAS -->
+                    <div class="sim-perspective-tabs" style="display:flex;gap:0.5rem;border-bottom:1px solid rgba(255,255,255,0.1);margin-bottom:1.5rem;padding-bottom:0.5rem;overflow-x:auto;">
+                        <button type="button" class="sim-tab-btn active" data-tab="tab-dev-order">
+                            <span style="font-size:1.1rem;">🛠️</span> 1. Orden de Desarrollo (Shift-Left)
+                        </button>
+                        <button type="button" class="sim-tab-btn" data-tab="tab-exec-order">
+                            <span style="font-size:1.1rem;">⚡</span> 2. Orden de Ejecución (Pipeline CI/CD)
+                        </button>
+                        <button type="button" class="sim-tab-btn" data-tab="tab-all-sims">
+                            <span style="font-size:1.1rem;">📚</span> 3. Catálogo Completo & Quiz
+                        </button>
+                    </div>
+
+                    <!-- TAB 1: ORDEN DE DESARROLLO (SHIFT-LEFT) -->
+                    <div id="tab-dev-order" class="sim-tab-content active">
+                        <div class="alert-box note mb-4">
+                            <h4>🛠️ Cómo se construyen las pruebas durante el desarrollo (Shift-Left)</h4>
+                            <p>No esperamos a que la aplicación esté terminada para probar. El orden lógico al programar va de los requisitos a los flujos:</p>
+                            <ol style="margin-left:1.25rem;margin-top:0.5rem;line-height:1.6;">
+                                <li><strong>Diseño de casos (BVA):</strong> Particiones válidas, inválidas y fronteras críticas antes de codificar.</li>
+                                <li><strong>TDD Unitario:</strong> Escribir el test que falla (Rojo) antes del código de producción (Verde).</li>
+                                <li><strong>Aislamiento (Dobles de prueba):</strong> Sustituir bases de datos y APIs lentas con Mocks/Stubs.</li>
+                                <li><strong>Recorrido E2E:</strong> Validar la experiencia integral de usuario en el navegador real.</li>
+                            </ol>
+                        </div>
+
+                        <h3>1.1 Diseño de Casos: Partición de Equivalencia & Valores Límite (BVA)</h3>
+                        <p class="simulator-intro">Reduce casos repetidos sin perder señales importantes. Determina particiones y fronteras (n-1, n, n+1) donde un cambio de regla puede revelar defectos.</p>
+                        <div class="sim-bva-container"></div>
+
+                        <h3 class="mt-4">1.2 TDD Interactivo: Ciclo Rojo - Verde - Refactor</h3>
+                        <p class="simulator-intro">Experimenta el ciclo de diseño guiado por pruebas: activa la aserción que falla, crea la implementación mínima y limpia el código manteniendo verde el semáforo.</p>
+                        <div class="sim-tdd-container"></div>
+
+                        <h3 class="mt-4">1.3 Aislamiento con Dobles de Prueba (Mocks, Stubs, Spies, Fakes)</h3>
+                        <p class="simulator-intro">Identifica cuándo usar un Stub para datos estáticos, un Mock para verificar llamadas externas o un Fake en memoria para no saturar servidores reales.</p>
+                        <div class="sim-doubles-container"></div>
+
+                        <h3 class="mt-4">1.4 Recorrido E2E: del objetivo a la evidencia</h3>
+                        <p class="simulator-intro">Elige un escenario y observa cómo una prueba de extremo a extremo pasa por navegador, localizador, acción, sistema y aserción con Playwright.</p>
+                        <div class="sim-e2e-container"></div>
+                    </div>
+
+                    <!-- TAB 2: ORDEN DE EJECUCIÓN (PIPELINE CI/CD) -->
+                    <div id="tab-exec-order" class="sim-tab-content" style="display:none;">
+                        <div class="alert-box note mb-4">
+                            <h4>⚡ Cómo se ejecutan las pruebas en integración continua (Fast-Feedback Pyramid)</h4>
+                            <p>En el servidor CI/CD, el orden es inverso al costo y duración: <strong>lo más rápido corre primero</strong> para alertar al equipo en segundos (Fail Fast):</p>
+                            <ol style="margin-left:1.25rem;margin-top:0.5rem;line-height:1.6;">
+                                <li><strong>Linter / Sintaxis (&lt; 2s):</strong> Errores tipográficos y formato.</li>
+                                <li><strong>Pruebas unitarias:</strong> Lógica aislada y retroalimentación rápida.</li>
+                                <li><strong>Pruebas de integración y contrato:</strong> Comunicación entre componentes y datos controlados.</li>
+                                <li><strong>Recorridos E2E críticos:</strong> Objetivos completos en navegadores reales.</li>
+                                <li><strong>Compuerta de calidad:</strong> Criterios acordados según riesgo, resultados y evidencia.</li>
+                            </ol>
+                        </div>
+
+                        <h3>2.1 Secuenciador de Fases: Pipeline de Pruebas Automatizadas</h3>
+                        <p class="simulator-intro">Ordena las 7 fases de un flujo de ejecución QA que prioriza retroalimentación temprana y controles automáticos. Después adapta el orden al riesgo, la arquitectura y el tiempo disponible de tu proyecto.</p>
+                        <div class="sim-sequencer-container"></div>
+
+                        <h3 class="mt-4">2.2 Test Pyramid Builder (Pirámide de Cohn)</h3>
+                        <p class="simulator-intro">Ubica cada tipo en la capa que suele ofrecer retroalimentación más rápida. La forma orienta la estrategia; la mezcla concreta depende del riesgo y la arquitectura.</p>
+                        <div class="sim-pyramid-container"></div>
+
+                        <h3 class="mt-4">2.3 Diagnóstico & Triage de Defectos (Bug Triage)</h3>
+                        <p class="simulator-intro">Cuando una prueba falla en ejecución, clasifica el tipo de defecto (lógica, integración o flaky), determina su severidad y genera el reporte técnico.</p>
+                        <div class="sim-triage-container"></div>
+                    </div>
+
+                    <!-- TAB 3: CATÁLOGO COMPLETO & EVALUACIÓN -->
+                    <div id="tab-all-sims" class="sim-tab-content" style="display:none;">
+                        <h3>3.1 Validador de Aserciones Rápidas</h3>
+                        <p class="simulator-intro">Pon a prueba tu agudeza técnica prediciendo el resultado booleano de aserciones críticas en Python y JavaScript.</p>
+                        <div class="sim-assertion-container"></div>
+
+                        <h3 class="mt-4">3.2 Quiz de Fundamentos Técnicos QA</h3>
+                        <p class="simulator-intro">Evalúa tus conocimientos consolidados en pirámide de pruebas, TDD, BDD, Playwright y CI/CD.</p>
+                        <div class="sim-quiz-container"></div>
+                    </div>
                 </div>
             </section>
 
@@ -499,6 +585,8 @@ Invoke-RestMethod http://127.0.0.1:8009/productos/</code></pre>
     <script src="js/code-renderer.js"></script>
     <script src="js/module-learning-kit-data.js?v=3.5.0"></script>
     <script src="js/module-learning-kit.js?v=3.5.0"></script>
+    <script src="js/ai-guided-practice-data.js?v=3.6.0"></script>
+    <script src="js/ai-guided-practice.js?v=3.6.0"></script>
     <script src="js/deliverables-registry.js"></script>
     <script src="js/vendor/devbrain-evidence.js"></script>
     <script src="js/main.js?v=3.5.0"></script>

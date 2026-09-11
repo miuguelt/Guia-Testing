@@ -100,3 +100,10 @@ def test_la_web_aprovecha_el_ancho_util_para_toda_la_prosa():
     assert "max-width: 70ch" not in AI_STYLES
     assert "max-width: 78ch" not in EVIDENCE_STYLES
     assert "max-width: 1040px" not in STYLES
+
+
+def test_el_boton_del_menu_muestra_foco_visible():
+    """Given navegación por teclado, When el menú recibe foco, Then la ubicación es perceptible."""
+    assert ".sidebar-toggle:focus," in STYLES
+    assert ".sidebar-toggle:focus-visible" in STYLES
+    assert "outline:" in css_rule(STYLES, ".sidebar-toggle:focus-visible")

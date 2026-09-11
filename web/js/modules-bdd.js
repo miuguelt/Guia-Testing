@@ -19,6 +19,57 @@ window.MODULES["m-bdd"] = {
             ]
         },
         {
+            type: "mental-map",
+            title: "Mapa visual: el flujo colaborativo de BDD",
+            body: "BDD alinea a quienes definen el negocio con quienes escriben el código. La conversación produce ejemplos, los ejemplos se escriben en Gherkin y la herramienta los convierte en pruebas vivas.",
+            center: "Flujo BDD",
+            accessibleText: "El flujo BDD conecta 1. Descubrimiento con los Tres Amigos, 2. Formulación en Gherkin, 3. Automatización con Behave o Cucumber, y 4. Documentación viva validada en CI.",
+            nodes: [
+                { title: "1. Descubrir", detail: "Tres amigos (PO, Dev, QA) debaten ejemplos concretos." },
+                { title: "2. Formular", detail: "Escribir escenarios con Dado, Cuando y Entonces." },
+                { title: "3. Automatizar", detail: "Pasos ejecutables que llaman a la función real." },
+                { title: "4. Documentación viva", detail: "Especificaciones que pasan en verde en cada commit." }
+            ]
+        },
+        {
+            type: "definition",
+            title: "Modelo mental: la estructura Gherkin descompuesta",
+            intro: "Gherkin no es un lenguaje de programación: es una plantilla estructurada para que humanos y máquinas entiendan la misma regla.",
+            pieces: [
+                {
+                    letter: "D", term: "Dado que · Given", translation: "Contexto inicial",
+                    meaning: "Describe el estado del mundo y las precondiciones antes de que ocurra la acción.",
+                    analogy: "Como poner los ingredientes sobre la mesa antes de empezar a cocinar.",
+                    example: "Dado que el estudiante no tiene sanciones y solicita 3 equipos."
+                },
+                {
+                    letter: "C", term: "Cuando · When", translation: "Acción desencadenante",
+                    meaning: "La acción concreta que realiza la persona o el evento que dispara el comportamiento.",
+                    analogy: "Como presionar el botón de encendido del microondas.",
+                    example: "Cuando valida la cantidad solicitada."
+                },
+                {
+                    letter: "E", term: "Entonces · Then", translation: "Consecuencia observable",
+                    meaning: "El resultado que se espera verificar. Debe ser observable por el usuario o el negocio.",
+                    analogy: "Como comprobar que la comida salió caliente y el temporizador volvió a cero.",
+                    example: "Entonces la cantidad es aceptada y quedan 7 equipos disponibles."
+                },
+                {
+                    letter: "T", term: "Tres Amigos", translation: "Colaboración previa",
+                    meaning: "Reunión rápida entre Negocio (¿qué?), Desarrollo (¿cómo?) y QA (¿qué puede fallar?).",
+                    analogy: "Como el cliente, el arquitecto y el maestro de obra revisando el plano antes de poner ladrillos.",
+                    example: "Preguntarse: ¿qué ocurre si el usuario solicita 0 o 6 equipos?"
+                }
+            ]
+        },
+        {
+            type: "image",
+            title: "Infografía Conceptual: La Colaboración de los Tres Amigos en BDD",
+            src: "img/bdd-three-amigos.jpg",
+            alt: "Infografía de los Tres Amigos en BDD: Producto, Desarrollo y QA colaborando alrededor de una pizarra con Gherkin",
+            caption: "El corazón de BDD es la alineación previa: Producto aporta el valor de negocio, Desarrollo la viabilidad técnica y QA la visión crítica de límites y casos esquina. Juntos construyen ejemplos claros que se convierten en pruebas automatizadas."
+        },
+        {
             type: "steps", title: "Las tres prácticas de BDD",
             steps: [
                 { title: "Descubrimiento: conversar sobre ejemplos", tag: "Antes del código", desc: "Reúne las perspectivas de negocio, desarrollo y pruebas: los tres amigos. Pueden ser tres personas o varios participantes. Identifiquen reglas, ejemplos y preguntas abiertas; no hace falta empezar por un archivo .feature." },
@@ -94,6 +145,61 @@ window.MODULES["m-bdd"] = {
                 ["ATDD", "Acordar pruebas de aceptación antes de implementar.", "Se solapa con BDD, que destaca también conversación y lenguaje compartido."],
                 ["E2E", "Alcance de una prueba que recorre un flujo completo.", "BDD puede ejecutarse como E2E; el taller de cantidad comprueba solo dominio."],
                 ["Pruebas posteriores", "Comprobar una implementación que ya existe.", "Aportan regresión, pero no demuestran que el desarrollo siguió TDD o BDD."]
+            ]
+        },
+        {
+            type: "comparison",
+            title: "El Doble Bucle: cómo colaboran BDD y TDD en la práctica",
+            headers: ["Fase del bucle", "Nivel", "Qué ocurre en el código"],
+            rows: [
+                ["1. Escenario BDD (Rojo exterior)", "Aceptación / Negocio", "Escribes el escenario en .feature y ejecutas Behave: falla porque el sistema aún no tiene esa capacidad."],
+                ["2. TDD Unitario (Bucle interior)", "Unidades / Dominio", "Para resolver el paso, aplicas Rojo → Verde → Refactor en la clase, función o validador específico."],
+                ["3. Integración de capas", "Componentes", "Conectas los decoradores (@given, @when, @then) con la función o servicio ya testeado."],
+                ["4. Escenario BDD (Verde exterior)", "Aceptación completa", "Ejecutas Behave de nuevo: todos los pasos pasan a verde. La regla de negocio está cumplida y documentada."]
+            ]
+        },
+        {
+            type: "image",
+            title: "Infografía Conceptual: El Doble Bucle de Calidad (Outside-In TDD + BDD)",
+            src: "img/double-loop-testing.jpg",
+            alt: "Diagrama del Doble Bucle: El bucle exterior BDD guía las necesidades de negocio mientras que el bucle interior TDD construye los componentes unitarios con precisión técnica",
+            caption: "Sincronía perfecta: El bucle exterior (BDD) define la meta global mediante un escenario de aceptación que empieza en Rojo. El desarrollador entra al bucle interior (TDD) para construir iterativamente los componentes necesarios. Cuando los módulos unitarios están verdes, el escenario exterior pasa a Verde."
+        },
+        {
+            type: "tools",
+            title: "Herramientas del ecosistema para aplicar BDD",
+            stack: [
+                {
+                    icon: "🥒", name: "Behave", tag: "Python",
+                    role: "Framework BDD en Python que ejecuta archivos .feature con pasos decorados en Python.",
+                    when: "Pruebas de aceptación y reglas de negocio en proyectos Python."
+                },
+                {
+                    icon: "🌐", name: "Cucumber.js", tag: "JavaScript / TypeScript",
+                    role: "Implementación oficial de Cucumber para Node.js y navegadores.",
+                    when: "Equipos JS/TS que comparten especificaciones ejecutables con PO y analistas."
+                },
+                {
+                    icon: "☕", name: "Cucumber-JVM", tag: "Java",
+                    role: "Motor BDD integrado con JUnit y Spring Boot.",
+                    when: "Aplicaciones empresariales Java que validan flujos de negocio completos."
+                },
+                {
+                    icon: "🔷", name: "Reqnroll / SpecFlow", tag: "C# .NET",
+                    role: "Framework BDD para el ecosistema .NET conectado a xUnit o NUnit.",
+                    when: "Servicios y aplicaciones web sobre Microsoft .NET."
+                }
+            ]
+        },
+        {
+            type: "steps",
+            title: "Paso a paso del aprendiz: cómo aplicar BDD en cualquier aplicación",
+            intro: "Sigue estos 4 pasos para transformar cualquier requerimiento en una prueba de aceptación automatizada:",
+            steps: [
+                { number: 1, title: "Reúne las tres perspectivas (Tres Amigos)", tag: "Paso 1: Conversar", desc: "Antes de programar, define la necesidad y pregunta: ¿qué datos son válidos?, ¿qué pasa en el límite?, ¿qué mensaje debe mostrarse si falla? Registra las respuestas en ejemplos concretos.", tip: "Si trabajas solo, ponte el sombrero de negocio, luego el de tester que busca fallos y finalmente el de desarrollador." },
+                { number: 2, title: "Redacta el archivo .feature en Gherkin", tag: "Paso 2: Formular", desc: "Crea la carpeta features/ y escribe la especificación usando Dado (contexto), Cuando (acción) y Entonces (consecuencia). Usa un Esquema del escenario con Ejemplos si hay varios valores para la misma regla.", tip: "Agrega `# language: es` en la primera línea para usar palabras clave en español." },
+                { number: 3, title: "Implementa los step definitions (código pegamento)", tag: "Paso 3: Conectar", desc: "Crea features/steps/regla_steps.py. Usa decoradores @given, @when y @then que reciban context y llamen a tus funciones o APIs reales sin lógica duplicada.", tip: "El paso solo delega y aserta; la regla de negocio debe vivir en el código de tu aplicación." },
+                { number: 4, title: "Ejecuta y verifica la documentación viva", tag: "Paso 4: Comprobar", desc: "Ejecuta `behave` o `npm run test:bdd`. Observa que todos los pasos se iluminen en verde. Integra el comando en tu pipeline CI para que nadie pueda romper la regla en el futuro.", tip: "Usa `behave --dry-run` para verificar la correspondencia de textos antes de ejecutar." }
             ]
         },
         {

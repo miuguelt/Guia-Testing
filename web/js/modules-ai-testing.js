@@ -99,10 +99,10 @@ Object.assign(window.MODULES, {
                         number: 5,
                         title: "Establecer la compuerta de calidad mínima (--min-score)",
                         tag: "Paso 5: Quality Gate",
-                        desc: "Integra el auditor en tu terminal o CI exigiendo una calificación mínima (ej. 80%). Si el score no se alcanza, el comando devuelve código de salida distinto de 0.",
+                        desc: "Integra el auditor en tu terminal o CI con una calificación mínima justificada para el proyecto. Si no se alcanza, el comando devuelve código de salida distinto de 0.",
                         command: "python -m qa_auditor --target ../codigo-ejemplo --min-score 80 --html informe.html",
                         tip: "El archivo `informe.html` generado proporciona un panel visual completo para presentar ante instructores o comités de calidad.",
-                        pitfall: "Dejar que el score caiga por debajo de 80% acumulando deuda técnica hasta el final de la formación."
+                        pitfall: "Convertir un puntaje de ejemplo en verdad universal o aplazar hallazgos importantes solo porque el promedio todavía supera la compuerta."
                     }
                 ]
             },
@@ -164,7 +164,7 @@ Proporciona un diagnostico en JSON estructurado:
 
 [PEGA EL REPORTE AQUI - muestra las lineas no cubiertas]
 
-Para cada archivo con cobertura < 80%:
+Para cada archivo por debajo del umbral de cobertura acordado:
 1. Identifica las funciones/metodos no cubiertos
 2. Sugiere casos de prueba especificos para cada uno
 3. Prioriza por riesgo de negocio

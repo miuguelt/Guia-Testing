@@ -1,0 +1,170 @@
+.human-ai-route,
+.ai-guided-practice {
+    border: 1px solid rgba(92, 214, 255, 0.24);
+    border-radius: 1.15rem;
+    background: linear-gradient(145deg, rgba(11, 24, 42, 0.96), rgba(24, 27, 55, 0.92));
+    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.2);
+}
+
+.human-ai-route { margin-top: 1.25rem; padding: 1.25rem; }
+.human-ai-route > h3 { margin: 0 0 0.35rem; }
+.human-ai-route > p { margin: 0 0 1rem; color: var(--text-secondary); }
+
+.human-ai-steps,
+.ai-guided-cycle {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0.55rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.human-ai-steps li,
+.ai-guided-cycle li {
+    min-width: 0;
+    padding: 0.75rem;
+    border: 1px solid rgba(156, 175, 198, 0.18);
+    border-radius: 0.8rem;
+    background: rgba(255, 255, 255, 0.035);
+}
+
+.human-ai-steps span,
+.ai-guided-cycle span {
+    display: inline-grid;
+    width: 1.7rem;
+    height: 1.7rem;
+    margin-bottom: 0.45rem;
+    place-items: center;
+    border-radius: 50%;
+    background: rgba(92, 214, 255, 0.14);
+    color: var(--ui-cyan, #5cd6ff);
+    font-weight: 800;
+}
+
+.human-ai-steps strong,
+.human-ai-steps small,
+.ai-guided-cycle strong,
+.ai-guided-cycle small { display: block; overflow-wrap: anywhere; }
+.human-ai-steps small,
+.ai-guided-cycle small { margin-top: 0.2rem; color: var(--text-muted); line-height: 1.35; }
+
+.ai-guided-practice { margin: 2rem 0 1.35rem; padding: clamp(1rem, 2.5vw, 1.5rem); }
+.ai-guided-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
+.ai-guided-heading h3 { margin: 0.25rem 0 0.5rem; font-size: clamp(1.25rem, 2vw, 1.65rem); }
+.ai-guided-heading p { max-width: 72ch; margin: 0; color: var(--text-secondary); }
+
+.ai-guided-kicker {
+    color: var(--ui-cyan, #5cd6ff);
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.ai-guided-badge {
+    display: grid;
+    min-width: 3.5rem;
+    min-height: 3.5rem;
+    place-items: center;
+    border: 1px solid rgba(169, 155, 255, 0.42);
+    border-radius: 1rem;
+    background: rgba(169, 155, 255, 0.12);
+    color: #d8d1ff;
+    font-weight: 900;
+}
+
+.ai-guided-cycle { margin-top: 1.25rem; }
+.ai-guided-cycle li { position: relative; }
+.ai-guided-cycle li:not(:last-child)::after {
+    position: absolute;
+    top: 1.4rem;
+    right: -0.5rem;
+    color: var(--ui-cyan, #5cd6ff);
+    content: '›';
+    font-size: 1.2rem;
+    font-weight: 900;
+}
+
+.ai-guided-grid { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(18rem, 0.85fr); gap: 1rem; margin-top: 1rem; }
+.ai-guided-prompt-card,
+.ai-guided-review-card,
+.ai-guided-checkpoint {
+    min-width: 0;
+    border: 1px solid rgba(156, 175, 198, 0.16);
+    border-radius: 0.95rem;
+    background: rgba(5, 12, 24, 0.48);
+}
+.ai-guided-prompt-card,
+.ai-guided-review-card { padding: 1rem; }
+.ai-guided-card-heading { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; margin-bottom: 0.75rem; }
+.ai-guided-card-heading span { color: var(--text-muted); font-size: 0.78rem; text-transform: uppercase; }
+.ai-guided-card-heading h4 { margin: 0.15rem 0 0; }
+.ai-guided-card-heading .btn { min-height: 2.75rem; white-space: nowrap; }
+
+.ai-guided-prompt {
+    max-height: 24rem;
+    margin: 0;
+    padding: 1.25rem 1.5rem;
+    overflow: auto;
+    border: 1px solid rgba(92, 214, 255, 0.2);
+    border-radius: 0.8rem;
+    background: #07101d;
+    color: #e8f3ff;
+    font-family: 'JetBrains Mono', Consolas, monospace;
+    font-size: 0.88rem;
+    line-height: 1.65;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+.ai-guided-privacy { margin: 0.75rem 0 0; color: var(--text-muted); font-size: 0.86rem; line-height: 1.55; }
+.ai-guided-privacy strong { color: #ffd18d; }
+
+.ai-guided-warning {
+    display: inline-block;
+    margin-bottom: 0.7rem;
+    padding: 0.35rem 0.65rem;
+    border-radius: 999px;
+    background: rgba(255, 193, 93, 0.12);
+    color: #ffd18d;
+    font-size: 0.8rem;
+    font-weight: 800;
+}
+.ai-guided-review-list { display: grid; gap: 0.7rem; margin: 0; }
+.ai-guided-review-list div { padding-bottom: 0.7rem; border-bottom: 1px solid rgba(156, 175, 198, 0.12); }
+.ai-guided-review-list div:last-child { padding-bottom: 0; border-bottom: 0; }
+.ai-guided-review-list dt { color: var(--ui-mint, #38d6ad); font-weight: 800; }
+.ai-guided-review-list dd { margin: 0.25rem 0 0; color: var(--text-secondary); line-height: 1.55; }
+
+.ai-guided-checkpoint { display: grid; grid-template-columns: minmax(14rem, 0.7fr) minmax(18rem, 1fr) auto; gap: 1rem; align-items: center; margin-top: 1rem; padding: 1rem; }
+.ai-guided-checkpoint h4 { margin: 0.2rem 0; }
+.ai-guided-checkpoint p { margin: 0; color: var(--text-muted); font-size: 0.88rem; }
+.ai-guided-checks { display: grid; gap: 0.45rem; }
+.ai-guided-checks label { display: flex; gap: 0.55rem; align-items: flex-start; color: var(--text-secondary); line-height: 1.4; cursor: pointer; }
+.ai-guided-checks input { width: 1.15rem; height: 1.15rem; margin-top: 0.12rem; accent-color: var(--ui-mint, #38d6ad); }
+.ai-confirm-review { min-height: 2.9rem; }
+.ai-guided-status { grid-column: 2 / -1; }
+.ai-guided-practice.is-reviewed { border-color: rgba(56, 214, 173, 0.5); }
+.ai-guided-practice.is-reviewed .ai-guided-status { color: #79efca; }
+
+@media (max-width: 980px) {
+    .ai-guided-grid,
+    .ai-guided-checkpoint { grid-template-columns: 1fr; }
+    .ai-guided-status { grid-column: auto; }
+}
+
+@media (max-width: 700px) {
+    .human-ai-steps,
+    .ai-guided-cycle { grid-template-columns: 1fr; }
+    .ai-guided-cycle li:not(:last-child)::after { top: auto; right: 1rem; bottom: -0.75rem; transform: rotate(90deg); }
+    .ai-guided-heading,
+    .ai-guided-card-heading { align-items: stretch; flex-direction: column; }
+    .ai-guided-badge { width: 3.5rem; }
+    .ai-guided-card-heading .btn { width: 100%; white-space: normal; }
+    .ai-guided-prompt { padding: 1rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ai-guided-practice *, .human-ai-route * { scroll-behavior: auto !important; transition: none !important; }
+}
+

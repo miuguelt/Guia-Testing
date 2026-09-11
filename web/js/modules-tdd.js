@@ -27,6 +27,51 @@ window.MODULES["m-tdd"] = {
             ]
         },
         {
+            type: "mental-map",
+            title: "Mapa visual: el ciclo Rojo → Verde → Refactorizar",
+            body: "TDD es un ritmo de diseño en pasos cortos. La prueba no evalúa código terminado: define el siguiente comportamiento observable y orienta la implementación mínima.",
+            center: "Ciclo TDD",
+            accessibleText: "El ciclo TDD se compone de Rojo (escribir prueba que falla), Verde (código mínimo para pasar), Refactorizar (limpiar sin romper) y Repetir con el siguiente caso frontera.",
+            nodes: [
+                { title: "1. Rojo (Red)", detail: "Prueba pequeña que falla por la razón esperada." },
+                { title: "2. Verde (Green)", detail: "Código mínimo que hace pasar la aserción." },
+                { title: "3. Refactor", detail: "Limpiar y simplificar manteniendo verde la suite." },
+                { title: "4. Siguiente caso", detail: "Frontera, caso inválido o nuevo requisito." }
+            ]
+        },
+        {
+            type: "definition",
+            title: "Modelo mental: qué significa cada fase en la práctica",
+            intro: "Comprende el propósito profundo de cada fase antes de tocar la terminal.",
+            pieces: [
+                {
+                    letter: "🔴", term: "Fase Roja", translation: "Test que falla primero",
+                    meaning: "Escribes una expectativa pequeña antes de que exista el código. La prueba debe fallar demostrando que el comportamiento aún no está.",
+                    analogy: "Como un carpintero que marca con lápiz y regla la madera antes de cortar: la marca indica exactamente dónde debe terminar el corte.",
+                    example: "assert cantidad_valida(1) is True falla con NameError o AssertionError."
+                },
+                {
+                    letter: "🟢", term: "Fase Verde", translation: "Solución mínima",
+                    meaning: "Escribes solo el código necesario para satisfacer la prueba. No construyes arquitecturas complejas ni agregas casos no pedidos.",
+                    analogy: "Como hacer el primer corte justo sobre la línea trazada para que la pieza encaje en el marco.",
+                    example: "def cantidad_valida(cantidad): return True hace pasar la prueba inmediatamente."
+                },
+                {
+                    letter: "🔵", term: "Refactorizar", translation: "Limpieza con red de seguridad",
+                    meaning: "Mejoras nombres de variables, eliminas duplicación y extraes constantes sin cambiar lo que el programa hace hacia afuera.",
+                    analogy: "Como lijar y pulir la madera: la pieza conserva exactamente sus medidas pero queda limpia y duradera.",
+                    example: "Extraer MIN_EQUIPOS = 1 y MAX_EQUIPOS = 5 manteniendo las 13 pruebas en verde."
+                }
+            ]
+        },
+        {
+            type: "image",
+            title: "Infografía Conceptual: El Ritmo del Ciclo TDD (Rojo → Verde → Refactorizar)",
+            src: "img/tdd-cycle.jpg",
+            alt: "Infografía del ciclo TDD: Rojo prueba que falla, Verde código mínimo, Refactorizar optimización de diseño",
+            caption: "El latido de TDD: La prueba se diseña primero para evidenciar la ausencia de una función. El código verde aporta la solución más directa. La fase de refactorización limpia y pule el código con la tranquilidad de que las pruebas automatizadas vigilan cada cambio."
+        },
+        {
             type: "alert", variant: "warning", title: "TDD no significa escribir pruebas después",
             body: "Escribir toda la solución y agregar asserts al final es una estrategia de pruebas posterior. Tampoco basta escribir una prueba y no verla fallar: podría no ejecutarse o comprobar algo irrelevante. Un error de dependencia o sintaxis se corrige antes de interpretar el rojo como evidencia del comportamiento."
         },
@@ -100,6 +145,43 @@ window.MODULES["m-tdd"] = {
                 { title: "Ejecuta después de cada cambio", command: "python -m pytest test_cantidades.py -q", desc: "Esperas 13 passed, código 0, antes y después de refactorizar. pytest.mark.parametrize repite la comprobación con distintas entradas.", pitfall: "Una prueba omitida (skipped) o no recogida no es una prueba aprobada." },
                 { title: "Práctica independiente", desc: "Cambia la regla a un máximo de 4. Primero agrega una prueba que rechace 5; observa el rojo y ajusta luego la implementación. Revisa los casos que dependían de la regla anterior y documenta el cambio antes de actualizar expectativas.", tip: "Cambiar un requisito es comportamiento nuevo; no lo llames refactorización." },
                 { title: "Evidencia ART-TEST-02", desc: "Conserva regla, entradas, salida roja y su causa, cambio mínimo y resultado verde. Referencia el taller en Registro de evidencias → ART-TEST-02. Si usas IA, aplica V.E.R.A.: verifica la propuesta, ejecútala y explica qué aceptaste." }
+            ]
+        },
+        {
+            type: "tools",
+            title: "Herramientas del ecosistema para aplicar TDD",
+            stack: [
+                {
+                    icon: "🐍", name: "pytest", tag: "Python",
+                    role: "Ejecutor de pruebas con aserciones nativas y parametrización rápida.",
+                    when: "Desarrollo de backend, lógica pura, funciones de cálculo y validadores."
+                },
+                {
+                    icon: "⚡", name: "Vitest / Jest", tag: "JavaScript / TypeScript",
+                    role: "Ejecutores en tiempo real con modo watch que reejecutan la prueba en cada guardado.",
+                    when: "Lógica de frontend, utilidades, componentes y APIs en Node.js."
+                },
+                {
+                    icon: "☕", name: "JUnit 5", tag: "Java",
+                    role: "Estándar de pruebas unitarias con anotaciones (@Test, @ParameterizedTest).",
+                    when: "Servicios de negocio, entidades de dominio y validadores en Java / Spring."
+                },
+                {
+                    icon: "🧬", name: "mutmut / Stryker", tag: "Mutación",
+                    role: "Introduce cambios artificiales en el código para verificar si los tests fallan.",
+                    when: "Auditar si tu suite TDD es realmente sensible o tiene pruebas con falsos verdes."
+                }
+            ]
+        },
+        {
+            type: "steps",
+            title: "Paso a paso del aprendiz: cómo aplicar TDD en cualquier proyecto",
+            intro: "Aplica este procedimiento universal cada vez que vayas a construir una función o regla en tu proyecto formativo:",
+            steps: [
+                { number: 1, title: "Formula una aserción observable", tag: "Paso 1: Rojo", desc: "Elige la regla más simple. Escribe la prueba con una entrada concreta y el resultado esperado exacto. Ejecuta la prueba y verifica que falle por la ausencia del código, no por un error de sintaxis o importación.", tip: "Si la prueba pasa antes de programar la solución, no estás haciendo TDD o la prueba no está comprobando nada." },
+                { number: 2, title: "Programa la solución más directa", tag: "Paso 2: Verde", desc: "Escribe el código mínimo que transforme la prueba en verde. Aunque devolver un valor constante parezca ingenuo, confirma que la aserción está conectada a la función real.", tip: "No agregues lógica para casos futuros que todavía no tienen una prueba escrita." },
+                { number: 3, title: "Introduce una prueba de frontera o contraejemplo", tag: "Paso 3: Segundo Rojo", desc: "Escribe la siguiente prueba con un límite (por ejemplo, el valor superior o un tipo inválido). La solución simplista fallará, obligándote a implementar la regla completa de forma justificada.", tip: "Cada nueva línea de lógica en producción debe estar justificada por una aserción previa." },
+                { number: 4, title: "Refactoriza bajo la protección de la suite", tag: "Paso 4: Limpieza", desc: "Una vez todas las pruebas pasen, renombra variables confusas, extrae constantes y simplifica condicionales. Vuelve a ejecutar la suite completa tras cada cambio cosmético.", tip: "Si una prueba se rompe durante el refactor, deshaz el último cambio inmediatamente." }
             ]
         },
         {

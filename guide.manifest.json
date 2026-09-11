@@ -9,9 +9,9 @@
     "format": "web",
     "entrypoint": "./web/index.html",
     "language": "es-CO",
-    "version": "3.5.0",
+    "version": "3.6.0",
     "servicePort": 8035,
-    "summary": "Ruta de fundamentos, diseño de casos, TDD, BDD, variantes de automatización y evaluación de calidad. Incluye un caso ficticio de préstamo de equipos y un laboratorio Python reproducible; las fuentes y los umbrales se interpretan según el contexto."
+    "summary": "Ruta de fundamentos, diseño de casos, TDD, BDD, variantes de automatización y evaluación de calidad con acompañamiento humano–IA en los 16 módulos. Incluye un caso ficticio de préstamo de equipos y un laboratorio Python reproducible; toda propuesta de IA se contrasta con requisitos, ejecución y decisión humana."
   },
   "curricularAlignment": {
     "program": {

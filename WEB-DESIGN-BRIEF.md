@@ -33,3 +33,33 @@ Criterios observables:
 
 Validación humana con un aprendiz: pendiente. La lectura funciona sin conexión;
 instalar pytest y Behave por primera vez requiere paquetes disponibles.
+
+## Acompañamiento humano–IA distribuido · v3.6
+
+Fecha: 2026-09-10. La IA se presenta como asistente opcional, no como oráculo ni
+como evidencia. Cada una de las 16 estaciones aplica el mismo contrato:
+comprender → encargar → cuestionar → comprobar → decidir. La instrucción cambia
+según el resultado y el riesgo del módulo; no se reutiliza un prompt genérico.
+
+Tesis visual: laboratorio técnico, progresivo, verificable y sobrio. El panel
+aparece después de la explicación y la práctica del módulo, antes de completarlo.
+Separa visualmente borrador, comprobación, límite de la evidencia, recuperación y
+decisión humana. Es usable sin IA y no realiza solicitudes de red.
+
+Estados previstos: pendiente, tres comprobaciones parciales, listo para registrar,
+revisión registrada y error de almacenamiento local. En vista estrecha, la ruta y
+las tarjetas pasan a una columna; los controles conservan objetivos táctiles y
+foco visible. Vistas de referencia: 320, 390, 768 y 1440 px.
+
+Criterios observables:
+
+- Dado cualquier módulo, existe una práctica específica con qué verificar, qué no
+  demuestra la IA, la decisión humana y una ruta de recuperación.
+- Dadas menos de tres comprobaciones, el registro permanece deshabilitado.
+- Dadas las tres comprobaciones, el aprendiz puede registrar su revisión local y
+  recibe confirmación visible.
+- Dado un contexto sin IA, las mismas preguntas permiten realizar la práctica a
+  mano; ningún avance exige una cuenta externa ni compartir datos.
+
+La comprensión real y la transferencia a un proyecto del aprendiz siguen siendo
+hipótesis pendientes de observación con personas, no resultados de estas pruebas.

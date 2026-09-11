@@ -289,30 +289,14 @@
                         </tr>
                       </thead>
                       <tbody>
+                        ${Object.values(sims).map(s => `
                         <tr>
-                          <td><strong>Simulador 1: Pirámide de Cohn</strong></td>
-                          <td>Balance Fowler: Unit (70%), Int (20%), E2E (10%)</td>
-                          <td style="text-align: center;">${sims['sim-pyramid'] ? sims['sim-pyramid'].score : 0} / 50 pts</td>
-                          <td style="text-align: center;"><span class="badge ${sims['sim-pyramid'] && sims['sim-pyramid'].passed ? 'badge--success' : 'badge--danger'}">${sims['sim-pyramid'] && sims['sim-pyramid'].passed ? 'APROBADO' : 'PENDIENTE'}</span></td>
+                          <td><strong>${s.name}</strong></td>
+                          <td style="font-size:0.85rem;color:var(--text-secondary);">${s.details}</td>
+                          <td style="text-align: center;">${s.score} / ${s.maxScore} (${s.percentage || 0}%)</td>
+                          <td style="text-align: center;"><span class="badge ${s.passed ? 'badge--success' : 'badge--danger'}">${s.passed ? 'APROBADO' : 'PENDIENTE'}</span></td>
                         </tr>
-                        <tr>
-                          <td><strong>Simulador 2: Assertion Validator</strong></td>
-                          <td>Aserciones booleanas y contratos de datos</td>
-                          <td style="text-align: center;">${sims['sim-assertion'] ? sims['sim-assertion'].score : 0} / 8 aciertos</td>
-                          <td style="text-align: center;"><span class="badge ${sims['sim-assertion'] && sims['sim-assertion'].passed ? 'badge--success' : 'badge--danger'}">${sims['sim-assertion'] && sims['sim-assertion'].passed ? 'APROBADO' : 'PENDIENTE'}</span></td>
-                        </tr>
-                        <tr>
-                          <td><strong>Simulador 3: Quiz Técnico QA</strong></td>
-                          <td>Preguntas de TDD, BDD, Mocking y Métricas</td>
-                          <td style="text-align: center;">${sims['sim-quiz'] ? sims['sim-quiz'].score : 0} / 8 aciertos</td>
-                          <td style="text-align: center;"><span class="badge ${sims['sim-quiz'] && sims['sim-quiz'].passed ? 'badge--success' : 'badge--danger'}">${sims['sim-quiz'] && sims['sim-quiz'].passed ? 'APROBADO' : 'PENDIENTE'}</span></td>
-                        </tr>
-                        <tr>
-                          <td><strong>Simulador 4: Secuenciador de Fases</strong></td>
-                          <td>Orden maestro de las 7 fases del pipeline</td>
-                          <td style="text-align: center;">${sims['sim-sequencer'] ? sims['sim-sequencer'].score : 0} / 7 fases</td>
-                          <td style="text-align: center;"><span class="badge ${sims['sim-sequencer'] && sims['sim-sequencer'].passed ? 'badge--success' : 'badge--danger'}">${sims['sim-sequencer'] && sims['sim-sequencer'].passed ? 'APROBADO' : 'PENDIENTE'}</span></td>
-                        </tr>
+                        `).join('')}
                         <tr>
                           <td><strong>Matriz de Suites Automatizadas</strong></td>
                           <td>PyTest, Jest, JUnit 5, Playwright, Cobertura, CI/CD</td>

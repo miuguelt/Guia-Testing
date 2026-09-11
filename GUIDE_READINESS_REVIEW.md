@@ -33,3 +33,24 @@ Continúan pendientes la validación con un aprendiz, la valoración del instruc
 lectores de pantalla, zoom nativo y una auditoría completa de accesibilidad.
 Los procedimientos no funcionales enseñan qué comprobar; no certifican que el
 aplicativo del aprendiz haya pasado esas pruebas.
+
+## Actualización del 10 de septiembre: mediación humana con IA
+
+Las 16 estaciones incluyen ahora una práctica situada de IA con un ciclo único:
+comprender, encargar, cuestionar, comprobar y decidir. Cada panel distingue la
+propuesta de la evidencia, declara qué no se ha demostrado, ofrece recuperación y
+exige tres verificaciones antes de registrar la revisión humana. La ruta también
+puede completarse sin IA y advierte que no deben copiarse secretos ni datos
+personales.
+
+Se corrigieron reglas presentadas antes como universales: los porcentajes de la
+pirámide y el 80 % de cobertura quedan como ejemplos contextuales; TDD y BDD se
+separan de las fases de ejecución de CI; la protección de ramas depende de checks
+obligatorios realmente configurados. El caso de límites conserva la cantidad
+entera ficticia de 1 a 5 en explicación y simulador.
+
+La interacción del módulo TDD fue recorrida en navegador: el registro empieza
+bloqueado, se habilita con las tres comprobaciones y muestra confirmación. La
+auditoría automatizada y la suite final se registran en el log de iteración. Sigue
+pendiente observar a un aprendiz real, evaluar la calidad de sus explicaciones y
+confirmar transferencia en un proyecto propio.

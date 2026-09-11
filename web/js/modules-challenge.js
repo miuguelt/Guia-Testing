@@ -75,7 +75,7 @@ Object.assign(window.MODULES, {
                     {
                         icon: "🚀", name: "GitHub Actions", tag: "CI/CD",
                         role: "Pipeline que ejecuta todo el stack y depliega a VPS si el Quality Gate pasa.",
-                        when: "Cada push, y solo si el coverage >= 80%."
+                        when: "Cada push, si la suite relevante pasa y se cumple el umbral de cobertura justificado para el proyecto."
                     },
                     {
                         icon: "📈", name: "k6", tag: "Rendimiento",

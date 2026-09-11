@@ -115,6 +115,26 @@ const CodeRenderer = {
     },
 
     /**
+     * Infografía o ilustración conceptual generada para facilitar la comprensión.
+     */
+    bloqueImagen(bloque) {
+        const figura = this.crear('figure', 'concept-image-card');
+        if (bloque.title) figura.appendChild(this.crear('figcaption', 'concept-image-title', bloque.title));
+
+        const img = document.createElement('img');
+        img.src = bloque.src;
+        img.alt = bloque.alt || bloque.title || 'Infografía conceptual de testing';
+        img.className = 'concept-image';
+        img.loading = 'lazy';
+        figura.appendChild(img);
+
+        if (bloque.caption) {
+            figura.appendChild(this.crear('p', 'concept-image-caption', bloque.caption));
+        }
+        return figura;
+    },
+
+    /**
      * Tarjetas de herramientas (tipo `tools`).
      *
      * Cada tarjeta responde a las dos preguntas que el aprendiz se hace al
@@ -297,6 +317,7 @@ const CodeRenderer = {
             case 'alert': return this.bloqueAviso(bloque);
             case 'comparison': return this.bloqueComparativa(bloque);
             case 'diagram': return this.bloqueDiagrama(bloque);
+            case 'image': return this.bloqueImagen(bloque);
             case 'tools': return this.bloqueHerramientas(bloque);
             case 'timeline': return this.bloqueHistoria(bloque);
             case 'steps': return this.bloquePasos(bloque);

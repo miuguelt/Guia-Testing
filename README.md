@@ -12,6 +12,16 @@
 
 Esta guía formativa cubre el aseguramiento de la calidad de software (QA), la pirámide de pruebas de Mike Cohn, el diseño bajo TDD/BDD y la automatización multi-stack (PyTest, Jest/Vitest, JUnit 5, Mockito, Playwright) bajo el estándar **ISO/IEC 25010** y el marco curricular SENA ADSO (Fase 5 - Evaluación).
 
+## Cómo aprender con IA sin delegarle el criterio
+
+Recorre las estaciones en orden. En cada una encontrarás una práctica opcional
+para trabajar con IA mediante cinco acciones: comprender la regla, encargar un
+borrador, cuestionar supuestos, comprobar con archivos y ejecuciones reales, y
+decidir qué aceptas o corriges. Una respuesta de la IA no es evidencia: conserva
+el comando, la salida observada, el alcance y tu explicación. No pegues secretos,
+datos personales ni información de clientes; reemplázalos por marcadores. Todas
+las prácticas también pueden hacerse manualmente.
+
 ## Proyecto descargable para practicar
 
 La guía publica un paquete fuente listo para trabajar en

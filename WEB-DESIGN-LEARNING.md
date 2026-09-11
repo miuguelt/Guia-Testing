@@ -26,3 +26,17 @@ desde el contenido visible evita prometer un ciclo que el aprendiz no puede
 ejecutar. Separar datos por tema permite ampliar explicaciones sin agregar otro
 motor de interfaz. La ventaja pedagógica es una hipótesis: no se promovieron
 reglas globales ni se afirmó comprensión sin una sesión con aprendices.
+
+## 2026-09-10 · IA como borrador sometido a evidencia
+
+Un panel repetido solo es útil si conserva un modelo mental estable y cambia el
+trabajo cognitivo de cada estación. Por eso se mantuvo una ruta de cinco pasos y
+se escribieron 16 encargos distintos. Mostrar “qué no demuestra todavía” junto a
+“qué debes comprobar” reduce la tentación de equiparar una respuesta plausible
+con una ejecución real.
+
+El bloqueo del registro hasta completar existencia, contraste y explicación hace
+visible la mediación humana sin fingir que tres casillas certifican competencia.
+La alternativa manual conserva accesibilidad pedagógica para quien no use IA. La
+eficacia del patrón sigue pendiente de una prueba con aprendices; no se propone
+como regla global fuera de esta guía.

@@ -45,3 +45,12 @@
 - Evidencia: docs/revision-fundamentos-tdd-bdd-2026-09-10.md; 72 pruebas aprobadas; 13 casos pytest y 6 escenarios Behave desde ZIP limpio; 30 revisiones de tamaño sin desbordamiento; Presentación de código y modularidad aprobadas
 - Retroalimentación: Validación con aprendiz e instructor pendiente; alcance técnico y limitaciones documentados
 - Reglas candidatas: no se proponen reglas globales.
+
+## 2026-09-10 19:37 -05:00 - validated
+
+- Iteración: adso-testing-qa-calidad-2026-20260910193730820
+- Estándar: 2.5.0
+- Resumen: Acompañamiento humano-IA distribuido en 16 módulos, corrección de reglas universales y revisión responsive de enlaces profundos
+- Evidencia: 81 pruebas automatizadas aprobadas; Test-DevBrainEducationalGuide strict aprobado; Test-WebQuality: 0 errores; Test-GuideDeliverables: 3 artefactos y 3 estaciones; Web audit: 0 violaciones axe y 0 desbordamientos; Recorrido TDD en navegador: bloqueo, tres verificaciones y registro confirmados
+- Retroalimentación: Validar comprensión y transferencia con un aprendiz real antes de declarar autonomía pedagógica; El auditor de foco cuenta controles de secciones SPA ocultas; el foco calculado del menú se verificó manualmente
+- Reglas candidatas: no se proponen reglas globales

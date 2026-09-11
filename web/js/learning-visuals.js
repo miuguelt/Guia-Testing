@@ -242,6 +242,9 @@
                 if (global.TestingSession) {
                     global.TestingSession.recordSimulator('sim-e2e', passed ? 1 : 0, 1, result.textContent);
                 }
+                if (typeof window !== 'undefined' && window.SIMULATORS && typeof window.SIMULATORS.updateCompletionCounter === 'function') {
+                    window.SIMULATORS.updateCompletionCounter();
+                }
             };
 
             runButton.addEventListener('click', () => {
