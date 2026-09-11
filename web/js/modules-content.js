@@ -108,13 +108,20 @@ def perform_trades(market_data):
                 ]
             },
             {
+                type: "image",
+                title: "Infografía Conceptual: La Pirámide de Pruebas y el Flujo CI/CD",
+                src: "img/test-pyramid-pipeline.jpg",
+                alt: "Infografía de la Pirámide de Pruebas con bases sólidas de pruebas unitarias, pruebas de integración y pruebas E2E culminando en un Quality Gate automatizado",
+                caption: "Estrategia por niveles de prueba: La base sostiene pruebas unitarias ultrarrápidas y exhaustivas; el medio valida la integración real entre servicios y persistencia; y la cúspide protege flujos críticos de usuario (E2E). Todo el conjunto se valida automáticamente en el pipeline CI/CD antes de permitir el despliegue."
+            },
+            {
                 type: "tools",
                 title: "Qué necesitas para esta práctica",
                 stack: [
                     {
                         icon: "⚡", name: "PyTest", tag: "Python",
                         role: "Framework de pruebas para Python: aserciones simples con assert, fixtures y parametrización.",
-                        when: "Logica de negocio y APIs (FastAPI, Flask). 70% inferior de la piramide y quality gates en CI."
+                        when: "Lógica de negocio y APIs (FastAPI, Flask). Suele aportar una base rápida y amplia; su peso depende del riesgo y la arquitectura."
                     },
                     {
                         icon: "⚛️", name: "Jest / Vitest", tag: "JavaScript",
@@ -129,7 +136,7 @@ def perform_trades(market_data):
                     {
                         icon: "🎬", name: "Playwright", tag: "E2E",
                         role: "Automatiza navegadores reales (Chromium, Firefox, WebKit): llenar, clicar, esperar y capturar evidencia.",
-                        when: "Flujos criticos de usuario. 10% superior de la piramide: son caros, usar solo los que importan."
+                        when: "Flujos críticos de usuario. Son más lentos y costosos; selecciona los que protegen riesgos importantes."
                     },
                     {
                         icon: "🚀", name: "GitHub Actions", tag: "CI/CD",
@@ -234,7 +241,7 @@ def perform_trades(market_data):
                     },
                     {
                         number: 2,
-                        title: "Fase 2: Pruebas Unitarias de Dominio (Base 70% de la Pirámide)",
+                        title: "Fase 2: Pruebas Unitarias de Dominio (base rápida)",
                         tag: "Lógica Pura & Algoritmos",
                         desc: "Escribe pruebas unitarias aisladas para funciones de cálculo, validaciones de esquemas Pydantic/JPA y reglas de negocio. Emplea mocks y stubs para aislar la base de datos y la red.",
                         command: "pytest tests/unit -v",
@@ -243,7 +250,7 @@ def perform_trades(market_data):
                     },
                     {
                         number: 3,
-                        title: "Fase 3: Pruebas de Integración y Contratos de API (Nivel Medio 20%)",
+                        title: "Fase 3: Pruebas de Integración y Contratos de API",
                         tag: "Endpoints & Persistencia",
                         desc: "Prueba los controladores y endpoints HTTP con clientes de prueba en memoria (TestClient / MockMvc / test_client). Conecta una base de datos de pruebas (SQLite en memoria o transacciones con rollback).",
                         command: "pytest tests/integration -v",
@@ -261,7 +268,7 @@ def perform_trades(market_data):
                     },
                     {
                         number: 5,
-                        title: "Fase 5: Pruebas End-to-End en Navegador Real (Cúspide 10%)",
+                        title: "Fase 5: Pruebas End-to-End en Navegador Real (flujos críticos)",
                         tag: "Flujos Críticos Reales",
                         desc: "Automatiza con Playwright los caminos dorados (Happy Paths) indispensables del sistema: login de usuario, creación de registros en el inventario y verificación en la tabla principal.",
                         command: "npx playwright test",
