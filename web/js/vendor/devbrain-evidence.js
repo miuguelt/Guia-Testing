@@ -1539,6 +1539,20 @@
   }
   
   /**
+   * Logotipo institucional SENA en formato SVG vectorizado para encabezados oficiales.
+   */
+  const DBE_SENA_LOGO_SVG = `
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="68" height="68" aria-label="Referencia visual SENA">
+      <circle cx="80" cy="22" r="14" fill="#39A900"/>
+      <path d="M80 44 C74 44 54 58 34 74 C30 77 32 81 36 81 C50 81 66 69 75 62 L75 96 L85 96 L85 62 C94 69 110 81 124 81 C128 81 130 77 126 74 C106 58 86 44 80 44 Z" fill="#39A900"/>
+      <rect x="56" y="102" width="48" height="6" rx="3" fill="#39A900"/>
+      <rect x="44" y="112" width="72" height="6" rx="3" fill="#39A900"/>
+      <rect x="32" y="122" width="96" height="6" rx="3" fill="#39A900"/>
+      <text x="80" y="150" text-anchor="middle" font-family="'Segoe UI', Roboto, Arial, sans-serif" font-weight="900" font-size="22" fill="#39A900" letter-spacing="2">SENA</text>
+    </svg>
+  `;
+
+  /**
    * Construye una hoja imprimible de trabajo para la guía.
    * @param {Object} params
    * @param {Object} params.registro
@@ -2403,7 +2417,6 @@
     dbeDescargar(htmlCompleto, `registro_evidencias_firmado_${fichaLimpia}_${docLimpio}.html`, 'text/html;charset=utf-8');
   }
 
-  /**
   /**
    * Ejecuta una impresión limpia y aislada del registro oficial SENA en cualquier navegador.
    */

@@ -1,6 +1,7 @@
 """Tests de estructura de la guia Testing."""
 import os
 import json
+import subprocess
 from pathlib import Path
 import pytest
 
@@ -577,5 +578,12 @@ def test_multi_mode_signature_and_print_workflow():
     assert os.path.isfile(path_export_pdf)
 
 
-
-
+def test_devbrain_evidence_runtime_mounting_and_methods():
+    """Ejecuta test_evidence_runtime.js en Node para verificar que DevBrainEvidence monta, refresca e imprime sin ReferenceError."""
+    test_script = os.path.join(BASE, "tests", "test_evidence_runtime.js")
+    assert os.path.isfile(test_script)
+    result = subprocess.run(["node", test_script], capture_output=True, text=True, cwd=BASE)
+    assert result.returncode == 0, f"Error en ejecución de DevBrainEvidence: {result.stderr}\n{result.stdout}"
+    assert "SUCCESS! Montar completed with zero errors!" in result.stdout
+    assert "refrescarDossier OK!" in result.stdout
+    assert "imprimir OK!" in result.stdout

@@ -1,4 +1,4 @@
-﻿node_modules/
+node_modules/
 dist/
 dist-ssr/
 *.local
@@ -21,6 +21,7 @@ coverage/
 playwright-report/
 test-results/
 *.db
+*.pdf
 
 # --- DevBrain: rastros de agentes IA (bloque gestionado) ---
 # Estado local de agentes (lo regenera Sync-DevBrainIdeIntegration)
