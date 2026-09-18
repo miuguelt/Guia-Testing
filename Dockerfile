@@ -11,6 +11,9 @@ LABEL description="Servidor Nginx ultraligero para la Guía Web Interactiva"
 # Limpiar directorio web predeterminado
 RUN rm -rf /usr/share/nginx/html/*
 
+# Configurar Nginx con políticas anti-caché para la SPA
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
 # Copiar archivos estáticos de la guía web (carpeta web/)
 COPY web/ /usr/share/nginx/html/
 
