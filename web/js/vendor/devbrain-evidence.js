@@ -3197,98 +3197,13 @@
       });
       botonRestaurarRespaldo.addEventListener('click', () => inputRestaurar.click());
 
-      const botonEjecutarTodasPruebas = dbeEl('button', {
-        clase: 'btn btn--secondary btn--sm',
-        texto: '⚡ Ejecutar Todas las Pruebas (CI)',
-        attrs: { type: 'button', id: 'btn-run-all-tests', title: 'Ejecuta y verifica automáticamente todas las suites de prueba en el pipeline' }
-      });
-      botonEjecutarTodasPruebas.addEventListener('click', () => {
-        const ts = (typeof window !== 'undefined' && window.TestingSession) ? window.TestingSession : null;
-        if (ts && typeof ts.runAllChecks === 'function') {
-          ts.runAllChecks();
-          pintar();
-          if (window.APP && typeof window.APP.showToast === 'function') {
-            window.APP.showToast('¡Todas las suites de prueba ejecutadas y verificadas!', 'success');
-          }
-        }
-      });
-
-      const botonRecargarEstado = dbeEl('button', {
-        clase: 'btn btn--secondary btn--sm',
-        texto: '🔄 Recargar Estado Real',
-        attrs: { type: 'button', id: 'btn-refresh-real-state', title: 'Actualiza la hoja con las últimas prácticas realizadas' }
-      });
-      botonRecargarEstado.addEventListener('click', () => {
-        pintar();
-        if (window.APP && typeof window.APP.showToast === 'function') {
-          window.APP.showToast('Estado de evidencias sincronizado ✓', 'info');
-        }
-      });
-
       const botonImprimir = dbeEl('button', {
         clase: 'btn btn--primary',
         texto: '🖨️ Imprimir / Guardar en PDF',
         attrs: { type: 'button', id: 'btn-print-evidence' }
       });
       botonImprimir.addEventListener('click', () => { dbeEjecutarImpresionLimpia(); });
-  
-      const botonDescargarHtml = dbeEl('button', {
-        clase: 'btn btn--primary',
-        texto: '📥 Descargar Documento Firmado (.html)',
-        attrs: { type: 'button', id: 'btn-download-html' }
-      });
-      botonDescargarHtml.addEventListener('click', () => {
-        dbeDescargarDocumentoHtml({ registro, filas, listas, apprenticeData, bitacora });
-      });
 
-      const botonDescargarJson = dbeEl('button', {
-        clase: 'btn btn--secondary',
-        texto: '💾 Descargar Evidencia en JSON',
-        attrs: { type: 'button', id: 'btn-download-json' }
-      });
-      botonDescargarJson.addEventListener('click', () => {
-        const payload = {
-          apprentice: apprenticeData,
-          signature: apprenticeData.signature || (typeof localStorage !== 'undefined' ? localStorage.getItem(claveFirma) : ''),
-          guideId: registro.guideId,
-          program: 'Tecnólogo en Análisis y Desarrollo de Software (ADSO) - Ficha ' + apprenticeData.ficha,
-          competency: (registro.submission && registro.submission.packageName) || 'Desarrollo de Software ADSO',
-          dossierStatus: listas === filas.length ? 'COMPLETED' : 'IN_PROGRESS',
-          evaluationTimestamp: new Date().toISOString(),
-          summary: { total: filas.length, completed: listas, pending: filas.length - listas },
-          artifacts: filas.map((f) => ({
-            id: f.artefacto.id,
-            code: f.artefacto.code,
-            name: f.artefacto.name,
-            instrument: f.artefacto.instrument || 'Instrumento de evaluación aplicable',
-            status: f.estado,
-            criterion: f.artefacto.criterion || 'Criterio de trabajo declarado'
-          })),
-          aiLog: bitacora
-        };
-        dbeDescargar(JSON.stringify(payload, null, 2), `registro_evidencias_${apprenticeData.ficha}_${apprenticeData.docNumber}.json`, 'application/json');
-      });
-  
-      const botonDescargarMd = dbeEl('button', {
-        clase: 'btn btn--secondary',
-        texto: '📄 Descargar Paquete (.md)',
-        attrs: { type: 'button', id: 'btn-download-md' }
-      });
-      botonDescargarMd.addEventListener('click', () => {
-        const md = dbePaqueteAMarkdown({ registro, filas, bitacora, identificacion: apprenticeData });
-        dbeDescargar(md, `${registro.guideId || 'evidencias'}.md`);
-      });
-  
-      const botonCopiarMd = dbeEl('button', {
-        clase: 'btn btn--secondary',
-        texto: '📋 Copiar Paquete',
-        attrs: { type: 'button' }
-      });
-      botonCopiarMd.addEventListener('click', () => {
-        const md = dbePaqueteAMarkdown({ registro, filas, bitacora, identificacion: apprenticeData });
-        dbeCopiar(md, botonCopiarMd);
-      });
-  
       formCard.appendChild(dbeEl('div', {
         clase: 'evidence-actions-bar no-print',
         attrs: { style: 'margin-top: 1.5rem; display: flex; flex-wrap: wrap; gap: 0.75rem;' },
@@ -3297,13 +3212,7 @@
           botonExportarRespaldo,
           botonRestaurarRespaldo,
           inputRestaurar,
-          botonEjecutarTodasPruebas,
-          botonRecargarEstado,
-          botonImprimir,
-          botonDescargarHtml,
-          botonDescargarJson,
-          botonDescargarMd,
-          botonCopiarMd
+          botonImprimir
         ]
       }));
   
