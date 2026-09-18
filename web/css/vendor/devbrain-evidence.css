@@ -642,18 +642,6 @@ textarea.dbe-campo__control {
   padding: 1rem;
 }
 
-@media print {
-  .dbe-acciones,
-  .dbe-restaurar,
-  .dbe-ia__registro {
-    display: none;
-  }
-
-  .dbe-estacion,
-  .dbe-dossier {
-    border: 1px solid #999;
-  }
-}
 
 
 /* ==========================================================================
@@ -931,12 +919,137 @@ textarea.dbe-campo__control {
   border: 1px solid #cbd5e1;
 }
 
+.badge--danger {
+  background-color: #fee2e2 !important;
+  color: #b91c1c !important;
+  border: 1px solid #fca5a5;
+}
+
+/* Modos de firma interactivos en DevBrain Evidence */
+.signature-mode-tabs {
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 0.85rem;
+  flex-wrap: wrap;
+}
+
+.sig-mode-btn {
+  background: var(--dbe-fondo-suave, #f8fafc);
+  color: var(--dbe-texto, #334155);
+  border: 1px solid var(--dbe-borde, #cbd5e1);
+  border-radius: 4px;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sig-mode-btn:hover {
+  background: var(--dbe-borde, #e2e8f0);
+}
+
+.sig-mode-btn.is-active {
+  background: #39a900 !important;
+  color: #ffffff !important;
+  border-color: #39a900 !important;
+  box-shadow: 0 2px 8px rgba(57, 169, 0, 0.3);
+}
+
+.signature-typed-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  width: 100%;
+  max-width: 440px;
+}
+
+.signature-typed-input {
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  color: #0f172a;
+  font-size: 0.95rem;
+  box-sizing: border-box;
+}
+
+.signature-typed-input:focus {
+  border-color: #39a900;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(57, 169, 0, 0.2);
+}
+
+.signature-font-picker {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.signature-font-picker label {
+  font-size: 0.8rem;
+  color: var(--dbe-texto-suave, #64748b);
+}
+
+.signature-font-select {
+  padding: 0.3rem 0.6rem;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  color: #0f172a;
+  font-size: 0.82rem;
+}
+
+.signature-typed-preview-card {
+  background: #ffffff;
+  border: 2px dashed #94a3b8;
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 85px;
+  color: #0f172a;
+  font-size: 1.5rem;
+  user-select: none;
+  overflow: hidden;
+}
+
+.btn-sign-trigger {
+  font-size: 0.72rem;
+  padding: 0.2rem 0.55rem;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-top: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
 /* Ajustes de Impresión Formal (@media print) */
 @media print {
+  @page {
+    margin: 10mm 12mm 10mm 12mm;
+    size: letter portrait;
+  }
+
+  *,
+  *::before,
+  *::after {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    box-sizing: border-box !important;
+  }
+
   body {
     background: #ffffff !important;
-    color: #000000 !important;
+    color: #0f172a !important;
+    overflow: visible !important;
+    height: auto !important;
   }
+
   .no-print,
   .dbe-acciones,
   .dbe-restaurar,
@@ -944,6 +1057,8 @@ textarea.dbe-campo__control {
   .dbe-progreso,
   .evidence-form-card,
   .evidence-actions-bar,
+  .signature-control-panel,
+  .signature-canvas-wrapper,
   .app-header,
   .nav-tabs-wrapper,
   .sidebar,
@@ -954,40 +1069,86 @@ textarea.dbe-campo__control {
   nav,
   header,
   aside,
-  footer {
+  footer,
+  .btn-sign-trigger {
     display: none !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
 
   .dbe-estacion,
   .dbe-dossier,
-  .sena-dossier-sheet {
+  .sena-dossier-sheet,
+  .sena-evidence-sheet,
+  .sena-printable-sheet {
     border: none !important;
     box-shadow: none !important;
     padding: 0 !important;
     margin: 0 !important;
     background: #ffffff !important;
-    color: #000000 !important;
+    color: #0f172a !important;
     width: 100% !important;
     max-width: 100% !important;
+    overflow: visible !important;
+    height: auto !important;
   }
 
-  .dossier-table th {
+  .dossier-table,
+  .evidence-table {
+    border-collapse: collapse !important;
+    width: 100% !important;
+  }
+
+  .dossier-table th,
+  .evidence-table th {
     background-color: #f1f5f9 !important;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
+    color: #0f172a !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .dossier-table td,
+  .evidence-table td {
+    color: #0f172a !important;
   }
 
   .sena-shield {
     background-color: #39a900 !important;
     color: #ffffff !important;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 
   .badge--success {
     background-color: #dcfce7 !important;
     color: #15803d !important;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
+    border-color: #86efac !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .badge--warning {
+    background-color: #fef9c3 !important;
+    color: #a16207 !important;
+    border-color: #fde047 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .badge--danger {
+    background-color: #fee2e2 !important;
+    color: #b91c1c !important;
+    border-color: #fca5a5 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .badge--pending {
+    background-color: #f1f5f9 !important;
+    color: #64748b !important;
+    border-color: #cbd5e1 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 }

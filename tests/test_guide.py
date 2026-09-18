@@ -327,7 +327,7 @@ def test_manifest_refleja_la_salida_web_y_la_secuencia_real():
         manifest = json.load(f)
 
     assert manifest["guide"]["entrypoint"] == "./web/index.html"
-    assert manifest["platform"]["modules"] == 16
+    assert manifest["platform"]["modules"] == 18
     assert sum(fase["hours"] for fase in manifest["learningSequence"]) == 40
     assert "adaptación didáctica" in manifest["sources"][0]["use"].lower()
 
@@ -475,6 +475,107 @@ def test_constructor_gema_tiene_persistencia_y_verificaciones_de_calidad():
     assert "errorCases" in code
     assert "securityCases" in code
     assert "qualityGate" in code
+
+
+def test_testing_session_persistencia_multidia_y_respaldos():
+    """TestingSession debe soportar firma digital, exportación e importación de respaldo completo."""
+    path = os.path.join(BASE, "web", "js", "testing-session.js")
+    with open(path, encoding="utf-8") as f:
+        code = f.read()
+
+    assert "exportFullSessionBackup" in code
+    assert "importFullSessionBackup" in code
+    assert "getSignature" in code
+    assert "saveSignature" in code
+    assert "guia_testing_apprentice_signature" in code
+
+
+def test_devbrain_evidence_hoja_oficial_dinamica_sena():
+    """DevBrainEvidence debe generar la hoja oficial SENA con persistencia, simuladores y rúbrica dinámica."""
+    path = os.path.join(BASE, "web", "js", "vendor", "devbrain-evidence.js")
+    with open(path, encoding="utf-8") as f:
+        code = f.read()
+
+    assert "dbeConstruirHojaSena" in code
+    assert "sena-evidence-sheet" in code
+    assert "evidence-header-table" in code
+    assert "DBE_SENA_LOGO_SVG" in code
+    assert "exportFullSessionBackup" in code
+    assert "btn-export-backup" in code
+    assert "btn-restore-backup" in code
+    assert "btn-save-memory" in code
+    assert "data-toggle-check" in code
+    assert "refrescarDossier" in code
+    assert "dbeDescargarDocumentoHtml" in code
+    assert "dbePaqueteAMarkdown" in code
+
+
+def test_devbrain_evidence_css_badge_danger():
+    """devbrain-evidence.css debe definir .badge--danger para estados de alerta y no cumplidos."""
+    path = os.path.join(BASE, "web", "css", "vendor", "devbrain-evidence.css")
+    with open(path, encoding="utf-8") as f:
+        css = f.read()
+
+    assert ".badge--danger" in css
+
+
+def test_pdf_print_isolation_and_color_adjust():
+    """styles.css y devbrain-evidence.css deben garantizar impresión limpia, exacta en color y aislada al documento oficial."""
+    path_css = os.path.join(BASE, "web", "css", "styles.css")
+    with open(path_css, encoding="utf-8") as f:
+        css = f.read()
+
+    assert "@media print" in css
+    assert "print-color-adjust: exact" in css
+    assert "-webkit-print-color-adjust: exact" in css
+    assert "size: letter portrait" in css
+    assert "break-inside: avoid" in css
+    assert "printing-dossier" in css
+    assert ".signature-mode-tabs" in css
+    assert ".signature-typed-preview-card" in css
+    assert "table-header-group" in css
+
+    # devbrain-evidence.css no debe tener bordes obsoletos de impresión que compitan con la hoja oficial
+    path_dbe_css = os.path.join(BASE, "web", "css", "vendor", "devbrain-evidence.css")
+    with open(path_dbe_css, encoding="utf-8") as f:
+        dbe_css = f.read()
+    assert "border: 1px solid #999" not in dbe_css
+
+
+def test_multi_mode_signature_and_print_workflow():
+    """devbrain-evidence.js y la interfaz web deben proveer firma multi-modal (trazo, tipografía, carga y física) e impresión limpia y estandarizada."""
+    path_dbe = os.path.join(BASE, "web", "js", "vendor", "devbrain-evidence.js")
+    with open(path_dbe, encoding="utf-8") as f:
+        dbe_code = f.read()
+
+    assert "dbeEjecutarImpresionLimpia" in dbe_code
+    assert "generarFirmaCaligraficaDataUrl" in dbe_code
+    assert "tab-sig-draw" in dbe_code
+    assert "tab-sig-type" in dbe_code
+    assert "tab-sig-upload" in dbe_code
+    assert "tab-sig-manual" in dbe_code
+    assert "btn-role-apprentice" in dbe_code
+    assert "btn-role-instructor" in dbe_code
+    assert "signature-typed-preview" in dbe_code
+
+    path_main = os.path.join(BASE, "web", "js", "main.js")
+    with open(path_main, encoding="utf-8") as f:
+        main_code = f.read()
+    assert "imprimirDossier" in main_code
+    assert "beforeprint" in main_code
+    assert "afterprint" in main_code
+    assert "initPrintHandlers" in main_code
+    assert "showToast" in main_code
+
+    path_html = os.path.join(BASE, "web", "index.html")
+    with open(path_html, encoding="utf-8") as f:
+        html = f.read()
+    assert "btn-header-print-pdf" in html
+
+    # Script estandarizado para generación headless
+    path_export_pdf = os.path.join(BASE, "exportar-pdf.ps1")
+    assert os.path.isfile(path_export_pdf)
+
 
 
 

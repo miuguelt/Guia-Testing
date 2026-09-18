@@ -10,11 +10,12 @@ const APP = {
         this.initParticles();
         this.initScrollAnimations();
         this.initRouting();
+        this.initBreadcrumb();
+        this.initBackToTop();
+        this.initResetProgress();
+        this.initPrintHandlers();
         GAMIFICATION.renderStats();
         GAMIFICATION.updateSidebarBadges();
-        // La ruta inicial puede llegar en el hash antes de que termine la
-        // inicialización de todos los módulos; reafirma el estado visual del
-        // menú para que no quede resaltado "Inicio" por defecto.
         this.updateSidebarActive(this.currentPage);
     },
 
@@ -44,7 +45,10 @@ const APP = {
         const toggle = document.getElementById('sidebar-toggle');
         const sidebar = document.getElementById('sidebar');
         if (toggle && sidebar) {
-            toggle.addEventListener('click', () => sidebar.classList.toggle('open'));
+            toggle.addEventListener('click', () => {
+                const abierto = sidebar.classList.toggle('open');
+                toggle.setAttribute('aria-expanded', abierto ? 'true' : 'false');
+            });
         }
         document.querySelectorAll('.nav-item').forEach(item => {
             item.addEventListener('click', (e) => {
@@ -72,6 +76,10 @@ const APP = {
             this.currentPage = pageId;
             this.updateBreadcrumb(pageId);
             this.updateSidebarActive(pageId);
+            this.announcePage(pageId);
+            if (pageId === 'm-evidencias-sena' && window.DevBrainEvidence && typeof window.DevBrainEvidence.refrescarDossier === 'function') {
+                window.DevBrainEvidence.refrescarDossier();
+            }
             if (updateHash && window.location.hash !== '#' + pageId) {
                 if (history.pushState) {
                     history.pushState(null, null, '#' + pageId);
@@ -81,6 +89,54 @@ const APP = {
             }
             window.scrollTo({ top: 0, behavior: updateHash ? 'smooth' : 'auto' });
         }
+    },
+
+    initPrintHandlers() {
+        window.addEventListener('beforeprint', () => {
+            document.body.classList.add('printing-dossier');
+            if (window.DevBrainEvidence && typeof window.DevBrainEvidence.refrescarDossier === 'function') {
+                window.DevBrainEvidence.refrescarDossier();
+            }
+        });
+        window.addEventListener('afterprint', () => {
+            document.body.classList.remove('printing-dossier');
+        });
+    },
+
+    imprimirDossier() {
+        this.navigateTo('m-evidencias-sena');
+        if (window.DevBrainEvidence && typeof window.DevBrainEvidence.imprimir === 'function') {
+            window.DevBrainEvidence.imprimir();
+        } else {
+            document.body.classList.add('printing-dossier');
+            setTimeout(() => {
+                window.print();
+                setTimeout(() => {
+                    document.body.classList.remove('printing-dossier');
+                }, 500);
+            }, 150);
+        }
+    },
+
+    showToast(message, type = 'info') {
+        let container = document.getElementById('app-toast-container');
+        if (!container) {
+            container = document.createElement('div');
+            container.id = 'app-toast-container';
+            container.className = 'app-toast-container no-print';
+            container.setAttribute('aria-live', 'polite');
+            document.body.appendChild(container);
+        }
+        const toast = document.createElement('div');
+        toast.className = `app-toast app-toast--${type} no-print`;
+        toast.textContent = message;
+        container.appendChild(toast);
+        setTimeout(() => {
+            toast.classList.add('app-toast--fade-out');
+            setTimeout(() => {
+                if (toast.parentNode) toast.parentNode.removeChild(toast);
+            }, 300);
+        }, 3200);
     },
 
     updateSidebarActive(pageId) {
@@ -94,32 +150,43 @@ const APP = {
         });
     },
 
+    pageLabels: {
+        welcome: 'Inicio',
+        'm-simuladores': 'Simuladores',
+        'm-evidencias-sena': 'Registro de evidencias',
+        descargar: 'Descargar Proyecto'
+    },
+
+    getPageTitle(pageId) {
+        const modulo = (window.MODULES || {})[pageId];
+        return (modulo && modulo.title) || this.pageLabels[pageId] || pageId;
+    },
+
+    initBreadcrumb() {
+        const root = document.getElementById('breadcrumb-root');
+        if (root) {
+            root.addEventListener('click', (event) => {
+                event.preventDefault();
+                this.navigateTo('welcome');
+            });
+        }
+    },
+
     updateBreadcrumb(pageId) {
         const breadcrumb = document.getElementById('breadcrumb-current');
         if (breadcrumb) {
-            const names = {
-                'welcome': 'Inicio',
-                'm-reflexion': 'Fundamentos',
-                'm-piramide': 'Diseño y niveles',
-                'm-pytest-fastapi': 'PyTest FastAPI',
-                'm-pytest-flask': 'PyTest Flask',
-                'm-jest-react': 'Jest React',
-                'm-junit-jsp': 'JUnit Java',
-                'm-tdd': 'TDD',
-                'm-bdd': 'BDD',
-                'm-playwright': 'Playwright E2E',
-                'm-cobertura': 'Cobertura',
-                'm-cicd': 'CI/CD',
-                'm-observabilidad': 'Observabilidad Coolify',
-                'm-reto': 'Reto Final',
-                'm-ia-testing': 'IA en Testing',
-                'm-gema-testing': 'Constructor de Gema QA',
-                'm-herramientas-ia': 'Herramientas IA',
-                'm-simuladores': 'Simuladores',
-                'm-evidencias-sena': 'Registro de evidencias',
-                'descargar': 'Descargar Proyecto'
-            };
-            breadcrumb.textContent = names[pageId] || pageId;
+            breadcrumb.textContent = this.getPageTitle(pageId);
+        }
+    },
+
+    /** Actualiza el título del documento y lo anuncia en la región aria-live. */
+    announcePage(pageId) {
+        const titulo = this.getPageTitle(pageId);
+        document.title = titulo + ' · Guía Testing QA';
+        const announcer = document.getElementById('page-announcer');
+        if (announcer) {
+            announcer.textContent = '';
+            announcer.textContent = 'Sección: ' + titulo;
         }
     },
 
@@ -128,10 +195,28 @@ const APP = {
         if (searchInput) {
             searchInput.addEventListener('input', (e) => {
                 const query = e.target.value.toLowerCase();
+                let visibles = 0;
                 document.querySelectorAll('.nav-item').forEach(item => {
                     const text = item.textContent.toLowerCase();
-                    item.style.display = text.includes(query) ? '' : 'none';
+                    const mostrar = text.includes(query);
+                    item.style.display = mostrar ? '' : 'none';
+                    if (mostrar) visibles++;
                 });
+                const nav = document.querySelector('.sidebar-nav');
+                let vacio = document.getElementById('nav-empty-state');
+                if (nav && visibles === 0) {
+                    if (!vacio) {
+                        vacio = document.createElement('div');
+                        vacio.id = 'nav-empty-state';
+                        vacio.className = 'nav-empty-state';
+                        vacio.setAttribute('role', 'status');
+                        vacio.style.padding = '0.75rem 1rem';
+                        nav.appendChild(vacio);
+                    }
+                    vacio.textContent = 'Sin resultados para «' + e.target.value + '»';
+                } else if (vacio) {
+                    vacio.remove();
+                }
             });
         }
         document.addEventListener('keydown', (e) => {
@@ -172,11 +257,18 @@ const APP = {
             document.getElementById('modal-modules').textContent = GAMIFICATION.completed.length;
             document.getElementById('modal-xp').textContent = GAMIFICATION.xp;
             document.getElementById('modal-level').textContent = GAMIFICATION.level;
+            this.victoryTrigger = document.activeElement;
             modal.style.display = 'flex';
-            if (window.confetti) {
-                confetti({ particleCount: 300, spread: 160, origin: { y: 0.5 } });
-                setTimeout(() => confetti({ particleCount: 200, spread: 120, origin: { y: 0.6 } }), 500);
-                setTimeout(() => confetti({ particleCount: 100, spread: 80, origin: { y: 0.7 } }), 1000);
+            const cerrar = document.getElementById('victory-modal-close');
+            if (cerrar) cerrar.focus();
+            if (!this.victoryListenersInit) {
+                this.victoryListenersInit = true;
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape' && modal.style.display !== 'none') this.closeVictoryModal();
+                });
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) this.closeVictoryModal();
+                });
             }
         }
     },
@@ -184,8 +276,34 @@ const APP = {
     closeVictoryModal() {
         const modal = document.getElementById('victory-modal');
         if (modal) modal.style.display = 'none';
+        if (this.victoryTrigger && this.victoryTrigger.focus) this.victoryTrigger.focus();
+        this.victoryTrigger = null;
     },
 
+    initBackToTop() {
+        const btn = document.getElementById('back-to-top');
+        if (!btn) return;
+        const suave = !(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+        window.addEventListener('scroll', () => {
+            btn.classList.toggle('visible', window.scrollY > window.innerHeight * 2);
+        }, { passive: true });
+        btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: suave ? 'smooth' : 'auto' }));
+    },
+
+    initResetProgress() {
+        const btn = document.getElementById('reset-progress');
+        if (!btn) return;
+        btn.addEventListener('click', () => {
+            if (!confirm('¿Reiniciar todo tu progreso? Se borrarán XP, insignias y módulos completados. Esta acción no se puede deshacer.')) return;
+            const claves = [];
+            for (let i = 0; i < localStorage.length; i++) {
+                const k = localStorage.key(i);
+                if (k && (k.startsWith('guia_testing_') || k.startsWith('fastapi_'))) claves.push(k);
+            }
+            claves.forEach(k => localStorage.removeItem(k));
+            location.reload();
+        });
+    },
     initCopyButtons() {
         document.querySelectorAll('pre').forEach(pre => {
             if (!pre.querySelector('.copy-btn')) {
@@ -208,6 +326,7 @@ const APP = {
     initParticles() {
         const container = document.getElementById('particles');
         if (!container) return;
+        if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
         for (let i = 0; i < 20; i++) {
             const p = document.createElement('div');
             p.className = 'particle';

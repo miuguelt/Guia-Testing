@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="css/module-learning-kit.css?v=3.5.0">
 </head>
 <body>
+    <a href="#contenido" class="skip-link">Saltar al contenido</a>
     <div class="background-orbs">
         <div class="orb orb-1"></div>
         <div class="orb orb-2"></div>
@@ -96,14 +97,15 @@
 
     <div class="main-wrapper">
         <header class="top-header glass-panel">
-            <div class="breadcrumb">Guía Testing & QA <span aria-hidden="true">›</span> <span id="breadcrumb-current">Inicio</span></div>
+            <div class="breadcrumb" aria-label="Miga de pan"><a id="breadcrumb-root" href="#welcome">Guía Testing &amp; QA</a> <span aria-hidden="true">›</span> <span id="breadcrumb-current">Inicio</span></div>
             <div class="header-actions">
                 <button type="button" class="btn btn-sm btn-primary" onclick="APP.navigateTo('m-simuladores')">Simuladores</button>
                 <button type="button" class="btn btn-sm btn-secondary" onclick="APP.navigateTo('m-evidencias-sena')">&#128196; Registro de evidencias</button>
+                <button type="button" class="btn btn-sm btn-secondary" id="btn-header-print-pdf" onclick="APP.imprimirDossier()" title="Imprimir o guardar en PDF el Registro Oficial de Evidencias SENA">&#128424;&#65039; Imprimir PDF</button>
             </div>
         </header>
 
-        <main class="content">
+        <main class="content" id="contenido">
             <section id="welcome" class="page-section active">
                 <div class="hero-section section-card glass-panel">
                     <div class="badge">Ruta de aprendizaje · SENA ADSO</div>
@@ -218,20 +220,20 @@
                     </div>
 
                     <!-- NAVEGACIÓN POR PERSPECTIVAS LÓGICAS -->
-                    <div class="sim-perspective-tabs" style="display:flex;gap:0.5rem;border-bottom:1px solid rgba(255,255,255,0.1);margin-bottom:1.5rem;padding-bottom:0.5rem;overflow-x:auto;">
-                        <button type="button" class="sim-tab-btn active" data-tab="tab-dev-order">
+                    <div class="sim-perspective-tabs" style="display:flex;gap:0.5rem;border-bottom:1px solid rgba(255,255,255,0.1);margin-bottom:1.5rem;padding-bottom:0.5rem;overflow-x:auto;" role="tablist">
+                        <button type="button" id="tab-dev-order-tab" class="sim-tab-btn active" role="tab" aria-controls="tab-dev-order" data-tab="tab-dev-order" aria-selected="true">
                             <span style="font-size:1.1rem;">🛠️</span> 1. Orden de Desarrollo (Shift-Left)
                         </button>
-                        <button type="button" class="sim-tab-btn" data-tab="tab-exec-order">
+                        <button type="button" id="tab-exec-order-tab" class="sim-tab-btn" role="tab" aria-controls="tab-exec-order" data-tab="tab-exec-order" aria-selected="false">
                             <span style="font-size:1.1rem;">⚡</span> 2. Orden de Ejecución (Pipeline CI/CD)
                         </button>
-                        <button type="button" class="sim-tab-btn" data-tab="tab-all-sims">
+                        <button type="button" id="tab-all-sims-tab" class="sim-tab-btn" role="tab" aria-controls="tab-all-sims" data-tab="tab-all-sims" aria-selected="false">
                             <span style="font-size:1.1rem;">📚</span> 3. Catálogo Completo & Quiz
                         </button>
                     </div>
 
                     <!-- TAB 1: ORDEN DE DESARROLLO (SHIFT-LEFT) -->
-                    <div id="tab-dev-order" class="sim-tab-content active">
+                    <div id="tab-dev-order" class="sim-tab-content active" role="tabpanel" aria-labelledby="tab-dev-order-tab" tabindex="0">
                         <div class="alert-box note mb-4">
                             <h4>🛠️ Cómo se construyen las pruebas durante el desarrollo (Shift-Left)</h4>
                             <p>No esperamos a que la aplicación esté terminada para probar. El orden lógico al programar va de los requisitos a los flujos:</p>
@@ -261,7 +263,7 @@
                     </div>
 
                     <!-- TAB 2: ORDEN DE EJECUCIÓN (PIPELINE CI/CD) -->
-                    <div id="tab-exec-order" class="sim-tab-content" style="display:none;">
+                    <div id="tab-exec-order" class="sim-tab-content" role="tabpanel" aria-labelledby="tab-exec-order-tab" tabindex="0" style="display:none;">
                         <div class="alert-box note mb-4">
                             <h4>⚡ Cómo se ejecutan las pruebas en integración continua (Fast-Feedback Pyramid)</h4>
                             <p>En el servidor CI/CD, el orden es inverso al costo y duración: <strong>lo más rápido corre primero</strong> para alertar al equipo en segundos (Fail Fast):</p>
@@ -288,7 +290,7 @@
                     </div>
 
                     <!-- TAB 3: CATÁLOGO COMPLETO & EVALUACIÓN -->
-                    <div id="tab-all-sims" class="sim-tab-content" style="display:none;">
+                    <div id="tab-all-sims" class="sim-tab-content" role="tabpanel" aria-labelledby="tab-all-sims-tab" tabindex="0" style="display:none;">
                         <h3>3.1 Validador de Aserciones Rápidas</h3>
                         <p class="simulator-intro">Pon a prueba tu agudeza técnica prediciendo el resultado booleano de aserciones críticas en Python y JavaScript.</p>
                         <div class="sim-assertion-container"></div>
@@ -528,11 +530,15 @@ Invoke-RestMethod http://127.0.0.1:8009/productos/</code></pre>
                 </div>
             </section>
 
-            <footer>
-                <p>Guía de Testing y QA — adaptación didáctica local — puerto 8035</p>
-            </footer>
         </main>
+        <footer>
+            <p>Guía de Testing y QA — adaptación didáctica local — puerto 8035</p>
+        </footer>
     </div>
+
+    <div id="page-announcer" class="visually-hidden" aria-live="polite"></div>
+
+    <button type="button" id="back-to-top" aria-label="Volver arriba">↑ Volver arriba</button>
 
     <div id="victory-modal" class="modal-overlay" style="display: none;">
         <div class="modal-content glass-panel">
@@ -563,37 +569,41 @@ Invoke-RestMethod http://127.0.0.1:8009/productos/</code></pre>
         </div>
     </div>
 
-    <script src="js/vendor/devbrain-code.js"></script>
-    <script src="js/testing-session.js"></script>
-    <script src="js/gamification.js"></script>
-    <script src="js/simulators.js"></script>
-    <script src="js/learning-visuals.js"></script>
-    <script src="js/modules-content.js?v=3.5.0"></script>
-    <script src="js/modules-content-2.js?v=3.5.0"></script>
-    <script src="js/modules-cicd.js?v=3.5.0"></script>
-    <script src="js/modules-observability.js?v=3.5.0"></script>
-    <script src="js/modules-ai-testing.js?v=3.5.0"></script>
-    <script src="js/modules-ai-coach.js?v=3.5.0"></script>
-    <script src="js/modules-ai-tools.js?v=3.5.0"></script>
-    <script src="js/modules-challenge.js?v=3.5.0"></script>
-    <script src="js/modules-tdd.js?v=3.5.0"></script>
-    <script src="js/modules-bdd.js?v=3.5.0"></script>
-    <script src="js/modules-foundations.js?v=3.5.0"></script>
-    <script src="js/modules-test-strategy.js?v=3.5.0"></script>
-    <script src="js/ai-testing-coach.js"></script>
-    <script src="js/ai-tools-lab.js"></script>
-    <script src="js/code-renderer.js"></script>
-    <script src="js/module-learning-kit-data.js?v=3.5.0"></script>
-    <script src="js/module-learning-kit.js?v=3.5.0"></script>
-    <script src="js/ai-guided-practice-data.js?v=3.6.0"></script>
-    <script src="js/ai-guided-practice.js?v=3.6.0"></script>
-    <script src="js/deliverables-registry.js"></script>
-    <script src="js/vendor/devbrain-evidence.js"></script>
-    <script src="js/main.js?v=3.5.0"></script>
+    <script src="js/vendor/devbrain-code.js?v=3.7.0" defer></script>
+    <script src="js/testing-session.js?v=3.7.0" defer></script>
+    <script src="js/gamification.js?v=3.7.0" defer></script>
+    <script src="js/simulators.js?v=3.7.0" defer></script>
+    <script src="js/learning-visuals.js?v=3.7.0" defer></script>
+    <script src="js/modules-content.js?v=3.7.0" defer></script>
+    <script src="js/modules-riesgo.js?v=3.7.0" defer></script>
+    <script src="js/modules-defectos.js?v=3.7.0" defer></script>
+    <script src="js/modules-content-2.js?v=3.7.0" defer></script>
+    <script src="js/modules-cicd.js?v=3.7.0" defer></script>
+    <script src="js/modules-observability.js?v=3.7.0" defer></script>
+    <script src="js/modules-ai-testing.js?v=3.7.0" defer></script>
+    <script src="js/modules-ai-coach.js?v=3.7.0" defer></script>
+    <script src="js/modules-ai-tools.js?v=3.7.0" defer></script>
+    <script src="js/modules-challenge.js?v=3.7.0" defer></script>
+    <script src="js/modules-tdd.js?v=3.7.0" defer></script>
+    <script src="js/modules-bdd.js?v=3.7.0" defer></script>
+    <script src="js/modules-foundations.js?v=3.7.0" defer></script>
+    <script src="js/modules-test-strategy.js?v=3.7.0" defer></script>
+    <script src="js/ai-testing-coach.js?v=3.7.0" defer></script>
+    <script src="js/ai-tools-lab.js?v=3.7.0" defer></script>
+    <script src="js/code-renderer.js?v=3.7.0" defer></script>
+    <script src="js/module-learning-kit-data.js?v=3.7.0" defer></script>
+    <script src="js/module-learning-kit.js?v=3.7.0" defer></script>
+    <script src="js/ai-guided-practice-data.js?v=3.7.0" defer></script>
+    <script src="js/ai-guided-practice.js?v=3.7.0" defer></script>
+    <script src="js/deliverables-registry.js?v=3.7.0" defer></script>
+    <script src="js/vendor/devbrain-evidence.js?v=3.7.0" defer></script>
+    <script src="js/main.js?v=3.7.0" defer></script>
     <script>
       // Convierte en tarjetas DevBrain cada <pre> de la guia, ahora y cada
       // vez que el enrutador pinte contenido nuevo.
-      DevBrainCode.activarAdopcionAutomatica();
+      document.addEventListener('DOMContentLoaded', function() {
+        if (window.DevBrainCode) DevBrainCode.activarAdopcionAutomatica();
+      });
     </script>
 
   <script>

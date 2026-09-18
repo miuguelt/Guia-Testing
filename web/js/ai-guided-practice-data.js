@@ -1,4 +1,4 @@
-/** Instrucciones humano–IA situadas en los 16 módulos de la ruta. */
+/** Instrucciones humano–IA situadas en los 18 módulos de la ruta. */
 (function (global) {
     'use strict';
 
@@ -18,6 +18,14 @@
             cannotProve: 'Una matriz no ejecutada no demuestra que el sistema cumpla la regla ni fija una proporción universal de pruebas.',
             humanDecision: 'Prioriza los casos por impacto y probabilidad, y justifica cuáles automatizarás primero.',
             recovery: 'Si propone muchos casos similares, pide que agrupe por particiones y explique qué defecto distinto podría revelar cada representante.'
+        },
+        'm-riesgo': {
+            goal: 'Construir una matriz de riesgo con criterios observables y justificar qué se cubre y qué se acepta sin probar.',
+            prompt: `Actúa como facilitador de análisis de riesgos para este aplicativo:\n\n[DESCRIPCIÓN DEL APLICATIVO, SUS USUARIOS Y 3 COMPONENTES CLAVE]\n\nPor cada riesgo que propongas, entrega: modo de falla, causa probable, efecto visible y detección actual (FMEA ligero). Después puntúa probabilidad e impacto en una escala 1–5, pero obligatorio: escribe el criterio observable que justifica cada nivel. Rotula la escala como ejemplo didáctico y señala qué criterios cambiarían en un dominio de mayor criticidad. Cierra proponiendo qué riesgos de zona alta tendrían caso de prueba y cuáles aceptarías como riesgo residual, con la razón de cada aceptación.`,
+            verify: 'Discute cada puntaje con tu equipo o instructor: si nadie puede argumentar en contra del número con el criterio escrito, la escala todavía no discrimina.',
+            cannotProve: 'La matriz no demuestra que el software funcione ni que los riesgos sean los correctos: solo ordena decisiones bajo los supuestos declarados.',
+            humanDecision: 'Tú aceptas o rechazas el riesgo residual y eliges qué zona alta se cubre primero; esa aceptación queda escrita en tu plan de pruebas.',
+            recovery: 'Si todo queda en zona alta, pídele que ordene los riesgos relativamente de mayor a menor y reescriba los criterios de cada nivel con ejemplos de tu dominio.'
         },
         'm-tdd': {
             goal: 'Usar la IA para preparar un ciclo rojo–verde–refactor pequeño y observable.',
@@ -82,6 +90,14 @@
             cannotProve: 'El porcentaje no mide por sí solo calidad de aserciones, cobertura de requisitos, seguridad ni utilidad.',
             humanDecision: 'Justifica un umbral contextual o decide no usarlo si no orienta una decisión útil.',
             recovery: 'Si la IA solo recomienda subir el porcentaje, exige relación requisito → riesgo → caso → aserción.'
+        },
+        'm-defectos': {
+            goal: 'Redactar un reporte de defecto accionable y llevarlo por el ciclo completo hasta el cierre con evidencia.',
+            prompt: `Revisa este borrador de issue que escribí sobre mi aplicativo:\n\n[TÍTULO Y CUERPO DEL ISSUE, CON PASOS, ESPERADO, OBSERVADO Y ENTORNO]\n\nEvalúalo con el ciclo de vida Nuevo → Abierto → Corregido → Retest → Cerrado: 1) ¿Permite a otra persona reproducir la diferencia entre esperado y observado? Señala lo que falte. 2) ¿La severidad se justifica por impacto y la prioridad por momento, sin confundirlas? 3) ¿La trazabilidad enlaza requisito → caso → defecto? 4) Propón el título y los pasos corregidos, y el mensaje de commit que cerraría el issue referenciándolo (Closes #N). No inventes datos de entorno: marca cada hueco como pregunta pendiente.`,
+            verify: 'Ejecuta tú mismo los pasos del issue corregido en tu entorno, confirma el comportamiento observado y solo entonces publícalo; verifica que el commit de cierre exista tras la corrección.',
+            cannotProve: 'Un issue bien redactado no demuestra que el defecto exista ni que la corrección funcione: solo hace verificables ambas cosas.',
+            humanDecision: 'Decides si el comportamiento reportado es realmente un defecto según el oráculo (la regla acordada) y cuándo aceptas el cierre tras el retest.',
+            recovery: 'Si el borrador dice «no funciona» sin reproducción, pídele que reescriba el issue con precondiciones, pasos numerados, esperado citando la regla y observado con mensajes exactos.'
         },
         'm-cicd': {
             goal: 'Crear una compuerta reproducible que conserve evidencia por cambio.',

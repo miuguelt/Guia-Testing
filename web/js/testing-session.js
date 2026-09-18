@@ -8,6 +8,7 @@
 
     const STORAGE_KEYS = {
         PROFILE: 'guia_testing_apprentice_profile',
+        SIGNATURE: 'guia_testing_apprentice_signature',
         TEST_CHECKS: 'guia_testing_test_checks',
         SIMULATORS: 'guia_testing_simulators',
         EVIDENCES: 'guia_testing_evidencias_state'
@@ -215,6 +216,17 @@
             percentage: 0,
             passed: false,
             details: 'Ordenar las 7 fases lógicas del flujo maestro de testing desde pruebas unitarias hasta CI/CD.',
+            completedAt: null
+        },
+        'sim-diseno': {
+            id: 'sim-diseno',
+            name: 'Diseño de Casos Guiado: 10 Decisiones sobre la Regla de Préstamos',
+            completed: false,
+            score: 0,
+            maxScore: 10,
+            percentage: 0,
+            passed: false,
+            details: 'Decidir particiones, límites y oráculos sobre la regla de préstamos con la razón de cada respuesta. Se aprueba con al menos 70% de aciertos.',
             completedAt: null
         },
         'sim-module-decisions': {
@@ -569,6 +581,111 @@
                 },
                 timestamp: new Date().toISOString()
             };
+        },
+
+        getSignature() {
+            try {
+                return localStorage.getItem(STORAGE_KEYS.SIGNATURE) || localStorage.getItem('sena_apprentice_signature') || '';
+            } catch (e) {}
+            return '';
+        },
+
+        saveSignature(dataUrl) {
+            try {
+                if (dataUrl) {
+                    localStorage.setItem(STORAGE_KEYS.SIGNATURE, dataUrl);
+                    localStorage.setItem('sena_apprentice_signature', dataUrl);
+                } else {
+                    localStorage.removeItem(STORAGE_KEYS.SIGNATURE);
+                    localStorage.removeItem('sena_apprentice_signature');
+                }
+            } catch (e) {}
+            this.notify();
+            return dataUrl;
+        },
+
+        exportFullSessionBackup() {
+            const profile = this.getProfile();
+            const signature = this.getSignature();
+            const checks = this.getTestChecks();
+            const simulators = this.getSimulators();
+            const progress = this.calculateProgress();
+
+            const deliverables = {};
+            ['ART-TEST-01', 'ART-TEST-02', 'ART-TEST-03'].forEach(id => {
+                try {
+                    const raw = localStorage.getItem(`guia_testing_evidencia_${id}`);
+                    if (raw) deliverables[id] = JSON.parse(raw);
+                } catch (e) {}
+            });
+
+            let gamification = {};
+            try {
+                const rawG = localStorage.getItem('guia_testing_gamification') || localStorage.getItem('gamification');
+                if (rawG) gamification = JSON.parse(rawG);
+            } catch (e) {}
+
+            let aiLog = [];
+            try {
+                const rawLog = localStorage.getItem('guia_testing_ai_log');
+                if (rawLog) aiLog = JSON.parse(rawLog);
+            } catch (e) {}
+
+            return {
+                standard: 'devbrain.educational-guide.session-backup',
+                version: '3.7.0',
+                exportedAt: new Date().toISOString(),
+                guideId: 'adso-testing-qa-calidad-2026',
+                apprentice: profile,
+                signature,
+                simulators,
+                testChecks: checks,
+                deliverables,
+                gamification,
+                aiLog,
+                progressSnapshot: progress
+            };
+        },
+
+        importFullSessionBackup(backupData) {
+            if (!backupData || typeof backupData !== 'object') {
+                throw new Error('Archivo de respaldo no válido.');
+            }
+            if (backupData.apprentice && typeof backupData.apprentice === 'object') {
+                this.saveProfile(backupData.apprentice);
+            }
+            if (backupData.signature !== undefined) {
+                this.saveSignature(backupData.signature);
+            }
+            if (backupData.simulators && typeof backupData.simulators === 'object') {
+                localStorage.setItem(STORAGE_KEYS.SIMULATORS, JSON.stringify(backupData.simulators));
+            }
+            if (backupData.testChecks && Array.isArray(backupData.testChecks)) {
+                localStorage.setItem(STORAGE_KEYS.TEST_CHECKS, JSON.stringify(backupData.testChecks));
+            }
+            if (backupData.deliverables && typeof backupData.deliverables === 'object') {
+                Object.entries(backupData.deliverables).forEach(([id, val]) => {
+                    try {
+                        localStorage.setItem(`guia_testing_evidencia_${id}`, JSON.stringify(val));
+                    } catch (_) {}
+                });
+            }
+            if (backupData.gamification && typeof backupData.gamification === 'object') {
+                try {
+                    localStorage.setItem('guia_testing_gamification', JSON.stringify(backupData.gamification));
+                    localStorage.setItem('gamification', JSON.stringify(backupData.gamification));
+                } catch (_) {}
+                if (window.GAMIFICATION && typeof window.GAMIFICATION.load === 'function') {
+                    window.GAMIFICATION.load();
+                }
+            }
+            if (backupData.aiLog && Array.isArray(backupData.aiLog)) {
+                try {
+                    localStorage.setItem('guia_testing_ai_log', JSON.stringify(backupData.aiLog));
+                } catch (_) {}
+            }
+            this.notify();
+            return true;
         }
     };
 

@@ -12,6 +12,58 @@
 
 Esta guía formativa cubre el aseguramiento de la calidad de software (QA), la pirámide de pruebas de Mike Cohn, el diseño bajo TDD/BDD y la automatización multi-stack (PyTest, Jest/Vitest, JUnit 5, Mockito, Playwright) bajo el estándar **ISO/IEC 25010** y el marco curricular SENA ADSO (Fase 5 - Evaluación).
 
+## Mapa de las 18 estaciones
+
+La interfaz web y el registro de evidencias siguen este orden pedagógico:
+
+1. Fundamentos del testing y QA.
+2. Diseño de casos y niveles de prueba.
+3. Decidir qué probar: priorización por riesgo.
+4. Desarrollo guiado por pruebas (TDD).
+5. Desarrollo guiado por comportamiento (BDD).
+6. PyTest con FastAPI.
+7. PyTest con Flask.
+8. Jest/Vitest con React.
+9. JUnit 5 y Mockito.
+10. Pruebas E2E con Playwright.
+11. Cobertura y métricas de calidad.
+12. Gestión de defectos: del hallazgo al cierre.
+13. Integración y entrega continuas (CI/CD).
+14. Observabilidad.
+15. IA aplicada al testing.
+16. Constructor de Gema QA.
+17. Laboratorio de herramientas de IA.
+18. Reto final.
+
+Las estaciones 3 y 12 son nuevas en la versión 3.7.0. La primera enseña a
+priorizar evidencia con probabilidad, impacto y FMEA ligero; la segunda conecta
+el hallazgo con el reporte, la corrección, el retest y el cierre trazable.
+
+### Componentes Gráficos y Casos Prácticos por Estación
+
+Cada una de las 18 estaciones cuenta con una arquitectura de aprendizaje visual que incluye **un diagrama conceptual interactivo nativo** y **un caso de estudio práctico estructurado** ambientado en el *Sistema de Préstamo de Equipos y Laboratorios SENA*:
+
+| Estación | Módulo | Diagrama Gráfico Interactivo | Caso Práctico Aplicado (Dominio Préstamos) | Oráculo / Aserción Observable |
+| :--- | :--- | :--- | :--- | :--- |
+| **01** | `m-reflexion` | Cadena Causal del Defecto (Error humano → Defecto en código → Fallo en runtime) | El Préstamo Fantasma de 6 Laptops (Cadena Causal) | Precondición rota detectada antes de impactar inventario físico |
+| **02** | `m-piramide` | Pirámide de Pruebas de Mike Cohn (Distribución, Velocidad y Aislamiento) | Matriz de Pruebas con Análisis de Valores Límite (BVA) | Partición de equivalencia y límites `[1, 5]`: rechazo en `0` y `6`, éxito en `1` y `5` |
+| **03** | `m-riesgo` | Matriz Térmica de Riesgo 3x3 (Probabilidad vs. Impacto y RPN) | FMEA Ligero y Selección de Pruebas Críticas de Préstamos | RPN ≥ 12 clasificado como Crítico; ejecución obligatoria en pre-commit |
+| **04** | `m-tdd` | Ciclo TDD Red-Green-Refactor con transiciones de estado | El Ciclo Red-Green-Refactor de Validación de Préstamos | Test inicial falla con `AssertionError`, pasa tras implementar regla mínima |
+| **05** | `m-bdd` | Arquitectura BDD en 3 Capas (Feature Gherkin → Steps Behave → Dominio) | Especificación Viva con Gherkin y Behave | `behave` ejecuta y valida la regla de negocio compartida en lenguaje ubicuo |
+| **06** | `m-pytest-fastapi` | Arquitectura de Prueba API (Fixture TestClient → Endpoint → Schema Pydantic) | Endpoint de Préstamos en FastAPI con TestClient | HTTP 201 en préstamo válido, HTTP 422 con detalle de error en carga inválida |
+| **07** | `m-pytest-flask` | Arquitectura Web MVC Flask (Client → Request Context → Sesión & Flash) | Formulario Web de Préstamos en Flask con Sesiones y Flash | Redirección 302 a inventario, mensaje en sesión y persistencia flash |
+| **08** | `m-jest-react` | Arquitectura UI Virtual DOM (jsdom → Render → UserEvent → Aserciones ARIA) | FormularioDePrestamo.jsx con Accesibilidad y Eventos | Disparo de evento `submit`, estado `aria-invalid="true"` y renderizado de alerta |
+| **09** | `m-junit-jsp` | Arquitectura de Aislamiento Mockito (Runner → Service → Repositorio Mock) | Aislamiento con Mockito en PrestamoService.java | `when(repo.buscar(...)).thenReturn(...)` y `verify(repo, times(1)).guardar(...)` |
+| **10** | `m-playwright` | Arquitectura E2E (Test Runner → Chrome DevTools Protocol → Navegador Real) | Flujo E2E Completo de Solicitud de Préstamo con Playwright | `expect(page.locator('.alerta-exito')).toBeVisible()` en navegador real |
+| **11** | `m-cobertura` | Pirámide de Cobertura de Código (Líneas → Ramas / Branches → Mutación) | Detección y Cobertura de Ramas Huérfanas con pytest-cov | Identificación de `branch missing` y elevación de cobertura de ramas al 100% |
+| **12** | `m-defectos` | Máquina de Estados del Defecto (Nuevo → Asignado → Resuelto → Retest → Cerrado) | Gestión Completa del Defecto DEF-01: De GitHub Issue a Retest | Creación de issue, commit trazable `Fixes #42`, retest verde y cierre formal |
+| **13** | `m-cicd` | Pipeline CI/CD Multi-Job con Quality Gate Estricto | Pipeline Multi-Job en GitHub Actions con Bloqueo de Merge | Jobs concurrentes (Python, Node, Java, E2E) y `quality-gate` obligatorio |
+| **14** | `m-observabilidad` | Arquitectura de Telemetría (App Flask → JSON Formatter → Correlation ID → Alertas) | Diagnóstico de Fallo Intermitente con Logs JSON y Correlation ID | Detección de traza de error en Dozzle mediante búsqueda por `correlation_id` |
+| **15** | `m-ia-testing` | Flujo de Trabajo V.E.R.A. (Verificar → Ejecutar → Revisar → Adaptar) | Generación Asistida de Casos Borde y Detección de Alucinaciones | Descubrimiento de alucinación en aserción generada por IA y corrección humana |
+| **16** | `m-gema-testing` | Arquitectura de Asistente IA Especializado (Instrucciones → Few-Shot → Reglas) | Encargo Estructurado y Auditoría con Gema QA | Auditoría automatizada de suite contra estándar ISO 25010 y corrección de flaquezas |
+| **17** | `m-herramientas-ia` | Matriz Comparativa de Asistentes IA (Copilot vs. Cursor vs. Qodo Gen) | Benchmark Comparativo de Mocks: Copilot vs Cursor vs Qodo | Evaluación objetiva de fidelidad y cobertura de mocks generados por 3 IAs |
+| **18** | `m-reto` | Pipeline de Certificación Integral y Auditoría Final | Auditoría Integral y Certificación de Calidad del Ecosistema de Préstamos | Ejecución del script maestro de auditoría con índice ponderado ≥ 90% |
+
 ## Cómo aprender con IA sin delegarle el criterio
 
 Recorre las estaciones en orden. En cada una encontrarás una práctica opcional
@@ -463,11 +515,158 @@ validaciones y códigos HTTP; prueba con Playwright los caminos críticos que un
 persona ejecuta en el navegador. Un mismo requisito puede tener ambas pruebas,
 pero con responsabilidades diferentes.
 
-#### 8. Medición de Cobertura (Coverage Gates)
-* **Python:** `pytest --cov=services --cov=routers --cov=schemas --cov-report=html --cov-fail-under=80`
-* **JavaScript:** `npm run test:coverage` (abrir `coverage/index.html`)
+##### 8. Medición de Cobertura Práctica (Coverage Gates)
+
+La cobertura no es un porcentaje abstracto para decorar un reporte: **es el mapa que te dice exactamente qué código te falta por validar**.
+
+##### ⚡ El comando más sencillo: Escribe solamente `pytest` y obtén cobertura
+Para que el aprendiz no tenga que memorizar banderas complejas ni teclear comandos largos, se configuran dos líneas en el archivo `pytest.ini` en la raíz de su proyecto:
+
+```ini
+# pytest.ini
+[pytest]
+addopts = -v --cov=app --cov-report=term-missing --cov-fail-under=80
+```
+
+Con esa configuración, el aprendiz abre su PowerShell o Bash y escribe únicamente:
+```powershell
+pytest
+```
+**No hace nada más.** PyTest ejecuta la suite completa y despliega de inmediato la tabla de cobertura con la columna `Missing` en su consola.
+
+Si el aprendiz está en una terminal sin archivo de configuración, el comando directo indispensable es:
+```powershell
+pytest --cov=app --cov-report=term-missing
+```
+* **`pytest`**: Ejecuta las pruebas unitarias e integración.
+* **`--cov=app`**: Indica la carpeta que contiene el código fuente a medir.
+* **`--cov-report=term-missing`**: **La bandera clave.** Sin ella, solo obtienes un porcentaje ciego (ej. 76%); con ella, la terminal te imprime los números de línea exactos que ninguna prueba ha tocado.
+
+---
+
+##### 🧪 Ejercicio Guiado Práctico en Flask: Descubrir qué falta con la columna `Missing`
+
+Usa el ejemplo real de la guía en [`recursos/codigo-ejemplo/flask_jinja_demo/`](recursos/codigo-ejemplo/flask_jinja_demo/). La ruta `POST /productos` en `app.py` valida campos, emite mensajes con `flash()`, guarda en sesión y redirige:
+
+```python
+# flask_jinja_demo/app.py (Extracto de la vista con números de línea)
+# L-21: if request.method == "POST":
+# L-22:     name = request.form.get("nombre", "").strip()
+# L-23:     price_text = request.form.get("precio", "").strip()
+# L-25:     if not name:
+# L-26:         flash("El nombre es obligatorio.", "error")
+# L-27:         return render_template("productos.html", products=products), 400
+# L-29:     try:
+# L-30:         price = float(price_text)
+# L-31:     except ValueError:
+# L-32:         price = 0
+# L-34:     if price <= 0:
+# L-35:         flash("El precio debe ser mayor que cero.", "error")
+# L-36:         return render_template("productos.html", products=products), 400
+# L-38:     products.append({"nombre": name, "precio": f"{price:.2f}"})
+# L-39:     session["products"] = products
+# L-40:     flash("Producto creado.", "success")
+# L-41:     return redirect(url_for("products_view"))
+```
+
+###### 🔹 Etapa 1: Solo probamos el "Camino Feliz" (Happy Path)
+El aprendiz escribe un primer test en `test_cobertura_flask.py` que solo envía datos válidos:
+```python
+def test_crear_producto_exitoso_con_flash(client):
+    res = client.post("/productos", data={"nombre": "Mouse", "precio": "45.00"}, follow_redirects=True)
+    assert res.status_code == 200
+    assert "Producto creado." in res.get_data(as_text=True)
+```
+Ejecutamos: `pytest --cov=app --cov-report=term-missing`
+Salida observada en terminal:
+```text
+=============================== tests coverage ===============================
+Name     Stmts   Miss  Cover   Missing
+--------------------------------------
+app.py      34      8    76%   12, 16, 26-27, 31-32, 35-36
+--------------------------------------
+TOTAL       34      8    76%
+============================== 1 passed in 0.59s ==============================
+```
+**¿Cómo interpretarlo?:**
+* **Cuánto falta:** `Miss: 8` sentencias para alcanzar el 100% (cobertura 76%, reprueba el umbral del 80%).
+* **QUÉ falta:** La columna `Missing` te canta con números exactos:
+  * Líneas `26-27`: El `if not name` con `flash("El nombre es obligatorio.", "error")` jamás se ejecutó.
+  * Líneas `35-36`: El `if price <= 0` con su `flash` de error nunca fue probado.
+  * Líneas `31-32`: La captura de `ValueError` si mandan texto como precio no se ha tocado.
+
+###### 🔹 Etapa 2: Agregamos la prueba de nombre vacío
+```python
+def test_crear_producto_sin_nombre_muestra_flash_error(client):
+    res = client.post("/productos", data={"nombre": "", "precio": "45.00"})
+    assert res.status_code == 400
+    assert "El nombre es obligatorio." in res.get_data(as_text=True)
+```
+Ejecutamos: `pytest --cov=app --cov-report=term-missing`
+Salida observada en terminal:
+```text
+=============================== tests coverage ===============================
+Name     Stmts   Miss  Cover   Missing
+--------------------------------------
+app.py      34      6    82%   12, 16, 31-32, 35-36
+--------------------------------------
+TOTAL       34      6    82%
+============================== 2 passed in 0.61s ==============================
+```
+**¿Qué cambió?:**
+* Las líneas `26-27` **desaparecieron de `Missing`**.
+* La cobertura subió al **82%** (supera el 80% mínimo).
+* Pero la columna `Missing` advierte que las validaciones de precio (`31-32, 35-36`) siguen desprotegidas.
+
+###### 🔹 Etapa 3: Agregamos precios inválidos (negativo y texto)
+```python
+def test_crear_producto_precio_negativo_muestra_flash_error(client):
+    res = client.post("/productos", data={"nombre": "Teclado", "precio": "-10.00"})
+    assert res.status_code == 400
+    assert "El precio debe ser mayor que cero." in res.get_data(as_text=True)
+
+def test_crear_producto_precio_no_numerico(client):
+    res = client.post("/productos", data={"nombre": "Monitor", "precio": "gratis"})
+    assert res.status_code == 400
+    assert "El precio debe ser mayor que cero." in res.get_data(as_text=True)
+```
+Ejecutamos: `pytest --cov=app --cov-report=term-missing`
+Salida observada en terminal:
+```text
+=============================== tests coverage ===============================
+Name     Stmts   Miss  Cover   Missing
+--------------------------------------
+app.py      34      2    94%   12, 16
+--------------------------------------
+TOTAL       34      2    94%
+============================== 4 passed in 0.62s ==============================
+```
+
+###### 🔹 Etapa 4: Suite completa (100% de cobertura y `Missing` limpio)
+Agregamos la redirección de `/` (línea 16) y la guardia de clave de entorno (línea 12):
+```text
+=============================== tests coverage ===============================
+Name     Stmts   Miss  Cover   Missing
+--------------------------------------
+app.py      34      0   100%
+--------------------------------------
+TOTAL       34      0   100%
+============================== 6 passed in 0.64s ==============================
+```
+**`Missing:` completamente vacío.** Toda la lógica de negocio, validaciones de formulario, códigos HTTP y mensajes flash tienen respaldo con pruebas reales.
+
+###### 🔹 Etapa 5: Cobertura de Ramas (`--cov-branch`)
+Para comprobar que cada bifurcación `if/else` fue probada tanto en su camino verdadero como en el falso:
+```powershell
+pytest --cov=app --cov-branch --cov-report=term-missing
+```
+Si aparece `25->29` en la columna `Missing`, significa que la condición en la línea 25 solo se probó en verdadero y nunca continuó hacia la 29 en falso.
+
+---
+
+##### 🌐 Cobertura en otros lenguajes
+* **JavaScript:** `npm run test:coverage` (abrir `coverage/index.html` con motor V8)
 * **Java:** `mvn test jacoco:report` (abrir `target/site/jacoco/index.html`)
-* **Regla de oro:** 80% en lógica de negocio es obligatorio. Auditar que cada línea cubierta contenga aserciones reales.
 
 #### 9. Pipeline CI/CD en GitHub Actions
 * Este proyecto implementa CI en `.github/workflows/ci.yml`:
@@ -733,6 +932,25 @@ que defina el instructor. Para preparar la entrega, usa
 [`docs/evidencias-template.md`](docs/evidencias-template.md), conserva los
 resultados reproducibles y revisa los umbrales acordados antes de cargar el
 paquete en el LMS.
+
+### Generación Estandarizada de PDF y Firmas Digitales
+
+El sistema cuenta con un pipeline estandarizado para la exportación limpia en PDF idéntico al formato oficial institucional GFPI-F-023:
+1. **Impresión Web Directa**:
+   - Botón **`🖨️ Imprimir PDF`** en la barra superior de navegación o en la sección `#m-evidencias-sena`.
+   - Atajo de teclado universal **`Ctrl+P`** / **`Cmd+P`**: los escuchadores de ciclo de vida (`beforeprint`) aíslan automáticamente el documento oficial, sincronizan las calificaciones reales y aplican `print-color-adjust: exact` sin páginas vacías.
+2. **Sistema Multi-Modal de Firmas**:
+   - **Trazar**: firma manuscrita digital directa mediante mouse, pantalla táctil o lápiz óptico.
+   - **Caligrafía**: generación tipográfica estilizada en alta resolución basada en el nombre registrado.
+   - **Cargar Imagen**: subida directa de firma en PNG/JPG.
+   - **Manual**: reserva formal del espacio para estampación física con bolígrafo tras la impresión.
+   - Alternancia entre rol de **Aprendiz** e **Instructor**.
+3. **Generación Desatendida / Automatizada (CLI)**:
+   - Para compilar el PDF de forma automática desde PowerShell o entornos CI/CD sin abrir el navegador manualmente:
+   ```powershell
+   .\exportar-pdf.ps1 -OutputFile "registro_evidencias_sena.pdf"
+   ```
+   Detecta automáticamente Microsoft Edge o Google Chrome en modo headless, procesa el diseño oficial y genera el PDF listo para entrega.
 
 
 ## Fundamentos y métodos: revisión de septiembre de 2026

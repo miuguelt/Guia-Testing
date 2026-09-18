@@ -2,7 +2,7 @@
 Object.assign(window.MODULES, {
     "m-reto": {
         title: "Reto Final: Pipeline QA Completo",
-        badge: "Modulo 16",
+        badge: "Estación 18/18 · Reto",
         intro: "Aplica todo lo aprendido en un proyecto real: pipeline completo que valida las 4 guias.",
         blocks: [
             {
@@ -14,6 +14,53 @@ Object.assign(window.MODULES, {
                 type: "alert", variant: "success",
                 title: "Entregables",
                 body: "1. Plan trazable con reglas, riesgos y casos. 2. Suite en una tecnología elegida, con aserciones útiles y cobertura justificada. 3. Recorridos E2E críticos y defectos documentados. 4. CI con resultados de la revisión probada. 5. README, reportes y declaración de lo no probado. Acordar alcance y criterios con el instructor."
+            },
+            {
+                type: "diagram",
+                diagramType: "pipeline",
+                title: "Diagrama Visual: Hoja de Ruta y Calificación del Reto Integral de Calidad",
+                stages: [
+                    { icon: "📋", name: "AA12: Planificación", desc: "Plan ISO/IEC 29119-3 y Matriz de Trazabilidad R-CANT." },
+                    { icon: "✍️", name: "AA13: Diseño de Casos", desc: "CP-01 a CP-06 con valores límite, oráculos y particiones." },
+                    { icon: "🛠️", name: "AA14: Entorno & Humo", desc: "Aislamiento en venv/npm, SQLite en memoria y smoke check." },
+                    { icon: "🧪", name: "AA15: Ejecución & Suites", desc: "PyTest, Vitest, JUnit 5, Playwright y reporte de cobertura." },
+                    { icon: "📦", name: "AA16: Dossier & CI", desc: "Pipeline GitHub Actions verde + informe de riesgos residuales." }
+                ],
+                body: "El Reto Final consolida las 5 actividades de aprendizaje en un portafolio de evidencias profesional y reproducible."
+            },
+            {
+                type: "case-study",
+                title: "Caso Práctico Paso a Paso: Auditoría Integral y Certificación de Calidad del Ecosistema de Préstamos",
+                context: "Realizar la auditoría de entrega final sobre el sistema de préstamos. Se consolida el plan ART-TEST-01, la ejecución automatizada multi-tecnología (FastAPI, React, JUnit, Playwright), el reporte de defectos DEF-01 resuelto, la compuerta de cobertura al 85% y la certificación de calidad en GitHub Actions.",
+                preconditions: [
+                    "Plan de pruebas y matriz de trazabilidad actualizados en 'docs/pruebas/'.",
+                    "Repositorio Git con suites unitarias, integración y E2E operativas.",
+                    "Pipeline en GitHub Actions con Quality Gate bloqueante activo."
+                ],
+                code: `# Secuencia de Verificación Integral del Reto:
+
+# 1. Backend FastAPI: Pruebas unitarias y de integración con cobertura
+pytest tests/unit tests/integration --cov=app --cov-branch --cov-fail-under=80
+
+# 2. Frontend React: Pruebas de componentes accesibles con Vitest
+npm run test:coverage
+
+# 3. Backend Java Spring Boot: Pruebas con Mockito y reporte JaCoCo
+mvn test jacoco:report
+
+# 4. End-to-End: Recorrido del camino crítico con Playwright
+npx playwright test --reporter=html
+
+# 5. Auditoría de Seguridad y Calidad con qa_auditor
+python -m qa_auditor --target app/ --min-score 85 --html test-results/auditoria.html`,
+                command: "python -m qa_auditor --target app/ --min-score 85 --html test-results/auditoria.html",
+                oracle: "Todas las suites deben finalizar con código 0. El informe de qa_auditor debe certificar score >= 85%, 0 secretos expuestos, 0 tests vacíos y cobertura de ramas >= 80%.",
+                expectedVsObserved: [
+                    ["PyTest + Vitest + JUnit 5", "Todas las suites pasan en verde sin omitir aserciones", "Pasa en verde"],
+                    ["Playwright E2E en Chromium", "3 flujos críticos validados con capturas y videos", "Caminos dorados certificados"],
+                    ["Reporte Final de Auditoría", "Score 92/100, 0 defectos bloqueantes, matriz 100% trazable", "Aprobado con Distinción"]
+                ],
+                decision: "El ecosistema de software cumple satisfactoriamente con la compuerta de calidad y los estándares de la guía SENA ADSO, quedando certificado para su entrega formal."
             },
             {
                 type: "steps",

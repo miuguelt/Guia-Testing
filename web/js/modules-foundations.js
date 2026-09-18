@@ -68,13 +68,92 @@ window.MODULES["m-reflexion"].blocks.unshift(
         ]
     },
     {
-        type: "alert", variant: "warning", title: "Práctica breve: explica la cadena causal",
-        body: "Supón que alguien interpreta mal el máximo, escribe <= 6 y una solicitud de 6 se aprueba. Identifica error, defecto y fallo. Solución: interpretación → condición incorrecta → aprobación observable. Una solicitud de 3 no revelaría ese defecto. Transfiere la explicación a una regla de tu proyecto y guárdala con el plan ART-TEST-01."
+        type: "diagram",
+        diagramType: "causal-chain",
+        title: "Diagrama Visual: La Cadena Causal de la Calidad (Del Error Humano al Incidente)",
+        body: "Un defecto no nace en el aire: proviene de una equivocación humana, se plasma en el código, se manifiesta como un fallo en tiempo de ejecución y se convierte en incidente si ningún control lo detecta."
+    },
+    {
+        type: "case-study",
+        title: "Caso Práctico Paso a Paso: El Préstamo Fantasma de 6 Laptops (Cadena Causal)",
+        context: "El laboratorio de informática del centro de formación tiene como regla que un aprendiz solo puede solicitar entre 1 y 5 equipos para evitar el acaparamiento. Un desarrollador junior implementa la validación pero se equivoca en el operador relacional.",
+        preconditions: [
+            "Usuario: Aprendiz 'carlos.qa' con matrícula activa y sin sanciones.",
+            "Inventario inicial: 10 laptops Lenovo ThinkPad disponibles en el sistema.",
+            "Regla acordada (Oráculo): Cantidad entera permitida en rango [1, 5]."
+        ],
+        code: `# simulacion_oraculo_prestamo.py
+def validar_solicitud_prestamo(cantidad: int, disponible: int) -> bool:
+    # ERROR COMUN: Escribir '<= 6' o '< 6' en lugar de '<= 5'
+    LIMITE_MAXIMO = 5
+    if not isinstance(cantidad, int) or isinstance(cantidad, bool):
+        return False
+    if cantidad < 1 or cantidad > LIMITE_MAXIMO:
+        return False
+    if cantidad > disponible:
+        return False
+    return True
+
+# Comprobación de oráculo para el caso frontera 6:
+assert validar_solicitud_prestamo(5, disponible=10) is True, "5 debe aceptarse"
+assert validar_solicitud_prestamo(6, disponible=10) is False, "6 debe ser RECHAZADO"`,
+        command: "python -c \"import simulacion_oraculo_prestamo; print('Verificación de oráculo completada')\"",
+        oracle: "Para la entrada (cantidad=6, disponible=10), la función debe responder estrictamente FALSE y el servicio HTTP debe retornar 400 Bad Request sin mutar el inventario.",
+        expectedVsObserved: [
+            ["Solicitud cantidad=5", "Aceptada (True) · Reserva 5 laptops", "Aceptada (Correcto)"],
+            ["Solicitud cantidad=6", "Rechazada (False) · Inventario intacto en 10", "Fallo si se acepta: Inventario baja a 4 indebidamente"],
+            ["Solicitud cantidad=0", "Rechazada (False) · Error de validación", "Fallo si se crea registro vacío"],
+            ["Solicitud tipo texto ('cinco')", "Rechazada (False) · Excepción controlada", "Fallo si causa 500 Internal Server Error"]
+        ],
+        decision: "Si la comprobación de cantidad=6 falla (es decir, el sistema la acepta), se confirma un Defecto Crítico. QA bloquea el pase a despliegue y registra el reporte DEF-01 enlazando la prueba automatizada."
     }
 );
 window.MODULES["m-piramide"].title = "Diseño de casos y niveles de prueba";
 window.MODULES["m-piramide"].intro = "Antes de automatizar, decide qué riesgo quieres detectar y cómo reconocer el resultado correcto. Usa las técnicas de diseño para elegir casos; después selecciona el nivel de prueba y la herramienta.";
 window.MODULES["m-piramide"].blocks.unshift(
+    {
+        type: "diagram",
+        diagramType: "pyramid",
+        title: "Diagrama Visual: La Pirámide de Pruebas y sus Proporciones Didácticas",
+        body: "La pirámide de Mike Cohn distribuye el esfuerzo según la velocidad y el costo de mantenimiento. La base amplia de pruebas unitarias garantiza retroalimentación instantánea; las capas superiores integran servicios y validan flujos críticos en navegador."
+    },
+    {
+        type: "case-study",
+        title: "Caso Práctico Paso a Paso: Matriz de Pruebas con Análisis de Valores Límite",
+        context: "Para la regla R-CANT ('1 a 5 equipos enteros'), se requiere diseñar la suite mínima que ofrezca la máxima detección de defectos en fronteras y particiones equivalentes.",
+        preconditions: [
+            "Entrada: Entero que representa la cantidad solicitada.",
+            "Límite inferior: 1 equipo | Límite superior: 5 equipos.",
+            "Técnica: Tres valores por frontera (Frontera inferior: 0, 1, 2; Frontera superior: 4, 5, 6)."
+        ],
+        code: `import pytest
+
+def cantidad_valida(c):
+    return type(c) is int and 1 <= c <= 5
+
+@pytest.mark.parametrize("cantidad,esperado", [
+    (0, False),  # Justo abajo del límite inferior
+    (1, True),   # Límite inferior exacto
+    (2, True),   # Justo arriba del límite inferior
+    (3, True),   # Representante de partición válida
+    (4, True),   # Justo abajo del límite superior
+    (5, True),   # Límite superior exacto
+    (6, False),  # Justo arriba del límite superior
+    (-1, False), # Partición inválida negativa
+    (10, False)  # Partición inválida superior
+])
+def test_fronteras_prestamo(cantidad, esperado):
+    assert cantidad_valida(cantidad) is esperado`,
+        command: "pytest tests/test_fronteras.py -v",
+        oracle: "Cada valor evaluado debe coincidir exactamente con el booleano esperado según los límites matemáticos del intervalo cerrado [1, 5].",
+        expectedVsObserved: [
+            ["CP-01 (c=0)", "False (Rechazado)", "Si da True, hay fallo en frontera inferior"],
+            ["CP-02 (c=1)", "True (Aceptado)", "Si da False, el sistema no presta el mínimo"],
+            ["CP-04 (c=5)", "True (Aceptado)", "Si da False, se bloquea el tope permitido"],
+            ["CP-05 (c=6)", "False (Rechazado)", "Si da True, se confirma fallo en frontera superior"]
+        ],
+        decision: "La suite parametrizada valida los 9 casos en menos de 0.05 segundos. Un fallo en CP-05 localiza de forma inequívoca el operador relacional defectuoso antes de escribir cualquier código de interfaz gráfica."
+    },
     {
         type: "alert", variant: "info", title: "Contrato del caso conductor",
         body: "Caso ficticio: el préstamo acepta cantidades de tipo entero entre 1 y 5. Además exige permiso y suficientes equipos. Al rechazar no crea un préstamo ni cambia existencias. Al aceptar reserva la cantidad. Los ejemplos iniciales aíslan la cantidad; luego combinamos permiso y disponibilidad. Duración didáctica de diseño y prueba manual: 30–45 minutos."

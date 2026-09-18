@@ -9,6 +9,7 @@ const SIMULATORS = {
                 this.renderPyramidBuilder();
                 this.renderAssertionValidator();
                 this.renderQuiz();
+                this.renderDesignQuiz();
                 this.renderPhaseSequencer();
                 this.renderBugTriage();
                 this.updateCompletionCounter();
@@ -24,13 +25,17 @@ const SIMULATORS = {
         tabBtns.forEach(btn => {
             btn.addEventListener("click", () => {
                 const targetId = btn.dataset.tab;
-                tabBtns.forEach(b => b.classList.remove("active"));
+                tabBtns.forEach(b => {
+                    b.classList.remove("active");
+                    b.setAttribute("aria-selected", "false");
+                });
                 tabContents.forEach(c => {
                     c.classList.remove("active");
                     c.style.display = "none";
                 });
 
                 btn.classList.add("active");
+                btn.setAttribute("aria-selected", "true");
                 const targetContent = document.getElementById(targetId);
                 if (targetContent) {
                     targetContent.classList.add("active");
@@ -46,7 +51,7 @@ const SIMULATORS = {
         if (!counterEl || !window.TestingSession) return;
         try {
             const sims = window.TestingSession.getSimulators();
-            const keys = ['sim-bva', 'sim-tdd', 'sim-doubles', 'sim-e2e', 'sim-sequencer', 'sim-pyramid', 'sim-triage', 'sim-quiz'];
+            const keys = ['sim-bva', 'sim-tdd', 'sim-doubles', 'sim-e2e', 'sim-sequencer', 'sim-pyramid', 'sim-triage', 'sim-quiz', 'sim-assertion', 'sim-diseno'];
             const completed = keys.filter(k => sims[k] && (sims[k].completed || sims[k].passed)).length;
             counterEl.textContent = String(completed);
         } catch (e) {
@@ -72,16 +77,16 @@ const SIMULATORS = {
         const render = () => {
             container.innerHTML = `
                 <div class="bva-ruler-container">
-                    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;margin-bottom:0.75rem;">
+                    <div class="bva-header-bar">
                         <div>
                             <strong style="color:var(--text-primary);font-size:0.95rem;">📐 Regla de Negocio:</strong>
-                            <span style="color:var(--text-secondary);font-size:0.88rem;margin-left:0.5rem;">"La cantidad de equipos debe ser un entero entre 1 y 5, inclusive."</span>
+                            <span class="bva-rule-text" style="margin-left:0.5rem;">"La cantidad de equipos debe ser un entero entre 1 y 5, inclusive."</span>
                         </div>
-                        <span style="font-size:0.75rem;background:rgba(56,189,248,0.15);color:#38bdf8;padding:3px 10px;border-radius:12px;font-weight:600;">Caja Negra Formal</span>
+                        <span class="bva-badge-pill">Caja Negra Formal</span>
                     </div>
 
                     <!-- Representación gráfica de la recta numérica y particiones -->
-                    <div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:0.25rem;">Visualización de Clases de Equivalencia y Puntos de Frontera:</div>
+                    <div style="font-size:0.8rem;color:var(--text-muted);margin-bottom:0.35rem;font-weight:600;">Visualización de Clases de Equivalencia y Puntos de Frontera:</div>
                     <div class="bva-partitions-bar">
                         <div class="bva-part-invalid-low" title="Partición Inválida Menor">
                             <span>🚫 Inválida menor<br><small>&lt; 1 equipo</small></span>
@@ -95,13 +100,13 @@ const SIMULATORS = {
                     </div>
 
                     <!-- Input interactivo de prueba libre -->
-                    <div style="background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:0.75rem 1rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:1rem;">
-                        <label style="font-size:0.85rem;color:var(--text-secondary);display:flex;align-items:center;gap:0.5rem;">
+                    <div class="bva-custom-tester">
+                        <label>
                             <strong>Probar una cantidad de equipos:</strong>
-                            <input type="number" id="bva-custom-input" placeholder="Ej.: 5" style="background:rgba(0,0,0,0.5);border:1px solid rgba(255,255,255,0.2);color:#fff;padding:0.4rem 0.6rem;border-radius:6px;width:90px;font-size:0.9rem;">
+                            <input type="number" id="bva-custom-input" placeholder="Ej.: 5">
                         </label>
                         <button type="button" class="btn btn-sm btn-primary" id="btn-eval-bva-custom">Evaluar con la regla</button>
-                        <div id="bva-custom-result" style="font-size:0.85rem;font-weight:600;"></div>
+                        <div id="bva-custom-result" style="font-size:0.88rem;font-weight:600;"></div>
                     </div>
 
                     <!-- Tabla formal de valores límite -->
@@ -122,7 +127,7 @@ const SIMULATORS = {
                                     const isTested = testedCases.has(tc.id);
                                     return `
                                         <tr style="background:${isTested ? 'rgba(16,185,129,0.06)' : 'transparent'};">
-                                            <td><strong style="font-family:'JetBrains Mono',monospace;font-size:0.95rem;color:#38bdf8;">${tc.input}</strong></td>
+                                            <td><strong style="font-family:'JetBrains Mono',monospace;font-size:0.95rem;color:var(--ui-cyan,#38bdf8);">${tc.input}</strong></td>
                                             <td style="font-size:0.82rem;">${tc.bvaRole}</td>
                                             <td style="font-size:0.82rem;color:var(--text-muted);">${tc.partition}</td>
                                             <td>
@@ -136,7 +141,7 @@ const SIMULATORS = {
                                                     : '<span style="color:var(--text-muted);font-size:0.82rem;">Pendiente</span>'}
                                             </td>
                                             <td>
-                                                <button type="button" class="btn btn-sm btn-secondary btn-run-case" data-id="${tc.id}" style="padding:3px 10px;font-size:0.78rem;">
+                                                <button type="button" class="btn-run-case" data-id="${tc.id}">
                                                     ${isTested ? 'Re-evaluar' : 'Ejecutar Test'}
                                                 </button>
                                             </td>
@@ -147,11 +152,11 @@ const SIMULATORS = {
                         </table>
                     </div>
 
-                    <div style="margin-top:1rem;display:flex;gap:0.75rem;align-items:center;flex-wrap:wrap;">
-                        <button type="button" class="btn btn-primary" id="btn-run-all-bva" style="padding:0.55rem 1.2rem;font-size:0.85rem;">
+                    <div style="margin-top:1.25rem;display:flex;gap:0.75rem;align-items:center;flex-wrap:wrap;">
+                        <button type="button" class="btn btn-primary" id="btn-run-all-bva">
                             ⚡ Ejecutar Suite Completa BVA (6 Casos)
                         </button>
-                        <button type="button" class="btn btn-secondary" id="btn-reset-bva" style="padding:0.55rem 1rem;font-size:0.85rem;">
+                        <button type="button" class="btn btn-secondary" id="btn-reset-bva">
                             ↺ Reiniciar
                         </button>
                         <span style="font-size:0.85rem;color:var(--text-muted);margin-left:auto;">
@@ -341,7 +346,7 @@ def calcular_tarifa(edad, es_estudiante=False):
                     </div>
 
                     <!-- Consola de salida de PyTest -->
-                    <div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;color:var(--text-muted);margin-bottom:0.25rem;">
+                    <div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-muted);margin-bottom:0.35rem;">
                         Terminal de Ejecución PyTest:
                     </div>
                     <div class="tdd-console-output" id="tdd-terminal">
@@ -353,17 +358,17 @@ def calcular_tarifa(edad, es_estudiante=False):
                     </div>
 
                     <!-- Botones de acción del ciclo -->
-                    <div style="margin-top:1rem;display:flex;gap:0.75rem;flex-wrap:wrap;align-items:center;">
+                    <div style="margin-top:1.25rem;display:flex;gap:0.75rem;flex-wrap:wrap;align-items:center;">
                         ${currentPhase === 1 ? `
-                            <button type="button" class="btn btn-primary" id="btn-tdd-run-red" style="background:#ef4444;border-color:#ef4444;color:#fff;">
+                            <button type="button" class="btn btn-primary" id="btn-tdd-run-red" style="background:linear-gradient(135deg,#ef4444,#dc2626);border-color:#ef4444;color:#fff;box-shadow:0 4px 14px rgba(239,68,68,0.35);">
                                 🔴 Ejecutar PyTest (Ver Fallo Rojo)
                             </button>
                         ` : currentPhase === 2 ? `
-                            <button type="button" class="btn btn-primary" id="btn-tdd-run-green" style="background:#10b981;border-color:#10b981;color:#fff;">
+                            <button type="button" class="btn btn-primary" id="btn-tdd-run-green" style="background:linear-gradient(135deg,#10b981,#059669);border-color:#10b981;color:#fff;box-shadow:0 4px 14px rgba(16,185,129,0.35);">
                                 🟢 Ejecutar PyTest (Hacer Pasar a Verde)
                             </button>
                         ` : `
-                            <button type="button" class="btn btn-primary" id="btn-tdd-run-refactor" style="background:#0284c7;border-color:#0284c7;color:#fff;">
+                            <button type="button" class="btn btn-primary" id="btn-tdd-run-refactor" style="background:linear-gradient(135deg,#0ea5e9,#0284c7);border-color:#0ea5e9;color:#fff;box-shadow:0 4px 14px rgba(14,165,233,0.35);">
                                 🔵 Ejecutar Suite Refactorizada
                             </button>
                         `}
@@ -527,15 +532,15 @@ tests/test_transporte.py <strong style="color:#10b981;">...</strong>            
             const correctCount = scenarios.filter(s => s.selected && s.selected.correct).length;
 
             container.innerHTML = `
-                <div style="background:rgba(15,23,42,0.7);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:1.25rem;">
-                    <p style="color:var(--text-muted);font-size:0.88rem;margin-bottom:1rem;">
+                <div class="bva-ruler-container">
+                    <p style="color:var(--text-muted);font-size:0.88rem;margin-bottom:1.15rem;">
                         <strong>Misión del Aprendiz:</strong> Selecciona el doble de prueba apropiado (Mock, Stub, Fake o Sin Doble) para aislar cada dependencia y comparar la ganancia en aislamiento y velocidad.
                     </p>
 
                     <div class="doubles-card-grid">
                         ${scenarios.map((s, idx) => `
-                            <div class="doubles-card" style="border-left:4px solid ${s.selected ? (s.selected.correct ? '#10b981' : '#ef4444') : '#38bdf8'};">
-                                <div style="font-size:0.75rem;font-weight:700;color:#38bdf8;text-transform:uppercase;margin-bottom:0.25rem;">
+                            <div class="doubles-card" style="border-left:4px solid ${s.selected ? (s.selected.correct ? '#10b981' : '#ef4444') : 'var(--ui-cyan,#38bdf8)'};">
+                                <div style="font-size:0.75rem;font-weight:700;color:var(--ui-cyan,#38bdf8);text-transform:uppercase;margin-bottom:0.25rem;">
                                     Caso ${idx + 1}
                                 </div>
                                 <div style="font-weight:600;font-size:0.9rem;color:var(--text-primary);margin-bottom:0.4rem;">
@@ -545,11 +550,11 @@ tests/test_transporte.py <strong style="color:#10b981;">...</strong>            
                                     ${s.context}
                                 </div>
 
-                                <div style="display:grid;gap:0.4rem;">
+                                <div style="display:grid;gap:0.45rem;">
                                     ${s.options.map((opt, optIdx) => {
                                         const isChosen = s.selected && s.selected.name === opt.name;
                                         return `
-                                            <button type="button" class="btn btn-sm btn-opt-double" data-scenario="${s.id}" data-opt="${optIdx}" style="text-align:left;font-size:0.76rem;padding:0.4rem 0.6rem;background:${isChosen ? (opt.correct ? 'rgba(16,185,129,0.3)' : 'rgba(239,68,68,0.3)') : 'rgba(255,255,255,0.04)'};border:1px solid ${isChosen ? (opt.correct ? '#10b981' : '#ef4444') : 'rgba(255,255,255,0.1)'};color:${isChosen ? '#fff' : 'var(--text-secondary)'};border-radius:6px;">
+                                            <button type="button" class="btn-opt-double" data-scenario="${s.id}" data-opt="${optIdx}" style="background:${isChosen ? (opt.correct ? 'rgba(16,185,129,0.25)' : 'rgba(239,68,68,0.25)') : 'rgba(255,255,255,0.04)'};border:1px solid ${isChosen ? (opt.correct ? '#10b981' : '#ef4444') : 'var(--ui-border, rgba(148,184,220,0.16))'};color:${isChosen ? '#fff' : 'var(--text-secondary)'};">
                                                 ${opt.name}
                                             </button>
                                         `;
@@ -557,7 +562,7 @@ tests/test_transporte.py <strong style="color:#10b981;">...</strong>            
                                 </div>
 
                                 ${s.selected ? `
-                                    <div style="margin-top:0.6rem;padding:0.4rem 0.6rem;border-radius:6px;background:${s.selected.correct ? 'rgba(16,185,129,0.12)' : 'rgba(239,68,68,0.12)'};font-size:0.75rem;color:${s.selected.correct ? '#6ee7b7' : '#fca5a5'};">
+                                    <div style="margin-top:0.65rem;padding:0.5rem 0.75rem;border-radius:6px;background:${s.selected.correct ? 'rgba(16,185,129,0.12)' : 'rgba(239,68,68,0.12)'};font-size:0.76rem;color:${s.selected.correct ? '#6ee7b7' : '#fca5a5'};border:1px solid ${s.selected.correct ? 'rgba(16,185,129,0.25)' : 'rgba(239,68,68,0.25)'};">
                                         ${s.selected.note}
                                     </div>
                                 ` : ''}
@@ -566,20 +571,20 @@ tests/test_transporte.py <strong style="color:#10b981;">...</strong>            
                     </div>
 
                     <!-- Comparativa de Velocidad & Aislamiento -->
-                    <div style="margin-top:1.25rem;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:1rem;">
-                        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem;font-size:0.85rem;">
+                    <div style="margin-top:1.25rem;background:rgba(0,0,0,0.35);border:1px solid var(--ui-border, rgba(148,184,220,0.18));border-radius:8px;padding:1.1rem 1.25rem;">
+                        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem;font-size:0.86rem;">
                             <strong>⚡ Impacto de los Dobles en la Velocidad de las Pruebas:</strong>
-                            <span style="color:#38bdf8;font-weight:600;">Progreso: ${correctCount} de ${scenarios.length} correctos</span>
+                            <span style="color:var(--ui-cyan,#38bdf8);font-weight:600;">Progreso: ${correctCount} de ${scenarios.length} correctos</span>
                         </div>
-                        <div class="doubles-speed-bar" style="margin-top:0.75rem;">
-                            <span style="width:130px;color:var(--text-muted);">Sin Mocks (I/O real):</span>
-                            <div class="speed-meter"><div class="speed-fill" style="width:95%;background:#ef4444;"></div></div>
-                            <span style="width:70px;color:#f87171;font-weight:600;">~ 4,800 ms</span>
+                        <div class="doubles-speed-bar" style="margin-top:0.85rem;">
+                            <span style="width:140px;color:var(--text-muted);font-size:0.82rem;">Sin Mocks (I/O real):</span>
+                            <div class="speed-meter"><div class="speed-fill" style="width:95%;background:linear-gradient(90deg,#ef4444,#f87171);"></div></div>
+                            <span style="width:75px;color:#f87171;font-weight:700;font-size:0.82rem;text-align:right;">~ 4,800 ms</span>
                         </div>
                         <div class="doubles-speed-bar">
-                            <span style="width:130px;color:var(--text-muted);">Con Dobles (Memoria):</span>
-                            <div class="speed-meter"><div class="speed-fill" style="width:5%;background:#10b981;"></div></div>
-                            <span style="width:70px;color:#34d399;font-weight:600;">~ 18 ms</span>
+                            <span style="width:140px;color:var(--text-muted);font-size:0.82rem;">Con Dobles (Memoria):</span>
+                            <div class="speed-meter"><div class="speed-fill" style="width:5%;background:linear-gradient(90deg,#10b981,#34d399);"></div></div>
+                            <span style="width:75px;color:#34d399;font-weight:700;font-size:0.82rem;text-align:right;">~ 18 ms</span>
                         </div>
                     </div>
 
@@ -642,11 +647,11 @@ tests/test_transporte.py <strong style="color:#10b981;">...</strong>            
 
         const render = () => {
             container.innerHTML = `
-                <div style="background:rgba(15,23,42,0.8);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:1.25rem;">
-                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;flex-wrap:wrap;gap:0.5rem;">
+                <div class="bva-ruler-container">
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.85rem;flex-wrap:wrap;gap:0.5rem;">
                         <div>
                             <strong style="color:var(--text-primary);font-size:0.95rem;">🚨 Incidente en CI/CD: Pipeline bloqueado en Stage de Integración</strong>
-                            <div style="font-size:0.8rem;color:var(--text-muted);">Un commit activó la suite y arrojó el siguiente reporte de fallo:</div>
+                            <div style="font-size:0.82rem;color:var(--text-muted);">Un commit activó la suite y arrojó el siguiente reporte de fallo:</div>
                         </div>
                         <span class="triage-badge" style="background:rgba(239,68,68,0.2);color:#f87171;border:1px solid #ef4444;">Fallo Activo</span>
                     </div>
@@ -665,9 +670,9 @@ Stacktrace:
                     </div>
 
                     <!-- Panel de Clasificación del Defecto -->
-                    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin-bottom:1rem;">
+                    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin-bottom:1.25rem;">
                         <div>
-                            <label style="font-size:0.8rem;font-weight:700;color:var(--text-secondary);display:block;margin-bottom:0.4rem;">
+                            <label style="font-size:0.82rem;font-weight:700;color:var(--text-secondary);display:block;margin-bottom:0.4rem;">
                                 1. Diagnóstico de Causa Raíz:
                             </label>
                             <select class="sim-select" id="triage-root-cause" style="width:100%;">
@@ -679,7 +684,7 @@ Stacktrace:
                         </div>
 
                         <div>
-                            <label style="font-size:0.8rem;font-weight:700;color:var(--text-secondary);display:block;margin-bottom:0.4rem;">
+                            <label style="font-size:0.82rem;font-weight:700;color:var(--text-secondary);display:block;margin-bottom:0.4rem;">
                                 2. Nivel de Severidad (Impacto):
                             </label>
                             <select class="sim-select" id="triage-severity" style="width:100%;">
@@ -691,7 +696,7 @@ Stacktrace:
                         </div>
 
                         <div>
-                            <label style="font-size:0.8rem;font-weight:700;color:var(--text-secondary);display:block;margin-bottom:0.4rem;">
+                            <label style="font-size:0.82rem;font-weight:700;color:var(--text-secondary);display:block;margin-bottom:0.4rem;">
                                 3. Acción Correctiva QA:
                             </label>
                             <select class="sim-select" id="triage-action" style="width:100%;">
@@ -703,7 +708,7 @@ Stacktrace:
                         </div>
                     </div>
 
-                    <button type="button" class="btn btn-primary" id="btn-submit-triage" style="padding:0.55rem 1.4rem;">
+                    <button type="button" class="btn btn-primary" id="btn-submit-triage" style="padding:0.6rem 1.5rem;">
                         ✔ Validar Dictamen de Triage
                     </button>
 
@@ -783,42 +788,62 @@ Stacktrace:
         const container = document.querySelector(".sim-pyramid-container");
         if (!container) return;
         container.innerHTML = `
-            <p style="color:var(--text-muted);margin-bottom:1rem;">Arrastra cada tipo de prueba a la capa que normalmente ofrece la retroalimentación adecuada. La forma no impone porcentajes universales.</p>
-            <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:1rem;" id="pyramid-items">
-                <div class="draggable" draggable="true" data-type="unit" data-correct="bottom" style="padding:0.5rem 1rem;background:var(--glass-bg);border-radius:8px;cursor:grab;">Unit Test</div>
-                <div class="draggable" draggable="true" data-type="integration" data-correct="middle" style="padding:0.5rem 1rem;background:var(--glass-bg);border-radius:8px;cursor:grab;">Integration</div>
-                <div class="draggable" draggable="true" data-type="e2e" data-correct="top" style="padding:0.5rem 1rem;background:var(--glass-bg);border-radius:8px;cursor:grab;">E2E</div>
+            <div class="bva-ruler-container">
+                <p style="color:var(--text-muted);margin-bottom:1rem;font-size:0.92rem;">
+                    <strong>Misión del aprendiz:</strong> arrastra (o haz clic en) cada tipo de prueba a la capa que normalmente ofrece la retroalimentación adecuada. La forma no impone porcentajes universales.
+                </p>
+                <div style="display:flex;gap:0.75rem;flex-wrap:wrap;margin-bottom:1.25rem;" id="pyramid-items">
+                    <div class="draggable" draggable="true" data-type="unit" data-correct="bottom">⚡ Unit Test</div>
+                    <div class="draggable" draggable="true" data-type="integration" data-correct="middle">🔌 Integration</div>
+                    <div class="draggable" draggable="true" data-type="e2e" data-correct="top">🎭 E2E</div>
+                </div>
+                <div id="pyramid" style="display:flex;flex-direction:column;align-items:center;gap:0.65rem;">
+                    <div data-level="top" style="width:100%;max-width:180px;min-height:52px;background:rgba(244,63,94,0.15);border:2px dashed rgba(244,63,94,0.5);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:0.82rem;font-weight:600;color:#fda4af;transition:all 0.25s ease;">Pocos E2E críticos</div>
+                    <div data-level="middle" style="width:100%;max-width:280px;min-height:52px;background:rgba(245,158,11,0.15);border:2px dashed rgba(245,158,11,0.5);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:0.82rem;font-weight:600;color:#fde68a;transition:all 0.25s ease;">Integración y contrato</div>
+                    <div data-level="bottom" style="width:100%;max-width:380px;min-height:52px;background:rgba(16,185,129,0.15);border:2px dashed rgba(16,185,129,0.5);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:0.82rem;font-weight:600;color:#a7f3d0;transition:all 0.25s ease;">Base rápida de unidad</div>
+                </div>
+                <div id="pyramid-result" style="margin-top:1.25rem;"></div>
             </div>
-            <div id="pyramid" style="display:flex;flex-direction:column;align-items:center;gap:0.5rem;">
-                <div data-level="top" style="width:120px;height:50px;background:rgba(244,63,94,0.2);border:2px dashed rgba(244,63,94,0.5);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:0.8rem;color:var(--text-muted);">Pocos E2E críticos</div>
-                <div data-level="middle" style="width:240px;height:50px;background:rgba(245,158,11,0.2);border:2px dashed rgba(245,158,11,0.5);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:0.8rem;color:var(--text-muted);">Integración y contrato</div>
-                <div data-level="bottom" style="width:360px;height:50px;background:rgba(16,185,129,0.2);border:2px dashed rgba(16,185,129,0.5);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:0.8rem;color:var(--text-muted);">Base rápida de unidad</div>
-            </div>
-            <div id="pyramid-result" style="margin-top:1rem;"></div>
         `;
         const draggables = container.querySelectorAll(".draggable");
         const slots = container.querySelectorAll("[data-level]");
         const solvedSlots = new Set();
+        let selectedType = null;
+
         draggables.forEach(d => {
             d.addEventListener("dragstart", e => e.dataTransfer.setData("type", d.dataset.type));
+            d.addEventListener("click", () => {
+                draggables.forEach(item => item.style.outline = "none");
+                if (selectedType === d.dataset.type) {
+                    selectedType = null;
+                } else {
+                    selectedType = d.dataset.type;
+                    d.style.outline = "2px solid var(--accent-primary, #38bdf8)";
+                    d.style.outlineOffset = "2px";
+                }
+            });
         });
+
         slots.forEach(slot => {
-            slot.addEventListener("dragover", e => e.preventDefault());
-            slot.addEventListener("drop", e => {
-                e.preventDefault();
-                const type = e.dataTransfer.getData("type");
+            const handleDropOrClick = (type) => {
                 const dragged = container.querySelector(`[data-type="${type}"]`);
                 if (!dragged) return;
                 const correct = dragged.dataset.correct === slot.dataset.level;
                 if (correct) {
-                    slot.style.background = "rgba(16,185,129,0.4)";
-                    slot.textContent = `${dragged.textContent} Correcto!`;
+                    slot.style.background = "rgba(16,185,129,0.35)";
+                    slot.style.borderColor = "#10b981";
+                    slot.style.borderStyle = "solid";
+                    slot.textContent = `${dragged.textContent} ¡Correcto!`;
+                    dragged.style.opacity = "0.45";
+                    dragged.style.pointerEvents = "none";
+                    dragged.style.outline = "none";
                     solvedSlots.add(slot.dataset.level);
+                    selectedType = null;
                     if (window.GAMIFICATION) GAMIFICATION.addXP(50, "Pyramid Builder correcto");
                     if (solvedSlots.size === 3) {
                         const resultEl = container.querySelector("#pyramid-result");
                         if (resultEl) {
-                            resultEl.innerHTML = '<div style="color:#10b981;font-weight:600;padding:0.5rem;background:rgba(16,185,129,0.15);border-radius:6px;">Capas ubicadas. Ahora justifica la mezcla según riesgos, arquitectura y tiempo de retroalimentación.</div>';
+                            resultEl.innerHTML = '<div style="color:#6ee7b7;font-weight:600;padding:0.75rem 1rem;background:rgba(16,185,129,0.15);border:1px solid #10b981;border-radius:8px;">🎉 Capas ubicadas correctamente. Ahora justifica la mezcla según riesgos, arquitectura y tiempo de retroalimentación.</div>';
                         }
                         if (window.TestingSession) {
                             window.TestingSession.recordSimulator('sim-pyramid', 50, 50, 'Capas ubicadas; la proporción queda por justificar según el contexto.');
@@ -826,9 +851,27 @@ Stacktrace:
                         SIMULATORS.updateCompletionCounter();
                     }
                 } else {
-                    slot.style.background = "rgba(244,63,94,0.4)";
-                    slot.textContent = "Incorrecto - intenta de nuevo";
-                    setTimeout(() => { slot.style.background = ""; slot.textContent = slot.dataset.level === "top" ? "Pocos E2E críticos" : slot.dataset.level === "middle" ? "Integración y contrato" : "Base rápida de unidad"; }, 1500);
+                    slot.style.background = "rgba(244,63,94,0.35)";
+                    slot.style.borderColor = "#f43f5e";
+                    slot.textContent = "Incorrecto — intenta de nuevo";
+                    setTimeout(() => {
+                        slot.style.background = "";
+                        slot.style.borderColor = "";
+                        slot.style.borderStyle = "dashed";
+                        slot.textContent = slot.dataset.level === "top" ? "Pocos E2E críticos" : slot.dataset.level === "middle" ? "Integración y contrato" : "Base rápida de unidad";
+                    }, 1500);
+                }
+            };
+
+            slot.addEventListener("dragover", e => e.preventDefault());
+            slot.addEventListener("drop", e => {
+                e.preventDefault();
+                const type = e.dataTransfer.getData("type");
+                handleDropOrClick(type);
+            });
+            slot.addEventListener("click", () => {
+                if (selectedType) {
+                    handleDropOrClick(selectedType);
                 }
             });
         });
@@ -850,21 +893,25 @@ Stacktrace:
         let score = 0;
         let current = 0;
         container.innerHTML = `
-            <p style="color:var(--text-muted);margin-bottom:1rem;">Adivina si el assertion PASA o FALLA:</p>
-            <div id="assert-code" style="font-family:'JetBrains Mono',monospace;background:rgba(0,0,0,0.3);padding:1rem;border-radius:8px;margin-bottom:1rem;font-size:0.95rem;"></div>
-            <div style="display:flex;gap:0.5rem;">
-                <button type="button" class="btn btn-primary" id="assert-pass">&#10004; Pasa</button>
-                <button type="button" class="btn btn-secondary" id="assert-fail">&#10006; Falla</button>
+            <div class="bva-ruler-container">
+                <p style="color:var(--text-muted);margin-bottom:1rem;font-size:0.92rem;">
+                    Predice el resultado booleano de la aserción técnica: ¿el test <strong>PASA</strong> o <strong>FALLA</strong>?
+                </p>
+                <div id="assert-code" style="font-family:'JetBrains Mono',monospace;background:#060b14;border:1px solid var(--ui-border, rgba(148,184,220,0.18));padding:1.1rem 1.25rem;border-radius:8px;margin-bottom:1.15rem;font-size:0.95rem;color:var(--ui-cyan,#38bdf8);box-shadow:inset 0 1px 0 rgba(255,255,255,0.05);"></div>
+                <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
+                    <button type="button" class="btn btn-assert-pass" id="assert-pass">✔ Pasa (True)</button>
+                    <button type="button" class="btn btn-assert-fail" id="assert-fail">✖ Falla (False)</button>
+                </div>
+                <div id="assert-feedback" style="margin-top:1rem;font-weight:600;"></div>
+                <div style="margin-top:1rem;color:var(--text-muted);font-size:0.85rem;">Aciertos: <strong id="assert-score" style="color:#fff;">0</strong> de ${tests.length}</div>
             </div>
-            <div id="assert-feedback" style="margin-top:1rem;"></div>
-            <div style="margin-top:1rem;color:var(--text-muted);">Aciertos: <span id="assert-score">0</span>/${tests.length}</div>
         `;
         const codeEl = container.querySelector("#assert-code");
         const feedbackEl = container.querySelector("#assert-feedback");
         const scoreEl = container.querySelector("#assert-score");
         const showTest = () => {
             if (current >= tests.length) {
-                feedbackEl.innerHTML = `<div style="color:#10b981;">Completado! ${score}/${tests.length} aciertos.</div>`;
+                feedbackEl.innerHTML = `<div style="color:#34d399;font-weight:700;padding:0.75rem 1rem;background:rgba(16,185,129,0.15);border:1px solid #10b981;border-radius:8px;">🎉 ¡Completado! ${score}/${tests.length} aciertos.</div>`;
                 if (window.GAMIFICATION) GAMIFICATION.addXP(75, "Assertion Validator completado");
                 if (window.TestingSession) {
                     window.TestingSession.recordSimulator('sim-assertion', score, tests.length, `${score} de ${tests.length} aserciones acertadas.`);
@@ -878,10 +925,10 @@ Stacktrace:
         const check = (guessedPass) => {
             const actual = tests[current].passes;
             if (guessedPass === actual) {
-                feedbackEl.innerHTML = `<span style="color:#10b981;">Correcto!</span>`;
+                feedbackEl.innerHTML = `<span style="color:#34d399;">✔ ¡Correcto!</span>`;
                 score++;
             } else {
-                feedbackEl.innerHTML = `<span style="color:#f43f5e;">Incorrecto. Resultado: ${actual ? "PASA" : "FALLA"}</span>`;
+                feedbackEl.innerHTML = `<span style="color:#f87171;">✖ Incorrecto. Resultado real: ${actual ? "PASA" : "FALLA"}</span>`;
             }
             scoreEl.textContent = score;
             current++;
@@ -906,11 +953,16 @@ Stacktrace:
             { q: "Mockito se usa con?", opts: ["Python","JavaScript","Java","Rust"], correct: 2 },
         ];
         let idx = 0, score = 0;
-        container.innerHTML = `<div id="quiz-content"></div><div id="quiz-score" style="margin-top:1rem;"></div>`;
+        container.innerHTML = `
+            <div class="bva-ruler-container">
+                <div id="quiz-content"></div>
+                <div id="quiz-score" style="margin-top:1.25rem;color:var(--text-muted);font-size:0.88rem;"></div>
+            </div>
+        `;
         const content = container.querySelector("#quiz-content");
         const showQ = () => {
             if (idx >= questions.length) {
-                content.innerHTML = `<div style="color:#10b981;">Quiz completado! ${score}/${questions.length} correctas.</div>`;
+                content.innerHTML = `<div style="color:#34d399;font-weight:700;padding:1rem;background:rgba(16,185,129,0.15);border:1px solid #10b981;border-radius:8px;">🎉 ¡Quiz completado! ${score}/${questions.length} respuestas correctas.</div>`;
                 if (window.GAMIFICATION) GAMIFICATION.addXP(75, "Quiz completado");
                 if (window.TestingSession) {
                     window.TestingSession.recordSimulator('sim-quiz', score, questions.length, `${score} de ${questions.length} preguntas correctas.`);
@@ -921,21 +973,161 @@ Stacktrace:
             }
             const q = questions[idx];
             content.innerHTML = `
-                <div style="margin-bottom:1rem;font-weight:600;">${idx+1}. ${q.q}</div>
-                <div style="display:grid;gap:0.5rem;">
-                    ${q.opts.map((o,i) => `<button type="button" class="btn btn-secondary quiz-opt" data-i="${i}" style="text-align:left;">${o}</button>`).join("")}
+                <div style="margin-bottom:1.15rem;font-weight:700;font-size:1.02rem;color:var(--text-primary);">${idx+1}. ${q.q}</div>
+                <div style="display:grid;gap:0.65rem;">
+                    ${q.opts.map((o,i) => `
+                        <button type="button" class="quiz-opt" data-i="${i}">
+                            <span style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);font-size:0.75rem;font-weight:700;color:var(--ui-cyan,#5cd6ff);flex-shrink:0;">
+                                ${String.fromCharCode(65 + i)}
+                            </span>
+                            <span>${o}</span>
+                        </button>
+                    `).join("")}
                 </div>
-                <div id="quiz-feedback" style="margin-top:1rem;"></div>
+                <div id="quiz-feedback" style="margin-top:1rem;font-weight:600;"></div>
             `;
             content.querySelectorAll(".quiz-opt").forEach(btn => {
                 btn.addEventListener("click", () => {
                     const i = parseInt(btn.dataset.i);
                     const fb = content.querySelector("#quiz-feedback");
-                    if (i === q.correct) { fb.innerHTML = "<span style='color:#10b981;'>Correcto!</span>"; score++; }
-                    else { fb.innerHTML = `<span style='color:#f43f5e;'>Incorrecto. Respuesta: ${q.opts[q.correct]}</span>`; }
-                    container.querySelector("#quiz-score").textContent = `${score}/${questions.length} aciertos`;
+                    if (i === q.correct) {
+                        fb.innerHTML = "<span style='color:#34d399;'>✔ ¡Correcto!</span>";
+                        score++;
+                    } else {
+                        fb.innerHTML = `<span style='color:#f87171;'>✖ Incorrecto. Respuesta correcta: <strong>${q.opts[q.correct]}</strong></span>`;
+                    }
+                    container.querySelector("#quiz-score").innerHTML = `Progreso: <strong>${score}</strong> de ${questions.length} aciertos`;
                     idx++;
                     setTimeout(showQ, 1500);
+                });
+            });
+        };
+        showQ();
+    },
+
+    renderDesignQuiz() {
+        const container = document.querySelector(".sim-diseno-container");
+        if (!container) return;
+        const questions = [
+            {
+                q: "Regla R-CANT: la cantidad debe ser un entero entre 1 y 5. ¿Cuántas particiones de equivalencia conviene considerar como mínimo?",
+                opts: ["Dos: válida e inválida", "Tres: menor que 1, entre 1 y 5, mayor que 5", "Cuatro: las tres anteriores más los tipos no enteros", "Una por cada valor del 1 al 5"],
+                correct: 2,
+                why: "La regla exige tipo entero exacto: None, texto, float y booleanos deben rechazarse. Esa es una cuarta partición. Probar los 5 valores uno a uno confunde partición con exhaustividad."
+            },
+            {
+                q: "Para la misma regla 1–5, ¿qué conjunto cubre las fronteras con valores límite?",
+                opts: ["0, 1, 5 y 6", "1, 2, 3, 4 y 5", "-1, 0, 6 y 7", "Solo 1 y 5"],
+                correct: 0,
+                why: "BVA prueba justo fuera, justo en y justo dentro de cada frontera: 0 (min-1), 1 (min), 5 (max), 6 (max+1). Los interiores 2, 3 y 4 se comportan igual entre sí."
+            },
+            {
+                q: "Una tabla de decisión combina permiso (sí/no) con disponibilidad suficiente (sí/no) para decidir si se acepta un préstamo. ¿Cuántas combinaciones mínimas exige?",
+                opts: ["2", "4 (2×2)", "8", "Tantas como casos de prueba ya existan"],
+                correct: 1,
+                why: "Cada condición booleana duplica las combinaciones: 2² = 4 reglas (aceptar, rechazar por falta de equipos, denegar por permiso, denegar por ambas). Omitir una regla deja una decisión sin evidencia."
+            },
+            {
+                q: "Una regla con 3 condiciones booleanas genera, en una tabla de decisión completa, ¿cuántas combinaciones?",
+                opts: ["3", "6", "8 (2³)", "9"],
+                correct: 2,
+                why: "n condiciones booleanas producen 2ⁿ combinaciones. Con 3: 8. Si el negocio reduce el conjunto por reglas de implicación (por ejemplo 'sin permiso, la disponibilidad no importa'), esa reducción debe documentarse como decisión, no asumirse."
+            },
+            {
+                q: "¿Qué es un oráculo en diseño de pruebas?",
+                opts: ["La herramienta que ejecuta las pruebas", "La fuente que permite decidir si un resultado observado es correcto", "El reporte de cobertura generado por pytest-cov", "El entorno donde corren las pruebas"],
+                correct: 1,
+                why: "Sin oráculo no hay resultado esperado: solo hay salida. La regla 'entero entre 1 y 5' es el oráculo del caso conductor; la herramienta solo lo comprueba."
+            },
+            {
+                q: "Para cantidad_valida, ¿qué entrada representa a la partición inválida mayor (> 5)?",
+                opts: ["0", "3", "5", "8"],
+                correct: 3,
+                why: "0 pertenece a la partición inválida menor, 3 y 5 a la válida. 8 representa a todos los enteros mayores que 5: basta un representante por partición, más los valores límite."
+            },
+            {
+                q: "¿Por qué 1.5 y True son casos necesarios en Python para cantidad_valida, además de los enteros?",
+                opts: ["Porque son valores límite del rango", "Porque bool hereda de int y 1.5 es float: el contrato exige tipo int exacto", "No son necesarios si ya probé 0 y 6", "Porque pytest obliga a probar al menos 7 tipos"],
+                correct: 1,
+                why: "isinstance(True, int) es True en Python y 1.5 cumple 1 <= 1.5 <= 5. Una comparación numérica sola los aceptaría; la regla del dominio exige type(cantidad) is int. Es una decisión de este dominio, no una ley universal."
+            },
+            {
+                q: "Caso CP-05: permiso activo, 10 equipos disponibles, se solicita cantidad 6. ¿Cuál es el resultado esperado?",
+                opts: ["Aceptar el préstamo y quedan 4 equipos", "Rechazar y conservar los 10 equipos disponibles", "Aceptar y conservar los 10 equipos", "Rechazar pero descontar 6 equipos"],
+                correct: 1,
+                why: "La regla R-CANT rechaza cualquier cantidad mayor a 5, y al rechazar no debe crear préstamo ni mover inventario. Comprobar solo el mensaje sin verificar las existencias deja un efecto secundario sin evidencia."
+            },
+            {
+                q: "¿Qué técnica de caja negra conviene para combinar condiciones como permiso y disponibilidad suficiente?",
+                opts: ["Análisis de valores límite", "Particiones de equivalencia", "Tabla de decisión", "Prueba de mutación"],
+                correct: 2,
+                why: "Cuando la decisión depende de la combinación de varias condiciones, la tabla de decisión enumera las reglas. BVA y particiones trabajan sobre una sola entrada; la mutación evalúa la calidad de la suite, no diseña casos."
+            },
+            {
+                q: "¿Qué logra un caso de prueba que ejecuta cantidad_valida(6) pero NO tiene aserción sobre el resultado?",
+                opts: ["Aumenta la cobertura de ramas", "Recorre código pero no comprueba nada útil: una mutación que cambie el máximo a 6 sobreviviría", "Evita falsos positivos", "Sigue siendo un test válido porque el código se ejecutó"],
+                correct: 1,
+                why: "Ejecutar sin comprobar solo recorre líneas. La aserción assert cantidad_valida(6) is False es lo que hace visible un máximo mal escrito: sin ella, la suite puede estar verde con la regla rota."
+            }
+        ];
+        let idx = 0, score = 0;
+        container.innerHTML = `
+            <div class="bva-ruler-container">
+                <p style="color:var(--text-muted);margin-bottom:1rem;font-size:0.92rem;">
+                    <strong>Misión del aprendiz:</strong> responde 10 decisiones de diseño de casos sobre la regla de préstamos (cantidad entera 1–5, permiso y disponibilidad). Cada respuesta incluye su razón. Se aprueba con al menos 70% de aciertos.
+                </p>
+                <div id="diseno-content"></div>
+                <div id="diseno-score" style="margin-top:1.25rem;color:var(--text-muted);font-size:0.88rem;"></div>
+            </div>
+        `;
+        const content = container.querySelector("#diseno-content");
+        const scoreEl = container.querySelector("#diseno-score");
+        const showQ = () => {
+            if (idx >= questions.length) {
+                const pct = Math.round((score / questions.length) * 100);
+                const passed = pct >= 70;
+                content.innerHTML = `<div style="color:${passed ? '#34d399' : '#fcd34d'};font-weight:700;padding:1rem;background:${passed ? 'rgba(16,185,129,0.15);border:1px solid #10b981' : 'rgba(245,158,11,0.15);border:1px solid #f59e0b'};border-radius:8px;">
+                    ${passed ? '🎉' : '📚'} ¡Reto de diseño completado! ${score}/${questions.length} aciertos (${pct}%). ${passed ? 'Dominas el criterio para diseñar antes de automatizar.' : 'Repasa la estación de diseño y vuelve a intentarlo: la razón de cada respuesta quedó arriba.'}
+                </div>`;
+                if (window.GAMIFICATION) window.GAMIFICATION.addXP(passed ? 90 : 40, passed ? "Diseña antes de automatizar: aprobado" : "Diseña antes de automatizar: intento registrado");
+                if (window.TestingSession) {
+                    window.TestingSession.recordSimulator('sim-diseno', score, questions.length, `${score} de ${questions.length} decisiones de diseño correctas (${pct}%).`);
+                }
+                SIMULATORS.updateCompletionCounter();
+                if (passed && typeof confetti !== "undefined") confetti({ particleCount: 100, spread: 70 });
+                return;
+            }
+            const q = questions[idx];
+            content.innerHTML = `
+                <div style="margin-bottom:0.5rem;font-size:0.78rem;font-weight:700;color:var(--ui-cyan,#38bdf8);text-transform:uppercase;">Pregunta ${idx + 1} de ${questions.length}</div>
+                <div style="margin-bottom:1.15rem;font-weight:700;font-size:1.02rem;color:var(--text-primary);">${q.q}</div>
+                <div style="display:grid;gap:0.65rem;">
+                    ${q.opts.map((o, i) => `
+                        <button type="button" class="quiz-opt" data-i="${i}">
+                            <span style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);font-size:0.75rem;font-weight:700;color:var(--ui-cyan,#5cd6ff);flex-shrink:0;">
+                                ${String.fromCharCode(65 + i)}
+                            </span>
+                            <span>${o}</span>
+                        </button>
+                    `).join("")}
+                </div>
+                <div id="diseno-feedback" style="margin-top:1rem;font-weight:600;"></div>
+            `;
+            content.querySelectorAll(".quiz-opt").forEach(btn => {
+                btn.addEventListener("click", () => {
+                    const i = parseInt(btn.dataset.i);
+                    const fb = content.querySelector("#diseno-feedback");
+                    const ok = i === q.correct;
+                    if (ok) {
+                        score++;
+                        fb.innerHTML = `<span style="color:#34d399;">✔ ¡Correcto.</span> <span style="color:var(--text-secondary);font-weight:400;font-size:0.85rem;">${q.why}</span>`;
+                    } else {
+                        fb.innerHTML = `<span style="color:#f87171;">✖ Incorrecto.</span> <span style="color:var(--text-secondary);font-weight:400;font-size:0.85rem;">${q.why}</span>`;
+                    }
+                    content.querySelectorAll(".quiz-opt").forEach(b => b.disabled = true);
+                    scoreEl.innerHTML = `Progreso: <strong>${score}</strong> de ${questions.length} aciertos`;
+                    idx++;
+                    setTimeout(showQ, 3200);
                 });
             });
         };
@@ -1035,7 +1227,7 @@ Stacktrace:
                         </span>
                         <div class="sim-sequencer-pool" id="seq-pool" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:0.75rem;margin-top:0.5rem;">
                             ${pool.map(p => `
-                                <div class="sim-phase-card" data-id="${p.id}" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:0.75rem 1rem;cursor:pointer;transition:all 0.2s ease;">
+                                <div class="sim-phase-card" data-id="${p.id}">
                                     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.25rem;">
                                         <span style="font-size:1.1rem;">${p.icon}</span>
                                         <span style="font-size:0.7rem;background:rgba(56,189,248,0.15);color:#38bdf8;padding:2px 8px;border-radius:12px;font-weight:600;">${p.tool}</span>
@@ -1054,7 +1246,7 @@ Stacktrace:
                         </span>
                         <div class="sim-sequencer-slots" id="seq-slots" style="display:flex;flex-direction:column;gap:0.6rem;margin-top:0.5rem;">
                             ${currentSlots.map((item, idx) => `
-                                <div class="sim-slot" data-index="${idx}" style="display:flex;align-items:center;gap:1rem;background:rgba(15,23,42,0.6);border:1px dashed ${item ? 'rgba(56,189,248,0.4)' : 'rgba(255,255,255,0.15)'};border-radius:8px;padding:0.6rem 1rem;min-height:54px;cursor:${item ? 'pointer' : 'default'};transition:all 0.2s ease;">
+                                <div class="sim-slot ${item ? 'is-filled' : ''}" data-index="${idx}">
                                     <div style="width:32px;height:32px;border-radius:50%;background:${item ? 'var(--accent-primary, #38bdf8)' : 'rgba(255,255,255,0.1)'};color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.85rem;flex-shrink:0;">
                                         ${idx + 1}
                                     </div>
@@ -1075,10 +1267,10 @@ Stacktrace:
                     </div>
 
                     <div style="display:flex;gap:0.75rem;flex-wrap:wrap;align-items:center;">
-                        <button type="button" class="btn btn-primary" id="btn-validate-seq" style="padding:0.6rem 1.5rem;">
+                        <button type="button" class="btn btn-primary" id="btn-validate-seq">
                             &#10004; Validar Orden del Pipeline
                         </button>
-                        <button type="button" class="btn btn-secondary" id="btn-reset-seq" style="padding:0.6rem 1.2rem;">
+                        <button type="button" class="btn btn-secondary" id="btn-reset-seq">
                             &#8634; Reiniciar / Mezclar
                         </button>
                     </div>

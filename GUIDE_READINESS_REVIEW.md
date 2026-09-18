@@ -36,7 +36,7 @@ aplicativo del aprendiz haya pasado esas pruebas.
 
 ## Actualización del 10 de septiembre: mediación humana con IA
 
-Las 16 estaciones incluyen ahora una práctica situada de IA con un ciclo único:
+Las 18 estaciones incluyen ahora una práctica situada de IA con un ciclo único:
 comprender, encargar, cuestionar, comprobar y decidir. Cada panel distingue la
 propuesta de la evidencia, declara qué no se ha demostrado, ofrece recuperación y
 exige tres verificaciones antes de registrar la revisión humana. La ruta también
@@ -54,3 +54,24 @@ bloqueado, se habilita con las tres comprobaciones y muestra confirmación. La
 auditoría automatizada y la suite final se registran en el log de iteración. Sigue
 pendiente observar a un aprendiz real, evaluar la calidad de sus explicaciones y
 confirmar transferencia en un proyecto propio.
+
+## Actualización de la versión 3.7.0: riesgo, defectos y orientación
+
+La versión 3.7.0 consolida 18 estaciones en la secuencia web. Incorpora una
+estación de priorización por riesgo con matriz probabilidad × impacto y FMEA
+ligero, y una estación de gestión de defectos con ciclo Nuevo → Abierto →
+Corregido → Retest → Cerrado/Reabierto. Ambas incluyen ejemplo resuelto,
+contraejemplo, recuperación, transferencia y práctica humano–IA con verificación
+del aprendiz.
+
+También se añadió un laboratorio guiado de k6, un control ejecutable de
+accesibilidad sobre la demo Flask, complejidad ciclomática para
+`cantidad_valida`, el simulador de diseño de casos y un índice navegable por
+estación. La interfaz incluye orientación por teclado, estado de búsqueda sin
+resultados, botón para volver arriba, modal de cierre accesible y reinicio
+explícito del progreso.
+
+Resultado de esta iteración: contrato estructural y suite automatizada
+actualizados; la validación con un aprendiz real, instructor y lector de pantalla
+sigue siendo una actividad humana pendiente y no se presenta como aprobada por
+esta revisión.

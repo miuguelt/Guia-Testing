@@ -54,3 +54,13 @@
 - Evidencia: 81 pruebas automatizadas aprobadas; Test-DevBrainEducationalGuide strict aprobado; Test-WebQuality: 0 errores; Test-GuideDeliverables: 3 artefactos y 3 estaciones; Web audit: 0 violaciones axe y 0 desbordamientos; Recorrido TDD en navegador: bloqueo, tres verificaciones y registro confirmados
 - Retroalimentación: Validar comprensión y transferencia con un aprendiz real antes de declarar autonomía pedagógica; El auditor de foco cuenta controles de secciones SPA ocultas; el foco calculado del menú se verificó manualmente
 - Reglas candidatas: no se proponen reglas globales
+
+## 2026-09-12 00:00 -05:00 - validated
+
+- Iteración: adso-testing-qa-calidad-2026-20260912000000000
+- Estándar: 2.5.0
+- Versión de la guía: 3.7.0
+- Resumen: 18 estaciones con priorización por riesgo, gestión de defectos, práctica mínima de rendimiento y accesibilidad, caja blanca, simulador de diseño de casos y shell accesible orientado por índice.
+- Evidencia: `pytest -q` (86 aprobadas); `tests/test_v370_completion.py`; validación de sintaxis JavaScript (28 archivos); peso de imágenes y fuentes dentro de los objetivos; recorrido local en navegador fresco sobre riesgo y defectos, máquina de estados visible, shell versionado/deferido, sin overflow en el viewport normal y sin errores/advertencias de consola.
+- Retroalimentación: Validar con un aprendiz e instructor la comprensión de la matriz de riesgo y del ciclo de defectos. `Test-GuideDeliverables.ps1` sigue necesitando una corrección de infraestructura: inspecciona el redirect `index.html` raíz en vez del entrypoint `./web/index.html` declarado por el manifiesto; el contrato real sí queda cubierto por `tests/test_guide.py`. No se presenta una auditoría axe como ejecutada.
+- Reglas candidatas: no se proponen reglas globales.

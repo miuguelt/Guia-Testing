@@ -2,7 +2,7 @@
 Object.assign(window.MODULES, {
     "m-observabilidad": {
         title: "Observabilidad en Producción: Logs JSON, Métricas y AI SRE en Coolify",
-        badge: "Modulo 12",
+        badge: "Estación 14/18 · Observabilidad",
         intro: "Cierra el ciclo de calidad cuando el contenedor ya está en producción. Aprende a emitir logs estructurados en JSON con Correlation ID (X-Request-ID), exponer endpoints de salud (/healthz, /readyz, /metrics), capturar logs con Dozzle y automatizar el triaje y diagnóstico de caídas en Coolify usando agentes de IA.",
         blocks: [
             {
@@ -20,6 +20,46 @@ Object.assign(window.MODULES, {
                     ["Health & Readiness", "Endpoints /healthz y /readyz", "Verifica conexión viva a PostgreSQL/Redis en runtime", "Coolify detecta contenedores zombi y programa reinicios."],
                     ["Agente AI SRE", "ai_log_watcher.py (Daemon)", "Webhook multihilo en puerto 9050 con SHA-256", "Emite diagnóstico RCA, severidad y parche sugerido."]
                 ]
+            },
+            {
+                type: "diagram",
+                diagramType: "architecture",
+                title: "Diagrama Visual: Arquitectura de Observabilidad y Triaje AI SRE en Producción",
+                nodes: [
+                    { title: "🌐 App Flask en Contenedor", detail: "Middleware inyecta X-Request-ID y emite logs de 1 línea JSON a stdout." },
+                    { title: "📋 Dozzle (Log Stream)", detail: "Captura stdout desde docker.sock con búsqueda regex en tiempo real sin abrir SSH." },
+                    { title: "🐳 Coolify PaaS Webhook", detail: "Monitorea /healthz y emite eventos de falla o reinicios recurrentes." },
+                    { title: "🤖 AI SRE Log Watcher", detail: "Deduplica por SHA-256, genera diagnóstico RCA y alerta al equipo con parche sugerido." }
+                ],
+                body: "El ciclo de calidad no termina con el despliegue. Los logs estructurados en JSON con Correlation ID permiten rastrear cada petición desde el navegador hasta la base de datos, facilitando diagnósticos inmediatos ante fallos en producción."
+            },
+            {
+                type: "case-study",
+                title: "Caso Práctico Paso a Paso: Diagnóstico de Fallo Intermitente con Logs JSON y Correlation ID",
+                context: "En producción, la ruta de solicitud de préstamos reporta fallos 500 intermitentes (1 de cada 20 peticiones). Al inspeccionar los logs con Dozzle y filtrar por 'X-Request-ID', el agente AI SRE identifica una desconexión por timeout en el pool de conexiones de PostgreSQL cuando la consulta excede 2 segundos. Se genera el diagnóstico de causa raíz (RCA) y se aplica el ajuste de configuración.",
+                preconditions: [
+                    "Contenedor Flask ejecutándose con middleware 'FlaskObservability' activo.",
+                    "Dozzle transmitiendo logs en vivo desde '/var/run/docker.sock'.",
+                    "Petición fallida capturada con cabecera 'X-Request-ID: req-9a8b7c6d-2026'."
+                ],
+                code: `// Log JSON estructurado emitido por el contenedor Flask
+{
+  "timestamp": "2026-09-12T20:45:10Z",
+  "service": "prestamos-sena",
+  "level": "ERROR",
+  "message": "OperationalError: connection to server at '10.0.0.5', port 5432 failed: timeout expired",
+  "source": "services/inventario.py:84",
+  "request_id": "req-9a8b7c6d-2026",
+  "exception": "Traceback (most recent call last):\\n  File 'services/inventario.py', line 84, in verificar_stock\\n    cursor.execute('SELECT stock FROM equipos WHERE id = %s FOR UPDATE', (equipo_id,))\\npsycopg2.OperationalError: connection to server at '10.0.0.5', port 5432 failed: timeout expired"
+}`,
+                command: "python recursos/observabilidad/ai_log_watcher.py --analyze-log sample_error.json",
+                oracle: "El agente AI SRE debe parsear el JSON sin errores de saltos de línea, generar la huella SHA-256 'f8b2c4...', identificar como causa raíz 'Pool de conexiones agotado bajo bloqueo pesimista FOR UPDATE' y recomendar aumentar el timeout de conexión y optimizar el bloqueo.",
+                expectedVsObserved: [
+                    ["Búsqueda en Dozzle por request_id", "Traza completa (inicio, error y fin) aislada en 1 sola consulta", "Pasa en verde"],
+                    ["Triaje asistido por IA", "Reporte RCA con Causa Raíz, Severidad Alta y sugerencia de pool_size=20", "Diagnóstico en < 5 segundos"],
+                    ["Prueba de regresión de carga (k6)", "Tasa de errores baja de 5% a 0% con p95 < 180ms", "Problema resuelto en producción"]
+                ],
+                decision: "Los logs estructurados en JSON combinados con Correlation ID reducen el tiempo medio de resolución (MTTR) de horas a minutos, proporcionando evidencia irrefutable para la gestión de incidentes."
             },
             {
                 type: "code", lang: "python", file: "recursos/observabilidad/flask_observability.py",

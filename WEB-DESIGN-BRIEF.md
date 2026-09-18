@@ -11,7 +11,7 @@ casos de autorización, persistencia y concurrencia se diseñan para transferenc
 
 Ruta: fundamentos → diseño → TDD → BDD → una variante técnica → E2E →
 cobertura y mantenimiento → CI → cierre. IA y operación son ampliaciones.
-Se conservan los identificadores de las 16 estaciones y sus evidencias.
+Se conservan los identificadores de las 18 estaciones y sus evidencias; la versión 3.7.0 incorpora priorización por riesgo y gestión de defectos.
 Estimación didáctica del taller TDD/BDD: 60–90 minutos, incluida recuperación;
 no se agregan horas oficiales ni se suman todas las variantes obligatoriamente.
 
@@ -37,7 +37,7 @@ instalar pytest y Behave por primera vez requiere paquetes disponibles.
 ## Acompañamiento humano–IA distribuido · v3.6
 
 Fecha: 2026-09-10. La IA se presenta como asistente opcional, no como oráculo ni
-como evidencia. Cada una de las 16 estaciones aplica el mismo contrato:
+como evidencia. Cada una de las 18 estaciones aplica el mismo contrato:
 comprender → encargar → cuestionar → comprobar → decidir. La instrucción cambia
 según el resultado y el riesgo del módulo; no se reutiliza un prompt genérico.
 

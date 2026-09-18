@@ -9,9 +9,9 @@
     "format": "web",
     "entrypoint": "./web/index.html",
     "language": "es-CO",
-    "version": "3.6.0",
+    "version": "3.7.0",
     "servicePort": 8035,
-    "summary": "Ruta de fundamentos, diseño de casos, TDD, BDD, variantes de automatización y evaluación de calidad con acompañamiento humano–IA en los 16 módulos. Incluye un caso ficticio de préstamo de equipos y un laboratorio Python reproducible; toda propuesta de IA se contrasta con requisitos, ejecución y decisión humana."
+    "summary": "Ruta de fundamentos, diseño de casos, priorización por riesgo, gestión de defectos, TDD, BDD, variantes de automatización y evaluación de calidad con acompañamiento humano–IA en los 18 módulos. Las estaciones «Decidir qué probar: priorización por riesgo» y «Gestión de defectos: del hallazgo al cierre» se incorporaron en la versión 3.7.0. Incluye un caso ficticio de préstamo de equipos y un laboratorio Python reproducible; toda propuesta de IA se contrasta con requisitos, ejecución y decisión humana."
   },
   "curricularAlignment": {
     "program": {
@@ -44,7 +44,7 @@
       "css/vendor/devbrain-evidence.css"
     ],
     "dashboardLink": "http://127.0.0.1:8051",
-    "modules": 16,
+    "modules": 18,
     "xpTotal": 4000,
     "levels": [
       {
@@ -171,6 +171,14 @@
     {
       "term": "Prueba frágil (brittle)",
       "meaning": "Prueba que se rompe ante cambios de implementación o presentación que conservan el comportamiento requerido."
+    },
+    {
+      "term": "Riesgo de prueba",
+      "meaning": "Posibilidad de que una condición produzca un daño relevante, combinada con la magnitud de ese daño; orienta qué evidencia obtener primero."
+    },
+    {
+      "term": "Ciclo de vida del defecto",
+      "meaning": "Estados y evidencias que llevan un hallazgo desde Nuevo y Abierto hasta Corregido, Retest y Cerrado, o lo devuelven a Abierto si persiste."
     }
   ],
   "sources": [

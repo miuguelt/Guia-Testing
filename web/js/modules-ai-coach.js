@@ -2,7 +2,7 @@
 Object.assign(window.MODULES, {
     "m-gema-testing": {
         title: "Constructor de Gema QA: convierte tu proyecto en un encargo claro",
-        badge: "Modulo 14 · taller interactivo",
+        badge: "Estación 16/18 · IA",
         intro: "Aquí no vas a crear una IA ni a generar todos los tests de una vez. Vas a completar un formulario que transforma la información de tu proyecto en una instrucción de trabajo para tu asistente de IA.",
         blocks: [
             {
@@ -50,6 +50,58 @@ Object.assign(window.MODULES, {
                 ]
             },
             { type: "ai-coach" },
+            {
+                type: "diagram",
+                diagramType: "architecture",
+                title: "Diagrama Visual: Arquitectura del Contrato de Encargo con Gema QA",
+                nodes: [
+                    { title: "📋 Formulario Contextual", detail: "Captura contexto, riesgo crítico, framework y criterios de aceptación." },
+                    { title: "📄 Contrato Gema QA (.md)", detail: "Genera prompt estructurado con restricciones, oráculos y política anti-alucinaciones." },
+                    { title: "🤖 Copiloto LLM (Cursor / Claude)", detail: "Procesa el encargo por capas: primero matriz de riesgos, luego suites aisladas." },
+                    { title: "🛡️ Bitácora V.E.R.A.", detail: "Verifica aserciones, ejecuta tests y registra la decisión del ingeniero humano." }
+                ],
+                body: "El Constructor de Gema QA actúa como un compilador de requerimientos hacia la IA: transforma intenciones de negocio ambiguas en especificaciones técnicas rigurosas con oráculos explícitos y límites claros."
+            },
+            {
+                type: "case-study",
+                title: "Caso Práctico Paso a Paso: Encargo Estructurado y Auditoría con Gema QA",
+                context: "Utilizar el Constructor de Gema QA para redactar el encargo del módulo de préstamos de laboratorios (SENA ADSO). La Gema genera el contrato exigiendo la regla R-CANT (1 a 5 equipos), cobertura mínima del 80% y oráculos determinísticos. Se envía a un asistente de IA, se auditan las aserciones y se ejecuta la suite generada.",
+                preconditions: [
+                    "Formulario de Gema completado con: Entidad='Prestamo', Regla='R-CANT: [1, 5] equipos', Stack='FastAPI + PyTest'.",
+                    "Archivo de salida 'gema-qa-prestamos.md' generado sin secretos ni credenciales reales.",
+                    "Entorno de pruebas local listo con pytest y pytest-cov instalados."
+                ],
+                code: `### 📜 Contrato Gema QA Generado (Extracto de la Instrucción):
+
+**ROL:** Ingeniero QA Senior con enfoque en Calidad y Seguridad de Software.
+**CONTEXTO:** Sistema de Préstamo de Equipos y Laboratorios (SENA ADSO).
+**REGLA CRÍTICA:** R-CANT: Solo se permiten entre 1 y 5 equipos por solicitud.
+
+**INSTRUCCIONES DE TRABAJO:**
+1. NO inventes imports ni módulos que no existan en el árbol de archivos.
+2. Genera una matriz de trazabilidad: Requisito ➔ Riesgo ➔ Casos CP-01 a CP-06.
+3. Para cada caso, define: Entrada, Precondición, Oráculo y Aserción estricta.
+4. Entrega el código en PyTest con SQLite en memoria y TestClient.
+
+---
+### 🧪 Código Generado tras el Contrato Gema:
+def test_contrato_gema_cantidad_valida(client):
+    res = client.post("/api/v1/prestamos/", json={"aprendiz_id": 1, "cantidad": 4})
+    assert res.status_code == 201
+    assert res.json()["cantidad"] == 4
+
+def test_contrato_gema_cantidad_invalida(client):
+    res = client.post("/api/v1/prestamos/", json={"aprendiz_id": 1, "cantidad": 7})
+    assert res.status_code == 422`,
+                command: "pytest tests/test_gema_prestamos.py -v --cov=app/prestamos --cov-fail-under=80",
+                oracle: "La suite generada por el encargo debe incluir aserciones tanto de éxito (201) como de rechazo (422) y alcanzar una cobertura de al menos 80% sin mocks ficticios.",
+                expectedVsObserved: [
+                    ["Encargo genérico ('hazme tests para préstamos')", "Código desordenado, sin fixture en memoria, asserts triviales", "Falta de precisión (Rechazado)"],
+                    ["Encargo con Gema QA estructurada", "Suite completa con fixtures, parametrize y 6 casos frontera", "Aprobado para ejecución"],
+                    ["Ejecución de la suite resultante", "6 pruebas ejecutadas en 0.08s con 89% de cobertura", "Pasa en verde"]
+                ],
+                decision: "Invertir 5 minutos en redactar un encargo estructurado con la Gema QA ahorra horas de depuración de alucinaciones y código basura generado por la IA."
+            },
             {
                 type: "steps",
                 title: "Cómo usar la salida sin perder el control",

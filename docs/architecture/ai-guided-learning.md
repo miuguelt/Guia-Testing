@@ -2,7 +2,7 @@
 
 ## Decisión
 
-La IA se integra en los 16 módulos como una práctica breve y repetible, no como
+La IA se integra en las 18 estaciones como una práctica breve y repetible, no como
 una respuesta automática ni como un capítulo aislado. Cada módulo conserva su
 contenido técnico y añade un recorrido con cinco momentos:
 
@@ -22,7 +22,7 @@ genera texto copiable y guarda únicamente el estado local de la práctica.
 
 ### Escenario: un aprendiz recibe ayuda situada en cualquier módulo
 
-- **Dado** que el aprendiz abre uno de los 16 módulos de la ruta,
+- **Dado** que el aprendiz abre una de las 18 estaciones de la ruta,
 - **cuando** termina de leer su modelo mental,
 - **entonces** encuentra una práctica humano–IA específica para ese tema,
 - **y** puede copiar una instrucción con contexto, tarea, restricciones y salida.
@@ -54,4 +54,3 @@ genera texto copiable y guarda únicamente el estado local de la práctica.
 en las secciones ya renderizadas por `CodeRenderer` y registra la interacción en
 `TestingSession` cuando el aprendiz confirma la revisión. No modifica el motor de
 evidencias ni emite juicios de aprobación.
-

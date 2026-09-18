@@ -2,7 +2,7 @@
 Object.assign(window.MODULES, {
     "m-herramientas-ia": {
         title: "Laboratorio de herramientas IA para calidad",
-        badge: "Modulo 15 · elección informada",
+        badge: "Estación 17/18 · IA",
         intro: "Conoce herramientas parecidas a una Gema, aprende qué construyen y escoge la que encaja con el lenguaje, la capa de pruebas y el nivel de control que necesita tu proyecto.",
         blocks: [
             {
@@ -11,6 +11,62 @@ Object.assign(window.MODULES, {
                 body: "Asistentes y agentes (GitHub Copilot, Cursor, Gemini Code Assist, Claude Code y Amazon Q) ayudan a entender y escribir. Qodo revisa cambios y reglas. Diffblue Cover se especializa en unitarias Java/Kotlin. mabl ayuda a planear y autorizar pruebas de navegador y API. Ninguna herramienta decide por sí sola si el requisito de negocio está cumplido."
             },
             { type: "tool-lab" },
+            {
+                type: "diagram",
+                diagramType: "architecture",
+                title: "Diagrama Visual: Ecosistema Comparativo de Herramientas IA para Calidad de Software",
+                nodes: [
+                    { title: "🧠 Asistentes de IDE (Copilot / Cursor)", detail: "Generación en línea de casos de prueba unitarios, fixtures y refactorización rápida." },
+                    { title: "🛡️ Agentes de Análisis & Revisión (Qodo / Amazon Q)", detail: "Auditoría de Pull Requests, detección de casos borde olvidados y reglas de calidad." },
+                    { title: "☕ Especialistas JVM (Diffblue Cover)", detail: "Generación 100% autónoma de suites completas de JUnit 5 para Spring Boot." },
+                    { title: "🌐 Autoría E2E Asistida (Playwright + AI / mabl)", detail: "Grabación inteligente, selectores auto-curativos (self-healing) y validación visual." }
+                ],
+                body: "Cada herramienta de IA tiene un área de especialidad. La clave del éxito en QA consiste en emparejar la herramienta adecuada con la capa correcta de la pirámide de pruebas, sin ceder la responsabilidad del oráculo."
+            },
+            {
+                type: "case-study",
+                title: "Caso Práctico Paso a Paso: Benchmark Comparativo de Mocks: Copilot vs Cursor vs Qodo",
+                context: "Evaluar cómo generan dobles de prueba (Mocks) diferentes asistentes de IA al aislar el servicio de correo en el flujo de notificación de préstamos. Se contrasta la propuesta de Copilot, Cursor y Qodo evaluando si generan dobles limpios o acoplan los tests a la implementación interna.",
+                preconditions: [
+                    "Servicio 'NotificadorPrestamo' que invoca a un cliente SMTP externo.",
+                    "Regla: al aprobar un préstamo válido, debe enviar 1 correo sin bloquear el hilo principal.",
+                    "Suite de comparación en 'tests/test_notificaciones.py' con PyTest y pytest-mock."
+                ],
+                code: `# app/notificador.py
+class NotificadorPrestamo:
+    def __init__(self, cliente_email):
+        self.cliente_email = cliente_email
+
+    def notificar_aprobacion(self, correo_aprendiz: str, id_prestamo: int) -> bool:
+        asunto = f"Préstamo #{id_prestamo} Aprobado"
+        cuerpo = "Tu solicitud de equipos ha sido confirmada."
+        return self.cliente_email.enviar(correo_aprendiz, asunto, cuerpo)
+
+# tests/test_benchmark_ia.py (Solución de referencia validada)
+def test_notificar_aprobacion_aislado(mocker):
+    # Mock limpio del cliente externo
+    mock_email = mocker.Mock()
+    mock_email.enviar.return_value = True
+
+    notificador = NotificadorPrestamo(cliente_email=mock_email)
+    resultado = notificador.notificar_aprobacion("aprendiz@sena.edu.co", 849)
+
+    assert resultado is True
+    # Verificación estricta de interacción
+    mock_email.enviar.assert_called_once_with(
+        "aprendiz@sena.edu.co",
+        "Préstamo #849 Aprobado",
+        "Tu solicitud de equipos ha sido confirmada."
+    )`,
+                command: "pytest tests/test_benchmark_ia.py -v",
+                oracle: "El mock debe capturar los argumentos exactos sin enviar tráfico SMTP real. La prueba debe ejecutarse en < 20ms.",
+                expectedVsObserved: [
+                    ["Propuesta GitHub Copilot", "Mock simple correcto pero sin validar argumentos exactos en assert_called", "Aceptable con corrección"],
+                    ["Propuesta Cursor Composer", "Generó la fixture completa con mocker e incluyó assert_called_once_with", "Óptima y directa"],
+                    ["Propuesta Qodo Gen", "Generó además casos de fallo de conexión SMTP (timeout y retry)", "Excelente cobertura de riesgo"]
+                ],
+                decision: "Cursor y Qodo destacan en comprensión de arquitectura y generación de escenarios de fallo, mientras que Copilot es más ágil para autocompletar la sintaxis inmediata."
+            },
             {
                 type: "comparison",
                 title: "Cómo escoger sin perseguir la novedad",

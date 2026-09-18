@@ -273,7 +273,7 @@
             if (!welcome || !anchor || welcome.querySelector('[data-guide-map]')) return;
             const section = make('section', 'guide-map section-card glass-panel');
             section.dataset.guideMap = 'true'; section.setAttribute('aria-labelledby', 'guide-map-title');
-            section.innerHTML = `<div class="guide-map-heading"><span class="learning-kit-kicker">Mapa de la ruta · 16 módulos</span><h2 id="guide-map-title">De la pregunta al juicio de calidad</h2><p>Recorre las cuatro estaciones. Cada etapa agrega una forma distinta de pensar, practicar y demostrar.</p></div><div class="guide-map-phases"></div><div class="guide-map-legend" aria-label="Leyenda de la ruta"><span><i class="guide-map-dot"></i>Concepto</span><span><i class="guide-map-dot is-practice"></i>Práctica</span><span><i class="guide-map-dot is-transfer"></i>Transferencia</span></div>`;
+            section.innerHTML = `<div class="guide-map-heading"><span class="learning-kit-kicker">Mapa de la ruta · 18 estaciones</span><h2 id="guide-map-title">De la pregunta al juicio de calidad</h2><p>Recorre las cuatro estaciones. Cada etapa agrega una forma distinta de pensar, practicar y demostrar.</p></div><div class="guide-map-phases"></div><div class="guide-map-legend" aria-label="Leyenda de la ruta"><span><i class="guide-map-dot"></i>Concepto</span><span><i class="guide-map-dot is-practice"></i>Práctica</span><span><i class="guide-map-dot is-transfer"></i>Transferencia</span></div>`;
             const phasesHost = section.querySelector('.guide-map-phases');
             phases.forEach(([number, title, detail, ids]) => {
                 const phase = make('article', 'guide-map-phase');

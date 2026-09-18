@@ -22,6 +22,12 @@
             table: [['Cantidad en el límite', 'Puede revelar validaciones incorrectas', 'Prueba frontera inferior y superior'], ['Permiso ausente', 'El flujo debe ser rechazado', 'Agrega caso de autorización'], ['La pantalla cambia', 'El selector puede volverse frágil', 'Usa intención del usuario']],
             scenario: ['La regla acepta de 1 a 5 equipos. ¿Qué conjunto descubre mejor los límites?', ['1, 2 y 3', '0, 1, 3, 5 y 6', 'Solo 5'], 1, 'Los límites y un representante de la partición válida dan más información que repetir valores del centro.']
         },
+        'm-riesgo': {
+            focus: 'Priorizar por riesgo, no por facilidad',
+            metrics: [['Probabilidad', 92], ['Impacto', 88], ['Trazabilidad', 74]],
+            table: [['La validación es nueva', 'Cambia seguido y puede fallar', 'Puntúa probabilidad alta con criterio observable'], ['Sin permiso expone datos', 'El impacto supera el esfuerzo de probar', 'Sube la zona aunque cueste montar roles'], ['Todo queda «alto»', 'La escala no discrimina', 'Ordena relativamente y ajusta criterios']],
+            scenario: ['Tienes una hora de pruebas y tres riesgos: cantidad inválida, préstamo sin permiso y un typo en un rótulo. ¿Qué cubres primero?', ['El typo: es lo más rápido de verificar', 'Cantidad inválida y préstamo sin permiso, según su zona en la matriz', 'Los tres por igual para ser justo'], 1, 'La facilidad de probar no es riesgo: primero van los que combinan probabilidad e impacto altos; el typo espera en backlog sin drama.']
+        },
         'm-pytest-fastapi': {
             focus: 'Aislar la API y su contrato',
             metrics: [['Aislamiento', 91], ['Contrato HTTP', 88], ['Diagnóstico', 76]],
@@ -69,6 +75,12 @@
             metrics: [['Riesgo', 91], ['Ramas', 86], ['Decisión', 78]],
             table: [['Línea ejecutada', 'No prueba que el resultado sea correcto', 'Revisa la aserción y el riesgo'], ['Rama no cubierta', 'Existe una decisión sin evidencia', 'Agrega el caso si importa al negocio'], ['Umbral acordado', 'Es un criterio de salida del equipo', 'Documenta por qué aplica']],
             scenario: ['La cobertura sube a 100 %, pero no hay un caso de autorización. ¿Qué concluyes?', ['Que el sistema está libre de defectos', 'Que falta evidencia de un riesgo aunque todas las líneas se ejecuten', 'Que debes quitar el caso'], 1, 'Cobertura indica ejecución, no correctitud. La autorización necesita un caso con una aserción útil.']
+        },
+        'm-defectos': {
+            focus: 'Del hallazgo al cierre con evidencia',
+            metrics: [['Reproducción', 92], ['Trazabilidad', 87], ['Cierre', 75]],
+            table: [['«No funciona» sin pasos', 'Nadie puede actuar sobre él', 'Escribe pasos, esperado y observado'], ['Severidad ≠ prioridad', 'Un typo visible puede ser urgente', 'Separa impacto de momento de corrección'], ['Reabierto vacío', 'Reinicia el reloj sin aprendizaje', 'Registra qué se intentó y qué se descarta']],
+            scenario: ['Un issue dice «el préstamo falla, arreglenlo urgente». ¿Qué le falta para ser accionable?', ['Una etiqueta de severidad alta', 'Pasos, resultado esperado según la regla, observado y entorno', 'Solo el número de versión'], 1, 'Un reporte accionable permite reproducir la diferencia entre esperado y observado; la etiqueta sola no corre código.']
         },
         'm-cicd': {
             focus: 'Convertir calidad en compuerta',
@@ -125,8 +137,16 @@
             flow: [['01', 'Formula', 'Escribe la regla y el resultado correcto.'], ['02', 'Fronteras', 'Busca límites, particiones y permisos.'], ['03', 'Escoge', 'Asigna la capa que aporta la señal.'], ['04', 'Transfiere', 'Cambia el ejemplo por una regla propia.']],
             special: { type: 'choice', variant: 'layer', label: 'Selector de capa', title: 'Una regla acepta de 1 a 5 equipos', prompt: '¿Qué combinación entrega evidencia sobre límites y autorización?', options: ['Solo un recorrido completo con cantidad 3', 'Valores 0, 1, 3, 5, 6 y un caso sin permiso', 'Repetir cinco veces el valor 3'], answer: 1, success: 'La combinación cubre fronteras, partición válida y permiso. Después puedes distribuirla en la capa adecuada.' }
         },
+        'm-riesgo': {
+            moduleNumber: '03', visual: 'risk', visualLabel: 'Matriz',
+            eyebrow: 'FUNDAMENTO · RIESGO', headline: 'Decide qué probar con probabilidad e impacto',
+            intro: 'Una matriz con criterios observables convierte «probarlo todo» en una decisión explícita: qué cubres, qué aceptas sin probar y por qué.',
+            question: '¿Qué riesgo combina alta probabilidad con alto impacto?', signal: 'Zona justificada de la matriz', evidence: 'Matriz con criterios por nivel',
+            flow: [['01', 'Enumera', 'Nombra modos, causas y efectos de cada riesgo.'], ['02', 'Puntúa', 'Asigna probabilidad e impacto con criterios.'], ['03', 'Ubica', 'Traza la zona y discútela con el equipo.'], ['04', 'Decide', 'Cubre las zonas altas y acepta el residual explícito.']],
+            special: { type: 'choice', variant: 'risk', label: 'Lectura de matriz', title: '¿Qué riesgo cubres primero?', prompt: 'Validación nueva que incumple la regla central frente a un typo en un rótulo.', options: ['El typo: es lo más fácil de probar', 'La validación: probabilidad e impacto altos', 'Da igual: cualquier orden es válido'], answer: 1, success: 'La zona de la matriz — no la facilidad — ordena la prioridad. El typo espera en backlog sin culpa.' }
+        },
         'm-pytest-fastapi': {
-            moduleNumber: '05', visual: 'contract', visualLabel: 'Contrato',
+            moduleNumber: '06', visual: 'contract', visualLabel: 'Contrato',
             eyebrow: 'PRÁCTICA · API', headline: 'Lee el contrato antes de culpar al endpoint',
             intro: 'Aísla la API, prepara datos controlados y usa la respuesta HTTP como una señal que explica qué parte del contrato se cumplió o se rompió.',
             question: '¿Qué entrada, respuesta y estado deben coincidir?', signal: 'Código y cuerpo HTTP', evidence: 'Reporte de prueba con detalle',
@@ -134,7 +154,7 @@
             special: { type: 'choice', variant: 'contract', label: 'Inspector de contrato', title: 'El caso recibe 422 y esperabas 201', prompt: '¿Qué evidencia consultas primero?', options: ['Cambiar 422 por 201 en la aserción', 'Leer el detalle de validación y comparar el esquema enviado', 'Desactivar la validación para que pase'], answer: 1, success: 'El detalle de validación mantiene visible la causa y permite corregir el dato o el contrato con evidencia.' }
         },
         'm-pytest-flask': {
-            moduleNumber: '06', visual: 'context', visualLabel: 'Contexto',
+            moduleNumber: '07', visual: 'context', visualLabel: 'Contexto',
             eyebrow: 'PRÁCTICA · WEB', headline: 'Haz que cada ruta empiece y termine limpia',
             intro: 'Sesión, contexto y datos compartidos pueden disfrazar una falla. El objetivo es que cada prueba conserve el mismo resultado sin importar el orden.',
             question: '¿Qué estado debe aislarse para repetir el caso?', signal: 'Resultado independiente', evidence: 'Caso reproducible y limpio',
@@ -142,7 +162,7 @@
             special: { type: 'choice', variant: 'context', label: 'Detective de aislamiento', title: 'Una prueba solo pasa después de otra', prompt: '¿Qué hipótesis tiene más valor investigar?', options: ['Un test depende de sesión o datos compartidos', 'La cobertura ya es suficiente', 'Agregar una espera fija al final'], answer: 0, success: 'El orden no debe cambiar el resultado. Aísla sesión, base de datos y contexto antes de tocar la aserción.' }
         },
         'm-jest-react': {
-            moduleNumber: '07', visual: 'interface', visualLabel: 'Interfaz',
+            moduleNumber: '08', visual: 'interface', visualLabel: 'Interfaz',
             eyebrow: 'PRÁCTICA · INTERFAZ', headline: 'Prueba lo que la persona puede observar',
             intro: 'Un componente demuestra calidad cuando comunica estados y efectos comprensibles: carga, vacío, error, acción confirmada y accesibilidad.',
             question: '¿Qué señal ve la persona después de actuar?', signal: 'Estado visible y accesible', evidence: 'Aserción orientada a usuario',
@@ -150,7 +170,7 @@
             special: { type: 'choice', variant: 'interface', label: 'Señal de usuario', title: 'Elige la aserción que protege el comportamiento', prompt: '¿Cuál aserción conserva la intención de un botón de guardar?', options: ['Existe un div con una clase específica', 'La persona ve “Guardado” después de activar el botón', 'El componente tiene 100 % de cobertura'], answer: 1, success: 'La aserción protege el resultado visible y deja libertad para cambiar la estructura interna.' }
         },
         'm-junit-jsp': {
-            moduleNumber: '08', visual: 'java', visualLabel: 'Unidad',
+            moduleNumber: '09', visual: 'java', visualLabel: 'Unidad',
             eyebrow: 'PRÁCTICA · JAVA', headline: 'Aísla la unidad y conserva la regla',
             intro: 'JUnit ejecuta el caso y los dobles controlan las dependencias. La evidencia debe demostrar la regla y también que no ocurrió un efecto indebido.',
             question: '¿Qué pasa con la dependencia cuando la regla rechaza?', signal: 'Resultado y efecto secundario', evidence: 'Excepción y verificación del doble',
@@ -158,7 +178,7 @@
             special: { type: 'choice', variant: 'java', label: 'Decisión con dobles', title: 'Una cantidad negativa debe rechazarse', prompt: '¿Qué caso entrega la evidencia más completa?', options: ['Verificar únicamente que se llamó un método', 'Enviar -1, comprobar la excepción y confirmar que no se guarda', 'Medir solo las líneas ejecutadas'], answer: 1, success: 'La prueba conserva la regla y su efecto secundario: rechazar la entrada y no persistir información inválida.' }
         },
         'm-tdd': {
-            moduleNumber: '03', visual: 'cycle', visualLabel: 'Ciclo',
+            moduleNumber: '04', visual: 'cycle', visualLabel: 'Ciclo',
             eyebrow: 'MÉTODO · DISEÑO', headline: 'Usa el fallo para diseñar mejor',
             intro: 'TDD convierte una regla en una conversación corta entre prueba e implementación: rojo, verde y refactor con una suite que vuelve a dar confianza.',
             question: '¿Qué aprendizaje te entrega el siguiente fallo?', signal: 'Fallo por la razón correcta', evidence: 'Suite repetida tras refactor',
@@ -166,7 +186,7 @@
             special: { type: 'sequence', variant: 'cycle', label: 'Secuencia TDD', title: 'Completa el ciclo en el orden correcto', prompt: 'Selecciona el siguiente paso. Si te equivocas, el ciclo te lo muestra.', sequence: ['Rojo', 'Verde', 'Refactor'], success: 'El ciclo evita diseñar a ciegas: cada cambio nace de una regla y termina con una verificación.' }
         },
         'm-bdd': {
-            moduleNumber: '04', visual: 'language', visualLabel: 'Lenguaje',
+            moduleNumber: '05', visual: 'language', visualLabel: 'Lenguaje',
             eyebrow: 'MÉTODO · NEGOCIO', headline: 'Escribe escenarios que negocio pueda revisar',
             intro: 'BDD empieza por descubrir y acordar reglas con ejemplos. Gherkin ayuda a expresarlos; las pruebas automatizadas comprueban los escenarios elegidos.',
             question: '¿Qué resultado podría reconocer alguien del negocio?', signal: 'Escenario comprensible', evidence: 'Feature y pasos trazables',
@@ -174,7 +194,7 @@
             special: { type: 'choice', variant: 'language', label: 'Constructor Gherkin', title: 'Elige el escenario que comunica una regla de acceso', prompt: '¿Cuál mantiene contexto, acción y resultado observable?', options: ['Dado un préstamo de 6 equipos, cuando valido su cantidad, entonces se rechaza', 'Dado botón azul, cuando hay clic, entonces se llama una función', 'Dado que todo funciona, entonces pasa'], answer: 0, success: 'El escenario habla de una persona y un resultado. La implementación puede cambiar sin romper el lenguaje del negocio.' }
         },
         'm-playwright': {
-            moduleNumber: '09', visual: 'browser', visualLabel: 'Recorrido',
+            moduleNumber: '10', visual: 'browser', visualLabel: 'Recorrido',
             eyebrow: 'VERIFICAR · E2E', headline: 'Sigue una señal real del navegador',
             intro: 'Un recorrido E2E debe proteger un objetivo crítico. Localiza por intención, espera una señal observable y conserva la traza cuando algo se aparte del resultado.',
             question: '¿Qué demuestra que el flujo puede continuar?', signal: 'Elemento o estado observable', evidence: 'Traza, captura y resultado',
@@ -182,15 +202,23 @@
             special: { type: 'choice', variant: 'browser', label: 'Detector de espera', title: 'La pantalla tarda más y falla una espera fija', prompt: '¿Qué cambio conserva el objetivo del recorrido?', options: ['Aumentar la espera a 60 segundos', 'Esperar el estado o elemento que demuestra que se puede continuar', 'Quitar la aserción final'], answer: 1, success: 'La espera orientada a una señal se adapta al entorno y conserva el propósito del caso.' }
         },
         'm-cobertura': {
-            moduleNumber: '10', visual: 'coverage', visualLabel: 'Cobertura',
+            moduleNumber: '11', visual: 'coverage', visualLabel: 'Cobertura',
             eyebrow: 'VERIFICAR · MÉTRICAS', headline: 'Lee cobertura junto al riesgo',
             intro: 'Una línea ejecutada no equivale a una regla demostrada. Usa ramas, aserciones y umbrales para descubrir qué decisiones todavía no tienen evidencia.',
             question: '¿Qué parte del riesgo quedó sin probar?', signal: 'Rama con aserción útil', evidence: 'Reporte interpretado',
             flow: [['01', 'Mide', 'Observa líneas y ramas ejecutadas.'], ['02', 'Pregunta', 'Relaciona la cifra con un riesgo real.'], ['03', 'Completa', 'Agrega el caso que falta.'], ['04', 'Decide', 'Explica el umbral y su límite.']],
             special: { type: 'choice', variant: 'coverage', label: 'Lectura de cobertura', title: 'La cobertura llega a 100 %', prompt: 'No existe un caso de autorización. ¿Qué concluyes?', options: ['El sistema está libre de defectos', 'Falta evidencia de un riesgo aunque las líneas se ejecuten', 'Hay que quitar el caso de autorización'], answer: 1, success: 'La cifra muestra ejecución, no corrección. La autorización necesita una entrada, una aserción y un resultado verificable.' }
         },
+        'm-defectos': {
+            moduleNumber: '12', visual: 'signals', visualLabel: 'Ciclo',
+            eyebrow: 'VERIFICAR · DEFECTOS', headline: 'Un defecto no cuenta hasta que se puede reproducir',
+            intro: 'El ciclo Nuevo → Abierto → Corregido → Retest → Cerrado ordena el trabajo entre quien prueba y quien corrige; la evidencia en cada flecha lo hace auditable.',
+            question: '¿Qué convierte un hallazgo en un issue accionable?', signal: 'Reproducción clara', evidence: 'Issue con trazabilidad CP → DEF → commit',
+            flow: [['01', 'Describe', 'Modo, pasos, esperado y observado.'], ['02', 'Clasifica', 'Severidad por impacto y prioridad por momento.'], ['03', 'Corrige', 'Commit que referencia el issue (Closes #N).'], ['04', 'Confirma', 'Retest del caso y regresión relacionada.']],
+            special: { type: 'sequence', variant: 'evidence', label: 'Ciclo del defecto', title: 'Ordena los estados del defecto', prompt: 'Selecciona cada estado en el orden del flujo.', sequence: ['Nuevo', 'Abierto', 'Corregido', 'Retest', 'Cerrado'], success: 'El ciclo completo exige evidencia en cada transición; un cierre sin retest es una promesa, no un hecho.' }
+        },
         'm-cicd': {
-            moduleNumber: '11', visual: 'pipeline', visualLabel: 'Compuerta',
+            moduleNumber: '13', visual: 'pipeline', visualLabel: 'Compuerta',
             eyebrow: 'VERIFICAR · ENTREGA', headline: 'Haz que la calidad viaje con cada cambio',
             intro: 'Una compuerta útil es repetible y explicable: ejecuta la suite, conserva el reporte y detiene la publicación cuando el resultado contradice el criterio.',
             question: '¿Qué información permite decidir si se publica?', signal: 'Suite y reporte identificables', evidence: 'Resultado de compuerta',
@@ -198,7 +226,7 @@
             special: { type: 'sequence', variant: 'pipeline', label: 'Flujo de compuerta', title: 'Completa el orden mínimo antes de publicar', prompt: 'Selecciona cada estación del flujo.', sequence: ['Cambio', 'Suite', 'Reporte', 'Publicación'], success: 'La entrega queda asociada a una verificación reproducible y a una decisión que el equipo puede explicar.' }
         },
         'm-observabilidad': {
-            moduleNumber: '12', visual: 'signals', visualLabel: 'Señales',
+            moduleNumber: '14', visual: 'signals', visualLabel: 'Señales',
             eyebrow: 'VERIFICAR · OPERACIÓN', headline: 'Relaciona la señal con su contexto',
             intro: 'Métricas, registros y trazas cuentan una historia distinta. Une versión, ruta, hora y tipo de error para decidir si observas un defecto o un problema de ambiente.',
             question: '¿Qué contexto convierte un número en diagnóstico?', signal: 'Señal correlacionada', evidence: 'Registro sin secretos',
@@ -206,7 +234,7 @@
             special: { type: 'choice', variant: 'signals', label: 'Radar de señales', title: 'Aumentan los errores después de una versión', prompt: '¿Qué conjunto comparas primero?', options: ['Solo el promedio de latencia', 'Versión, ruta, hora y tipo de error en los registros', 'El color del tablero'], answer: 1, success: 'La correlación une señal y contexto. Mantén fuera tokens, contraseñas y datos personales innecesarios.' }
         },
         'm-ia-testing': {
-            moduleNumber: '13', visual: 'ai', visualLabel: 'Criterio',
+            moduleNumber: '15', visual: 'ai', visualLabel: 'Criterio',
             eyebrow: 'TRANSFERIR · IA', headline: 'Acelera el borrador sin ceder el criterio',
             intro: 'La IA puede proponer casos y código, pero la persona debe comprobar requisitos, imports, datos, ejecución y privacidad antes de aceptar una salida.',
             question: '¿Qué debes verificar antes de confiar?', signal: 'Trazabilidad comprobada', evidence: 'Bitácora humano–IA',
@@ -214,7 +242,7 @@
             special: { type: 'choice', variant: 'ai', label: 'Filtro de confianza', title: 'Un asistente genera diez pruebas que pasan', prompt: 'Todavía no has leído los requisitos. ¿Qué haces?', options: ['Aceptarlas por la cantidad', 'Revisar trazabilidad, aserciones y datos antes de ejecutarlas', 'Compartir secretos para darle más contexto'], answer: 1, success: 'La velocidad sirve cuando la salida puede explicarse y verificarse. La responsabilidad sigue siendo humana.' }
         },
         'm-gema-testing': {
-            moduleNumber: '14', visual: 'prompt', visualLabel: 'Encargo',
+            moduleNumber: '16', visual: 'prompt', visualLabel: 'Encargo',
             eyebrow: 'TRANSFERIR · IA', headline: 'Convierte el contexto en un encargo verificable',
             intro: 'Un buen encargo de QA declara riesgo, alcance, herramienta, criterio de terminado y evidencia esperada. Eso reduce respuestas ambiguas.',
             question: '¿Qué tendría que entregar la propuesta?', signal: 'Criterio de terminado', evidence: 'Encargo y resultado observado',
@@ -222,7 +250,7 @@
             special: { type: 'choice', variant: 'prompt', label: 'Constructor de encargo', title: 'La instrucción QA no menciona el comando de pruebas', prompt: '¿La entregas así?', options: ['Sí, la IA lo adivinará', 'No; completa contexto y exige un criterio verificable', 'Elimina la matriz para simplificar'], answer: 1, success: 'Alcance, comando, evidencia y criterio de terminado convierten una petición en trabajo que puede revisarse.' }
         },
         'm-herramientas-ia': {
-            moduleNumber: '15', visual: 'tools', visualLabel: 'Selección',
+            moduleNumber: '17', visual: 'tools', visualLabel: 'Selección',
             eyebrow: 'TRANSFERIR · HERRAMIENTAS', headline: 'Elige por necesidad, privacidad y control',
             intro: 'La herramienta correcta es la que resuelve una tarea medible con la menor exposición necesaria. Compara su alcance real con la suite del proyecto.',
             question: '¿Qué decisión reduce exposición y mantiene evidencia?', signal: 'Tarea medible', evidence: 'Comparación documentada',
@@ -230,7 +258,7 @@
             special: { type: 'choice', variant: 'tools', label: 'Selector de herramienta', title: 'Quieres cubrir una API pequeña sin entregar el repositorio', prompt: '¿Qué criterio priorizas?', options: ['La herramienta que produce más archivos', 'Alcance mínimo, privacidad y una tarea medible', 'La que tenga más colores'], answer: 1, success: 'El criterio protege el contexto y permite comparar una salida concreta con una verificación propia.' }
         },
         'm-reto': {
-            moduleNumber: '16', visual: 'evidence', visualLabel: 'Entrega',
+            moduleNumber: '18', visual: 'evidence', visualLabel: 'Entrega',
             eyebrow: 'DESAFÍO · INTEGRACIÓN', headline: 'Cierra el ciclo con una evidencia que se pueda defender',
             intro: 'El reto integra requisito, caso, ejecución, diagnóstico y entrega. No basta con tener pruebas: debes explicar qué riesgo cubren y qué observaste.',
             question: '¿Qué hace reproducible una decisión de calidad?', signal: 'Trazabilidad completa', evidence: 'Registro Integral de Evidencias',

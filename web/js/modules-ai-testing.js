@@ -2,7 +2,7 @@
 Object.assign(window.MODULES, {
     "m-ia-testing": {
         title: "IA en Testing: genera más rápido, verifica siempre",
-        badge: "Modulo 13 · IA",
+        badge: "Estación 15/18 · IA",
         intro: "En este módulo aprenderás a usar IA para proponer pruebas y analizar resultados. La actividad termina cuando ejecutas, revisas y documentas lo que la IA sugirió; no cuando obtienes una respuesta bonita.",
         blocks: [
             {
@@ -53,6 +53,59 @@ Object.assign(window.MODULES, {
                 type: "alert", variant: "success",
                 title: "Sabes que terminaste cuando puedes mostrar",
                 body: "Una prueba revisada y ejecutable · el comando y su resultado · una revisión de calidad con `qa_auditor` o una explicación de por qué no aplica · `docs/ai-log.md` con la decisión humana y los riesgos pendientes."
+            },
+            {
+                type: "diagram",
+                diagramType: "pipeline",
+                title: "Diagrama Visual: Protocolo V.E.R.A. de Testing Asistido por IA",
+                stages: [
+                    { icon: "🤖", name: "1. Prompt con Oráculo", desc: "Entrega regla de negocio (R-CANT), contrato y entradas sin secretos." },
+                    { icon: "🛡️", name: "2. Filtro Anti-Alucinación", desc: "Revisa imports inventados, aserciones ausentes y try/except silenciosos." },
+                    { icon: "⚡", name: "3. Ejecución Local", desc: "Corre 'pytest' real e introduce un fallo forzado para comprobar que truene." },
+                    { icon: "🔍", name: "4. Auditoría Estática", desc: "Escaneo estático con 'qa_auditor' para detectar tests vacíos o cosméticos." },
+                    { icon: "📝", name: "5. Registro de Calidad", desc: "Documenta en 'docs/ai-log.md' qué propuso la IA y qué corrigió el humano." }
+                ],
+                body: "La IA propone rápidamente escenarios de prueba, pero el ingeniero QA debe validar cada línea: comprobar imports, verificar aserciones y certificar que la prueba detecte defectos reales."
+            },
+            {
+                type: "case-study",
+                title: "Caso Práctico Paso a Paso: Generación Asistida de Casos Borde y Detección de Alucinaciones",
+                context: "Utilizar un modelo LLM para generar casos de prueba sobre la regla de préstamo R-CANT. La IA propone un test que pasa en verde pero contiene una alucinación crítica: importa un módulo inexistente 'app.utils.loan_checker' y usa 'assert True' dentro de un try/except que oculta excepciones. Se aplica el protocolo de verificación humana, se corrige el test y se audita con 'qa_auditor'.",
+                preconditions: [
+                    "Función 'validar_prestamo(cantidad, tiene_permiso)' implementada en 'app/prestamos.py'.",
+                    "Herramienta 'qa_auditor' disponible en 'recursos/auditoria-seguridad/'.",
+                    "Archivo de auditoría 'docs/ai-log.md' inicializado para registrar decisiones."
+                ],
+                code: `# ❌ CÓDIGO GENERADO POR IA CON ALUCINACIÓN Y ASSERT TRIVIAL:
+# import app.utils.loan_checker  # <- ALUCINACIÓN: Módulo inexistente
+# try:
+#     resultado = validar_prestamo(6, True)
+#     assert True  # <- PELIGRO: Pasa en verde sin validar el resultado
+# except Exception:
+#     pass
+
+# ✅ CÓDIGO CORREGIDO Y VERIFICADO POR EL APRENDIZ QA:
+import pytest
+from app.prestamos import validar_solicitud_prestamo
+
+@pytest.mark.parametrize("cantidad,tiene_permiso,esperado", [
+    (1, True, True),    # Límite inferior válido
+    (5, True, True),    # Límite superior válido
+    (0, True, False),   # Fuera del límite inferior
+    (6, True, False),   # Fuera del límite superior (R-CANT)
+    (3, False, False),  # Sin permiso activo
+])
+def test_regla_prestamos_verificada(cantidad, tiene_permiso, esperado):
+    # Aserción determinística sin try/except silenciosos
+    assert validar_solicitud_prestamo(cantidad, tiene_permiso) is esperado`,
+                command: "pytest tests/test_prestamos_ai.py -v; python -m qa_auditor --target tests/test_prestamos_ai.py",
+                oracle: "La prueba parametrizada debe ejecutar los 5 casos de frontera. 'qa_auditor' debe certificar 0 tests vacíos (empty_tests=0), 0 imports alucinados y score de seguridad >= 90%.",
+                expectedVsObserved: [
+                    ["Test propuesto por IA sin revisar", "Pasa en verde pero qa_auditor detecta 'No meaningful asserts' y módulo fantasma", "Rechazado por el humano"],
+                    ["Test parametrizado corregido", "5 pasados en verde con aserciones estrictas", "Aprobado (Evidencia en ai-log.md)"],
+                    ["Inyección de fallo (cambiar 6 a True)", "pytest reporta FAILED en CP-05", "Demuestra efectividad del oráculo"]
+                ],
+                decision: "La IA acelera la generación de plantillas y casos de borde, pero el criterio humano y la ejecución con mutaciones son indispensables para impedir que tests cosméticos entren al repositorio."
             },
             {
                 type: "steps",

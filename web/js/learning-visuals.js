@@ -87,11 +87,12 @@
                     <text x="${position.x + 18}" y="${position.y + 51}" class="mental-map-node-detail">${detail}</text>
                 </g>`;
             }).join('');
+            const subtitle = escapeHtml(block.subtitle || block.centerSubtitle || 'QA');
             svg.innerHTML = `${lineMarkup}
                 <g class="mental-map-center">
                     <circle cx="500" cy="180" r="82"></circle>
                     <text x="500" y="174" text-anchor="middle">${escapeHtml(center)}</text>
-                    <text x="500" y="198" text-anchor="middle" class="mental-map-center-subtitle">E2E</text>
+                    <text x="500" y="198" text-anchor="middle" class="mental-map-center-subtitle">${subtitle}</text>
                 </g>${nodeMarkup}`;
             figure.appendChild(svg);
 

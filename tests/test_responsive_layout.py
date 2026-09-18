@@ -26,7 +26,7 @@ def test_layout_principal_es_mobile_first_y_reserva_el_menu_para_pantallas_holga
     assert "margin-left: 0" in main_wrapper
     assert "width: 100%" in content
     assert "max-width: none" in content
-    assert "@media (min-width: 85rem)" in STYLES
+    assert "@media (min-width: 64rem)" in STYLES
     assert "width: calc(100% - var(--sidebar-width))" in STYLES
     assert "min-height: 42px" in css_rule(STYLES, ".btn")
     assert "@media (max-width: 1024px)" not in STYLES

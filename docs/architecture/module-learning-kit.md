@@ -2,7 +2,7 @@
 
 ## Propósito
 
-Los 16 módulos comparten una orientación breve, pero no un panel de métricas
+Las 18 estaciones comparten una orientación breve, pero no un panel de métricas
 genérico. Cada kit convierte el tema del módulo en una ruta de pensamiento
 propia: pregunta de trabajo, señal observable, evidencia que se conserva,
 cuatro pasos seleccionables, un modelo visual semántico y un micro-laboratorio
@@ -44,7 +44,7 @@ ya tiene un kit y no duplica el mapa de inicio.
 
 ## Verificación
 
-`tests/test_learning_kit.py` valida presencia, cobertura de los 16 módulos,
+`tests/test_learning_kit.py` valida presencia y cobertura de las 18 estaciones,
 contenido específico, accesibilidad básica, el modelo visual semántico y el
 registro separado del laboratorio. La revisión visual también comprueba la
 portada, el mapa de ruta, el recorrido seleccionable y las variantes de riesgo,

@@ -1,7 +1,7 @@
 // Taller declarativo BDD: comparte la regla de cantidad con TDD.
 window.MODULES["m-bdd"] = {
     title: "BDD: desarrollo guiado por comportamiento",
-    badge: "Método · BDD",
+    badge: "Estación 5/18 · BDD",
     intro: "Behavior-Driven Development (BDD) es una manera de colaborar para acordar qué necesita hacer el sistema mediante ejemplos concretos. Negocio, desarrollo y pruebas descubren reglas, las expresan con un lenguaje compartido y automatizan los ejemplos útiles para comprobar que el producto conserva ese comportamiento.",
     blocks: [
         {
@@ -16,6 +16,28 @@ window.MODULES["m-bdd"] = {
                 ["Gherkin", "Sintaxis para organizar ejemplos como contexto, acción y consecuencia.", "Dado un contexto, Cuando ocurre una acción, Entonces observo un resultado."],
                 ["Behave / Cucumber", "Herramientas que relacionan el texto con funciones ejecutables.", "Un paso llama cantidad_valida y otro comprueba su respuesta."],
                 ["Escenario automatizado", "Comprobación de un ejemplo mediante una herramienta.", "La cantidad 6 es rechazada por la función real."]
+            ]
+        },
+        {
+            type: "architecture",
+            title: "Arquitectura BDD: Especificación Viva en 3 Capas",
+            intro: "Diagrama visual interactivo que ilustra cómo se conectan los archivos de especificación Gherkin con los pasos de prueba ejecutables y el código del dominio de negocio.",
+            nodes: [
+                {
+                    title: "1. Capa Gherkin (.feature)",
+                    type: "cliente",
+                    desc: "Especificación de negocio en lenguaje ubicuo (Dado, Cuando, Entonces). Legible y acordada por Product Owner, Desarrolladores y QA."
+                },
+                {
+                    title: "2. Capa de Pasos (Steps Behave)",
+                    type: "servidor",
+                    desc: "Decoradores @given, @when, @then en Python que parsean los parámetros de entrada y los envían a las funciones de negocio."
+                },
+                {
+                    title: "3. Capa de Dominio (Entidades & Lógica)",
+                    type: "bd",
+                    desc: "Reglas de negocio puras (ej. validar_prestamo, verificar_cupo en Sistema de Préstamos). Totalmente desacopladas de Behave."
+                }
             ]
         },
         {
@@ -106,6 +128,44 @@ window.MODULES["m-bdd"] = {
         {
             type: "alert", variant: "warning", title: "Contraejemplo: un escenario que no permite decidir",
             body: "«Dado un usuario válido, Cuando hace clic, Entonces todo funciona» no precisa estado, acción ni resultado. Mejora: «Dado que quedan 2 equipos y tengo permiso, Cuando solicito 3, Entonces se rechaza el préstamo y quedan 2 equipos». Evita selectores CSS y funciones internas al acordar reglas de negocio."
+        },
+        {
+            type: "case-study",
+            title: "Caso Práctico Paso a Paso: Especificación Viva con Gherkin y Behave",
+            context: "En la mesa de los 'Tres Amigos' (Negocio, Dev, QA) se acuerda formalizar la regla de negocio de solicitudes de préstamo como especificación ejecutable viva.",
+            preconditions: [
+                "Herramienta: Behave (BDD runner para Python).",
+                "Archivo de especificación: laboratorios/prestamos/features/cantidades.feature.",
+                "Steps de conexión: laboratorios/prestamos/features/steps/cantidades_steps.py."
+            ],
+            code: `# features/cantidades.feature
+# language: es
+@cantidad
+Característica: Validar cantidades de equipos en préstamos
+  Como encargado del inventario
+  Quiero que el sistema rechace solicitudes mayores a 5
+  Para que todos los aprendices tengan acceso equitativo
+
+  Esquema del escenario: Comprobar límites de solicitud
+    Dado una solicitud de <cantidad> equipos
+    Cuando valido la cantidad solicitada
+    Entonces la cantidad es <resultado>
+
+    Ejemplos:
+      | cantidad | resultado |
+      | 1        | aceptada  |
+      | 5        | aceptada  |
+      | 6        | rechazada |
+      | 0        | rechazada |`,
+            command: "behave features/cantidades.feature --tags=@cantidad",
+            oracle: "Para cada fila del 'Scenario Outline', el paso @then debe comprobar que el resultado devuelto por la función de dominio coincide con la etiqueta esperada.",
+            expectedVsObserved: [
+                ["Fila 1: cantidad=1", "aceptada (True)", "Pasa en verde"],
+                ["Fila 2: cantidad=5", "aceptada (True)", "Pasa en verde"],
+                ["Fila 3: cantidad=6", "rechazada (False)", "Fallo si se acepta: Rompe criterio de negocio"],
+                ["Fila 4: cantidad=0", "rechazada (False)", "Fallo si se acepta: Petición sin sentido"]
+            ],
+            decision: "La especificación viva sirve como documentación compartida que no queda obsoleta. Si un commit futuro rompe la regla de cantidad máxima, el pipeline BDD fallará con un mensaje en lenguaje humano comprensible para el cliente."
         },
         {
             id: "bdd-feature", type: "code", lang: "gherkin", file: "laboratorios/prestamos/features/cantidades.feature",

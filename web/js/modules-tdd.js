@@ -1,7 +1,7 @@
 // Taller declarativo TDD: contenido cargado antes del renderizador.
 window.MODULES["m-tdd"] = {
     title: "TDD: desarrollo guiado por pruebas",
-    badge: "Método · TDD",
+    badge: "Estación 4/18 · TDD",
     intro: "Test-Driven Development (TDD) es una forma de desarrollar en ciclos pequeños: primero expresas un comportamiento esperado en una prueba, observas que falla, implementas lo necesario y mejoras el diseño. La prueba ayuda a decidir la interfaz y el siguiente cambio.",
     blocks: [
         {
@@ -24,6 +24,33 @@ window.MODULES["m-tdd"] = {
                 ["Rojo", "Escribe una expectativa pequeña y ejecútala.", "Falla porque falta ese comportamiento. Explica la aserción que falló."],
                 ["Verde", "Implementa lo más sencillo que satisface las pruebas actuales.", "Pasan la prueba nueva y las anteriores. No ocultes fallos ni acomodes el resultado esperado al código."],
                 ["Refactorizar", "Mejora nombres, separación o duplicación conservando comportamiento.", "La suite sigue pasando. Si ya es claro, no fuerces un cambio."]
+            ]
+        },
+        {
+            type: "pipeline",
+            title: "Ciclo Visual TDD: Red → Green → Refactor",
+            intro: "Visualización gráfica de la cadencia de desarrollo guiado por pruebas. Cada iteración comienza con una prueba que falla por la razón correcta antes de escribir código de producción.",
+            steps: [
+                {
+                    number: "1",
+                    title: "🔴 1. Red (Rojo)",
+                    desc: "Escribe una prueba pequeña y enfocada para una nueva capacidad. Ejecútala y confirma que falla con una aserción clara (no por error de sintaxis)."
+                },
+                {
+                    number: "2",
+                    title: "🟢 2. Green (Verde)",
+                    desc: "Escribe la cantidad mínima de código de producción para que la prueba pase. No agregues lógica especulativa ni optimizaciones prematuras."
+                },
+                {
+                    number: "3",
+                    title: "🔵 3. Refactor (Refactorizar)",
+                    desc: "Limpia el código, elimina duplicación y mejora la legibilidad manteniendo la suite verde. La prueba es tu red de seguridad."
+                },
+                {
+                    number: "4",
+                    title: "🔁 4. Siguiente Caso",
+                    desc: "Avanza al siguiente valor límite o regla de negocio (ej. límites R-CANT: 1, 5, 0, 6) repitiendo el ciclo rigurosamente."
+                }
             ]
         },
         {
@@ -74,6 +101,38 @@ window.MODULES["m-tdd"] = {
         {
             type: "alert", variant: "warning", title: "TDD no significa escribir pruebas después",
             body: "Escribir toda la solución y agregar asserts al final es una estrategia de pruebas posterior. Tampoco basta escribir una prueba y no verla fallar: podría no ejecutarse o comprobar algo irrelevante. Un error de dependencia o sintaxis se corrige antes de interpretar el rojo como evidencia del comportamiento."
+        },
+        {
+            type: "case-study",
+            title: "Caso Práctico Paso a Paso: El Ciclo Red-Green-Refactor de Validación de Préstamos",
+            context: "Diseñar bajo TDD estricto la función 'cantidad_valida(c)' para garantizar que solo admita enteros de 1 a 5, rechazando booleanos y cadenas sin fallos en tiempo de ejecución.",
+            preconditions: [
+                "Entorno: Python 3.10+ con pytest instalado.",
+                "Directorio de trabajo: 'practica-tdd/' con cantidades.py y test_cantidades.py.",
+                "Regla de oro: No escribir ni una sola línea de código en cantidades.py sin antes ver una prueba fallar por la causa correcta."
+            ],
+            code: `import pytest
+from cantidades import cantidad_valida
+
+def test_rojo_acepta_un_equipo():
+    assert cantidad_valida(1) is True
+
+def test_rojo_rechaza_seis_equipos():
+    assert cantidad_valida(6) is False
+
+@pytest.mark.parametrize("valor_invalido", [0, 6, "3", True, None])
+def test_casos_borde_y_tipos(valor_invalido):
+    assert cantidad_valida(valor_invalido) is False`,
+            command: "python -m pytest test_cantidades.py -v",
+            oracle: "Fase 1 (Rojo): test_acepta_un_equipo falla con AssertionError. Fase 2 (Verde): retorna solución mínima y pasa. Fase 3 (Refactor): extrae constantes MIN=1, MAX=5 y todas las pruebas siguen en verde.",
+            expectedVsObserved: [
+                ["Paso 1: Test test_acepta_un_equipo()", "FALLA (Rojo esperado)", "Si pasa de inmediato, el test no está comprobando nada nuevo"],
+                ["Paso 2: return True en cantidades.py", "PASA (Verde mínimo)", "Si falla, la solución no es la más directa"],
+                ["Paso 3: Test test_rechaza_seis()", "FALLA (Segundo Rojo)", "Demuestra que la constante True es insuficiente"],
+                ["Paso 4: return type(c) is int and 1 <= c <= 5", "PASAN TODOS (Verde robusto)", "Suite verde con 13 comprobaciones"],
+                ["Paso 5: Refactorizar a constantes", "PASAN TODOS (Red de seguridad)", "El diseño mejora sin alterar el contrato público"]
+            ],
+            decision: "La suite TDD es la red de seguridad viva. Cualquier cambio futuro en la regla de préstamos alertará inmediatamente al desarrollador si rompe el contrato establecido."
         },
         {
             type: "alert", variant: "info", title: "Caso conductor: cantidad de un préstamo",

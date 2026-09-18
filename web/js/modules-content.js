@@ -1,7 +1,7 @@
 const MODULES = {
     "m-reflexion": {
         title: "Reflexión inicial: el costo de un defecto no detectado",
-        badge: "Módulo 1",
+        badge: "Estación 1/18 · Propósito",
         intro: "Antes de escribir una prueba, identifica qué daño quieres evitar y qué evidencia te permitiría decidir si el cambio es seguro.",
         blocks: [
             {
@@ -51,7 +51,7 @@ def perform_trades(market_data):
 
     "m-piramide": {
         title: "La pirámide de pruebas",
-        badge: "Módulo 2",
+        badge: "Estación 2/18 · Pirámide",
         intro: "El modelo de Mike Cohn ayuda a conversar sobre costo, velocidad y alcance. No fija porcentajes universales: primero diseña casos a partir de una regla y después elige el nivel de prueba que aporta más información.",
         blocks: [
             {
@@ -300,7 +300,7 @@ def perform_trades(market_data):
 
     "m-pytest-fastapi": {
         title: "PyTest: prueba un microservicio FastAPI",
-        badge: "Variante 5",
+        badge: "Estación 6/18 · FastAPI",
         intro: "Prueba endpoints FastAPI sin levantar un servidor real: controla las dependencias, prepara datos aislados y relaciona cada respuesta con una regla.",
         blocks: [
             {
@@ -323,6 +323,61 @@ def perform_trades(market_data):
                         when: "Cada vez que el test necesita un contexto real (DB, auth) sin contaminar a los demas tests."
                     }
                 ]
+            },
+            {
+                type: "diagram",
+                diagramType: "architecture",
+                title: "Diagrama Visual: Arquitectura de Pruebas en FastAPI con TestClient",
+                nodes: [
+                    { title: "⚡ PyTest Runner", detail: "Orquesta fixtures, aserciones y reportes de cobertura en milisegundos." },
+                    { title: "🌐 TestClient (Starlette/HTTPX)", detail: "Ejecuta peticiones HTTP síncronas en memoria contra la app ASGI sin abrir puertos de red." },
+                    { title: "🛡️ Validación Pydantic", detail: "Intercepta cargas inválidas o tipos incompatibles retornando 422 Unprocessable Entity." },
+                    { title: "💾 SQLite en Memoria (Aislada)", detail: "Cada función de prueba crea y destruye su esquema con 'Base.metadata.drop_all'." }
+                ],
+                body: "TestClient se comunica directamente con la aplicación FastAPI en memoria. La base de datos SQLite se crea limpia por cada prueba mediante dependency_overrides, garantizando aislamiento total y cero contaminación cruzada."
+            },
+            {
+                type: "case-study",
+                title: "Caso Práctico Paso a Paso: Endpoint de Préstamos en FastAPI con TestClient",
+                context: "Probar el endpoint 'POST /api/v1/prestamos/' verificando que cree la solicitud con código 201 y descuente stock, o devuelva 422 si la cantidad solicitada excede el límite de 5 equipos.",
+                preconditions: [
+                    "FastAPI app con schema Pydantic: 'cantidad: int = Field(ge=1, le=5)'.",
+                    "Fixture 'client' con dependency_override sobre 'get_db' inyectando SQLite en memoria.",
+                    "Estado inicial: 10 equipos registrados en la tabla de inventario."
+                ],
+                code: `from fastapi import status
+
+def test_crear_prestamo_exitoso(client):
+    # Caso válido: 3 laptops
+    response = client.post("/api/v1/prestamos/", json={
+        "aprendiz_id": 101,
+        "cantidad": 3,
+        "laboratorio": "Sistemas-A"
+    })
+    assert response.status_code == status.HTTP_201_CREATED
+    data = response.json()
+    assert data["cantidad"] == 3
+    assert data["estado"] == "ACTIVO"
+    assert "id" in data
+
+def test_rechazar_prestamo_excedido(client):
+    # Caso frontera superior inválida: 6 laptops
+    response = client.post("/api/v1/prestamos/", json={
+        "aprendiz_id": 101,
+        "cantidad": 6,
+        "laboratorio": "Sistemas-A"
+    })
+    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+    detalle = response.json()["detail"][0]
+    assert "less_than_equal" in detalle["type"] or "le" in str(detalle)`,
+                command: "pytest tests/test_prestamos_api.py -v",
+                oracle: "Para cantidad 3 se debe recibir 201 Created y JSON persistido. Para cantidad 6 Pydantic debe interceptar antes de llegar a la base de datos y retornar 422.",
+                expectedVsObserved: [
+                    ["POST cantidad=3", "201 Created + JSON con ID", "Pasa en verde"],
+                    ["POST cantidad=6", "422 Unprocessable Entity", "Fallo si devuelve 200/201 (defecto grave)"],
+                    ["POST cantidad='tres'", "422 Validation Error", "Fallo si causa 500 Internal Error"]
+                ],
+                decision: "El uso de Pydantic combinado con TestClient previene que datos corruptos lleguen a la capa de persistencia. La prueba automatizada se integra al pipeline de CI como barrera bloqueante."
             },
             {
                 type: "steps",
@@ -485,7 +540,7 @@ def test_validacion_precio_cero(client):
 
     "m-pytest-flask": {
         title: "PyTest: prueba una aplicación Flask",
-        badge: "Variante 6",
+        badge: "Estación 7/18 · Flask",
         intro: "Prueba las rutas de una aplicación Flask con SQLite en memoria. Necesitas el proyecto completo —run.py, requirements.txt, app/ y tests/test_routes.py— para ejecutar esta práctica.",
         blocks: [
             {
@@ -508,6 +563,57 @@ def test_validacion_precio_cero(client):
                         when: "Aislar el estado entre tests: registros, sesiones y operaciones de escritura."
                     }
                 ]
+            },
+            {
+                type: "diagram",
+                diagramType: "architecture",
+                title: "Diagrama Visual: Arquitectura de Pruebas en Flask con TestClient y Contexto",
+                nodes: [
+                    { title: "⚡ PyTest + Client", detail: "app.test_client() simula peticiones HTTP WSGI sin abrir sockets de red." },
+                    { title: "🔄 Application Context", detail: "with app.app_context() inicializa sesiones, configs y extensiones globales." },
+                    { title: "🌶️ Rutas & Jinja2", detail: "Procesa formularios, mensajes Flash y renderiza plantillas HTML en memoria." },
+                    { title: "💾 SQLite en Memoria", detail: "db.create_all() al inicio y db.drop_all() al desmontar garantizan estado virgen." }
+                ],
+                body: "Flask ejecuta las solicitudes a través de Werkzeug TestClient en proceso. Las sesiones de usuario y los mensajes flash se verifican en la respuesta HTML o inspeccionando la sesión del cliente sin levantar un servidor real."
+            },
+            {
+                type: "case-study",
+                title: "Caso Práctico Paso a Paso: Formulario Web de Préstamos en Flask con Sesiones y Flash",
+                context: "Probar la ruta 'POST /prestamos/solicitar' que recibe un formulario con aprendiz_id y cantidad. Si cantidad está entre 1 y 5 y hay stock, redirige a '/prestamos/mis-solicitudes' con mensaje flash 'Solicitud creada con éxito'. Si cantidad es 6 o menor a 1, recarga con advertencia de validación.",
+                preconditions: [
+                    "App Flask configurada con TESTING=True y SQLite en memoria (:memory:).",
+                    "Sesión simulada de usuario autenticado como Aprendiz (aprendiz_id=202).",
+                    "Inventario inicial con 10 laptops registradas en la base de datos de pruebas."
+                ],
+                code: `def test_solicitud_prestamo_exitosa_con_flash(client):
+    # Act: Envío de formulario válido con follow_redirects para seguir el 302
+    response = client.post("/prestamos/solicitar", data={
+        "equipo_id": 1,
+        "cantidad": 3
+    }, follow_redirects=True)
+    
+    # Assert: Estado 200 tras redirección y presencia de mensaje flash en HTML
+    assert response.status_code == 200
+    assert b"Solicitud creada con exito" in response.data
+    assert b"Laptops solicitadas: 3" in response.data
+
+def test_solicitud_prestamo_excede_limite_invalido(client):
+    # Act: Envío de formulario con 6 equipos (viola la regla R-CANT)
+    response = client.post("/prestamos/solicitar", data={
+        "equipo_id": 1,
+        "cantidad": 6
+    }, follow_redirects=True)
+    
+    # Assert: Rechazo visible en plantilla o código de error
+    assert response.status_code == 400 or b"La cantidad permitida es de 1 a 5 equipos" in response.data`,
+                command: "pytest tests/test_routes.py::test_solicitud_prestamo_exitosa_con_flash -v",
+                oracle: "Para cantidad 3, debe producir redirección 302 -> 200 e inyectar el mensaje flash de éxito en el HTML renderizado. Para cantidad 6, debe rechazar la solicitud sin persistir registros en la base de datos.",
+                expectedVsObserved: [
+                    ["POST cantidad=3 (follow_redirects=True)", "Redirección 302 a /mis-solicitudes con status final 200 y mensaje Flash presente", "Pasa en verde"],
+                    ["POST cantidad=6", "Mensaje 'La cantidad permitida es de 1 a 5 equipos' en la plantilla sin inserción en DB", "Fallo si redirige como éxito o persiste en SQLite"],
+                    ["POST sin autenticación", "Redirección 302 al formulario de login", "Fallo si permite solicitar anónimamente"]
+                ],
+                decision: "Las pruebas en Flask permiten validar el ciclo completo de la aplicación web clásica (HTTP, sesiones, cookies, mensajes flash y renderizado Jinja) en milisegundos sin necesidad de un navegador visual pesado."
             },
             {
                 type: "steps",
@@ -675,7 +781,7 @@ def test_user_creation_and_login(client):
 
     "m-jest-react": {
         title: "Jest: prueba componentes React",
-        badge: "Variante 7",
+        badge: "Estación 8/18 · React",
         intro: "Prueba componentes React desde el comportamiento visible: interacción, estados, accesibilidad y mensajes que la persona puede reconocer.",
         blocks: [
             {
@@ -698,6 +804,70 @@ def test_user_creation_and_login(client):
                         when: "Render condicional, eventos, estados de loading/error y custom hooks. Reduce los tests fragiles ligados a la implementacion."
                     }
                 ]
+            },
+            {
+                type: "diagram",
+                diagramType: "architecture",
+                title: "Diagrama Visual: Arquitectura de Pruebas en React con Vitest y Testing Library",
+                nodes: [
+                    { title: "⚡ Vitest Runner", detail: "Ejecuta suites en milisegundos con soporte nativo de ESM y Vite." },
+                    { title: "🖥️ JSDOM", detail: "Emula el DOM del navegador en memoria de Node.js sin abrir ventanas reales." },
+                    { title: "🧩 <FormularioPrestamo />", detail: "Componente React montado con 'render()' gestionando estado local y accesibilidad." },
+                    { title: "🔍 screen.getByRole & userEvent", detail: "Interacciona con inputs y botones mediante roles accesibles (ARIA) como una persona real." }
+                ],
+                body: "React Testing Library promueve pruebas centradas en el usuario y accesibilidad: consulta elementos por rol semántico ('button', 'spinbutton', 'alert'), dispara eventos reales y comprueba que la interfaz mute visiblemente según las reglas de negocio."
+            },
+            {
+                type: "case-study",
+                title: "Caso Práctico Paso a Paso: FormularioDePrestamo.jsx con Accesibilidad y Eventos",
+                context: "Probar el componente frontend '<FormularioDePrestamo />' que contiene un input de cantidad (1 a 5) y botón 'Confirmar Solicitud'. Si se ingresa 6, debe mostrar un mensaje accesible <role='alert'>La cantidad máxima permitida es 5</role> y deshabilitar el botón de envío.",
+                preconditions: [
+                    "Vitest y @testing-library/react configurados con jsdom.",
+                    "Componente FormularioDePrestamo importado con soporte para prop callback 'onSubmit'.",
+                    "Matchers semánticos de @testing-library/jest-dom activos (toBeInTheDocument, toBeDisabled)."
+                ],
+                code: `import { render, screen, fireEvent } from "@testing-library/react";
+import { describe, it, expect, vi } from "vitest";
+import FormularioDePrestamo from "./FormularioDePrestamo";
+
+describe("FormularioDePrestamo", () => {
+    it("permite solicitar 3 equipos y emite onSubmit", () => {
+        const handleSubmit = vi.fn();
+        render(<FormularioDePrestamo onSubmit={handleSubmit} />);
+
+        const input = screen.getByLabelText(/cantidad de equipos/i);
+        const submitBtn = screen.getByRole("button", { name: /confirmar solicitud/i });
+
+        fireEvent.change(input, { target: { value: "3" } });
+        fireEvent.click(submitBtn);
+
+        expect(handleSubmit).toHaveBeenCalledTimes(1);
+        expect(handleSubmit).toHaveBeenCalledWith(expect.objectContaining({ cantidad: 3 }));
+    });
+
+    it("bloquea envío y muestra alerta si cantidad es 6", () => {
+        const handleSubmit = vi.fn();
+        render(<FormularioDePrestamo onSubmit={handleSubmit} />);
+
+        const input = screen.getByLabelText(/cantidad de equipos/i);
+        const submitBtn = screen.getByRole("button", { name: /confirmar solicitud/i });
+
+        fireEvent.change(input, { target: { value: "6" } });
+
+        const alerta = screen.getByRole("alert");
+        expect(alerta).toHaveTextContent(/la cantidad maxima permitida es 5/i);
+        expect(submitBtn).toBeDisabled();
+        expect(handleSubmit).not.toHaveBeenCalled();
+    });
+});`,
+                command: "npm test -- FormularioDePrestamo.test.jsx",
+                oracle: "Para cantidad 3: el botón debe estar activo y llamar al handler con { cantidad: 3 }. Para cantidad 6: debe renderizarse inmediatamente el nodo con role='alert' y el botón de submit debe quedar deshabilitado.",
+                expectedVsObserved: [
+                    ["Input = 3 + Click", "Handler onSubmit llamado 1 vez con { cantidad: 3 }", "Pasa en verde"],
+                    ["Input = 6", "Elemento role='alert' en el DOM y submitBtn deshabilitado", "Fallo si permite el envío"],
+                    ["Input = 0", "Mensaje 'La cantidad mínima es 1' y botón deshabilitado", "Fallo si se omite el límite inferior"]
+                ],
+                decision: "Al basar las consultas en getByRole y getByLabelText, las pruebas garantizan que el aplicativo sea accesible para lectores de pantalla y resistente a cambios de diseño CSS."
             },
             {
                 type: "steps",
@@ -838,7 +1008,7 @@ describe("useFetch", () => {
 
     "m-junit-jsp": {
         title: "JUnit 5: Pruebas de Spring Boot",
-        badge: "Variante 8",
+        badge: "Estación 9/18 · Java",
         intro: "Probamos servicios, controladores y repositorios de Spring Boot con JUnit 5, Mockito y H2.",
         blocks: [
             {
@@ -861,6 +1031,78 @@ describe("useFetch", () => {
                         when: "Tests de integracion con JPA que no deben tocar la base de produccion."
                     }
                 ]
+            },
+            {
+                type: "diagram",
+                diagramType: "architecture",
+                title: "Diagrama Visual: Arquitectura de Pruebas Unitarias con JUnit 5 y Mockito",
+                nodes: [
+                    { title: "☕ JUnit 5 Engine (Jupiter)", detail: "Ejecuta las pruebas parametrizadas y aserciones en el ciclo Maven Test." },
+                    { title: "🎯 @InjectMocks PrestamoService", detail: "Instancia bajo prueba con lógica de negocio pura (validación R-CANT y permisos)." },
+                    { title: "🔧 @Mock InventarioRepository", detail: "Doble de prueba que simula stock disponible sin consultar la base de datos SQL." },
+                    { title: "📋 verify() & assertThrows()", detail: "Comprueba contratos: llamadas exactas al repositorio y captura de excepciones de dominio." }
+                ],
+                body: "Mockito intercepta las dependencias externas (repositorios, clientes REST). La prueba unitaria se enfoca exclusivamente en la regla de negocio del servicio, ejecutándose en menos de 50 milisegundos."
+            },
+            {
+                type: "case-study",
+                title: "Caso Práctico Paso a Paso: Aislamiento con Mockito en PrestamoService.java",
+                context: "Probar el método 'crearSolicitud(Aprendiz, int cantidad)' de 'PrestamoService'. Si la cantidad es 3 y hay stock, debe guardar en el repositorio y retornar la solicitud activa. Si la cantidad es 6, debe lanzar 'ReglaNegocioException' y verificar que NUNCA se llamó a 'repository.save()'.",
+                preconditions: [
+                    "Proyecto Spring Boot con dependencia 'spring-boot-starter-test' (JUnit 5 + Mockito).",
+                    "Mock de 'InventarioRepository' configurado con 10 equipos disponibles.",
+                    "Entidad de prueba Aprendiz con estado ACTIVO y permiso verificado."
+                ],
+                code: `@ExtendWith(MockitoExtension.class)
+@DisplayName("PrestamoService - Reglas de Negocio")
+class PrestamoServiceTest {
+
+    @Mock
+    private InventarioRepository inventarioRepo;
+
+    @Mock
+    private SolicitudRepository solicitudRepo;
+
+    @InjectMocks
+    private PrestamoService prestamoService;
+
+    @Test
+    @DisplayName("Debe crear solicitud cuando la cantidad es 3 y hay stock")
+    void testCrearSolicitudValida() {
+        Aprendiz aprendiz = new Aprendiz(101L, "Sofia ADSO", true);
+        when(inventarioRepo.obtenerStockDisponible("LAPTOP")).thenReturn(10);
+        when(solicitudRepo.save(any(SolicitudPrestamo.class)))
+            .thenAnswer(inv -> inv.getArgument(0));
+
+        SolicitudPrestamo resultado = prestamoService.crearSolicitud(aprendiz, "LAPTOP", 3);
+
+        assertNotNull(resultado);
+        assertEquals(3, resultado.getCantidad());
+        assertEquals(EstadoSolicitud.APROBADA, resultado.getEstado());
+        verify(solicitudRepo, times(1)).save(any(SolicitudPrestamo.class));
+    }
+
+    @Test
+    @DisplayName("Debe rechazar solicitud y no persistir si cantidad supera límite de 5")
+    void testRechazarCantidadExcedida() {
+        Aprendiz aprendiz = new Aprendiz(101L, "Sofia ADSO", true);
+
+        ReglaNegocioException ex = assertThrows(ReglaNegocioException.class, () -> {
+            prestamoService.crearSolicitud(aprendiz, "LAPTOP", 6);
+        });
+
+        assertTrue(ex.getMessage().contains("excede el maximo permitido"));
+        verify(solicitudRepo, never()).save(any(SolicitudPrestamo.class));
+    }
+}`,
+                command: "mvn test -Dtest=PrestamoServiceTest",
+                oracle: "Para cantidad 3: el servicio debe retornar la entidad guardada y llamar a save() 1 vez. Para cantidad 6: debe lanzar ReglaNegocioException y save() NUNCA debe ejecutarse (verify never).",
+                expectedVsObserved: [
+                    ["crearSolicitud(aprendiz, 'LAPTOP', 3)", "Retorna SolicitudPrestamo con cantidad 3 y llama a save()", "Pasa en verde"],
+                    ["crearSolicitud(aprendiz, 'LAPTOP', 6)", "Lanza ReglaNegocioException; verify(never()).save() se cumple", "Fallo si guarda en BD o no lanza excepción"],
+                    ["crearSolicitud(inactivo, 'LAPTOP', 1)", "Lanza AccesoDenegadoException sin tocar inventario", "Fallo si ignora permiso del aprendiz"]
+                ],
+                decision: "El uso de verify(never()) aporta evidencia contundente de que ninguna falla de validación produce efectos secundarios en la base de datos."
             },
             {
                 type: "steps",

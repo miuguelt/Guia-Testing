@@ -9,9 +9,14 @@ def cobertura(doc):
     doc.add_heading("Cobertura de código y compuertas de calidad", level=3)
     doc.add_paragraph(
         "Umbral obligatorio ADSO: cobertura mayor o igual al 80 % en la "
-        "lógica de negocio. Comandos: pytest --cov=app --cov-fail-under=80, "
-        "npm run test:coverage y mvn test jacoco:report."
+        "lógica de negocio. Configuración cero-fricción: en pytest.ini definir "
+        "addopts = -v --cov=app --cov-report=term-missing para escribir solamente "
+        "pytest y obtener el reporte confiable. Comando directo: pytest --cov=app "
+        "--cov-report=term-missing --cov-fail-under=80. La columna Missing revela "
+        "exactamente los números de línea que ninguna prueba ha validado. En otros "
+        "ecosistemas: npm run test:coverage y mvn test jacoco:report."
     )
+
 
 
 def cicd_y_git(doc):

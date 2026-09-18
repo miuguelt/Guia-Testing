@@ -2,7 +2,7 @@
 Object.assign(window.MODULES, {
     "m-playwright": {
         title: "Playwright con Flask y Jinja",
-        badge: "Modulo 9",
+        badge: "Estación 10/18 · Playwright",
         intro: "Si ya dominas Flask, conserva ese mapa mental: ruta Flask -> render_template() -> HTML Jinja -> accion del usuario -> nueva peticion. Playwright automatiza y comprueba ese recorrido en un navegador real.",
         blocks: [
             {
@@ -56,9 +56,63 @@ Object.assign(window.MODULES, {
             },
             {
                 type: "diagram",
-                diagramType: "flask-playwright-flow",
-                title: "Del endpoint al navegador",
-                body: "@app.get('/productos') -> render_template('productos.html') -> el navegador recibe HTML -> locator.fill() y locator.click() -> Flask recibe request.form -> redirect() o flash() -> expect() comprueba la respuesta visible."
+                diagramType: "architecture",
+                title: "Diagrama Visual: Arquitectura de Pruebas E2E con Playwright",
+                nodes: [
+                    { title: "🎭 Playwright Runner", detail: "Orquesta navegadores Chromium/Firefox/WebKit en modo headless o con UI interactiva." },
+                    { title: "🌐 BrowserContext Aislado", detail: "Crea una sesión efímera independiente con cookies, almacenamiento y caché limpios." },
+                    { title: "🔍 Locators Accesibles", detail: "Localiza por semántica de usuario con getByRole('button') y getByLabel() con auto-waiting nativo." },
+                    { title: "✅ expect(page) Web-First", detail: "Reintenta aserciones automáticamente hasta confirmar URL, visibilidad de alertas o filas de la tabla." }
+                ],
+                body: "Playwright simula la interacción real del usuario sobre el navegador Chromium. La prueba interactúa con el formulario Jinja renderizado por Flask y verifica tanto las redirecciones de servidor como la aparición de mensajes de confirmación en el DOM."
+            },
+            {
+                type: "case-study",
+                title: "Caso Práctico Paso a Paso: Flujo E2E Completo de Solicitud de Préstamo con Playwright",
+                context: "Automatizar el camino crítico del aprendiz: inicia sesión en el portal, navega a '/prestamos/nuevo', selecciona 3 laptops para el Laboratorio Sistemas-A, envía el formulario y verifica la redirección a '/prestamos/mis-solicitudes' junto con el mensaje de confirmación y la nueva fila en la tabla.",
+                preconditions: [
+                    "Servidor web local activo en 'http://127.0.0.1:5000' con base de datos de pruebas inicializada.",
+                    "Playwright configurado con 'baseURL: http://127.0.0.1:5000' en 'playwright.config.js'.",
+                    "Usuario de prueba 'aprendiz.adso' con credenciales válidas y rol estudiante activo."
+                ],
+                code: `import { test, expect } from "@playwright/test";
+
+test("Aprendiz solicita exitosamente 3 laptops para laboratorio", async ({ page }) => {
+    // 1. Navegar al formulario de login
+    await page.goto("/login");
+    await page.getByLabel("Correo Institucional").fill("aprendiz@sena.edu.co");
+    await page.getByLabel("Contraseña").fill("PasswordSeguro123!");
+    await page.getByRole("button", { name: /iniciar sesión/i }).click();
+
+    // 2. Comprobar aterrizaje en dashboard y navegar a préstamos
+    await expect(page).toHaveURL(/\\/dashboard$/);
+    await page.getByRole("link", { name: /solicitar préstamo/i }).click();
+
+    // 3. Diligenciar formulario de préstamo (Regla R-CANT: 3 unidades)
+    await expect(page).toHaveURL(/\\/prestamos\\/nuevo$/);
+    await page.getByLabel("Tipo de Equipo").selectOption("Portátil Dell Latitude");
+    await page.getByLabel("Cantidad de Equipos").fill("3");
+    await page.getByLabel("Laboratorio Destino").selectOption("Lab Sistemas A");
+    await page.getByRole("button", { name: /confirmar préstamo/i }).click();
+
+    // 4. Aserción final del flujo: redirect a listado y confirmación visual
+    await expect(page).toHaveURL(/\\/prestamos\\/mis-solicitudes$/);
+    await expect(page.getByRole("status")).toContainText(/solicitud registrada con éxito/i);
+    
+    // Verificar que la fila aparezca en la tabla de solicitudes activas
+    const filaPrestamo = page.getByTestId("solicitud-row").first();
+    await expect(filaPrestamo).toContainText("Portátil Dell Latitude");
+    await expect(filaPrestamo).toContainText("3");
+    await expect(filaPrestamo).toContainText("PENDIENTE");
+});`,
+                command: "npx playwright test tests/e2e/prestamos.spec.js --headed",
+                oracle: "El flujo debe completar las 3 pantallas secuenciales (login -> formulario -> listado) sin timeouts. La URL final debe ser /prestamos/mis-solicitudes y la tabla debe contener la fila con 3 laptops.",
+                expectedVsObserved: [
+                    ["Login + Formulario (3 laptops)", "Redirect a /mis-solicitudes, banner verde de éxito y fila en tabla", "Pasa en verde"],
+                    ["Formulario con 6 laptops", "Permanece en /prestamos/nuevo, botón bloqueado o alerta 'Máximo 5 equipos'", "Fallo si redirige o persiste"],
+                    ["Servidor no disponible en :5000", "Playwright reporta error de conexión ERR_CONNECTION_REFUSED", "Fallo de infraestructura (no del test)"]
+                ],
+                decision: "Las pruebas E2E con Playwright validan la integración total (Front + Back + DB) desde la perspectiva del aprendiz, protegiendo el camino crítico contra regresiones visuales o de enrutamiento."
             },
             {
                 type: "comparison",
@@ -246,7 +300,7 @@ test("crea un producto y sigue el redirect de Flask", async ({ page }) => {
 
     "m-cobertura": {
         title: "Cobertura y Metricas de Calidad",
-        badge: "Modulo 10",
+        badge: "Estación 11/18 · Cobertura",
         intro: "Mide qué porcentaje de tu código está cubierto por tests. Umbral didáctico orientativo: 80% o más en lógica de negocio.",
         blocks: [
             {
@@ -271,74 +325,160 @@ test("crea un producto y sigue el redirect de Flask", async ({ page }) => {
                 ]
             },
             {
+                type: "diagram",
+                diagramType: "pyramid",
+                title: "Diagrama Visual: Jerarquía y Niveles de Cobertura de Código",
+                tiers: [
+                    { id: "e2e", name: "Mutation Testing (Efectividad Real)", pct: "Oro", speed: "Lenta (minutos)", cost: "Alto CPU", tools: "mutmut, Stryker, PIT", desc: "Introduce mutaciones sintácticas en el código (invierte condicionales, vacía métodos) y verifica si tus pruebas fallan al detectarlas." },
+                    { id: "integration", name: "Branch Coverage (Cobertura de Ramas)", pct: "Recomendado", speed: "Rápida (~segundos)", cost: "Medio", tools: "pytest --cov-branch, c8", desc: "Evalúa que cada bifurcación lógica (if/else, switch, ternarios) haya sido probada en ambos sentidos: verdadero y falso." },
+                    { id: "unit", name: "Line Coverage (Cobertura de Instrucciones)", pct: "80% Base", speed: "Muy rápida (~ms)", cost: "Bajo", tools: "pytest-cov, Istanbul, JaCoCo", desc: "Registra qué líneas de código fueron ejecutadas al menos una vez por el runner. Útil como base inicial, no como garantía final." }
+                ],
+                body: "La cobertura no debe medirse únicamente por líneas ejecutadas. Una suite con 100% de cobertura de líneas puede ocultar ramas huérfanas y aserciones ausentes. Avanzar hacia Branch Coverage y Mutation Testing asegura que las pruebas validen el comportamiento real."
+            },
+            {
+                type: "case-study",
+                title: "Caso Práctico Guiado en Flask: Cobertura Progresiva y Detección de Líneas con Flash y Sesiones",
+                context: "Auditar y conquistar la cobertura de la aplicación Flask 'flask_jinja_demo/app.py'. La ruta 'POST /productos' valida campos, emite mensajes con 'flash()', guarda en sesión y redirige. Observa cómo la columna 'Missing' de la terminal nos canta con números de línea exactos qué código falta por validar en cada etapa hasta alcanzar 100% confiable.",
+                preconditions: [
+                    "Entorno virtual activo con pytest, pytest-cov y Flask instalados.",
+                    "Archivo app.py con validación de nombre vacío, precio <= 0, flash() y sesión.",
+                    "Objetivo: Entender qué y cuánto falta leyendo la columna Missing de la terminal."
+                ],
+                code: `# 1. EL CÓDIGO A VALIDAR: flask_jinja_demo/app.py (Extracto numerado)
+# L-21: if request.method == "POST":
+# L-22:     name = request.form.get("nombre", "").strip()
+# L-23:     price_text = request.form.get("precio", "").strip()
+# L-25:     if not name:
+# L-26:         flash("El nombre es obligatorio.", "error")
+# L-27:         return render_template("productos.html", products=products), 400
+# L-29:     try:
+# L-30:         price = float(price_text)
+# L-31:     except ValueError:
+# L-32:         price = 0
+# L-34:     if price <= 0:
+# L-35:         flash("El precio debe ser mayor que cero.", "error")
+# L-36:         return render_template("productos.html", products=products), 400
+# L-38:     products.append({"nombre": name, "precio": f"{price:.2f}"})
+# L-39:     session["products"] = products
+# L-40:     flash("Producto creado.", "success")
+# L-41:     return redirect(url_for("products_view"))
+
+# 2. LA SUITE PROGRESIVA: test_cobertura_flask.py
+import os, pytest
+os.environ["FLASK_SECRET_KEY"] = "clave-local-prueba"
+from app import create_app
+
+@pytest.fixture
+def client():
+    app = create_app()
+    app.config["TESTING"] = True
+    with app.test_client() as c:
+        yield c
+
+# FASE 1: Solo caso feliz -> Terminal reporta 76% | Missing: 12, 16, 26-27, 31-32, 35-36
+def test_crear_producto_exitoso_con_flash(client):
+    res = client.post("/productos", data={"nombre": "Mouse", "precio": "45.00"}, follow_redirects=True)
+    assert res.status_code == 200
+    assert "Producto creado." in res.get_data(as_text=True)
+
+# FASE 2: Valida nombre vacío -> Missing reduce a: 12, 16, 31-32, 35-36 (82%)
+def test_crear_producto_sin_nombre_muestra_flash_error(client):
+    res = client.post("/productos", data={"nombre": "", "precio": "45.00"})
+    assert res.status_code == 400
+    assert "El nombre es obligatorio." in res.get_data(as_text=True)
+
+# FASE 3: Valida precios inválidos -> Missing reduce a: 12, 16 (94%)
+def test_crear_producto_precio_invalido_muestra_flash_error(client):
+    res = client.post("/productos", data={"nombre": "Teclado", "precio": "-10.00"})
+    assert res.status_code == 400
+    assert "El precio debe ser mayor que cero." in res.get_data(as_text=True)
+
+    res_txt = client.post("/productos", data={"nombre": "Teclado", "precio": "gratis"})
+    assert res_txt.status_code == 400
+
+# FASE 4: Redirección de home y guardián de entorno -> Missing vacío: 100%
+def test_ruta_home_redirige_a_productos(client):
+    res = client.get("/")
+    assert res.status_code == 302
+    assert "/productos" in res.headers["Location"]`,
+                command: "pytest --cov=app --cov-report=term-missing",
+                oracle: "La columna 'Missing' es el mapa exacto de trabajo: cada rango de líneas indicado (ej. 26-27 o 35-36) indica qué condicional de error con flash() no ha sido probado. Al agregar las pruebas correspondientes, las líneas desaparecen de 'Missing' hasta alcanzar 100%.",
+                expectedVsObserved: [
+                    ["Fase 1: Solo test_crear_producto_exitoso (Happy Path)", "Stmts: 34, Miss: 8, Cover: 76% | Missing: 12, 16, 26-27, 31-32, 35-36", "Alerta: 76% no alcanza el umbral del 80%. Missing canta que los flash de error no se han probado."],
+                    ["Fase 2: Añadir test de nombre vacío (flash error)", "Stmts: 34, Miss: 6, Cover: 82% | Missing: 12, 16, 31-32, 35-36", "Pasa el umbral (82% >= 80%), pero Missing advierte que las ramas de precio siguen huérfanas."],
+                    ["Fase 3: Añadir tests de precio negativo y texto", "Stmts: 34, Miss: 2, Cover: 94% | Missing: 12, 16", "Validaciones de formulario cubiertas al 100%; solo falta redirección y clave de entorno."],
+                    ["Fase 4: Suite completa con redirección", "Stmts: 34, Miss: 0, Cover: 100% | Missing: (limpio)", "100% de instrucciones ejecutadas con aserciones rigurosas de HTTP y mensajes flash."],
+                    ["Fase 5: Ejecución con --cov-branch", "Branch: 8, BrPart: 0, Cover: 100%", "Comprueba que cada if fue evaluado tanto en su camino verdadero como en el falso."]
+                ],
+                decision: "Nunca te conformes con un porcentaje ciego. Usa la columna 'Missing' para identificar las líneas de código huérfanas de pruebas y complétalas con aserciones que verifiquen el estado real."
+            },
+            {
                 type: "steps",
-                title: "Paso a Paso del Aprendiz: De Cero a Medición de Cobertura y Quality Gates",
-                intro: "Aprende a medir qué porcentaje de código ejecutan tus pruebas y cómo aplicar un umbral contextual. El 80% es un ejemplo de esta práctica, no una exigencia institucional universal.",
+                title: "Paso a Paso del Aprendiz: De Escribir Solo 'pytest' a Medir Cobertura Confiable",
+                intro: "Aprende a medir qué porcentaje de código ejecutan tus pruebas con los comandos más sencillos posibles, sin fricción y con total certeza de qué líneas te faltan.",
                 steps: [
                     {
                         number: 1,
-                        title: "Instalar el plugin de cobertura según tu lenguaje",
-                        tag: "Paso 1: Herramientas",
-                        desc: "Instala `pytest-cov` en Python, `@vitest/coverage-v8` en JavaScript o añade `jacoco-maven-plugin` en el `pom.xml` de Java.",
-                        command: "pip install pytest-cov  # O en Node: npm i -D @vitest/coverage-v8",
-                        tip: "Elige siempre motores de cobertura nativos (como el profiling de V8 en Node o tracing en Python) para reducir el impacto en tiempo de ejecución.",
-                        pitfall: "Intentar medir cobertura sin haber instalado el plugin correspondiente; el comando fallará con argumentos no reconocidos."
+                        title: "El atajo definitivo: escribe solamente 'pytest' y obtén cobertura",
+                        tag: "Paso 1: Cero Fricción",
+                        desc: "En tu archivo `pytest.ini`, añade la directiva: `addopts = -v --cov=app --cov-report=term-missing`. A partir de ese instante, así como solamente escribes `pytest` para correr los tests, escribes exactamente `pytest` y obtienes de forma automática tus pruebas y la tabla completa de cobertura con la columna Missing, sin tener que recordar banderas.",
+                        command: "pytest  # ¡Sin parámetros extra! Lee pytest.ini y entrega reporte confiable",
+                        tip: "Al configurar `addopts` en `pytest.ini`, todo tu equipo o evaluador ejecuta exactamente el mismo estándar de cobertura con un comando de una sola palabra.",
+                        pitfall: "No definir `--cov-report=term-missing`: el plugin solo te mostrará un porcentaje global ciego (ej. 76%) y no sabrás qué líneas te faltan."
                     },
                     {
                         number: 2,
-                        title: "Configurar un umbral de bloqueo contextual",
-                        tag: "Paso 2: Umbral",
-                        desc: "Configura la bandera `--cov-fail-under=80`. Si el porcentaje global o de lógica de negocio es 79.9%, el comando retornará código de error 1 rompiendo el build.",
-                        command: "pytest --cov=app --cov-fail-under=80",
-                        tip: "Excluye archivos de configuración, migraciones y scripts de inicio en `.coveragerc` o `pyproject.toml` para no distorsionar la métrica de negocio.",
-                        pitfall: "Contar archivos autogenerados o de configuración en el cálculo de cobertura, lo que infla o baja artificialmente el porcentaje."
+                        title: "El comando directo sin archivo de configuración: las 3 piezas indispensables",
+                        tag: "Paso 2: Comando Directo",
+                        desc: "Si no tienes un archivo `pytest.ini` configurado, el comando directo más simple y completo es `pytest --cov=app --cov-report=term-missing`. Se compone de tres partes: 1) `pytest` (el ejecutor), 2) `--cov=app` (la carpeta a medir), y 3) `--cov-report=term-missing` (muestra qué líneas faltan).",
+                        command: "pytest --cov=app --cov-report=term-missing",
+                        tip: "Si tu archivo está en la misma carpeta donde ejecutas el comando, escribe `pytest --cov=. --cov-report=term-missing`.",
+                        pitfall: "Escribir solamente `pytest --cov`: funciona, pero oculta la columna Missing. Sin ver los números de línea, encontrar qué falta toma diez veces más tiempo."
                     },
                     {
                         number: 3,
-                        title: "Ejecutar la suite y generar reporte HTML visual",
-                        tag: "Paso 3: Generación",
-                        desc: "Genera una carpeta HTML interactiva para explorar archivo por archivo qué líneas no fueron tocadas por los tests.",
-                        command: "pytest --cov=app --cov-report=html --cov-report=term-missing",
-                        tip: "Abre `htmlcov/index.html` en tu navegador. Las líneas en rojo son las que jamás se ejecutaron durante ninguna prueba.",
-                        pitfall: "Olvidar añadir `htmlcov/` y `.coverage` al `.gitignore`, ensuciando el repositorio Git con miles de archivos temporales."
+                        title: "Aprender a leer la columna 'Missing': saber cuánto y qué falta",
+                        tag: "Paso 3: Diagnóstico en Consola",
+                        desc: "En la salida de consola, observa la fila de tu archivo: `Miss: 6` te dice CUÁNTO falta (6 sentencias para el 100%). La columna `Missing: 26-27, 35-36` te dice QUÉ falta (las líneas 26 a 27 y 35 a 36 jamás se ejecutaron). Abre `app.py` en esas líneas: verás de inmediato qué `if`, `flash` o `return` no tiene una prueba.",
+                        command: "# Inspecciona visualmente en tu editor las líneas que aparecen en la columna Missing",
+                        tip: "Las líneas en 'Missing' son tu lista de tareas pendiente: diseña un test específico cuya entrada obligue al flujo a entrar en esas líneas.",
+                        pitfall: "Intentar adivinar qué falta mirando los tests en lugar de mirar los números exactos de la columna Missing."
                     },
                     {
                         number: 4,
-                        title: "Auditar la cobertura de ramas (Branch Coverage)",
+                        title: "Auditar bifurcaciones con '--cov-branch': descubrir saltos a medias",
                         tag: "Paso 4: Cobertura de Ramas",
-                        desc: "Activa `--cov-branch`. La cobertura de ramas comprueba que en cada condicional `if/else` se hayan probado tanto la condición verdadera como la falsa.",
+                        desc: "Una línea con `if` puede aparecer cubierta si se ejecutó cuando la condición fue verdadera, pero si nunca probaste el falso, la decisión está incompleta. Añade `--cov-branch`. Si ves en Missing `25->29`, significa que la condición en la línea 25 nunca saltó directamente a la línea 29.",
                         command: "pytest --cov=app --cov-branch --cov-report=term-missing",
-                        tip: "Una línea con `if` puede aparecer en verde, pero si nunca probaste el camino `else`, la rama tiene un fallo latente no detectado.",
-                        pitfall: "Quedarse solo con 'Line Coverage' básica creyendo que todo el flujo condicional está a salvo."
+                        tip: "Puedes incluir `--cov-branch` directamente dentro de `addopts` en `pytest.ini` para tener branch coverage automático.",
+                        pitfall: "Quedarse satisfecho con 100% de Line Coverage cuando condicionales complejos con or o and tienen ramas huérfanas."
                     },
                     {
                         number: 5,
-                        title: "Detectar tests cosméticos (Sin Aserciones Reales)",
-                        tag: "Paso 5: Auditoría Crítica",
-                        desc: "Revisa que cada test que ejecute líneas tenga aserciones con `assert` o `expect` que validen el estado. Un test sin aserciones infla la cobertura pero no prueba nada.",
-                        command: "python -m qa_auditor --target app/",
-                        tip: "Usa `qa_auditor` para detectar automáticamente funciones de prueba vacías o sin aserciones que pasan en verde por engaño.",
-                        pitfall: "Celebrar tener 100% de cobertura cuando los tests solo invocan funciones sin verificar su valor de retorno."
+                        title: "Fijar la compuerta de calidad local con '--cov-fail-under=80'",
+                        tag: "Paso 5: Quality Gate",
+                        desc: "Para asegurar que nadie entregue código con cobertura insuficiente, añade `--cov-fail-under=80`. Si el porcentaje baja de 80.0%, pytest terminará con código de error (rojo) y bloqueará el commit o el pipeline de CI/CD.",
+                        command: "pytest --cov=app --cov-report=term-missing --cov-fail-under=80",
+                        tip: "El umbral del 80% en lógica de negocio es un estándar contextual sano; úsalo como compuerta de protección, no como fin cosmético.",
+                        pitfall: "Aplicar `--cov-fail-under=80` sobre carpetas con archivos autogenerados o migraciones que distorsionan el promedio."
                     }
                 ]
             },
             {
-                type: "code", lang: "bash", file: "comandos_cobertura.sh",
-                title: "Comandos para medir cobertura",
-                code: `# Python - pytest-cov
-pytest --cov=app --cov-report=html --cov-report=term-missing
-# Abre htmlcov/index.html en el navegador
+                type: "code", lang: "ini", file: "pytest.ini",
+                title: "Configuración cero-fricción: escribe solo 'pytest' y obtén cobertura",
+                code: `[pytest]
+# Al definir addopts, el aprendiz solo escribe 'pytest' en la terminal
+# y obtiene de inmediato los tests y la tabla con líneas faltantes.
+addopts = -v --cov=app --cov-report=term-missing --cov-fail-under=80
 
-# JavaScript - Jest con coverage
-npx jest --coverage --coverageReporters html
-
-# Java - JaCoCo (Maven)
-mvn test jacoco:report
-# Abre target/site/jacoco/index.html
-
-# Configurar umbral minimo (pytest.ini)
-# [pytest]
-# cov_fail_under = 80`
+# Comandos equivalentes si no tienes pytest.ini:
+# 1. El más directo y confiable:
+#    pytest --cov=app --cov-report=term-missing
+# 2. Con cobertura de ramas (bifurcaciones if/else):
+#    pytest --cov=app --cov-branch --cov-report=term-missing
+# 3. Reporte visual interactivo en HTML (abre htmlcov/index.html):
+#    pytest --cov=app --cov-report=html`
             },
             {
                 type: "comparison",

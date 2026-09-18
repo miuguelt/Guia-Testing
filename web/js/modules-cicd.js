@@ -2,7 +2,7 @@
 Object.assign(window.MODULES, {
     "m-cicd": {
         title: "CI/CD con GitHub Actions",
-        badge: "Modulo 11",
+        badge: "Estación 13/18 · CI/CD",
         intro: "Automatiza: cada push ejecuta tests, cada merge a main despliega. Pipeline completo.",
         blocks: [
             {
@@ -324,9 +324,77 @@ export default function () {
 }`
             },
             {
-                type: "diagram", diagramType: "pipeline",
-                title: "Flujo CI/CD",
-                body: "Push -&gt; Lint -&gt; Tests Unit -&gt; Build -&gt; Tests E2E -&gt; Deploy Staging -&gt; Approval -&gt; Deploy Prod"
+                type: "diagram",
+                diagramType: "pipeline",
+                title: "Diagrama Visual: Pipeline CI/CD Multi-Job con Quality Gate Estricto",
+                stages: [
+                    { icon: "🚀", name: "1. Disparador", desc: "Push o PR en develop/main por cada cambio de código." },
+                    { icon: "🛡️", name: "2. Linters & Secretos", desc: "Ruff + Gitleaks verifican sintaxis y ausencia de credenciales." },
+                    { icon: "⚡", name: "3. Tests en Paralelo", desc: "PyTest (Backend), Vitest (Frontend) y JaCoCo (Spring Boot) concurrentes." },
+                    { icon: "🎭", name: "4. E2E (Playwright)", desc: "Recorridos de usuario críticos en navegador Chromium headless." },
+                    { icon: "🚦", name: "5. Quality Gate", desc: "Compuerta estricta: Cobertura >= 80% y 0 fallos. Si falla, bloquea el merge." },
+                    { icon: "📦", name: "6. Deploy & Smoke", desc: "Despliegue a VPS vía SSH + curl /health con rollback automático." }
+                ],
+                body: "El pipeline automatiza la compuerta de calidad. Ningún código llega al servidor de staging ni producción si alguna prueba unitaria, de contrato, de cobertura o E2E falla."
+            },
+            {
+                type: "case-study",
+                title: "Caso Práctico Paso a Paso: Pipeline CI/CD Multi-Job con Quality Gate Estricto en GitHub Actions",
+                context: "Implementar un flujo automatizado en GitHub Actions ('.github/workflows/ci.yml') que ejecute las suites de PyTest y Playwright ante un Pull Request. Si la cobertura en la lógica de préstamos es inferior al 80% o un test de regresión falla, el Quality Gate debe abortar el flujo con código 1 y bloquear el merge a 'main'.",
+                preconditions: [
+                    "Repositorio en GitHub con rama protegida 'main' que exige 'Quality Gate' en verde para merge.",
+                    "Archivo '.github/workflows/ci.yml' configurado con jobs 'tests' y 'quality-gate'.",
+                    "Suite con pruebas unitarias, integración y E2E para el módulo de préstamos."
+                ],
+                code: `# .github/workflows/ci.yml
+name: CI - Quality Gate Prestamos
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  unit-and-integration:
+    name: PyTest Backend & Cobertura
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12", cache: "pip" }
+      - run: pip install -r requirements.txt
+      # Compuerta: exige al menos 80% de cobertura y 0 fallos
+      - run: pytest tests/ --cov=app/prestamos --cov-branch --cov-fail-under=80
+
+  e2e-playwright:
+    name: Playwright E2E Caminos Criticos
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "20", cache: "npm" }
+      - run: npm ci && npx playwright install --with-deps chromium
+      - run: npm run e2e:headless
+
+  quality-gate:
+    name: Compuerta de Aprobacion Final
+    runs-on: ubuntu-latest
+    needs: [unit-and-integration, e2e-playwright]
+    if: always()
+    steps:
+      - name: Validar estado de dependencias
+        if: \${{ needs.unit-and-integration.result != 'success' || needs.e2e-playwright.result != 'success' }}
+        run: |
+          echo "❌ Quality Gate RECHAZADO: Se detectaron fallos en la suite de pruebas o cobertura insuficiente."
+          exit 1
+      - name: Aprobar compuerta
+        run: echo "✅ Quality Gate APROBADO: Suite en verde y cobertura cumplida. Listo para merge."`,
+                command: "git push origin feature/prestamos-v2  # Dispara la ejecución del workflow en GitHub Actions",
+                oracle: "Si todos los tests pasan y la cobertura es >= 80%, el job 'quality-gate' termina con código 0 y el PR muestra 'All checks have passed'. Si un test falla, el check aparece en rojo 'Quality Gate failed' y el botón de merge queda inhabilitado.",
+                expectedVsObserved: [
+                    ["Pull Request con cobertura 85% y 0 fallos", "Checks en verde (✅ Passed). Botón 'Merge pull request' habilitado", "Pasa en verde"],
+                    ["Pull Request con fallo en test o cobertura 78%", "Job quality-gate aborta con exit 1 (❌ Failed). Merge bloqueado", "Compuerta actuó correctamente"],
+                    ["Smoke test post-deploy responde 500", "Script activa git checkout HEAD~1 y docker compose up -d (Rollback)", "Resiliencia operativa garantizada"]
+                ],
+                decision: "El pipeline automatizado en GitHub Actions actúa como un centinela imparcial, impidiendo que el factor humano o las prisas introduzcan defectos en la rama principal de producción."
             },
             {
                 type: "timeline",
