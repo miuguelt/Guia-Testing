@@ -4474,3 +4474,28 @@ textarea:focus-visible {
     }
 }
 
+/* Resaltado interactivo de simuladores al navegar desde la matriz de evidencias */
+@keyframes simHighlightPulse {
+    0% {
+        outline: 3px solid #38bdf8;
+        box-shadow: 0 0 25px rgba(56, 189, 248, 0.6);
+        transform: scale(1.01);
+    }
+    50% {
+        outline: 3px solid #38bdf8;
+        box-shadow: 0 0 35px rgba(56, 189, 248, 0.8);
+        transform: scale(1.015);
+    }
+    100% {
+        outline: 2px solid transparent;
+        box-shadow: none;
+        transform: scale(1);
+    }
+}
+
+.sim-highlight-pulse {
+    animation: simHighlightPulse 2.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    border-radius: 8px;
+}
+
+

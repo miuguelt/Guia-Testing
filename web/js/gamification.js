@@ -73,6 +73,10 @@ const GAMIFICATION = {
             this.addXP(250, 'Módulo ' + moduleId + ' completado');
             this.renderStats();
             this.updateSidebarBadges();
+            if (window.TestingSession && typeof window.TestingSession.syncTestChecksWithExercises === 'function') {
+                window.TestingSession.syncTestChecksWithExercises();
+                window.TestingSession.notify();
+            }
         }
     },
 

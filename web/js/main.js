@@ -91,6 +91,44 @@ const APP = {
         }
     },
 
+    navigateToSimulator(simId, targetStation = 'm-simuladores') {
+        this.navigateTo(targetStation);
+
+        if (targetStation === 'm-simuladores') {
+            const devSims = ['sim-bva', 'sim-tdd', 'sim-doubles', 'sim-e2e'];
+            const execSims = ['sim-sequencer', 'sim-pyramid', 'sim-triage'];
+            const allSims = ['sim-assertion', 'sim-quiz'];
+
+            let targetTab = 'tab-dev-order';
+            if (execSims.includes(simId)) targetTab = 'tab-exec-order';
+            else if (allSims.includes(simId)) targetTab = 'tab-all-sims';
+
+            const tabBtn = document.querySelector(`.sim-tab-btn[data-tab="${targetTab}"]`);
+            if (tabBtn) tabBtn.click();
+
+            setTimeout(() => {
+                const containerClass = `.${simId}-container`;
+                const container = document.querySelector(containerClass) || document.getElementById(simId);
+                if (container) {
+                    container.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    container.classList.add('sim-highlight-pulse');
+                    setTimeout(() => container.classList.remove('sim-highlight-pulse'), 2500);
+                }
+            }, 180);
+        } else {
+            setTimeout(() => {
+                const container = document.getElementById(simId) ||
+                    document.querySelector(`.${simId}-container`) ||
+                    document.querySelector('.interactive-challenge, .module-learning-kit, .code-card');
+                if (container) {
+                    container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    container.classList.add('sim-highlight-pulse');
+                    setTimeout(() => container.classList.remove('sim-highlight-pulse'), 2500);
+                }
+            }, 180);
+        }
+    },
+
     initPrintHandlers() {
         window.addEventListener('beforeprint', () => {
             document.body.classList.add('printing-dossier');

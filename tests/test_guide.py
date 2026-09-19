@@ -587,3 +587,29 @@ def test_devbrain_evidence_runtime_mounting_and_methods():
     assert "SUCCESS! Montar completed with zero errors!" in result.stdout
     assert "refrescarDossier OK!" in result.stdout
     assert "imprimir OK!" in result.stdout
+
+
+def test_matriz_suites_verificacion_real_y_links_simulador():
+    """La matriz de suites debe evaluar dinámicamente ejercicios reales, no tener Acción Rápida y enlazar simuladores."""
+    path_dbe = os.path.join(BASE, "web", "js", "vendor", "devbrain-evidence.js")
+    with open(path_dbe, encoding="utf-8") as f:
+        dbe_code = f.read()
+
+    assert "Simulador / Práctica" in dbe_code
+    assert "data-nav-sim" in dbe_code
+    assert ">Acción Rápida<" not in dbe_code
+
+    path_ts = os.path.join(BASE, "web", "js", "testing-session.js")
+    with open(path_ts, encoding="utf-8") as f:
+        ts_code = f.read()
+
+    assert "evaluateCheckRealStatus" in ts_code
+    assert "syncTestChecksWithExercises" in ts_code
+    assert "simId" in ts_code
+    assert "simName" in ts_code
+
+    path_main = os.path.join(BASE, "web", "js", "main.js")
+    with open(path_main, encoding="utf-8") as f:
+        main_code = f.read()
+
+    assert "navigateToSimulator" in main_code

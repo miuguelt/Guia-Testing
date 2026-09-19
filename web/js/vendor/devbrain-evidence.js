@@ -928,14 +928,15 @@
       lineas.push('');
       lineas.push('## 4. Matriz de Suites de Pruebas Automatizadas');
       lineas.push('');
-      lineas.push('| Framework | Suite / Archivo de Prueba | Propósito & Aserciones | Estado Verificado |');
-      lineas.push('| --- | --- | --- | --- |');
+      lineas.push('| Framework | Suite / Archivo de Prueba | Métrica / Evidencia Real | Estado Verificado | Simulador / Práctica |');
+      lineas.push('| --- | --- | --- | --- | --- |');
       checks.forEach((c) => {
         const estadoCheck = c.passed ? '✅ VERIFICADO' : '⏳ PENDIENTE';
         const fecha = c.executedAt ? ` (${new Date(c.executedAt).toLocaleDateString('es-CO')})` : '';
-        lineas.push(`| **${dbeCelda(c.framework)}** | \`${c.file}\`<br>${dbeCelda(c.name)} | ${dbeCelda(c.description)} | ${estadoCheck}${fecha} |`);
+        const simRef = c.simName ? `[${dbeCelda(c.simName)}](#${c.stationId || 'm-simuladores'})` : 'Simulador QA';
+        lineas.push(`| **${dbeCelda(c.framework)}** | \`${c.file}\`<br>${dbeCelda(c.name)} | ${dbeCelda(c.actualMetric || c.description)} | ${estadoCheck}${fecha} | ${simRef} |`);
       });
-      lineas.push(`| **Resumen Global** | **${passedChecksCount} de ${checks.length} suites verificadas** | PyTest, Jest, JUnit 5, Playwright, CI/CD | ${passedChecksCount >= 5 ? '✅ CUMPLE UMBRAL' : '⏳ EN FORMACIÓN'} |`);
+      lineas.push(`| **Resumen Global** | **${passedChecksCount} de ${checks.length} suites verificadas** | Cálculo real según ejercicios completados | ${passedChecksCount >= 5 ? '✅ CUMPLE UMBRAL' : '⏳ EN FORMACIÓN'} | — |`);
       lineas.push('');
     }
 
@@ -1751,21 +1752,24 @@
         <table class="evidence-table">
           <thead>
             <tr>
-              <th style="width: 32%;">Suite de Prueba Evaluada</th>
-              <th style="width: 28%;">Métrica de Calidad Esperada</th>
-              <th style="width: 20%; text-align: center;">Estatus de Verificación</th>
-              <th style="width: 20%; text-align: center;" class="no-print">Acción Rápida</th>
+              <th style="width: 28%;">Suite de Prueba Evaluada</th>
+              <th style="width: 32%;">Métrica de Calidad Esperada / Obtenida</th>
+              <th style="width: 18%; text-align: center;">Estatus de Verificación</th>
+              <th style="width: 22%; text-align: center;" class="no-print">Simulador / Práctica</th>
             </tr>
           </thead>
           <tbody>
             ${checks.length ? checks.map((c) => `
             <tr>
-              <td><strong>${dbeCelda(c.name)}</strong></td>
-              <td style="font-size:0.82rem; color: #475569;">${dbeCelda(c.details || 'Verificación automatizada en pipeline')}</td>
+              <td>
+                <strong>${dbeCelda(c.name)}</strong>
+                ${c.file ? `<div style="font-size:0.75rem; color:#64748b; margin-top:0.2rem;"><code>${dbeCelda(c.file)}</code></div>` : ''}
+              </td>
+              <td style="font-size:0.82rem; color: #475569;">${dbeCelda(c.actualMetric || c.details || 'Verificación automatizada en pipeline')}</td>
               <td style="text-align: center;"><span class="badge ${c.passed ? 'badge--success' : 'badge--danger'}">${c.passed ? 'VERIFICADO' : 'PENDIENTE'}</span></td>
               <td style="text-align: center;" class="no-print">
-                <button type="button" class="btn btn--xs ${c.passed ? 'btn--secondary' : 'btn--primary'}" data-toggle-check="${c.id}" style="font-size: 0.72rem; padding: 0.2rem 0.55rem; cursor: pointer;">
-                  ${c.passed ? '↩ Desmarcar' : '⚡ Ejecutar Suite'}
+                <button type="button" class="btn btn--xs ${c.passed ? 'btn--secondary' : 'btn--primary'}" data-nav-sim="${c.simId || ''}" data-nav-station="${c.stationId || 'm-simuladores'}" title="${c.passed ? 'Práctica superada. Clic para repasar el ejercicio.' : 'Ir al simulador para realizar el ejercicio práctico'}" style="font-size: 0.72rem; padding: 0.25rem 0.55rem; cursor: pointer;">
+                  ${c.passed ? '🔄 Repasar Práctica ➔' : '🎮 Ir al Simulador ➔'}
                 </button>
               </td>
             </tr>
@@ -1894,6 +1898,22 @@
       </section>
     `;
 
+    hoja.querySelectorAll('[data-nav-sim]').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const simId = btn.getAttribute('data-nav-sim');
+        const stationId = btn.getAttribute('data-nav-station') || 'm-simuladores';
+        if (window.APP && typeof window.APP.navigateToSimulator === 'function') {
+          window.APP.navigateToSimulator(simId, stationId);
+        } else if (window.APP && typeof window.APP.navigateTo === 'function') {
+          window.APP.navigateTo(stationId);
+        } else {
+          window.location.hash = stationId;
+        }
+      });
+    });
+
+    // Compatibilidad y pruebas: data-toggle-check
     hoja.querySelectorAll('[data-toggle-check]').forEach((btn) => {
       btn.addEventListener('click', (e) => {
         e.preventDefault();
