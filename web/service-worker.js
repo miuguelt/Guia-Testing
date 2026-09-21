@@ -2,7 +2,7 @@
  * Service Worker para Guía de Testing & QA
  * Proporciona soporte 100% offline (Cache-First con Network Fallback)
  */
-const CACHE_NAME = 'guia-testing-v3.7.1-cache';
+const CACHE_NAME = 'guia-testing-v3.7.3-cache';
 const PRECACHE_ASSETS = [
   './',
   './index.html',
@@ -12,10 +12,12 @@ const PRECACHE_ASSETS = [
   './css/ai-testing-coach.css',
   './css/ai-guided-practice.css',
   './css/module-learning-kit.css',
+  './css/controls.css',
   './css/vendor/devbrain-code.css',
   './css/vendor/devbrain-evidence.css',
   './js/main.js',
   './js/testing-session.js',
+  './js/vendor/devbrain-evidence.js',
   './js/simulators.js',
   './js/sena-dossier.js',
   './js/gamification.js',
@@ -63,9 +65,11 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   // Ignoramos peticiones no GET o de esquemas no soportados (como chrome-extension://)
   if (event.request.method !== 'GET') return;
+  const requestUrl = new URL(event.request.url);
+  if (requestUrl.protocol !== 'http:' && requestUrl.protocol !== 'https:') return;
 
   event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
+    caches.match(event.request, { ignoreSearch: true }).then((cachedResponse) => {
       if (cachedResponse) {
         return cachedResponse;
       }
@@ -76,7 +80,9 @@ self.addEventListener('fetch', (event) => {
           }
           const responseToCache = networkResponse.clone();
           caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, responseToCache);
+            return cache.put(event.request, responseToCache);
+          }).catch((err) => {
+            console.warn('[ServiceWorker] Fallo al guardar recurso en caché:', event.request.url, err);
           });
           return networkResponse;
         })

@@ -589,6 +589,34 @@ def test_devbrain_evidence_runtime_mounting_and_methods():
     assert "imprimir OK!" in result.stdout
 
 
+def test_devbrain_evidence_agrupa_repintados_durante_la_escritura():
+    """Los campos de evidencia deben seguir aceptando texto durante una ráfaga de teclas."""
+    test_script = os.path.join(BASE, "tests", "test_evidence_input_regression.js")
+    assert os.path.isfile(test_script)
+    result = subprocess.run(["node", test_script], capture_output=True, text=True, cwd=BASE)
+    assert result.returncode == 0, f"Regresión de escritura en evidencias: {result.stderr}\n{result.stdout}"
+    assert "EVIDENCE INPUT REGRESSION PASSED" in result.stdout
+
+
+def test_service_worker_no_conserva_una_version_antigua_de_evidencias():
+    """La corrección del dossier debe llegar también a sesiones con caché offline."""
+    service_worker = os.path.join(BASE, "web", "service-worker.js")
+    with open(service_worker, encoding="utf-8") as f:
+        source = f.read()
+    assert "guia-testing-v3.7.2-cache" in source
+    assert "./js/vendor/devbrain-evidence.js" in source
+    assert "caches.match(event.request, { ignoreSearch: true })" in source
+
+
+def test_service_worker_ignora_esquemas_no_compatibles_con_cache():
+    """El Service Worker no debe interceptar solicitudes chrome-extension://."""
+    test_script = os.path.join(BASE, "tests", "test_service_worker_scheme_regression.js")
+    assert os.path.isfile(test_script)
+    result = subprocess.run(["node", test_script], capture_output=True, text=True, cwd=BASE)
+    assert result.returncode == 0, f"Regresión de esquema del Service Worker: {result.stderr}\n{result.stdout}"
+    assert "SERVICE WORKER SCHEME REGRESSION PASSED" in result.stdout
+
+
 def test_matriz_suites_verificacion_real_y_links_simulador():
     """La matriz de suites debe evaluar dinámicamente ejercicios reales, no tener Acción Rápida y enlazar simuladores."""
     path_dbe = os.path.join(BASE, "web", "js", "vendor", "devbrain-evidence.js")

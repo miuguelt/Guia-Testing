@@ -630,6 +630,46 @@
     }
     return nodo;
   }
+
+  /**
+   * Agrupa repintados derivados de eventos de escritura.
+   *
+   * Los campos de las estaciones guardan cada cambio para no perder trabajo,
+   * pero el dossier y la barra de progreso son vistas derivadas costosas. Si se
+   * reconstruyen por cada tecla, el navegador interrumpe la escritura y el
+   * aprendiz percibe que el campo dejó de responder. El guardado sigue siendo
+   * inmediato; solo se difiere la reconstrucción visual hasta que cesa la
+   * ráfaga de cambios.
+   *
+   * @param {Function} pintar
+   * @param {number} esperaMs
+   * @returns {{programar: Function, ahora: Function, cancelar: Function}}
+   */
+  function dbeCrearRefrescoAgrupado(pintar, esperaMs = 120) {
+    let temporizador = null;
+
+    const cancelar = () => {
+      if (temporizador !== null) {
+        window.clearTimeout(temporizador);
+        temporizador = null;
+      }
+    };
+
+    const ahora = () => {
+      cancelar();
+      pintar();
+    };
+
+    const programar = () => {
+      cancelar();
+      temporizador = window.setTimeout(() => {
+        temporizador = null;
+        pintar();
+      }, esperaMs);
+    };
+
+    return { programar, ahora, cancelar };
+  }
   
   /**
    * Crea un bloque titulado con contenido de texto.
@@ -2602,23 +2642,25 @@
     }
 
     // Función principal para aplicar firma según rol y modalidad
-    const aplicarFirma = (dataUrl, role = currentRole, mode = currentMode) => {
+    const aplicarFirma = (dataUrl, role = currentRole, mode = currentMode, persistir = true) => {
       const esAprendiz = role === 'apprentice';
 
       if (esAprendiz) {
         apprenticeData.signature = dataUrl;
-        try {
-          if (dataUrl) {
-            localStorage.setItem(claveFirmaApprentice, dataUrl);
-            localStorage.setItem('sena_apprentice_signature', dataUrl);
-          } else {
-            localStorage.removeItem(claveFirmaApprentice);
-            localStorage.removeItem('sena_apprentice_signature');
-          }
-        } catch (_) {}
+        if (persistir) {
+          try {
+            if (dataUrl) {
+              localStorage.setItem(claveFirmaApprentice, dataUrl);
+              localStorage.setItem('sena_apprentice_signature', dataUrl);
+            } else {
+              localStorage.removeItem(claveFirmaApprentice);
+              localStorage.removeItem('sena_apprentice_signature');
+            }
+          } catch (_) {}
 
-        if (typeof window !== 'undefined' && window.TestingSession && typeof window.TestingSession.saveSignature === 'function') {
-          window.TestingSession.saveSignature(dataUrl);
+          if (typeof window !== 'undefined' && window.TestingSession && typeof window.TestingSession.saveSignature === 'function') {
+            window.TestingSession.saveSignature(dataUrl);
+          }
         }
 
         if (stampAreaApprentice) {
@@ -2633,15 +2675,17 @@
         }
       } else {
         apprenticeData.instructorSignature = dataUrl;
-        try {
-          if (dataUrl) {
-            localStorage.setItem(claveFirmaInstructor, dataUrl);
-            localStorage.setItem('sena_instructor_signature', dataUrl);
-          } else {
-            localStorage.removeItem(claveFirmaInstructor);
-            localStorage.removeItem('sena_instructor_signature');
-          }
-        } catch (_) {}
+        if (persistir) {
+          try {
+            if (dataUrl) {
+              localStorage.setItem(claveFirmaInstructor, dataUrl);
+              localStorage.setItem('sena_instructor_signature', dataUrl);
+            } else {
+              localStorage.removeItem(claveFirmaInstructor);
+              localStorage.removeItem('sena_instructor_signature');
+            }
+          } catch (_) {}
+        }
 
         if (stampAreaInstructor) {
           stampAreaInstructor.innerHTML = dataUrl
@@ -2657,7 +2701,7 @@
 
       actualizarEstadoUI();
 
-      if (dataUrl && window.APP && typeof window.APP.showToast === 'function') {
+      if (persistir && dataUrl && window.APP && typeof window.APP.showToast === 'function') {
         window.APP.showToast(`Firma de ${esAprendiz ? 'Aprendiz' : 'Instructor'} incorporada al documento ✓`, 'success');
       }
     };
@@ -2744,7 +2788,7 @@
       firmaExistenteAprendiz = localStorage.getItem(claveFirmaApprentice) || localStorage.getItem('sena_apprentice_signature') || '';
     }
     if (firmaExistenteAprendiz) {
-      aplicarFirma(firmaExistenteAprendiz, 'apprentice', 'draw');
+      aplicarFirma(firmaExistenteAprendiz, 'apprentice', 'draw', false);
       const img = new Image();
       img.onload = () => {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -2759,7 +2803,7 @@
       firmaExistenteInstructor = localStorage.getItem(claveFirmaInstructor) || localStorage.getItem('sena_instructor_signature') || '';
     }
     if (firmaExistenteInstructor) {
-      aplicarFirma(firmaExistenteInstructor, 'instructor', 'draw');
+      aplicarFirma(firmaExistenteInstructor, 'instructor', 'draw', false);
     }
 
     // Botón Guardar / Aplicar Firma
@@ -3290,21 +3334,22 @@
       dbeVincularInputs(tarjeta, apprenticeData, store ? store.prefijo : '');
       dbeInicializarFirmaPad(tarjeta, apprenticeData, store ? store.prefijo : '');
     };
-  
+
     pintar();
+    const refresco = dbeCrearRefrescoAgrupado(pintar);
     if (store) {
-      store.suscribir(() => pintar());
+      store.suscribir(() => refresco.programar());
     }
     if (typeof window !== 'undefined') {
       if (window.TestingSession && typeof window.TestingSession.subscribe === 'function') {
-        window.TestingSession.subscribe(() => pintar());
+        window.TestingSession.subscribe(() => refresco.programar());
       }
       if (window.DevBrainEvidence) {
         window.DevBrainEvidence.refrescarDossier = pintar;
         window.DevBrainEvidence.imprimir = dbeEjecutarImpresionLimpia;
       }
     }
-    return { refrescar: pintar };
+    return { refrescar: () => refresco.ahora() };
   }
   
   /**
@@ -3321,8 +3366,9 @@
       dbeSeguirTema(tarjeta);
     };
     pintar();
+    const refresco = dbeCrearRefrescoAgrupado(pintar);
     if (store) {
-      store.suscribir(() => pintar());
+      store.suscribir(() => refresco.programar());
     }
   }
   
@@ -3461,6 +3507,12 @@
     Store: DbeEvidenceStore,
     calcularEstado: dbeCalcularEstado,
   };
+
+  // Contrato mínimo para las pruebas de regresión del runtime. No se publica
+  // en el navegador final; solo se habilita en el entorno de pruebas local.
+  if (global.__DEV__) {
+    evidence.__testing = { crearRefrescoAgrupado: dbeCrearRefrescoAgrupado };
+  }
   
 
   global.DevBrainEvidence = evidence;

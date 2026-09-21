@@ -1,0 +1,346 @@
+/*
+ * Controles transversales de la guía
+ *
+ * Este archivo se carga al final de la cascada para que los controles que se
+ * generan desde los módulos y los que provienen del dossier de evidencias
+ * compartan la misma experiencia: alto táctil, contraste, foco visible y
+ * estados claros.
+ */
+
+:root {
+    --control-height: 2.75rem;
+    --control-height-compact: 2.625rem;
+    --control-radius: 0.75rem;
+    --control-border: rgba(148, 184, 220, 0.28);
+    --control-border-hover: rgba(92, 214, 255, 0.72);
+    --control-focus: rgba(92, 214, 255, 0.42);
+    --control-surface: rgba(7, 20, 39, 0.78);
+    --control-surface-hover: rgba(25, 55, 84, 0.9);
+}
+
+button,
+input,
+select,
+textarea,
+.btn {
+    font: inherit;
+    box-sizing: border-box;
+}
+
+button,
+.btn {
+    min-height: var(--control-height);
+    border: 1px solid var(--control-border);
+    border-radius: var(--control-radius);
+    transition:
+        background-color 160ms ease,
+        border-color 160ms ease,
+        box-shadow 160ms ease,
+        color 160ms ease,
+        transform 160ms ease;
+}
+
+button:not(:disabled):not([aria-disabled='true']),
+.btn:not([aria-disabled='true']) {
+    cursor: pointer;
+}
+
+button:not(:disabled):not([aria-disabled='true']):hover,
+.btn:not([aria-disabled='true']):hover {
+    border-color: var(--control-border-hover);
+    box-shadow: 0 0 0 3px rgba(92, 214, 255, 0.08), 0 10px 24px rgba(1, 8, 20, 0.2);
+    transform: translateY(-1px);
+}
+
+button:not(:disabled):not([aria-disabled='true']):active,
+.btn:not([aria-disabled='true']):active {
+    box-shadow: 0 0 0 2px rgba(92, 214, 255, 0.1);
+    transform: translateY(0);
+}
+
+button:disabled,
+button[aria-disabled='true'],
+.btn:disabled,
+.btn[aria-disabled='true'] {
+    cursor: not-allowed;
+    filter: saturate(0.55);
+    opacity: 0.58;
+    transform: none;
+}
+
+button:focus-visible,
+.btn:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 3px solid var(--control-focus);
+    outline-offset: 2px;
+}
+
+/* Acciones principales y secundarias mantienen una jerarquía sencilla y
+   estable incluso cuando el botón es inyectado por un módulo. */
+.btn-primary {
+    background: var(--ui-cyan);
+    border-color: var(--ui-cyan);
+    color: #06111f;
+    box-shadow: 0 8px 20px rgba(92, 214, 255, 0.2);
+}
+
+.btn-primary:hover {
+    background: #8ae3ff;
+    border-color: #8ae3ff;
+    color: #06111f;
+}
+
+.btn-secondary,
+.btn:not(.btn-primary):not(.btn--primary):not(.btn--secondary) {
+    background: var(--ui-surface-raised);
+    border-color: var(--control-border);
+    color: var(--ui-text);
+}
+
+.btn-secondary:hover,
+.btn:not(.btn-primary):not(.btn--primary):not(.btn--secondary):hover {
+    background: var(--control-surface-hover);
+    color: var(--ui-text);
+}
+
+.btn-sm {
+    min-height: var(--control-height-compact);
+    padding-block: 0.5rem;
+}
+
+/* Campos de texto, áreas largas y selectores */
+input:not([type='hidden']):not([type='checkbox']):not([type='radio']):not([type='range']),
+select,
+textarea {
+    width: 100%;
+    min-width: 0;
+    min-height: var(--control-height);
+    border: 1px solid var(--control-border);
+    border-radius: var(--control-radius);
+    background-color: var(--control-surface);
+    color: var(--ui-text);
+    caret-color: var(--ui-cyan);
+    line-height: 1.4;
+}
+
+input:not([type='hidden']):not([type='checkbox']):not([type='radio']):not([type='range']),
+select {
+    padding: 0.65rem 0.85rem;
+}
+
+textarea {
+    min-height: 7rem;
+    padding: 0.8rem 0.9rem;
+    resize: vertical;
+}
+
+input:not([type='hidden']):not([type='checkbox']):not([type='radio']):not([type='range']):hover,
+input:not([type='hidden']):not([type='checkbox']):not([type='radio']):not([type='range']):focus,
+select:hover,
+select:focus,
+textarea:hover,
+textarea:focus {
+    border-color: var(--control-border-hover);
+    background-color: rgba(10, 28, 50, 0.92);
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: var(--ui-muted);
+    opacity: 0.9;
+}
+
+select {
+    appearance: none;
+    padding-right: 2.75rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235cd6ff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-position: right 0.85rem center;
+    background-repeat: no-repeat;
+    background-size: 1rem;
+}
+
+select option {
+    background: var(--ui-surface);
+    color: var(--ui-text);
+}
+
+/* Algunos módulos históricos tienen selectores más específicos o usan
+   !important para proteger sus controles. Esta capa explícita mantiene el
+   contrato visual común sin alterar el comportamiento de los formularios. */
+.sim-input,
+.sim-select,
+.sim-textarea,
+.dbe-campo__control,
+.signature-typed-input,
+.signature-font-select,
+.learning-kit-matrix-grid select {
+    min-height: var(--control-height) !important;
+    border: 1px solid var(--control-border) !important;
+    border-radius: var(--control-radius) !important;
+    background-color: var(--control-surface) !important;
+    color: var(--ui-text) !important;
+    caret-color: var(--ui-cyan) !important;
+}
+
+.sim-input,
+.sim-select,
+.signature-typed-input,
+.signature-font-select,
+.learning-kit-matrix-grid select {
+    padding: 0.65rem 0.85rem !important;
+}
+
+.sim-select,
+.learning-kit-matrix-grid select,
+.signature-font-select {
+    appearance: none !important;
+    padding-right: 2.75rem !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235cd6ff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") !important;
+    background-position: right 0.85rem center !important;
+    background-repeat: no-repeat !important;
+    background-size: 1rem !important;
+}
+
+.sim-textarea,
+textarea.dbe-campo__control {
+    min-height: 7rem !important;
+    padding: 0.8rem 0.9rem !important;
+    resize: vertical;
+}
+
+.sim-input:hover,
+.sim-input:focus,
+.sim-select:hover,
+.sim-select:focus,
+.sim-textarea:hover,
+.sim-textarea:focus,
+.dbe-campo__control:hover,
+.dbe-campo__control:focus,
+.signature-typed-input:hover,
+.signature-typed-input:focus,
+.signature-font-select:hover,
+.signature-font-select:focus,
+.learning-kit-matrix-grid select:hover,
+.learning-kit-matrix-grid select:focus {
+    border-color: var(--control-border-hover) !important;
+    background-color: rgba(10, 28, 50, 0.92) !important;
+}
+
+input[type='checkbox'],
+input[type='radio'] {
+    width: 1.2rem;
+    height: 1.2rem;
+    min-height: 1.2rem;
+    flex: 0 0 auto;
+    accent-color: var(--ui-mint);
+}
+
+input[type='range'] {
+    width: 100%;
+    min-height: 2.25rem;
+    accent-color: var(--ui-cyan);
+}
+
+input[type='file'] {
+    min-height: var(--control-height);
+    padding: 0.35rem;
+    overflow: hidden;
+}
+
+input[type='file']::file-selector-button {
+    min-height: 2rem;
+    margin-right: 0.6rem;
+    padding: 0.35rem 0.75rem;
+    border: 1px solid var(--control-border);
+    border-radius: 0.55rem;
+    background: var(--ui-surface-raised);
+    color: var(--ui-text);
+    font: inherit;
+    cursor: pointer;
+}
+
+input[type='file']::file-selector-button:hover {
+    border-color: var(--control-border-hover);
+    background: var(--control-surface-hover);
+}
+
+/* Controles de selección, pestañas y opciones que no usan .btn. */
+.tab-btn,
+.sim-tab-btn,
+.tool-filter,
+.gema-stepper button,
+.learning-kit-step,
+.learning-kit-choice,
+.learning-kit-special-option,
+.quiz-option-btn,
+.quiz-opt,
+.btn-run-case,
+.btn-opt-double,
+.btn-copy-code,
+.btn-next,
+.copy-btn,
+.dbe-boton--menudo,
+.sig-mode-btn {
+    min-height: var(--control-height-compact);
+    border-radius: 0.7rem;
+}
+
+.tab-btn[aria-selected='true'],
+.sim-tab-btn[aria-selected='true'],
+.tool-filter.is-active,
+.gema-stepper button.is-active,
+.learning-kit-step.is-active,
+button[aria-pressed='true'] {
+    border-color: var(--ui-cyan);
+    background: rgba(92, 214, 255, 0.16);
+    color: var(--ui-text);
+    box-shadow: 0 0 0 3px rgba(92, 214, 255, 0.08), 0 8px 20px rgba(1, 8, 20, 0.18);
+}
+
+.learning-kit-choice,
+.learning-kit-special-option,
+.quiz-option-btn,
+.quiz-opt,
+.btn-run-case,
+.btn-opt-double,
+.btn-copy-code,
+.copy-btn,
+.dbe-boton--menudo {
+    background: var(--control-surface);
+    color: var(--ui-text);
+}
+
+@media (max-width: 40rem) {
+    button,
+    .btn {
+        min-height: 2.75rem;
+    }
+
+    .btn,
+    .evidence-actions-bar .btn,
+    .gema-actions .btn,
+    .gema-output-actions .btn {
+        width: 100%;
+    }
+
+    .header-actions .btn,
+    .tool-lab-card-actions .btn,
+    .modal-footer .btn,
+    .next-button-container .btn {
+        width: auto;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    button,
+    .btn {
+        transition: none;
+    }
+
+    button:not(:disabled):hover,
+    .btn:not([aria-disabled='true']):hover {
+        transform: none;
+    }
+}
