@@ -405,7 +405,7 @@
         /**
          * Actualiza y guarda el perfil del aprendiz.
          */
-        saveProfile(profileData) {
+        saveProfile(profileData, notifyObservers = true) {
             const current = this.getProfile();
             const updated = Object.assign({}, current, profileData);
             localStorage.setItem(STORAGE_KEYS.PROFILE, JSON.stringify(updated));
@@ -413,7 +413,7 @@
             try {
                 localStorage.setItem('guia_testing_apprentice_profile', JSON.stringify(updated));
             } catch (e) {}
-            this.notify();
+            if (notifyObservers) this.notify();
             return updated;
         },
 

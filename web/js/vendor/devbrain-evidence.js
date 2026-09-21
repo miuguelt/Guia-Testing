@@ -670,6 +670,28 @@
 
     return { programar, ahora, cancelar };
   }
+
+  // El dossier contiene campos editables: reconstruirlos mientras tienen foco
+  // desconecta el nodo y obliga al aprendiz a volver a hacer clic tras cada pausa.
+  function dbeCrearRefrescoProtegido(pintar, contenedor, esperaMs = 120) {
+    let pendiente = false;
+    const editando = () => {
+      const activo = document.activeElement;
+      return activo && contenedor.contains(activo) &&
+        typeof activo.matches === 'function' && activo.matches('input, textarea, select');
+    };
+    const refresco = dbeCrearRefrescoAgrupado(() => {
+      if (editando()) { pendiente = true; return; }
+      pendiente = false;
+      pintar();
+    }, esperaMs);
+    contenedor.addEventListener('focusout', () => {
+      window.setTimeout(() => {
+        if (pendiente && !editando()) refresco.ahora();
+      }, 0);
+    });
+    return { programar: refresco.programar, ahora: refresco.ahora, cancelar: refresco.cancelar };
+  }
   
   /**
    * Crea un bloque titulado con contenido de texto.
@@ -2010,6 +2032,21 @@
    * @param {string} prefijo
    * @returns {Object}
    */
+  function dbeLimpiarPerfilPendiente(perfil) {
+    const pendientes = {
+      name: ['APRENDIZ ADSO', 'APRENDIZ SENA ADSO'],
+      ficha: ['<NÚMERO_DE_FICHA>', '228118-ADSO'],
+      centro: ['Por diligenciar', 'Centro de Biotecnología Agropecuaria / CSF'],
+      regional: ['Por diligenciar', 'Regional Distrito Capital'],
+      instructor: ['Por diligenciar', 'INSTRUCTOR TÉCNICO SENA']
+    };
+    const limpio = { ...perfil };
+    Object.keys(pendientes).forEach((campo) => {
+      if (pendientes[campo].includes(String(limpio[campo] || '').trim())) limpio[campo] = '';
+    });
+    return limpio;
+  }
+
   function dbeLeerPerfilAprendiz(prefijo) {
     const clave = `${prefijo || 'guia_testing'}_apprentice_profile`;
     const perfilInicial = {
@@ -2027,7 +2064,7 @@
     if (typeof window !== 'undefined' && window.TestingSession && typeof window.TestingSession.getProfile === 'function') {
       const tsProfile = window.TestingSession.getProfile();
       if (tsProfile && (tsProfile.name || tsProfile.docNumber)) {
-        return { ...perfilInicial, ...tsProfile };
+        return dbeLimpiarPerfilPendiente({ ...perfilInicial, ...tsProfile });
       }
     }
 
@@ -2035,11 +2072,11 @@
       const guardado = localStorage.getItem(clave) || localStorage.getItem('guia_testing_apprentice_profile') || localStorage.getItem('sena_apprentice_profile');
       if (guardado) {
         const perfil = JSON.parse(guardado);
-        return { ...perfilInicial, ...perfil };
+        return dbeLimpiarPerfilPendiente({ ...perfilInicial, ...perfil });
       }
     } catch (e) {}
 
-    return perfilInicial;
+    return dbeLimpiarPerfilPendiente(perfilInicial);
   }
 
   /**
@@ -2047,14 +2084,25 @@
    * @param {string} prefijo
    * @param {Object} datos
    */
-  function dbeGuardarPerfilAprendiz(prefijo, datos) {
+  let dbeAvisoPerfilPendiente = null;
+  function dbeGuardarPerfilAprendiz(prefijo, datos, aplazarAviso = false) {
     const clave = `${prefijo || 'guia_testing'}_apprentice_profile`;
     try {
       localStorage.setItem(clave, JSON.stringify(datos));
       localStorage.setItem('guia_testing_apprentice_profile', JSON.stringify(datos));
     } catch (e) {}
     if (typeof window !== 'undefined' && window.TestingSession && typeof window.TestingSession.saveProfile === 'function') {
-      window.TestingSession.saveProfile(datos);
+      if (dbeAvisoPerfilPendiente !== null) {
+        window.clearTimeout(dbeAvisoPerfilPendiente);
+        dbeAvisoPerfilPendiente = null;
+      }
+      window.TestingSession.saveProfile(datos, !aplazarAviso);
+      if (aplazarAviso && typeof window.TestingSession.notify === 'function') {
+        dbeAvisoPerfilPendiente = window.setTimeout(() => {
+          dbeAvisoPerfilPendiente = null;
+          window.TestingSession.notify();
+        }, 300);
+      }
     }
   }
 
@@ -2115,14 +2163,14 @@
    * @param {string} valor
    * @returns {HTMLElement}
    */
-  function dbeCrearGrupoInput(etiqueta, id, valor) {
+  function dbeCrearGrupoInput(etiqueta, id, valor, ayuda = {}) {
     return dbeEl('div', {
       clase: 'sim-form-group',
       hijos: [
         dbeEl('label', { clase: 'sim-label', texto: etiqueta, attrs: { for: id } }),
         dbeEl('input', {
           clase: 'sim-input',
-          attrs: { type: 'text', id, value: valor || '' }
+          attrs: { type: 'text', id, value: valor || '', placeholder: ayuda.placeholder || '', autocomplete: ayuda.autocomplete || 'off', maxlength: ayuda.maxlength || '120', ...(ayuda.inputmode ? { inputmode: ayuda.inputmode } : {}) }
         })
       ]
     });
@@ -2137,7 +2185,7 @@
   function dbeVincularInputs(raiz, apprenticeData, prefijo) {
     const mapeo = [
       { id: 'ev-name', target: ['disp-name', 'sig-name'], key: 'name' },
-      { id: 'ev-doc', target: ['disp-doc', 'sig-doc'], key: 'docNumber', prefix: 'C.C. ' },
+      { id: 'ev-doc', target: ['disp-doc', 'sig-doc'], key: 'docNumber' },
       { id: 'ev-ficha', target: ['disp-ficha'], key: 'ficha' },
       { id: 'ev-centro', target: ['disp-centro', 'sig-centro'], key: 'centro' },
       { id: 'ev-regional', target: ['disp-regional'], key: 'regional' },
@@ -2151,11 +2199,11 @@
       input.addEventListener('input', (e) => {
         const val = e.target.value;
         apprenticeData[item.key] = val;
-        dbeGuardarPerfilAprendiz(prefijo, apprenticeData);
+        dbeGuardarPerfilAprendiz(prefijo, apprenticeData, true);
         item.target.forEach((targetId) => {
           const nodo = raiz.querySelector(`#${targetId}`);
           if (nodo) {
-            nodo.textContent = item.prefix ? `${item.prefix}${val}` : val;
+            nodo.textContent = val;
           }
         });
       });
@@ -2774,7 +2822,8 @@
       const btnClear = raiz.querySelector('#btn-clear-sig');
       if (btnClear) btnClear.style.display = (mode === 'draw' || mode === 'type') ? 'inline-flex' : 'none';
       if (btnSave) {
-        btnSave.textContent = mode === 'manual' ? '📝 Aplicar Modo Manual (Espacio en Físico)' : '💾 Aplicar Firma al Documento';
+        btnSave.style.display = mode === 'upload' ? 'none' : 'inline-flex';
+        btnSave.textContent = mode === 'manual' ? '📝 Reservar espacio para firma' : '💾 Aplicar firma';
       }
     };
 
@@ -2858,11 +2907,9 @@
 
     // Botón / Input Cargar Imagen
     const fileInput = raiz.querySelector('#sig-file-input');
-    const uploadTrigger = raiz.querySelector('#btn-upload-sig-trigger');
     const uploadBtnInPanel = raiz.querySelector('#btn-browse-sig-file');
     const triggerFileClick = () => { if (fileInput) fileInput.click(); };
 
-    if (uploadTrigger) uploadTrigger.addEventListener('click', triggerFileClick);
     if (uploadBtnInPanel) uploadBtnInPanel.addEventListener('click', triggerFileClick);
 
     if (fileInput) {
@@ -2949,20 +2996,20 @@
           dbeEl('div', {
             clase: 'evidence-form-grid',
             hijos: [
-              dbeCrearGrupoInput('Nombre Completo del Aprendiz:', 'ev-name', apprenticeData.name),
-              dbeCrearGrupoInput('Documento de Identidad:', 'ev-doc', apprenticeData.docNumber),
-              dbeCrearGrupoInput('Número de Ficha ADSO:', 'ev-ficha', apprenticeData.ficha),
-              dbeCrearGrupoInput('Centro de Formación:', 'ev-centro', apprenticeData.centro),
-              dbeCrearGrupoInput('Regional SENA:', 'ev-regional', apprenticeData.regional),
-              dbeCrearGrupoInput('Nombre del Instructor Líder:', 'ev-instructor', apprenticeData.instructor),
+              dbeCrearGrupoInput('Nombre completo del aprendiz', 'ev-name', apprenticeData.name, { placeholder: 'Nombres y apellidos', autocomplete: 'name' }),
+              dbeCrearGrupoInput('Documento de identidad', 'ev-doc', apprenticeData.docNumber, { placeholder: 'Ej.: 123456789', autocomplete: 'off', maxlength: '30', inputmode: 'numeric' }),
+              dbeCrearGrupoInput('Número de ficha ADSO', 'ev-ficha', apprenticeData.ficha, { placeholder: 'Ej.: 1234567', maxlength: '30', inputmode: 'numeric' }),
+              dbeCrearGrupoInput('Centro de formación', 'ev-centro', apprenticeData.centro, { placeholder: 'Nombre del centro' }),
+              dbeCrearGrupoInput('Regional SENA', 'ev-regional', apprenticeData.regional, { placeholder: 'Nombre de la regional' }),
+              dbeCrearGrupoInput('Nombre del instructor líder', 'ev-instructor', apprenticeData.instructor, { placeholder: 'Nombre y apellido' }),
               dbeEl('div', {
                 clase: 'sim-form-group',
                 attrs: { style: 'grid-column: 1 / -1; margin-top: 0.5rem;' },
                 hijos: [
-                  dbeEl('label', { clase: 'sim-label', texto: 'Observaciones o Dictamen del Instructor / Diagnóstico:', attrs: { for: 'ev-obs' } }),
+                  dbeEl('label', { clase: 'sim-label', texto: 'Observaciones o dictamen del instructor', attrs: { for: 'ev-obs' } }),
                   dbeEl('textarea', {
                     clase: 'sim-input',
-                    attrs: { id: 'ev-obs', rows: '2', style: 'width: 100%; font-family: inherit; font-size: 0.85rem; padding: 0.5rem; resize: vertical;' },
+                    attrs: { id: 'ev-obs', rows: '3', maxlength: '3000', placeholder: 'Escribe aquí las observaciones cuando correspondan' },
                     texto: apprenticeData.observations || ''
                   })
                 ]
@@ -2976,22 +3023,22 @@
               dbeEl('div', {
                 attrs: { style: 'display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.5rem;' },
                 hijos: [
-                  dbeEl('h4', { clase: 'signature-panel-title', attrs: { style: 'margin: 0;' }, texto: '✍️ Opciones y Registro de Firma Oficial (SENA SIGA)' }),
+                  dbeEl('h4', { clase: 'signature-panel-title', attrs: { style: 'margin: 0;' }, texto: '✍️ Firmas del aprendiz y del instructor' }),
                   dbeEl('span', {
-                    attrs: { id: 'sig-current-role-label', style: 'font-size: 0.8rem; font-weight: 700; color: #39a900;' },
+                    attrs: { id: 'sig-current-role-label', 'aria-live': 'polite' },
                     texto: `Firmando para: Aprendiz (${apprenticeData.name || 'Sin nombre'})`
                   })
                 ]
               }),
               dbeEl('p', {
                 clase: 'signature-panel-subtitle',
-                texto: 'Selecciona quién firma (Aprendiz o Instructor) y el método preferido: dibujar con el mouse o táctil, generar con tipografía caligráfica estilizada, subir una imagen de tu firma o reservar el espacio para firma manual con bolígrafo tras imprimir.'
+                texto: 'Elige quién firma y cómo lo hará. Puedes dibujar, escribir o subir la firma; también puedes dejar el espacio libre para firmar después de imprimir.'
               }),
               // Selector de Rol
               dbeEl('div', {
                 clase: 'sig-role-selector',
                 hijos: [
-                  dbeEl('strong', { attrs: { style: 'color: #334155; font-size: 0.82rem;' }, texto: 'Firmar como:' }),
+                  dbeEl('strong', { clase: 'sig-role-label', texto: 'Firmar como:' }),
                   dbeEl('button', {
                     clase: 'sig-role-btn is-active',
                     attrs: { type: 'button', id: 'btn-role-apprentice', 'data-role': 'apprentice' },
@@ -3011,32 +3058,32 @@
                   dbeEl('button', {
                     clase: 'sig-mode-btn is-active',
                     attrs: { type: 'button', id: 'tab-sig-draw', 'data-mode': 'draw' },
-                    texto: '✏️ Dibujar Trazo'
+                    texto: '✏️ Dibujar firma'
                   }),
                   dbeEl('button', {
                     clase: 'sig-mode-btn',
                     attrs: { type: 'button', id: 'tab-sig-type', 'data-mode': 'type' },
-                    texto: '🔤 Escribir Caligrafía'
+                    texto: '🔤 Escribir firma'
                   }),
                   dbeEl('button', {
                     clase: 'sig-mode-btn',
                     attrs: { type: 'button', id: 'tab-sig-upload', 'data-mode': 'upload' },
-                    texto: '📁 Cargar Imagen'
+                    texto: '📁 Subir firma'
                   }),
                   dbeEl('button', {
                     clase: 'sig-mode-btn',
                     attrs: { type: 'button', id: 'tab-sig-manual', 'data-mode': 'manual' },
-                    texto: '📝 Firma Física en Papel'
+                    texto: '📝 Firmar en papel'
                   })
                 ]
               }),
               // Contenedor de Paneles
               dbeEl('div', {
-                attrs: { style: 'display: flex; flex-wrap: wrap; gap: 1.5rem; align-items: flex-start;' },
+                clase: 'signature-workspace',
                 hijos: [
                   // Columna izquierda: Paneles de contenido según modo
                   dbeEl('div', {
-                    attrs: { style: 'flex: 1; min-width: 320px;' },
+                    clase: 'signature-workspace__content',
                     hijos: [
                       // Panel 1: Canvas para Dibujar
                       dbeEl('div', {
@@ -3056,26 +3103,30 @@
                         attrs: { id: 'panel-sig-type', style: 'display: none;' },
                         clase: 'signature-typed-panel',
                         hijos: [
+                          dbeEl('label', { clase: 'sim-label', texto: 'Nombre para la firma', attrs: { for: 'signature-typed-input' } }),
                           dbeEl('input', {
                             clase: 'signature-typed-input',
                             attrs: {
                               type: 'text',
                               id: 'signature-typed-input',
-                              placeholder: 'Escriba su nombre y apellido completo...',
+                              maxlength: '120',
+                              autocomplete: 'off',
+                              placeholder: 'Nombres y apellidos',
                               value: apprenticeData.name || ''
                             }
                           }),
                           dbeEl('div', {
-                            attrs: { style: 'display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;' },
+                            clase: 'signature-font-picker',
                             hijos: [
-                              dbeEl('label', { attrs: { for: 'signature-font-select', style: 'font-size: 0.78rem; color: #64748b; font-weight: 600;' }, texto: 'Estilo de letra:' }),
+                              dbeEl('label', { attrs: { for: 'signature-font-select' }, texto: 'Estilo de letra' }),
                               dbeEl('select', {
-                                attrs: { id: 'signature-font-select', style: 'font-size: 0.8rem; padding: 0.25rem 0.5rem; border-radius: 4px; border: 1px solid #cbd5e1;' },
+                                clase: 'signature-font-select',
+                                attrs: { id: 'signature-font-select', title: 'Estilo de letra para la firma' },
                                 hijos: [
-                                  dbeEl('option', { attrs: { value: 'Dancing Script, cursive' }, texto: 'Caligrafía Elegante (Dancing Script)' }),
-                                  dbeEl('option', { attrs: { value: 'Caveat, cursive' }, texto: 'Manuscrita Natural (Caveat)' }),
-                                  dbeEl('option', { attrs: { value: '"Brush Script MT", cursive' }, texto: 'Firma Clásica (Brush Script)' }),
-                                  dbeEl('option', { attrs: { value: '"Segoe Script", cursive' }, texto: 'Estilo Cursiva (Segoe Script)' })
+                                  dbeEl('option', { attrs: { value: 'Dancing Script, cursive' }, texto: 'Elegante' }),
+                                  dbeEl('option', { attrs: { value: 'Caveat, cursive' }, texto: 'Manuscrita' }),
+                                  dbeEl('option', { attrs: { value: '"Brush Script MT", cursive' }, texto: 'Clásica' }),
+                                  dbeEl('option', { attrs: { value: '"Segoe Script", cursive' }, texto: 'Cursiva' })
                                 ]
                               })
                             ]
@@ -3128,7 +3179,7 @@
                   }),
                   // Columna derecha: Estado y Acciones
                   dbeEl('div', {
-                    attrs: { style: 'flex: 1; min-width: 240px;' },
+                    clase: 'signature-workspace__footer',
                     hijos: [
                       dbeEl('div', {
                         attrs: { style: 'margin-bottom: 0.75rem;' },
@@ -3146,17 +3197,12 @@
                           dbeEl('button', {
                             clase: 'btn btn--primary btn--sm',
                             attrs: { type: 'button', id: 'btn-save-sig' },
-                            texto: '💾 Aplicar Firma al Documento'
+                            texto: '💾 Aplicar firma'
                           }),
                           dbeEl('button', {
                             clase: 'btn btn--secondary btn--sm',
                             attrs: { type: 'button', id: 'btn-clear-sig' },
-                            texto: '🧹 Limpiar Trazo'
-                          }),
-                          dbeEl('button', {
-                            clase: 'btn btn--secondary btn--sm',
-                            attrs: { type: 'button', id: 'btn-upload-sig-trigger' },
-                            texto: '📁 Cargar Imagen'
+                            texto: '🧹 Limpiar trazo'
                           }),
                           dbeEl('input', {
                             attrs: { type: 'file', id: 'sig-file-input', accept: 'image/png, image/jpeg, image/webp', style: 'display: none;' }
@@ -3164,7 +3210,7 @@
                           dbeEl('button', {
                             clase: 'btn btn--secondary btn--sm',
                             attrs: { type: 'button', id: 'btn-remove-sig', style: firmaActual ? '' : 'display: none;' },
-                            texto: '🗑️ Quitar Firma'
+                            texto: '🗑️ Quitar firma'
                           })
                         ]
                       })
@@ -3179,8 +3225,8 @@
   
       // 2. Acciones de persistencia, sincronización y exportación
       const botonGuardarMemoria = dbeEl('button', {
-        clase: 'btn btn--primary',
-        texto: '💾 Guardar en Memoria',
+        clase: 'btn btn--secondary',
+        texto: '💾 Guardar ahora',
         attrs: { type: 'button', id: 'btn-save-memory', title: 'Guarda tu avance y perfil localmente para retomar en cualquier sesión futura' }
       });
       botonGuardarMemoria.addEventListener('click', () => {
@@ -3194,7 +3240,7 @@
 
       const botonExportarRespaldo = dbeEl('button', {
         clase: 'btn btn--secondary',
-        texto: '📥 Exportar Respaldo (.json)',
+        texto: '📥 Descargar respaldo (.json)',
         attrs: { type: 'button', id: 'btn-export-backup', title: 'Descarga un archivo de respaldo con tu perfil, firmas, simuladores y pruebas' }
       });
       botonExportarRespaldo.addEventListener('click', () => {
@@ -3256,27 +3302,26 @@
 
       const botonRestaurarRespaldo = dbeEl('button', {
         clase: 'btn btn--secondary',
-        texto: '📤 Restaurar Avance (.json)',
+        texto: '📤 Restaurar avance (.json)',
         attrs: { type: 'button', id: 'btn-restore-backup', title: 'Carga un archivo de respaldo JSON para continuar tu trabajo en otro equipo' }
       });
       botonRestaurarRespaldo.addEventListener('click', () => inputRestaurar.click());
 
       const botonImprimir = dbeEl('button', {
         clase: 'btn btn--primary',
-        texto: '🖨️ Imprimir / Guardar en PDF',
+        texto: '🖨️ Imprimir o guardar en PDF',
         attrs: { type: 'button', id: 'btn-print-evidence' }
       });
       botonImprimir.addEventListener('click', () => { dbeEjecutarImpresionLimpia(); });
 
       formCard.appendChild(dbeEl('div', {
         clase: 'evidence-actions-bar no-print',
-        attrs: { style: 'margin-top: 1.5rem; display: flex; flex-wrap: wrap; gap: 0.75rem;' },
         hijos: [
+          botonImprimir,
           botonGuardarMemoria,
           botonExportarRespaldo,
           botonRestaurarRespaldo,
-          inputRestaurar,
-          botonImprimir
+          inputRestaurar
         ]
       }));
   
@@ -3336,7 +3381,7 @@
     };
 
     pintar();
-    const refresco = dbeCrearRefrescoAgrupado(pintar);
+    const refresco = dbeCrearRefrescoProtegido(pintar, contenedor);
     if (store) {
       store.suscribir(() => refresco.programar());
     }
@@ -3511,7 +3556,7 @@
   // Contrato mínimo para las pruebas de regresión del runtime. No se publica
   // en el navegador final; solo se habilita en el entorno de pruebas local.
   if (global.__DEV__) {
-    evidence.__testing = { crearRefrescoAgrupado: dbeCrearRefrescoAgrupado };
+    evidence.__testing = { crearRefrescoAgrupado: dbeCrearRefrescoAgrupado, crearRefrescoProtegido: dbeCrearRefrescoProtegido, limpiarPerfilPendiente: dbeLimpiarPerfilPendiente };
   }
   
 

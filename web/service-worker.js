@@ -4,7 +4,7 @@
  */
 // Se migra desde guia-testing-v3.7.2-cache para invalidar estilos y controles
 // que pudieron quedar persistidos durante una sesión offline anterior.
-const CACHE_NAME = 'guia-testing-v3.7.5-cache';
+const CACHE_NAME = 'guia-testing-v3.7.12-cache';
 const PRECACHE_ASSETS = [
   './',
   './index.html',

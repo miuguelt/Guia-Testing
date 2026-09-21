@@ -3154,6 +3154,149 @@ textarea:focus-visible {
     align-items: center;
 }
 
+/* Flujo de firma: rol → método → área de trabajo → acciones. */
+.evidence-form-card .sim-form-group,
+.signature-workspace__content,
+.signature-workspace__footer {
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+.evidence-form-card .sim-input {
+    width: 100%;
+    min-height: 44px;
+    box-sizing: border-box;
+    font: inherit;
+    resize: vertical;
+}
+
+.evidence-form-card .sim-input:focus-visible,
+.signature-control-panel button:focus-visible,
+.evidence-actions-bar button:focus-visible {
+    outline: 2px solid #80d4ff;
+    outline-offset: 2px;
+}
+
+.evidence-form-card .badge--success {
+    background: rgba(57, 169, 0, 0.16) !important;
+    border-color: rgba(57, 169, 0, 0.5);
+    color: #a4ec7c !important;
+}
+
+.sig-role-selector,
+.signature-mode-tabs {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.85rem;
+}
+
+.sig-role-label,
+#sig-current-role-label {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+#sig-current-role-label { font-weight: 700; }
+
+.sig-role-btn,
+.signature-control-panel .sig-mode-btn {
+    min-height: 44px;
+    padding: 0.55rem 0.85rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    background: var(--bg-tertiary, #1e293b);
+    color: var(--text-main);
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.sig-role-btn:hover,
+.signature-control-panel .sig-mode-btn:hover {
+    border-color: #39a900;
+    color: var(--text-main);
+}
+
+.sig-role-btn.is-active,
+.signature-control-panel .sig-mode-btn.is-active {
+    background: #39a900;
+    border-color: #39a900;
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(57, 169, 0, 0.25);
+}
+
+.signature-workspace {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+}
+
+.signature-workspace__footer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.signature-panel-actions .btn,
+.evidence-actions-bar .btn {
+    min-height: 44px;
+    white-space: normal;
+    text-align: center;
+}
+
+.signature-control-panel .signature-typed-panel { max-width: none; }
+
+.signature-control-panel .signature-typed-input,
+.signature-control-panel .signature-font-select {
+    width: 100%;
+    min-width: 0;
+    min-height: 44px;
+    box-sizing: border-box;
+    background: var(--bg-tertiary, #1e293b);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    color: var(--text-main);
+    font: inherit;
+}
+
+.signature-control-panel .signature-font-picker {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.35rem;
+    align-items: stretch;
+}
+
+.signature-control-panel .signature-font-select { padding: 0.55rem 2.25rem 0.55rem 0.75rem; }
+
+.evidence-actions-bar {
+    align-items: center;
+    border-top: 1px solid var(--border-subtle);
+    padding-top: 1.25rem;
+}
+
+@media (max-width: 480px) {
+    .dbe-dossier.evidence-wrapper {
+        margin-inline: -1rem;
+        width: calc(100% + 2rem);
+    }
+
+    .dbe-dossier.evidence-wrapper .evidence-form-card {
+        margin-inline: -1rem;
+        width: calc(100% + 2rem);
+        padding: 1rem;
+    }
+
+    .signature-control-panel { padding: 1rem; }
+
+    .sig-role-btn,
+    .signature-control-panel .sig-mode-btn,
+    .signature-panel-actions .btn,
+    .evidence-actions-bar .btn { flex: 1 1 100%; }
+}
+
 .signature-status-pill {
     font-size: 0.78rem;
     padding: 0.25rem 0.65rem;
@@ -4497,5 +4640,3 @@ textarea:focus-visible {
     animation: simHighlightPulse 2.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     border-radius: 8px;
 }
-
-
