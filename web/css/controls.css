@@ -287,6 +287,16 @@ input[type='file']::file-selector-button:hover {
     border-radius: 0.7rem;
 }
 
+.gema-stepper {
+    align-content: start;
+    align-self: start;
+}
+
+.gema-stepper button {
+    align-self: start;
+    height: auto;
+}
+
 .tab-btn[aria-selected='true'],
 .sim-tab-btn[aria-selected='true'],
 .tool-filter.is-active,
