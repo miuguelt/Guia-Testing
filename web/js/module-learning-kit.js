@@ -3,15 +3,15 @@
     'use strict';
 
     const moduleOrder = [
-        'm-reflexion', 'm-piramide', 'm-tdd', 'm-bdd',
+        'm-reflexion', 'm-piramide', 'm-riesgo', 'm-tdd', 'm-bdd',
         'm-pytest-fastapi', 'm-pytest-flask', 'm-jest-react', 'm-junit-jsp', 'm-playwright',
-        'm-cobertura', 'm-cicd', 'm-observabilidad', 'm-ia-testing',
+        'm-cobertura', 'm-defectos', 'm-cicd', 'm-observabilidad', 'm-ia-testing',
         'm-gema-testing', 'm-herramientas-ia', 'm-reto'
     ];
     const phases = [
-        ['01', 'Comprender', 'Riesgo, propósito y lenguaje común', ['m-reflexion', 'm-piramide']],
+        ['01', 'Comprender', 'Riesgo, propósito y lenguaje común', ['m-reflexion', 'm-piramide', 'm-riesgo']],
         ['02', 'Practicar', 'Herramientas, capas y ciclos', ['m-tdd', 'm-bdd', 'm-pytest-fastapi', 'm-pytest-flask', 'm-jest-react', 'm-junit-jsp']],
-        ['03', 'Verificar', 'Flujos, métricas y operación', ['m-playwright', 'm-cobertura', 'm-cicd', 'm-observabilidad']],
+        ['03', 'Verificar', 'Flujos, métricas y operación', ['m-playwright', 'm-cobertura', 'm-defectos', 'm-cicd', 'm-observabilidad']],
         ['04', 'Transferir', 'IA responsable y reto integrador', ['m-ia-testing', 'm-gema-testing', 'm-herramientas-ia', 'm-reto']]
     ];
     const symbols = {

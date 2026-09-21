@@ -4,7 +4,7 @@
  */
 // Se migra desde guia-testing-v3.7.2-cache para invalidar estilos y controles
 // que pudieron quedar persistidos durante una sesión offline anterior.
-const CACHE_NAME = 'guia-testing-v3.7.12-cache';
+const CACHE_NAME = 'guia-testing-v3.7.13-cache';
 const PRECACHE_ASSETS = [
   './',
   './index.html',
@@ -17,21 +17,35 @@ const PRECACHE_ASSETS = [
   './css/controls.css',
   './css/vendor/devbrain-code.css',
   './css/vendor/devbrain-evidence.css',
+  './js/vendor/devbrain-code.js',
+  './js/vendor/devbrain-evidence.js',
   './js/main.js',
   './js/testing-session.js',
-  './js/vendor/devbrain-evidence.js',
-  './js/simulators.js',
-  './js/sena-dossier.js',
   './js/gamification.js',
-  './js/deliverables-registry.js',
+  './js/simulators.js',
   './js/learning-visuals.js',
   './js/code-renderer.js',
   './js/ai-testing-coach.js',
+  './js/ai-tools-lab.js',
   './js/ai-guided-practice.js',
   './js/ai-guided-practice-data.js',
-  './js/ai-tools-lab.js',
   './js/module-learning-kit.js',
-  './js/module-learning-kit-data.js'
+  './js/module-learning-kit-data.js',
+  './js/deliverables-registry.js',
+  './js/modules-content.js',
+  './js/modules-riesgo.js',
+  './js/modules-defectos.js',
+  './js/modules-content-2.js',
+  './js/modules-cicd.js',
+  './js/modules-observability.js',
+  './js/modules-ai-testing.js',
+  './js/modules-ai-coach.js',
+  './js/modules-ai-tools.js',
+  './js/modules-challenge.js',
+  './js/modules-tdd.js',
+  './js/modules-bdd.js',
+  './js/modules-foundations.js',
+  './js/modules-test-strategy.js'
 ];
 
 self.addEventListener('install', (event) => {

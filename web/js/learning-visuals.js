@@ -128,7 +128,7 @@
             section.appendChild(list);
 
             const draw = () => {
-                const query = input.value.trim().toLowerCase();
+                const query = (input.value || '').trim().toLowerCase();
                 const entries = (block.entries || []).filter((entry) => {
                     const searchable = [entry.term, entry.alias, entry.meaning, entry.analogy, entry.example].join(' ').toLowerCase();
                     return !query || searchable.includes(query);

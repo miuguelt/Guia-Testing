@@ -97,7 +97,7 @@ const APP = {
         if (targetStation === 'm-simuladores') {
             const devSims = ['sim-bva', 'sim-tdd', 'sim-doubles', 'sim-e2e'];
             const execSims = ['sim-sequencer', 'sim-pyramid', 'sim-triage'];
-            const allSims = ['sim-assertion', 'sim-quiz'];
+            const allSims = ['sim-assertion', 'sim-quiz', 'sim-diseno'];
 
             let targetTab = 'tab-dev-order';
             if (execSims.includes(simId)) targetTab = 'tab-exec-order';
@@ -190,6 +190,8 @@ const APP = {
 
     pageLabels: {
         welcome: 'Inicio',
+        'm-riesgo': 'Decidir qué probar: priorización por riesgo',
+        'm-defectos': 'Gestión de defectos: del hallazgo al cierre',
         'm-simuladores': 'Simuladores',
         'm-evidencias-sena': 'Registro de evidencias',
         descargar: 'Descargar Proyecto'
