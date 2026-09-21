@@ -7,6 +7,9 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <title>Guía de Testing y QA — aprendizaje autónomo</title>
+    <meta name="theme-color" content="#0b0f19">
+    <link rel="icon" type="image/svg+xml" href="img/icon.svg">
+    <link rel="manifest" href="manifest.webmanifest">
     <link rel="stylesheet" href="css/styles.css?v=3.7.0&t=20260918-v4">
     <!-- Todos los recursos se sirven localmente para permitir el uso sin red. -->
     <link rel="stylesheet" href="css/vendor/devbrain-code.css?v=3.7.0&t=20260918-v4">
@@ -616,6 +619,17 @@ Invoke-RestMethod http://127.0.0.1:8009/productos/</code></pre>
           prefijo: 'guia_testing',
           dossierHref: '#m-evidencias-sena'
         });
+      }
+
+      // Registro de Service Worker para soporte offline PWA
+      if ('serviceWorker' in navigator && (window.location.protocol === 'http:' || window.location.protocol === 'https:')) {
+        navigator.serviceWorker.register('./service-worker.js')
+          .then(function(reg) {
+            console.log('[PWA] Service Worker registrado con éxito en ámbito:', reg.scope);
+          })
+          .catch(function(err) {
+            console.warn('[PWA] Fallo al registrar Service Worker:', err);
+          });
       }
     });
   </script>

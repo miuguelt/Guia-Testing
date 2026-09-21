@@ -1,0 +1,20 @@
+{
+  "name": "Guía Interactiva de Testing de Software & QA",
+  "short_name": "Guía Testing",
+  "description": "Plataforma de aprendizaje interactivo en QA, TDD, BDD, Playwright y aseguramiento de calidad con acompañamiento humano-IA y protocolo V.E.R.A.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0b0f19",
+  "theme_color": "#0b0f19",
+  "orientation": "any",
+  "categories": ["education", "productivity", "development"],
+  "lang": "es-CO",
+  "icons": [
+    {
+      "src": "img/icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

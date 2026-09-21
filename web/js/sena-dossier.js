@@ -163,6 +163,7 @@
                     <button type="button" class="btn btn--primary" id="btn-print-evidence" onclick="SenaDossier.printDossier()">🖨️ Imprimir / Guardar en PDF</button>
                     <button type="button" class="btn btn--secondary" id="btn-download-json" onclick="SenaDossier.downloadJson()">💾 Descargar Evidencia en JSON</button>
                     <button type="button" class="btn btn--secondary" id="btn-download-md" onclick="SenaDossier.downloadMarkdown()">📥 Descargar en Markdown (.md)</button>
+                    <button type="button" class="btn btn--secondary" id="btn-download-xapi" onclick="SenaDossier.downloadXAPI()" title="Descargar paquete de trazabilidad en estándar xAPI (Tin Can) para integración con LMS">📊 Descargar xAPI (LMS .json)</button>
                     <button type="button" class="btn btn--secondary btn--sm" id="btn-refresh-evidence" onclick="SenaDossier.refreshRealState()" title="Actualizar datos con las últimas prácticas realizadas">🔄 Recargar Estado Real</button>
                     <button type="button" class="btn btn--secondary btn--sm" onclick="SenaDossier.runAllChecks()">⚡ Ejecutar Todas las Pruebas (CI)</button>
                   </div>
@@ -759,6 +760,147 @@ ${Object.values(sims).map(s => `| **${s.name}** | ${s.details} | ${s.score} / ${
 
             if (global.APP && global.APP.showToast) {
                 global.APP.showToast("Registro local descargado en JSON ✓", "success");
+            }
+        },
+
+        downloadXAPI() {
+            const profile = global.TestingSession ? global.TestingSession.getProfile() : {};
+            const progress = global.TestingSession ? global.TestingSession.calculateProgress() : { weightedScore: 0, isApproved: false };
+            const checks = global.TestingSession ? global.TestingSession.getTestChecks() : [];
+            const sims = global.TestingSession ? global.TestingSession.getSimulators() : {};
+            const now = new Date().toISOString();
+
+            const actor = {
+                objectType: "Agent",
+                name: profile.name || "Aprendiz SENA ADSO",
+                mbox: `mailto:aprendiz.${profile.docNumber || 'anonimo'}@misena.edu.co`
+            };
+
+            const statements = [];
+
+            // Statement principal: Finalización o avance global de la guía
+            statements.push({
+                id: (crypto.randomUUID ? crypto.randomUUID() : 'xapi-' + Math.random().toString(36).substring(2)),
+                timestamp: now,
+                actor: actor,
+                verb: {
+                    id: progress.isApproved ? "http://adlnet.gov/expapi/verbs/completed" : "http://adlnet.gov/expapi/verbs/progressed",
+                    display: { "es-CO": progress.isApproved ? "completó" : "progresó en" }
+                },
+                object: {
+                    id: "https://sena.edu.co/adso/competencia/220501098/guia-testing-qa",
+                    definition: {
+                        name: { "es-CO": "Guía de Testing, Aseguramiento de Calidad y Pruebas Automatizadas" },
+                        description: { "es-CO": "Ruta formativa integral de QA, TDD, BDD, Playwright y gestión de defectos con acompañamiento humano-IA." },
+                        type: "http://adlnet.gov/expapi/activities/course"
+                    }
+                },
+                result: {
+                    score: {
+                        scaled: Number((progress.weightedScore / 100).toFixed(2)),
+                        raw: progress.weightedScore,
+                        min: 0,
+                        max: 100
+                    },
+                    success: !!progress.isApproved,
+                    completion: !!progress.isApproved
+                },
+                context: {
+                    contextActivities: {
+                        parent: [{
+                            id: "https://sena.edu.co/adso/programa/228118",
+                            definition: { name: { "es-CO": "Tecnólogo en Análisis y Desarrollo de Software (ADSO)" } }
+                        }],
+                        grouping: [{
+                            id: "https://sena.edu.co/adso/competencia/220501098",
+                            definition: { name: { "es-CO": "Competencia 220501098: Verificar los entregables del desarrollo de software" } }
+                        }]
+                    },
+                    extensions: {
+                        "https://sena.edu.co/xapi/ficha": profile.ficha || "N/A",
+                        "https://sena.edu.co/xapi/instructor": profile.instructor || "N/A",
+                        "https://sena.edu.co/xapi/centro": profile.centro || "N/A"
+                    }
+                }
+            });
+
+            // Statements por cada simulador evaluado
+            Object.keys(sims).forEach(simKey => {
+                const sim = sims[simKey];
+                statements.push({
+                    id: (crypto.randomUUID ? crypto.randomUUID() : 'xapi-sim-' + Math.random().toString(36).substring(2)),
+                    timestamp: now,
+                    actor: actor,
+                    verb: {
+                        id: sim.passed ? "http://adlnet.gov/expapi/verbs/passed" : "http://adlnet.gov/expapi/verbs/attempted",
+                        display: { "es-CO": sim.passed ? "aprobó" : "intentó" }
+                    },
+                    object: {
+                        id: `https://sena.edu.co/adso/testing-qa/simulators/${simKey}`,
+                        definition: {
+                            name: { "es-CO": sim.name || simKey },
+                            description: { "es-CO": sim.details || "Simulador interactivo de QA" },
+                            type: "http://adlnet.gov/expapi/activities/simulation"
+                        }
+                    },
+                    result: {
+                        score: {
+                            scaled: Number(((sim.score || 0) / (sim.maxScore || 100)).toFixed(2)),
+                            raw: sim.score || 0,
+                            min: 0,
+                            max: sim.maxScore || 100
+                        },
+                        success: !!sim.passed
+                    }
+                });
+            });
+
+            // Statements por cada check de suite automatizada
+            checks.forEach(check => {
+                if (check.passed) {
+                    statements.push({
+                        id: (crypto.randomUUID ? crypto.randomUUID() : 'xapi-check-' + Math.random().toString(36).substring(2)),
+                        timestamp: now,
+                        actor: actor,
+                        verb: {
+                            id: "http://adlnet.gov/expapi/verbs/passed",
+                            display: { "es-CO": "aprobó suite" }
+                        },
+                        object: {
+                            id: `https://sena.edu.co/adso/testing-qa/suites/${check.id}`,
+                            definition: {
+                                name: { "es-CO": check.name || check.id },
+                                type: "http://adlnet.gov/expapi/activities/assessment"
+                            }
+                        },
+                        result: {
+                            success: true
+                        }
+                    });
+                }
+            });
+
+            const payload = {
+                version: "1.0.3",
+                standard: "xAPI (Experience API / Tin Can)",
+                generatedAt: now,
+                count: statements.length,
+                statements: statements
+            };
+
+            const fileName = `xapi_statements_ADSO_${profile.ficha || 'ficha'}_${profile.docNumber || 'aprendiz'}.json`;
+            const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            if (global.APP && global.APP.showToast) {
+                global.APP.showToast(`Paquete xAPI generado con ${statements.length} declaraciones ✓`, "success");
             }
         }
     };
