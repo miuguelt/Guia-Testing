@@ -756,13 +756,13 @@ def test_user_creation_and_login(client):
     response = client.post("/auth/register", data={
         "username": "testuser",
         "email": "<CORREO_DE_PRUEBA>",
-        "password": "<CONTRASEÑA_DE_PRUEBA>",
+        "password": "<CONTRASEÑA_DE_PRUEBA>",  # placeholder
     }, follow_redirects=True)
     assert response.status_code == 200
     # Login
     response = client.post("/auth/login", data={
         "email": "<CORREO_DE_PRUEBA>",
-        "password": "<CONTRASEÑA_DE_PRUEBA>",
+        "password": "<CONTRASEÑA_DE_PRUEBA>",  # placeholder
     }, follow_redirects=True)
     assert response.status_code == 200
     assert b"Bienvenido" in response.data or b"Dashboard" in response.data`

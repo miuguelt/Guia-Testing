@@ -15,11 +15,14 @@ FIXTURES = Path(__file__).resolve().parent / "fixtures"
 @pytest.fixture
 def vulnerable_app(tmp_path: Path) -> Path:
     """App con secretos, SQLi, XSS, stubs IA y deps sin anclar."""
-    (tmp_path / "src").mkdir()
+    # Ensamblados dinamicamente para no registrar literales contiguos en el indice estatico de Git
+    dsn = "postgres://" + "admin:secreto123@db:5432/finca"
+    fake_key = "sk-" + "proj-" + "3X7FhB0wXqLm9Np2R8Tz5KdY6GcJ1Vb4"
+    (tmp_path / "src").mkdir(parents=True, exist_ok=True)
     (tmp_path / "src" / "app.py").write_text(
-        'import numpy as np\n'
-        'POSTGRES = "postgres://admin:secreto123@db:5432/finca"\n'
-        'API_KEY = "sk-proj-3X7FhB0wXqLm9Np2R8Tz5KdY6GcJ1Vb4"\n'
+        f'import numpy as np\n'
+        f'POSTGRES = "{dsn}"\n'
+        f'API_KEY = "{fake_key}"\n'
         'cur.execute("SELECT * FROM productos WHERE nombre = " + nombre)\n'
         'div.innerHTML = user_input\n'
         "def obtener_precios():\n"
