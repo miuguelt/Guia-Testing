@@ -63,32 +63,84 @@ const APP = {
     },
 
     navigateTo(pageId, updateHash = true) {
-        document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
+        const SECTION_ALIASES = {
+            'm-plan-pruebas': 'm-piramide',
+            'm-plan': 'm-piramide',
+            'm-unitarias': 'm-pytest-fastapi',
+            'm-unit': 'm-pytest-fastapi',
+            'm-e2e': 'm-playwright'
+        };
+        if (SECTION_ALIASES[pageId]) {
+            pageId = SECTION_ALIASES[pageId];
+        }
+
         const target = document.getElementById(pageId);
-        if (target) {
-            target.classList.add('active');
-            // Los módulos se renderizan después de cargar el HTML y permanecen
-            // ocultos hasta que entran en el viewport. Como el módulo estaba
-            // oculto al registrarse en el IntersectionObserver, podía quedar
-            // con opacity: 0 aunque su contenido ya existiera en el DOM.
-            target.querySelectorAll('.section-card, .simulator-card, .concept-card')
-                .forEach((element) => element.classList.add('animate-in'));
-            this.currentPage = pageId;
-            this.updateBreadcrumb(pageId);
-            this.updateSidebarActive(pageId);
-            this.announcePage(pageId);
-            if (pageId === 'm-evidencias-sena' && window.DevBrainEvidence && typeof window.DevBrainEvidence.refrescarDossier === 'function') {
-                window.DevBrainEvidence.refrescarDossier();
+        if (!target) {
+            console.warn(`[APP] navigateTo: No se encontró la sección #${pageId}`);
+            return;
+        }
+
+        document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
+        target.classList.add('active');
+        // Los módulos se renderizan después de cargar el HTML y permanecen
+        // ocultos hasta que entran en el viewport. Como el módulo estaba
+        // oculto al registrarse en el IntersectionObserver, podía quedar
+        // con opacity: 0 aunque su contenido ya existiera en el DOM.
+        target.querySelectorAll('.section-card, .simulator-card, .concept-card')
+            .forEach((element) => element.classList.add('animate-in'));
+        this.currentPage = pageId;
+        this.updateBreadcrumb(pageId);
+        this.updateSidebarActive(pageId);
+        this.announcePage(pageId);
+        if (pageId === 'm-evidencias-sena' && window.DevBrainEvidence && typeof window.DevBrainEvidence.refrescarDossier === 'function') {
+            window.DevBrainEvidence.refrescarDossier();
+        }
+        if (updateHash && window.location.hash !== '#' + pageId) {
+            if (history.pushState) {
+                history.pushState(null, null, '#' + pageId);
+            } else {
+                window.location.hash = pageId;
             }
-            if (updateHash && window.location.hash !== '#' + pageId) {
-                if (history.pushState) {
-                    history.pushState(null, null, '#' + pageId);
-                } else {
-                    window.location.hash = pageId;
+        }
+        window.scrollTo({ top: 0, behavior: updateHash ? 'smooth' : 'auto' });
+    },
+
+    navigateToEvidence(evidenceId, targetStation = null) {
+        if (!targetStation) {
+            const registry = window.GUIDE_DELIVERABLES;
+            if (registry && registry.artifacts) {
+                const art = registry.artifacts.find(a => a.id === evidenceId || a.code === evidenceId);
+                if (art && art.station && art.station.sectionId) {
+                    targetStation = art.station.sectionId;
                 }
             }
-            window.scrollTo({ top: 0, behavior: updateHash ? 'smooth' : 'auto' });
         }
+        if (!targetStation) {
+            const fallbackMap = {
+                'ART-TEST-01': 'm-piramide',
+                'TEST-EV01': 'm-piramide',
+                'EV-01': 'm-piramide',
+                'ART-TEST-02': 'm-pytest-fastapi',
+                'TEST-EV02': 'm-pytest-fastapi',
+                'EV-02': 'm-pytest-fastapi',
+                'ART-TEST-03': 'm-playwright',
+                'TEST-EV03': 'm-playwright',
+                'EV-03': 'm-playwright'
+            };
+            targetStation = fallbackMap[evidenceId] || 'm-piramide';
+        }
+
+        this.navigateTo(targetStation);
+
+        setTimeout(() => {
+            const selector = `[data-db-evidence="${evidenceId}"], #estacion-${evidenceId}, .dbe-estacion[aria-labelledby="dbe-titulo-${evidenceId}"]`;
+            const container = document.querySelector(selector);
+            if (container) {
+                container.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                container.classList.add('sim-highlight-pulse');
+                setTimeout(() => container.classList.remove('sim-highlight-pulse'), 2500);
+            }
+        }, 180);
     },
 
     navigateToSimulator(simId, targetStation = 'm-simuladores') {

@@ -641,3 +641,35 @@ def test_matriz_suites_verificacion_real_y_links_simulador():
         main_code = f.read()
 
     assert "navigateToSimulator" in main_code
+
+def test_enlaces_taxativos_evidencias_llevan_a_estaciones_reales():
+    """Los botones e instrumentos de la lista de chequeo y evidencias deben dirigir a estaciones reales."""
+    path_dbe = os.path.join(BASE, "web", "js", "vendor", "devbrain-evidence.js")
+    with open(path_dbe, encoding="utf-8") as f:
+        dbe_code = f.read()
+
+    assert "m-plan-pruebas" not in dbe_code
+    assert "m-unitarias" not in dbe_code
+    assert 'data-nav-station="m-piramide"' in dbe_code
+    assert 'data-nav-station="m-pytest-fastapi"' in dbe_code
+    assert 'data-nav-station="m-playwright"' in dbe_code
+    assert 'data-nav-evidence="ART-TEST-01"' in dbe_code
+    assert 'Lista de Chequeo de Plan de Pruebas IEEE 829' in dbe_code
+
+    path_sd = os.path.join(BASE, "web", "js", "sena-dossier.js")
+    with open(path_sd, encoding="utf-8") as f:
+        sd_code = f.read()
+
+    assert "m-plan-pruebas" not in sd_code
+    assert "m-unitarias" not in sd_code
+    assert "m-piramide" in sd_code
+    assert "m-pytest-fastapi" in sd_code
+
+    path_main = os.path.join(BASE, "web", "js", "main.js")
+    with open(path_main, encoding="utf-8") as f:
+        main_code = f.read()
+
+    assert "navigateToEvidence" in main_code
+    assert "SECTION_ALIASES" in main_code
+    assert "'m-plan-pruebas': 'm-piramide'" in main_code
+    assert "'m-unitarias': 'm-pytest-fastapi'" in main_code

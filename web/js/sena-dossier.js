@@ -248,29 +248,29 @@
                       <tbody>
                         <tr>
                           <td style="text-align: center;"><strong>EV-01</strong></td>
-                          <td>Documento del Plan de Pruebas de Software (IEEE 829): Alcance, matriz de trazabilidad, ambientes y casos de prueba.</td>
-                          <td>Lista de Chequeo de Plan de Pruebas IEEE 829</td>
+                          <td><a href="#m-piramide" onclick="event.preventDefault(); window.APP && window.APP.navigateToEvidence ? window.APP.navigateToEvidence('ART-TEST-01', 'm-piramide') : (window.APP && window.APP.navigateTo('m-piramide'));" style="color: inherit; text-decoration: none; cursor: pointer;" title="Ir al Plan de Pruebas (IEEE 829)">Documento del Plan de Pruebas de Software (IEEE 829): Alcance, matriz de trazabilidad, ambientes y casos de prueba.</a></td>
+                          <td><a href="#m-piramide" onclick="event.preventDefault(); window.APP && window.APP.navigateToEvidence ? window.APP.navigateToEvidence('ART-TEST-01', 'm-piramide') : (window.APP && window.APP.navigateTo('m-piramide'));" style="color: var(--accent-primary, #2563eb); text-decoration: underline; cursor: pointer; font-weight: 500;" title="Ir a la Lista de Chequeo de Plan de Pruebas IEEE 829">Lista de Chequeo de Plan de Pruebas IEEE 829</a></td>
                           <td style="text-align: center;">
                             <span class="badge ${ev1Done ? 'badge--success' : 'badge--danger'}">${ev1Done ? 'CUMPLIDO (IEEE 829)' : 'PENDIENTE'}</span>
-                            ${!ev1Done ? `<br><button type="button" class="btn btn--xs btn--secondary no-print" onclick="APP.navigateTo('m-plan-pruebas')" style="margin-top: 0.35rem; font-size: 0.7rem; padding: 0.2rem 0.5rem;">Ir a Plan ➔</button>` : ''}
+                            <br><button type="button" class="btn btn--xs btn--secondary no-print" onclick="window.APP && window.APP.navigateToEvidence ? window.APP.navigateToEvidence('ART-TEST-01', 'm-piramide') : (window.APP && window.APP.navigateTo('m-piramide'))" style="margin-top: 0.35rem; font-size: 0.7rem; padding: 0.2rem 0.5rem; cursor: pointer;">${ev1Done ? 'Ver Plan ➔' : 'Ir a Plan ➔'}</button>
                           </td>
                         </tr>
                         <tr>
                           <td style="text-align: center;"><strong>EV-02</strong></td>
-                          <td>Suite de Pruebas Unitarias e Integración con Cobertura >= 80% (PyTest FastAPI/Flask, Jest React, JUnit 5 y Mocks).</td>
-                          <td>Rúbrica Analítica de Pruebas Automatizadas</td>
+                          <td><a href="#m-pytest-fastapi" onclick="event.preventDefault(); window.APP && window.APP.navigateToEvidence ? window.APP.navigateToEvidence('ART-TEST-02', 'm-pytest-fastapi') : (window.APP && window.APP.navigateTo('m-pytest-fastapi'));" style="color: inherit; text-decoration: none; cursor: pointer;" title="Ir a la Suite de Pruebas Unitarias">Suite de Pruebas Unitarias e Integración con Cobertura &gt;= 80% (PyTest FastAPI/Flask, Jest React, JUnit 5 y Mocks).</a></td>
+                          <td><a href="#m-pytest-fastapi" onclick="event.preventDefault(); window.APP && window.APP.navigateToEvidence ? window.APP.navigateToEvidence('ART-TEST-02', 'm-pytest-fastapi') : (window.APP && window.APP.navigateTo('m-pytest-fastapi'));" style="color: var(--accent-primary, #2563eb); text-decoration: underline; cursor: pointer; font-weight: 500;" title="Ir a la Rúbrica Analítica de Pruebas Automatizadas">Rúbrica Analítica de Pruebas Automatizadas</a></td>
                           <td style="text-align: center;">
                             <span class="badge ${ev2Done ? 'badge--success' : 'badge--danger'}">${ev2Done ? 'CUMPLIDO (COBERTURA 91.2%)' : 'PENDIENTE'}</span>
-                            ${!ev2Done ? `<br><button type="button" class="btn btn--xs btn--secondary no-print" onclick="APP.navigateTo('m-unitarias')" style="margin-top: 0.35rem; font-size: 0.7rem; padding: 0.2rem 0.5rem;">Ir a Tests ➔</button>` : ''}
+                            <br><button type="button" class="btn btn--xs btn--secondary no-print" onclick="window.APP && window.APP.navigateToEvidence ? window.APP.navigateToEvidence('ART-TEST-02', 'm-pytest-fastapi') : (window.APP && window.APP.navigateTo('m-pytest-fastapi'))" style="margin-top: 0.35rem; font-size: 0.7rem; padding: 0.2rem 0.5rem; cursor: pointer;">${ev2Done ? 'Ver Tests ➔' : 'Ir a Tests ➔'}</button>
                           </td>
                         </tr>
                         <tr>
                           <td style="text-align: center;"><strong>EV-03</strong></td>
-                          <td>Pruebas End-to-End con Playwright y Reporte de Defectos: Navegación real, video/traces y matriz Bug Tracker.</td>
-                          <td>Rúbrica de Producto de Software</td>
+                          <td><a href="#m-playwright" onclick="event.preventDefault(); window.APP && window.APP.navigateToEvidence ? window.APP.navigateToEvidence('ART-TEST-03', 'm-playwright') : (window.APP && window.APP.navigateTo('m-playwright'));" style="color: inherit; text-decoration: none; cursor: pointer;" title="Ir a Pruebas E2E con Playwright">Pruebas End-to-End con Playwright y Reporte de Defectos: Navegación real, video/traces y matriz Bug Tracker.</a></td>
+                          <td><a href="#m-playwright" onclick="event.preventDefault(); window.APP && window.APP.navigateToEvidence ? window.APP.navigateToEvidence('ART-TEST-03', 'm-playwright') : (window.APP && window.APP.navigateTo('m-playwright'));" style="color: var(--accent-primary, #2563eb); text-decoration: underline; cursor: pointer; font-weight: 500;" title="Ir a la Rúbrica de Producto de Software">Rúbrica de Producto de Software</a></td>
                           <td style="text-align: center;">
                             <span class="badge ${ev3Done ? 'badge--success' : 'badge--danger'}">${ev3Done ? 'CUMPLIDO (PLAYWRIGHT E2E)' : 'PENDIENTE'}</span>
-                            ${!ev3Done ? `<br><button type="button" class="btn btn--xs btn--secondary no-print" onclick="APP.navigateTo('m-playwright')" style="margin-top: 0.35rem; font-size: 0.7rem; padding: 0.2rem 0.5rem;">Ir a E2E ➔</button>` : ''}
+                            <br><button type="button" class="btn btn--xs btn--secondary no-print" onclick="window.APP && window.APP.navigateToEvidence ? window.APP.navigateToEvidence('ART-TEST-03', 'm-playwright') : (window.APP && window.APP.navigateTo('m-playwright'))" style="margin-top: 0.35rem; font-size: 0.7rem; padding: 0.2rem 0.5rem; cursor: pointer;">${ev3Done ? 'Ver E2E ➔' : 'Ir a E2E ➔'}</button>
                           </td>
                         </tr>
                       </tbody>
