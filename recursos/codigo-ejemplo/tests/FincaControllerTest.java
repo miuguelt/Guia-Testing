@@ -1,3 +1,5 @@
+package co.sena.adso.fincas;
+
 import co.sena.adso.fincas.controller.FincaController;
 import co.sena.adso.fincas.dto.FincaRequest;
 import co.sena.adso.fincas.entity.Finca;
