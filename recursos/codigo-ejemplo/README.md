@@ -13,7 +13,7 @@ base de datos externa ni de credenciales reales.
 | Integración | `main.py`, `routers/` y `tests/integration/` | Contrato HTTP, validación y SQLite en memoria aislada por prueba. |
 | BDD | `features/inventario.feature` | Requisitos expresados como escenarios Given-When-Then. |
 | Componentes | `src/components/Contador.jsx` y Vitest | Comportamiento visible de un componente React en DOM simulado. |
-| Java | `src/main/java/` y `tests/*Test.java` | Servicio, controlador y repositorio con JUnit 5, Mockito y Spring Boot. |
+| Java | `src/main/java/` y `tests/*Test.java` | Servicio, controlador y repositorio Spring Boot, más un DAO JDBC aislado con JUnit 5 y Mockito. |
 | E2E | `flask_jinja_demo/` y `tests/e2e/` | Un flujo real desde el navegador hasta la plantilla y el servidor. |
 
 La regla general es simple: cada prueba debe tener un propósito, datos
@@ -43,6 +43,7 @@ features/inventario.feature          # especificación BDD en Gherkin
 src/components/Contador.jsx          # componente React
 tests/Contador.test.jsx               # pruebas de componente con Vitest
 src/main/java/...                     # ejemplo Spring Boot
+src/main/java/co/sena/adso/productos/ # modelo y DAO JDBC del taller
 tests/*Test.java                      # JUnit 5, Mockito y controlador
 flask_jinja_demo/                    # aplicación web mínima para E2E
 tests/e2e/                            # Playwright sobre navegador real

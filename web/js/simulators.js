@@ -881,22 +881,26 @@ Stacktrace:
         const container = document.querySelector(".sim-assertion-container");
         if (!container) return;
         const tests = [
-            { code: "assert 2 + 2 == 4", passes: true },
-            { code: 'assert "hola" in "hola mundo"', passes: true },
-            { code: "assert 10 > 20", passes: false },
-            { code: "assert [1,2,3].length == 3", passes: false, lang: "js" },
-            { code: "assert len([1,2,3]) == 3", passes: true },
-            { code: "assert None is not False", passes: true },
-            { code: "assert 0 == False", passes: true },
-            { code: "assert [] == False", passes: false },
+            { code: "assert 2 + 2 == 4", passes: true, lang: "python" },
+            { code: 'assert "hola" in "hola mundo"', passes: true, lang: "python" },
+            { code: "assert 10 > 20", passes: false, lang: "python" },
+            { code: "assert([1, 2, 3].length === 3)", passes: true, lang: "js" },
+            { code: "assert len([1,2,3]) == 3", passes: true, lang: "python" },
+            { code: "assert None is not False", passes: true, lang: "python" },
+            { code: "assert 0 == False", passes: true, lang: "python" },
+            { code: "assert [] == False", passes: false, lang: "python" },
         ];
-        let score = 0;
-        let current = 0;
+        const savedAttempt = window.TestingSession && window.TestingSession.getSimulators()['sim-assertion']?.inProgress;
+        const canResume = savedAttempt && savedAttempt.maxScore === tests.length && Number.isInteger(savedAttempt.currentIndex);
+        let score = canResume ? Number(savedAttempt.score) || 0 : 0;
+        let current = canResume ? Math.min(savedAttempt.currentIndex, tests.length) : 0;
         container.innerHTML = `
             <div class="bva-ruler-container">
                 <p style="color:var(--text-muted);margin-bottom:1rem;font-size:0.92rem;">
                     Predice el resultado booleano de la aserción técnica: ¿el test <strong>PASA</strong> o <strong>FALLA</strong>?
                 </p>
+                <div id="assert-progress" style="margin-bottom:0.75rem;color:var(--text-muted);font-size:0.85rem;" aria-live="polite"></div>
+                <div id="assert-language" style="margin-bottom:0.45rem;color:var(--ui-cyan,#38bdf8);font-size:0.75rem;font-weight:700;text-transform:uppercase;"></div>
                 <div id="assert-code" style="font-family:'JetBrains Mono',monospace;background:#060b14;border:1px solid var(--ui-border, rgba(148,184,220,0.18));padding:1.1rem 1.25rem;border-radius:8px;margin-bottom:1.15rem;font-size:0.95rem;color:var(--ui-cyan,#38bdf8);box-shadow:inset 0 1px 0 rgba(255,255,255,0.05);"></div>
                 <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
                     <button type="button" class="btn btn-assert-pass" id="assert-pass">✔ Pasa (True)</button>
@@ -909,20 +913,47 @@ Stacktrace:
         const codeEl = container.querySelector("#assert-code");
         const feedbackEl = container.querySelector("#assert-feedback");
         const scoreEl = container.querySelector("#assert-score");
+        const progressEl = container.querySelector("#assert-progress");
+        const languageEl = container.querySelector("#assert-language");
+        const passBtn = container.querySelector("#assert-pass");
+        const failBtn = container.querySelector("#assert-fail");
+        scoreEl.textContent = score;
         const showTest = () => {
             if (current >= tests.length) {
-                feedbackEl.innerHTML = `<div style="color:#34d399;font-weight:700;padding:0.75rem 1rem;background:rgba(16,185,129,0.15);border:1px solid #10b981;border-radius:8px;">🎉 ¡Completado! ${score}/${tests.length} aciertos.</div>`;
-                if (window.GAMIFICATION) GAMIFICATION.addXP(75, "Assertion Validator completado");
+                const attemptPassed = score / tests.length >= 0.7;
+                const wasPassed = window.TestingSession && window.TestingSession.getSimulators()['sim-assertion']?.passed;
+                let saved = null;
                 if (window.TestingSession) {
-                    window.TestingSession.recordSimulator('sim-assertion', score, tests.length, `${score} de ${tests.length} aserciones acertadas.`);
+                    saved = window.TestingSession.recordSimulator('sim-assertion', score, tests.length, `${score} de ${tests.length} aserciones acertadas.`);
                 }
+                const displayedScore = saved ? saved.score : score;
+                const passed = saved ? saved.passed : attemptPassed;
+                const retainedBest = displayedScore > score;
+                feedbackEl.innerHTML = `<div style="color:${passed ? '#34d399' : '#fcd34d'};font-weight:700;padding:0.75rem 1rem;background:${passed ? 'rgba(16,185,129,0.15);border:1px solid #10b981' : 'rgba(245,158,11,0.15);border:1px solid #f59e0b'};border-radius:8px;">${passed ? '🎉 APROBADO' : '📚 PENDIENTE'} · Intento: ${score}/${tests.length} (${Math.round(score / tests.length * 100)}%).${retainedBest ? ` Se conserva tu mejor resultado: ${displayedScore}/${tests.length} (${saved.percentage}%).` : ''}</div><button type="button" class="btn btn-secondary" id="assert-retry" style="margin-top:0.75rem;">Intentar de nuevo</button>`;
+                if (passed && !wasPassed && window.GAMIFICATION) GAMIFICATION.addXP(75, "Assertion Validator aprobado");
                 SIMULATORS.updateCompletionCounter();
+                feedbackEl.querySelector("#assert-retry").addEventListener("click", () => {
+                    score = 0;
+                    current = 0;
+                    scoreEl.textContent = '0';
+                    if (window.TestingSession && typeof window.TestingSession.recordSimulatorProgress === 'function') {
+                        window.TestingSession.recordSimulatorProgress('sim-assertion', score, tests.length, current, `En curso: pregunta 1 de ${tests.length}.`);
+                    }
+                    passBtn.disabled = false;
+                    failBtn.disabled = false;
+                    showTest();
+                });
                 return;
             }
             codeEl.textContent = tests[current].code;
+            progressEl.textContent = `Pregunta ${current + 1} de ${tests.length}`;
+            languageEl.textContent = tests[current].lang === 'js' ? 'JavaScript' : 'Python';
             feedbackEl.textContent = "";
+            passBtn.disabled = false;
+            failBtn.disabled = false;
         };
         const check = (guessedPass) => {
+            if (passBtn.disabled || current >= tests.length) return;
             const actual = tests[current].passes;
             if (guessedPass === actual) {
                 feedbackEl.innerHTML = `<span style="color:#34d399;">✔ ¡Correcto!</span>`;
@@ -932,10 +963,20 @@ Stacktrace:
             }
             scoreEl.textContent = score;
             current++;
-            setTimeout(showTest, 1200);
+            if (window.TestingSession && typeof window.TestingSession.recordSimulatorProgress === 'function') {
+                const progressDetails = current >= tests.length
+                    ? `Respuestas completas: ${score} aciertos de ${tests.length}. Falta ver el resultado.`
+                    : `En curso: pregunta ${current + 1} de ${tests.length}; ${score} aciertos.`;
+                window.TestingSession.recordSimulatorProgress('sim-assertion', score, tests.length, current, progressDetails);
+            }
+            passBtn.disabled = true;
+            failBtn.disabled = true;
+            const nextText = current >= tests.length ? 'Ver resultado' : 'Siguiente pregunta';
+            feedbackEl.insertAdjacentHTML("beforeend", ` <button type="button" class="btn btn-secondary" id="assert-next">${nextText}</button>`);
+            feedbackEl.querySelector("#assert-next").addEventListener("click", showTest);
         };
-        container.querySelector("#assert-pass").addEventListener("click", () => check(true));
-        container.querySelector("#assert-fail").addEventListener("click", () => check(false));
+        passBtn.addEventListener("click", () => check(true));
+        failBtn.addEventListener("click", () => check(false));
         showTest();
     },
 
@@ -1070,7 +1111,10 @@ Stacktrace:
                 why: "Ejecutar sin comprobar solo recorre líneas. La aserción assert cantidad_valida(6) is False es lo que hace visible un máximo mal escrito: sin ella, la suite puede estar verde con la regla rota."
             }
         ];
-        let idx = 0, score = 0;
+        const savedAttempt = window.TestingSession && window.TestingSession.getSimulators()['sim-diseno']?.inProgress;
+        const canResume = savedAttempt && savedAttempt.maxScore === questions.length && Number.isInteger(savedAttempt.currentIndex);
+        let idx = canResume ? Math.min(savedAttempt.currentIndex, questions.length) : 0;
+        let score = canResume ? Number(savedAttempt.score) || 0 : 0;
         container.innerHTML = `
             <div class="bva-ruler-container">
                 <p style="color:var(--text-muted);margin-bottom:1rem;font-size:0.92rem;">
@@ -1082,19 +1126,34 @@ Stacktrace:
         `;
         const content = container.querySelector("#diseno-content");
         const scoreEl = container.querySelector("#diseno-score");
+        if (score > 0 || idx > 0) scoreEl.textContent = `Progreso: ${score} de ${questions.length} aciertos · ${Math.min(idx, questions.length)} de ${questions.length} respondidas`;
         const showQ = () => {
             if (idx >= questions.length) {
                 const pct = Math.round((score / questions.length) * 100);
-                const passed = pct >= 70;
-                content.innerHTML = `<div style="color:${passed ? '#34d399' : '#fcd34d'};font-weight:700;padding:1rem;background:${passed ? 'rgba(16,185,129,0.15);border:1px solid #10b981' : 'rgba(245,158,11,0.15);border:1px solid #f59e0b'};border-radius:8px;">
-                    ${passed ? '🎉' : '📚'} ¡Reto de diseño completado! ${score}/${questions.length} aciertos (${pct}%). ${passed ? 'Dominas el criterio para diseñar antes de automatizar.' : 'Repasa la estación de diseño y vuelve a intentarlo: la razón de cada respuesta quedó arriba.'}
-                </div>`;
-                if (window.GAMIFICATION) window.GAMIFICATION.addXP(passed ? 90 : 40, passed ? "Diseña antes de automatizar: aprobado" : "Diseña antes de automatizar: intento registrado");
+                const attemptPassed = pct >= 70;
+                const wasPassed = window.TestingSession && window.TestingSession.getSimulators()['sim-diseno']?.passed;
+                let saved = null;
                 if (window.TestingSession) {
-                    window.TestingSession.recordSimulator('sim-diseno', score, questions.length, `${score} de ${questions.length} decisiones de diseño correctas (${pct}%).`);
+                    saved = window.TestingSession.recordSimulator('sim-diseno', score, questions.length, `${score} de ${questions.length} decisiones de diseño correctas (${pct}%).`);
                 }
+                const displayedScore = saved ? saved.score : score;
+                const passed = saved ? saved.passed : attemptPassed;
+                const retainedBest = displayedScore > score;
+                content.innerHTML = `<div style="color:${passed ? '#34d399' : '#fcd34d'};font-weight:700;padding:1rem;background:${passed ? 'rgba(16,185,129,0.15);border:1px solid #10b981' : 'rgba(245,158,11,0.15);border:1px solid #f59e0b'};border-radius:8px;">
+                    ${passed ? '🎉 APROBADO' : '📚 PENDIENTE'} · Intento: ${score}/${questions.length} aciertos (${pct}%). ${attemptPassed ? 'Dominas el criterio para diseñar antes de automatizar.' : 'Revisa las razones de las respuestas y vuelve a intentarlo.'}${retainedBest ? ` Se conserva tu mejor resultado: ${displayedScore}/${questions.length} (${saved.percentage}%).` : ''}
+                </div><button type="button" class="btn btn-secondary" id="diseno-retry" style="margin-top:0.75rem;">Intentar de nuevo</button>`;
+                if (attemptPassed && !wasPassed && window.GAMIFICATION) window.GAMIFICATION.addXP(90, "Diseña antes de automatizar: aprobado");
                 SIMULATORS.updateCompletionCounter();
                 if (passed && typeof confetti !== "undefined") confetti({ particleCount: 100, spread: 70 });
+                content.querySelector("#diseno-retry").addEventListener("click", () => {
+                    idx = 0;
+                    score = 0;
+                    scoreEl.textContent = 'Progreso: 0 de 10 aciertos';
+                    if (window.TestingSession && typeof window.TestingSession.recordSimulatorProgress === 'function') {
+                        window.TestingSession.recordSimulatorProgress('sim-diseno', score, questions.length, idx, `En curso: pregunta 1 de ${questions.length}.`);
+                    }
+                    showQ();
+                });
                 return;
             }
             const q = questions[idx];
@@ -1125,9 +1184,17 @@ Stacktrace:
                         fb.innerHTML = `<span style="color:#f87171;">✖ Incorrecto.</span> <span style="color:var(--text-secondary);font-weight:400;font-size:0.85rem;">${q.why}</span>`;
                     }
                     content.querySelectorAll(".quiz-opt").forEach(b => b.disabled = true);
-                    scoreEl.innerHTML = `Progreso: <strong>${score}</strong> de ${questions.length} aciertos`;
+                    scoreEl.innerHTML = `Progreso: <strong>${score}</strong> de ${questions.length} aciertos · ${idx + 1} de ${questions.length} respondidas`;
                     idx++;
-                    setTimeout(showQ, 3200);
+                    if (window.TestingSession && typeof window.TestingSession.recordSimulatorProgress === 'function') {
+                        const progressDetails = idx >= questions.length
+                            ? `Respuestas completas: ${score} aciertos de ${questions.length}. Falta ver el resultado.`
+                            : `En curso: pregunta ${idx + 1} de ${questions.length}; ${score} aciertos.`;
+                        window.TestingSession.recordSimulatorProgress('sim-diseno', score, questions.length, idx, progressDetails);
+                    }
+                    const nextText = idx >= questions.length ? 'Ver resultado' : 'Siguiente pregunta';
+                    fb.insertAdjacentHTML("beforeend", ` <button type="button" class="btn btn-secondary" id="diseno-next">${nextText}</button>`);
+                    fb.querySelector("#diseno-next").addEventListener("click", showQ);
                 });
             });
         };

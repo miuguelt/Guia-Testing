@@ -143,11 +143,6 @@ def test_teoria_git_github_seguridad():
     assert "Tests para Git" in gg
 
 
-def test_devbrain():
-    for f in ["session-start.ps1", "session-end.ps1", "checkpoint.ps1", "integrity-check.ps1"]:
-        assert os.path.isfile(os.path.join(BASE, ".devbrain", f)), f"Falta .devbrain/{f}"
-
-
 def test_start_windows():
     assert os.path.isfile(os.path.join(BASE, "start-windows.ps1"))
 

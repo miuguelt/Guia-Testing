@@ -2,9 +2,9 @@
  * Service Worker para Guía de Testing & QA
  * Proporciona soporte 100% offline (Cache-First con Network Fallback)
  */
-// Se migra desde guia-testing-v3.7.2-cache para invalidar estilos y controles
-// que pudieron quedar persistidos durante una sesión offline anterior.
-const CACHE_NAME = 'guia-testing-v3.7.14-cache';
+// Se migra desde guia-testing-v3.7.2-cache y v3.7.14-cache para invalidar
+// los scripts de práctica y evidencias y distribuir el flujo corregido sin conexión.
+const CACHE_NAME = 'guia-testing-v3.7.15-cache';
 const PRECACHE_ASSETS = [
   './',
   './index.html',

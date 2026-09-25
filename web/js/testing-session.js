@@ -666,23 +666,53 @@
         },
 
         /**
+         * Conserva una evaluación incompleta para que pueda retomarse después de recargar la guía.
+         */
+        recordSimulatorProgress(simId, score, maxScore, currentIndex, customDetails = null) {
+            const sims = this.getSimulators();
+            if (!sims[simId]) return;
+
+            sims[simId].inProgress = {
+                score,
+                maxScore,
+                currentIndex,
+                percentage: maxScore > 0 ? Math.round((score / maxScore) * 100) : 0,
+                updatedAt: new Date().toISOString(),
+                details: customDetails || ''
+            };
+
+            localStorage.setItem(STORAGE_KEYS.SIMULATORS, JSON.stringify(sims));
+            this.notify();
+            return sims[simId];
+        },
+
+        /**
          * Registra el resultado real de un simulador cuando el aprendiz interactúa con él.
          */
         recordSimulator(simId, score, maxScore, customDetails = null) {
             const sims = this.getSimulators();
             if (!sims[simId]) return;
 
-            const pct = maxScore > 0 ? Math.round((score / maxScore) * 100) : 0;
+            const bestScoreSimulators = ['sim-assertion', 'sim-diseno', 'sim-module-decisions'];
+            const previousScore = Number(sims[simId].score) || 0;
+            const keepBestScore = bestScoreSimulators.includes(simId)
+                && Number(sims[simId].maxScore) === maxScore
+                && previousScore > score;
+            const recordedScore = keepBestScore ? previousScore : score;
+            const pct = maxScore > 0 ? Math.round((recordedScore / maxScore) * 100) : 0;
             // Para pasar se requiere al menos 70% de aciertos
             const passed = pct >= 70;
 
             sims[simId].completed = true;
-            sims[simId].score = score;
+            sims[simId].score = recordedScore;
             sims[simId].maxScore = maxScore;
             sims[simId].percentage = pct;
             sims[simId].passed = passed;
-            sims[simId].completedAt = new Date().toISOString();
-            if (customDetails) sims[simId].details = customDetails;
+            delete sims[simId].inProgress;
+            if (!keepBestScore) {
+                sims[simId].completedAt = new Date().toISOString();
+                if (customDetails) sims[simId].details = customDetails;
+            }
 
             localStorage.setItem(STORAGE_KEYS.SIMULATORS, JSON.stringify(sims));
             this.syncTestChecksWithExercises();

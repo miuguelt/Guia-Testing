@@ -1,4 +1,6 @@
 """Contrato del kit visual y de simulacion que acompana cada modulo."""
+import shutil
+import subprocess
 from pathlib import Path
 
 
@@ -38,15 +40,16 @@ def test_kit_tiene_diagrama_grafico_tabla_y_simulador_accesibles():
     assert ".learning-kit-simulator" in css
 
 
-def test_kit_prioriza_un_modelo_visual_semantico_sobre_el_panel_generico():
-    """Cada módulo debe explicar su relación causal, no mostrar métricas ornamentales."""
+def test_kit_monta_la_decision_y_el_micro_laboratorio_de_cada_modulo():
+    """Las dos evidencias de práctica registradas deben tener una interacción accesible."""
     script = (WEB_ROOT / "js" / "module-learning-kit.js").read_text(encoding="utf-8")
 
     assert "renderSemanticVisual" in script
     assert "learning-kit-model" in script
     assert "grid.appendChild(this.renderFocusChart(kit, moduleId))" not in script
     assert "grid.appendChild(this.renderDecisionTable(kit))" not in script
-    assert "grid.appendChild(this.renderDecisionSimulator(moduleId, kit))" not in script
+    assert "grid.appendChild(this.renderDecisionSimulator(moduleId, kit))" in script
+    assert "grid.appendChild(this.renderSpecialLab(moduleId, kit))" in script
 
 
 def test_portada_no_presenta_una_ilustracion_generica_como_contenido():
@@ -86,3 +89,35 @@ def test_micro_laboratorio_tiene_registro_separado_en_la_sesion():
     """El nuevo ejercicio no debe sobrescribir el simulador de decisiones existente."""
     session = (WEB_ROOT / "js" / "testing-session.js").read_text(encoding="utf-8")
     assert "sim-module-special" in session
+
+
+def test_todos_los_modulos_tienen_un_escenario_para_decisiones_qa():
+    data = (WEB_ROOT / "js" / "module-learning-kit-data.js").read_text(encoding="utf-8")
+    assert data.count("scenario: [") == 18
+
+
+def test_las_evaluaciones_pendientes_ofrecen_continuar_y_reintentar():
+    simulators = (WEB_ROOT / "js" / "simulators.js").read_text(encoding="utf-8")
+    assertion = simulators[simulators.index("renderAssertionValidator() {") : simulators.index("renderQuiz() {")]
+    loan = simulators[simulators.index("renderDesignQuiz() {") : simulators.index("renderPhaseSequencer() {")]
+
+    assert "if (passBtn.disabled || current >= tests.length) return;" in assertion
+    assert "Siguiente pregunta" in assertion
+    assert "assert-retry" in assertion
+    assert "Ver resultado" in loan
+    assert "diseno-retry" in loan
+    assert "setTimeout(showQ, 3200)" not in loan
+
+
+def test_flujo_de_reintento_y_mejor_puntaje_en_los_simuladores():
+    node = shutil.which("node")
+    assert node, "Node.js es necesario para ejecutar la regresión de los simuladores."
+    result = subprocess.run(
+        [node, str(PROJECT_ROOT / "tests" / "test_simulator_completion.js")],
+        cwd=PROJECT_ROOT,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+    )
+    assert result.returncode == 0, f"Falló la regresión de finalización: {result.stderr}\n{result.stdout}"
+    assert "SIMULATOR COMPLETION REGRESSION PASSED" in result.stdout

@@ -1789,14 +1789,27 @@
             </tr>
           </thead>
           <tbody>
-            ${Object.keys(sims).length ? Object.values(sims).map((s) => `
+            ${Object.keys(sims).length ? Object.values(sims).map((s) => {
+              const attempt = s.inProgress;
+              const displayScore = !s.passed && attempt ? attempt.score : s.score;
+              const displayPercentage = !s.passed && attempt ? attempt.percentage : (s.percentage || 0);
+              const status = s.passed ? 'APROBADO' : attempt ? 'EN CURSO' : 'PENDIENTE';
+              const statusClass = s.passed ? 'badge--success' : attempt ? 'badge--warning' : 'badge--danger';
+              const attemptLabel = attempt
+                ? `<br><small>${s.passed ? 'Reintento' : 'Avance'}: ${attempt.currentIndex}/${s.maxScore} respuestas</small>`
+                : '';
+              return `
             <tr>
               <td><strong>${dbeCelda(s.name)}</strong></td>
-              <td style="font-size:0.82rem; color: #475569;">${dbeCelda(s.details || 'Práctica interactiva en plataforma')}</td>
-              <td style="text-align: center;">${s.score} / ${s.maxScore} (${s.percentage || 0}%)</td>
-              <td style="text-align: center;"><span class="badge ${s.passed ? 'badge--success' : 'badge--danger'}">${s.passed ? 'APROBADO' : 'PENDIENTE'}</span></td>
+              <td style="font-size:0.82rem; color: #475569;">${dbeCelda(!s.passed && attempt && attempt.details ? attempt.details : (s.details || 'Práctica interactiva en plataforma'))}</td>
+              <td style="text-align: center;">${displayScore} / ${s.maxScore} (${displayPercentage}%)${attemptLabel}</td>
+              <td style="text-align: center;">
+                <span class="badge ${statusClass}">${status}</span>
+                ${s.id === 'sim-module-decisions' ? '<br><button type="button" class="btn btn--xs btn--primary no-print" data-nav-module-decision="m-piramide" title="Ir a la decisión QA del primer módulo" style="margin-top:0.35rem;font-size:0.72rem;padding:0.25rem 0.55rem;cursor:pointer;">🎮 Ir a decisión QA ➔</button>' : ''}
+              </td>
             </tr>
-            `).join('') : `
+            `;
+            }).join('') : `
             <tr>
               <td><strong>Simuladores Prácticos QA</strong></td>
               <td style="font-size:0.82rem; color: #475569;">Pirámide, Aserciones, Secuenciador, E2E, Quiz</td>
@@ -1972,6 +1985,27 @@
         } else {
           window.location.hash = stationId;
         }
+      });
+    });
+
+    hoja.querySelectorAll('[data-nav-module-decision]').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const stationId = btn.getAttribute('data-nav-module-decision');
+        if (window.APP && typeof window.APP.navigateTo === 'function') {
+          window.APP.navigateTo(stationId);
+        } else {
+          window.location.hash = stationId;
+        }
+        setTimeout(() => {
+          const station = document.getElementById(stationId);
+          const practice = station && station.querySelector('.learning-kit-simulator');
+          if (practice) {
+            practice.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            practice.classList.add('sim-highlight-pulse');
+            setTimeout(() => practice.classList.remove('sim-highlight-pulse'), 2500);
+          }
+        }, 180);
       });
     });
 

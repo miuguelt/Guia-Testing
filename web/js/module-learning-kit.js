@@ -184,7 +184,7 @@
             const section = make('section', 'learning-kit-simulator');
             section.setAttribute('aria-labelledby', `kit-sim-title-${moduleId}`);
             const scenario = kit.scenario || ['', [], 0, ''];
-            section.innerHTML = `<div class="learning-kit-simulator-heading"><span class="learning-kit-simulator-kicker">Decisión guiada · +15 XP</span><h4 id="kit-sim-title-${moduleId}">Ahora decide como tester</h4><p>${escapeHtml(scenario[0])}</p></div><div class="learning-kit-choices" role="group" aria-label="Opciones de decisión">${(scenario[1] || []).map((choice, index) => `<button type="button" class="learning-kit-choice" data-option="${index}"><span class="learning-kit-choice-letter">${String.fromCharCode(65 + index)}</span>${escapeHtml(choice)}</button>`).join('')}</div><div class="learning-kit-feedback" role="status" aria-live="polite">Elige una respuesta para ver el razonamiento.</div><button type="button" class="btn btn-secondary learning-kit-reset">Intentar de nuevo</button>`;
+            section.innerHTML = `<div class="learning-kit-simulator-heading"><span class="learning-kit-simulator-kicker">Decisión guiada · +15 XP al primer acierto</span><h4 id="kit-sim-title-${moduleId}">Ahora decide como tester</h4><p>${escapeHtml(scenario[0])}</p></div><div class="learning-kit-choices" role="group" aria-label="Opciones de decisión">${(scenario[1] || []).map((choice, index) => `<button type="button" class="learning-kit-choice" data-option="${index}"><span class="learning-kit-choice-letter">${String.fromCharCode(65 + index)}</span>${escapeHtml(choice)}</button>`).join('')}</div><div class="learning-kit-feedback" role="status" aria-live="polite">Elige una respuesta para ver el razonamiento.</div><button type="button" class="btn btn-secondary learning-kit-reset">Intentar de nuevo</button>`;
             const feedback = section.querySelector('.learning-kit-feedback');
             const choices = [...section.querySelectorAll('.learning-kit-choice')];
             const reset = section.querySelector('.learning-kit-reset');
@@ -193,8 +193,9 @@
                 section.classList.toggle('is-correct', correct); section.classList.toggle('is-incorrect', !correct);
                 feedback.textContent = correct ? `Decisión acertada. ${scenario[3]}` : `Todavía no. ${scenario[3]}`;
                 choices.forEach((button, index) => { button.disabled = true; button.classList.toggle('is-answer', index === Number(scenario[2])); button.classList.toggle('is-selected', index === selected); });
+                const alreadyPassed = global.TestingSession && global.TestingSession.getSimulators()['sim-module-decisions']?.passed;
                 if (global.TestingSession) global.TestingSession.recordSimulator('sim-module-decisions', correct ? 1 : 0, 1, `${moduleId}: ${correct ? 'decisión acertada' : 'decisión por revisar'}.`);
-                if (correct && global.GAMIFICATION) global.GAMIFICATION.addXP(15, `Decisión QA: ${moduleId}`);
+                if (correct && !alreadyPassed && global.GAMIFICATION) global.GAMIFICATION.addXP(15, `Decisión QA: ${moduleId}`);
             };
             choices.forEach((button) => button.addEventListener('click', () => showFeedback(Number(button.dataset.option))));
             reset.addEventListener('click', () => { section.classList.remove('is-correct', 'is-incorrect'); feedback.textContent = 'Elige una respuesta para ver el razonamiento.'; choices.forEach((button) => { button.disabled = false; button.classList.remove('is-answer', 'is-selected'); }); });
@@ -260,6 +261,7 @@
             const grid = section.querySelector('.learning-kit-grid');
             grid.insertAdjacentHTML('beforeend', this.renderFlowDiagram(kit, moduleId));
             grid.insertAdjacentHTML('beforeend', this.renderSemanticVisual(kit, moduleId));
+            grid.appendChild(this.renderDecisionSimulator(moduleId, kit));
             grid.appendChild(this.renderSpecialLab(moduleId, kit));
             this.bindFlow(grid.querySelector('.learning-kit-flow'), kit);
             const moduleIntro = host.querySelector('.module-intro');

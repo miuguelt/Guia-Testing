@@ -1,5 +1,6 @@
+import co.sena.adso.productos.dao.ProductoDAO;
+import co.sena.adso.productos.model.Producto;
 import org.junit.jupiter.api.*;
-import org.mockito.Mockito;
 import java.sql.*;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
